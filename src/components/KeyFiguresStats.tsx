@@ -17,7 +17,7 @@ const initialStats: Stat[] = [
     id: 'participants',
     label: 'Total Participants',
     value: 0,
-    suffix: '+',
+    suffix: '', // Enlever le +
     icon: '👥',
     color: 'blue'
   },
@@ -25,7 +25,7 @@ const initialStats: Stat[] = [
     id: 'sessions',
     label: 'Tours Conducted',
     value: 0,
-    suffix: '+',
+    suffix: '', // Enlever le +
     icon: '🚶',
     color: 'green'
   },
@@ -33,7 +33,7 @@ const initialStats: Stat[] = [
     id: 'kilometers',
     label: 'Kilometers Walked',
     value: 0,
-    suffix: '+',
+    suffix: '', // Enlever le +
     icon: '📍',
     color: 'purple'
   },
@@ -41,7 +41,7 @@ const initialStats: Stat[] = [
     id: 'countries',
     label: 'Countries Represented',
     value: 0,
-    suffix: '+',
+    suffix: '', // Enlever le +
     icon: '🌍',
     color: 'orange'
   }
@@ -56,76 +56,43 @@ export default function KeyFiguresStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Vérification des variables d'environnement
-        console.log('🔧 Supabase URL:', import.meta.env.PUBLIC_SUPABASE_URL);
-        console.log('🔧 Supabase Key exists:', !!import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
-        
-        console.log('🔍 Attempting to fetch from Supabase...');
-        
-        // Utilisons d'abord select('*') pour voir toutes les colonnes disponibles
         const { data, error } = await supabase
           .from('data_participants_tour')
           .select('*');
 
-        console.log('📊 Supabase response:', { data, error });
+        if (error) throw error;
+        if (!data || data.length === 0) return;
 
-        if (error) {
-          console.error('❌ Supabase error:', error);
-          return;
-        }
+        const sessionSet = new Set<number>();
+        let totalParticipants = 0;
+        const countryMap = new Map<string, number>();
 
-        if (data && data.length > 0) {
-          console.log(`✅ Found ${data.length} rows in database`);
-          console.log('🔍 First row structure:', data[0]);
-          console.log('🔍 Available columns:', Object.keys(data[0]));
-          
-          // Adaptons aux vraies colonnes de la table
-          const sessionSet = new Set<number>();
-          let totalParticipants = 0;
-          const countryMap = new Map<string, number>();
+        data.forEach(row => {
+          if (row.id_session) sessionSet.add(row.id_session);
+          // Correction: utiliser directement taille_du_groupe sans fallback à 1
+          const participantCount = Number(row.taille_du_groupe) || 0;
+          totalParticipants += participantCount;
 
-          data.forEach(row => {
-            // Utilisons les vraies colonnes de ta table
-            if (row.id_session) sessionSet.add(row.id_session);
-            
-            // Cherchons la colonne qui contient le nombre de participants
-            // Elle pourrait s'appeler différemment
-            const participantCount = row.taille_du_groupe || row.participants || row.nombre_participants || 1;
-            totalParticipants += participantCount;
-            
-            // Pour le pays
-            const country = row.pays || row.country || row.nationalite;
-            if (country) {
-              const pays = String(country).trim();
-              countryMap.set(pays, (countryMap.get(pays) || 0) + participantCount);
-            }
-          });
+          const country = row.pays;
+          if (country) {
+            const key = String(country).trim();
+            countryMap.set(key, (countryMap.get(key) || 0) + participantCount);
+          }
+        });
 
-          const sessionsCount = sessionSet.size;
-          const distanceKm = Math.round(sessionsCount * 2.5);
-          const uniqueCountries = countryMap.size;
+        const sessionsCount = sessionSet.size;
+        const distanceKm = Math.round(sessionsCount * 2.5);
+        const uniqueCountries = countryMap.size;
 
-          console.log('📈 Final calculated stats:', {
-            totalParticipants,
-            sessionsCount,
-            distanceKm,
-            uniqueCountries,
-            countriesFound: Array.from(countryMap.keys())
-          });
-
-          const updatedStats = [
-            { ...initialStats[0], value: totalParticipants },
-            { ...initialStats[1], value: sessionsCount },
-            { ...initialStats[2], value: distanceKm },
-            { ...initialStats[3], value: uniqueCountries }
-          ];
-
-          setRealStats(updatedStats);
-        } else {
-          console.warn('⚠️ No data found in data_participants_tour');
-        }
-      } catch (error) {
-        console.error('💥 Error fetching stats:', error);
+        const updatedStats = [
+          { ...initialStats[0], value: totalParticipants },
+          { ...initialStats[1], value: sessionsCount },
+          { ...initialStats[2], value: distanceKm },
+          { ...initialStats[3], value: uniqueCountries }
+        ];
+        setRealStats(updatedStats);
+      } catch (err) {
+        console.error('Error fetching stats:', err);
       }
     };
 
@@ -166,19 +133,19 @@ export default function KeyFiguresStats() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
       {realStats.map((stat) => (
         <div
           key={stat.id}
-          className="bg-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300"
+          className="bg-white rounded-lg shadow-lg p-4 md:p-6 text-center transform hover:scale-105 transition-transform duration-300"
         >
-          <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-2xl ${getColorClasses(stat.color)}`}>
+          <div className={`w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-4 rounded-full flex items-center justify-center text-xl md:text-2xl ${getColorClasses(stat.color)}`}>
             {stat.icon}
           </div>
-          <div className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">
             {animatedValues[stat.id]}{stat.suffix}
           </div>
-          <div className="text-gray-600 font-medium">
+          <div className="text-xs md:text-base text-gray-600 font-medium">
             {stat.label}
           </div>
         </div>
