@@ -8,107 +8,128 @@ interface CountryData {
 
 const geoUrl = "/data/world-110m.json";
 
-// Mapping des noms de pays en FRANÇAIS vers les codes ISO
-const countryNameToCode: Record<string, string> = {
-  'USA': 'USA',
-  'UK': 'GBR',
-  'États-Unis': 'USA',
-  'Etats-Unis': 'USA',
-  'France': 'FRA',
-  'Allemagne': 'DEU',
-  'Espagne': 'ESP',
-  'Italie': 'ITA',
-  'Canada': 'CAN',
-  'Australie': 'AUS',
-  'Japon': 'JPN',
-  'Chine': 'CHN',
-  'Brésil': 'BRA',
-  'Inde': 'IND',
-  'Pays-Bas': 'NLD',
-  'Belgique': 'BEL',
-  'Suisse': 'CHE',
-  'Autriche': 'AUT',
-  'Suède': 'SWE',
-  'Norvège': 'NOR',
-  'Danemark': 'DNK',
-  'Finlande': 'FIN',
-  'Pologne': 'POL',
-  'République tchèque': 'CZE',
-  'Portugal': 'PRT',
-  'Grèce': 'GRC',
-  'Turquie': 'TUR',
-  'Russie': 'RUS',
-  'Mexique': 'MEX',
-  'Argentine': 'ARG',
-  'Chili': 'CHL',
-  'Colombie': 'COL',
-  'Pérou': 'PER',
-  'Venezuela': 'VEN',
-  'Afrique du Sud': 'ZAF',
-  'Égypte': 'EGY',
-  'Maroc': 'MAR',
-  'Nigeria': 'NGA',
-  'Kenya': 'KEN',
-  'Corée du Sud': 'KOR',
-  'Thaïlande': 'THA',
-  'Vietnam': 'VNM',
-  'Singapour': 'SGP',
-  'Malaisie': 'MYS',
-  'Indonésie': 'IDN',
-  'Philippines': 'PHL',
-  'Nouvelle-Zélande': 'NZL',
-  'Israël': 'ISR',
-  'Arabie saoudite': 'SAU',
-  'Émirats arabes unis': 'ARE',
-  'Iran': 'IRN',
-  'Irak': 'IRQ',
-  'Pakistan': 'PAK',
-  'Bangladesh': 'BGD',
-  'Sri Lanka': 'LKA',
-  'Myanmar': 'MMR',
-  'Cambodge': 'KHM',
-  'Laos': 'LAO',
-  'Mongolie': 'MNG',
-  'Kazakhstan': 'KAZ',
-  'Ouzbékistan': 'UZB',
-  'Turkménistan': 'TKM',
-  'Kirghizistan': 'KGZ',
-  'Tadjikistan': 'TJK',
-  'Afghanistan': 'AFG',
-  'Ukraine': 'UKR',
-  'Biélorussie': 'BLR',
-  'Lituanie': 'LTU',
-  'Lettonie': 'LVA',
-  'Estonie': 'EST',
-  'Moldavie': 'MDA',
-  'Roumanie': 'ROU',
-  'Bulgarie': 'BGR',
-  'Serbie': 'SRB',
-  'Croatie': 'HRV',
-  'Bosnie-Herzégovine': 'BIH',
-  'Monténégro': 'MNE',
-  'Albanie': 'ALB',
-  'Macédoine du Nord': 'MKD',
-  'Slovénie': 'SVN',
-  'Slovaquie': 'SVK',
-  'Hongrie': 'HUN',
-  'Irlande': 'IRL',
-  'Islande': 'ISL',
-  'Luxembourg': 'LUX',
-  'Malte': 'MLT',
-  'Chypre': 'CYP',
-  'Cameroun': 'CMR',
-  'Irlande du Nord': 'GBR', // Partie du UK
-  'Hong Kong': 'HKG',
-  'Liban': 'LBN',
-  'Tunisie': 'TUN'
+// Mapping des noms de pays de Supabase vers les noms utilisés dans le fichier TopoJSON
+const countryNameToTopoName: Record<string, string> = {
+  'USA': 'United States of America',
+  'UK': 'United Kingdom',
+  'United Kingdom': 'United Kingdom', // Ajout pour être sûr
+  'Royaume-Uni': 'United Kingdom', // Au cas où
+  'Grande-Bretagne': 'United Kingdom', // Au cas où
+  'France': 'France',
+  'Allemagne': 'Germany',
+  'Espagne': 'Spain',
+  'Italie': 'Italy',
+  'Canada': 'Canada',
+  'Australie': 'Australia',
+  'Japon': 'Japan',
+  'Chine': 'China',
+  'Brésil': 'Brazil',
+  'Inde': 'India',
+  'Pays Bas': 'Netherlands',
+  'Belgique': 'Belgium',
+  'Suisse': 'Switzerland',
+  'Autriche': 'Austria',
+  'Suède': 'Sweden',
+  'Norvège': 'Norway',
+  'Danemark': 'Denmark',
+  'Finlande': 'Finland',
+  'Pologne': 'Poland',
+  'République tchèque': 'Czech Republic',
+  'Portugal': 'Portugal',
+  'Grèce': 'Greece',
+  'Turquie': 'Turkey',
+  'Russie': 'Russia',
+  'Mexique': 'Mexico',
+  'Argentine': 'Argentina',
+  'Chili': 'Chile',
+  'Colombie': 'Colombia',
+  'Pérou': 'Peru',
+  'Venezuela': 'Venezuela',
+  'Afrique du Sud': 'South Africa',
+  'Egypte': 'Egypt',
+  'Maroc': 'Morocco',
+  'Nigeria': 'Nigeria',
+  'Kenya': 'Kenya',
+  'Corée du Sud': 'South Korea',
+  'Thailande': 'Thailand',
+  'Vietnam': 'Vietnam',
+  'Singapour': 'Singapore',
+  'Malaisie': 'Malaysia',
+  'Indonésie': 'Indonesia',
+  'Philippines': 'Philippines',
+  'Nouvelle Zélande': 'New Zealand',
+  'Israel': 'Israel',
+  'Arabie saoudite': 'Saudi Arabia',
+  'Émirats arabes unis': 'United Arab Emirates',
+  'Iran': 'Iran',
+  'Irak': 'Iraq',
+  'Pakistan': 'Pakistan',
+  'Bangladesh': 'Bangladesh',
+  'Sri Lanka': 'Sri Lanka',
+  'Myanmar': 'Myanmar',
+  'Cambodge': 'Cambodia',
+  'Laos': 'Laos',
+  'Mongolie': 'Mongolia',
+  'Kazakhstan': 'Kazakhstan',
+  'Ouzbékistan': 'Uzbekistan',
+  'Turkménistan': 'Turkmenistan',
+  'Kirghizistan': 'Kyrgyzstan',
+  'Tadjikistan': 'Tajikistan',
+  'Afghanistan': 'Afghanistan',
+  'Ukraine': 'Ukraine',
+  'Biélorussie': 'Belarus',
+  'Lituanie': 'Lithuania',
+  'Lettonie': 'Latvia',
+  'Estonie': 'Estonia',
+  'Moldavie': 'Moldova',
+  'Roumanie': 'Romania',
+  'Bulgarie': 'Bulgaria',
+  'Serbie': 'Serbia',
+  'Croatie': 'Croatia',
+  'Bosnie-Herzégovine': 'Bosnia and Herzegovina',
+  'Monténégro': 'Montenegro',
+  'Albanie': 'Albania',
+  'Macédoine du Nord': 'North Macedonia',
+  'Slovenie': 'Slovenia',
+  'Slovaquie': 'Slovakia',
+  'Hongrie': 'Hungary',
+  'Irlande': 'Ireland',
+  'Islande': 'Iceland',
+  'Luxembourg': 'Luxembourg',
+  'Malte': 'Malta',
+  'Chypre': 'Cyprus',
+  'Cameroun': 'Cameroon',
+  'Irlande du Nord': 'United Kingdom', // Partie du UK
+  'Hong Kong': 'Hong Kong',
+  'Liban': 'Lebanon',
+  'Tunisie': 'Tunisia',
+  'Azerbaidjan': 'Azerbaijan',
+  'Costa Rica': 'Costa Rica',
+  'Ecosse': 'Scotland',
+  'Equateur' : 'Ecuador',
+  'Taiwan' : 'Taiwan',
+  'République Tchèque': 'Czech Republic',
+  'Ireland' : 'Ireland'
 };
 
 export default function WorldMap() {
   const [countryData, setCountryData] = useState<CountryData>({});
   const [maxValue, setMaxValue] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string } | null>(null);
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string; country: string; flag: string; count: number } | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchCountryData = async () => {
@@ -119,7 +140,7 @@ export default function WorldMap() {
 
         if (error) throw error;
 
-        console.log('Raw data from Supabase:', data); // Debug
+        console.log('Raw data from Supabase:', data);
 
         const countryCount = new Map<string, number>();
         data?.forEach(row => {
@@ -133,25 +154,34 @@ export default function WorldMap() {
           }
         });
 
-        console.log('Country count map:', Array.from(countryCount.entries())); // Debug
+        console.log('Country count map:', Array.from(countryCount.entries()));
 
-        // Convert to country codes
-        const countryCodeMap: CountryData = {};
+        // Convert to TopoJSON country names
+        const countryNameMap: CountryData = {};
         let max = 0;
         
         countryCount.forEach((count, country) => {
-          const code = countryNameToCode[country];
-          console.log(`Mapping ${country} to ${code}`); // Debug
-          if (code) {
-            countryCodeMap[code] = count;
-            max = Math.max(max, count);
+          const topoName = countryNameToTopoName[country];
+          console.log(`Mapping ${country} to ${topoName} (count: ${count})`);
+          if (topoName) {
+            // Cumuler les valeurs au lieu de les écraser
+            countryNameMap[topoName] = (countryNameMap[topoName] || 0) + count;
+            max = Math.max(max, countryNameMap[topoName]);
+          } else {
+            console.warn(`⚠️ No mapping found for: ${country}`);
           }
         });
 
-        console.log('Final country code map:', countryCodeMap); // Debug
-        console.log('Max value:', max); // Debug
+        // Debug spécifique pour UK
+        console.log('🔍 UK Debug:', {
+          'UK in countryCount': countryCount.get('UK'),
+          'United Kingdom in final map': countryNameMap['United Kingdom']
+        });
 
-        setCountryData(countryCodeMap);
+        console.log('Final country name map:', countryNameMap);
+        console.log('Max value:', max);
+
+        setCountryData(countryNameMap);
         setMaxValue(max);
       } catch (error) {
         console.error('Error fetching country data:', error);
@@ -161,77 +191,161 @@ export default function WorldMap() {
     fetchCountryData();
   }, []);
 
+  // Helper function to get country flag code for API
+  const getCountryFlagCode = (countryName: string): string => {
+    const flagCodeMap: Record<string, string> = {
+      'United States of America': 'US',
+      'United Kingdom': 'GB', 
+      'France': 'FR',
+      'Germany': 'DE',
+      'Spain': 'ES',
+      'Italy': 'IT',
+      'Canada': 'CA',
+      'Australia': 'AU',
+      'Japan': 'JP',
+      'China': 'CN',
+      'Brazil': 'BR',
+      'India': 'IN',
+      'Netherlands': 'NL',
+      'Belgium': 'BE',
+      'Switzerland': 'CH',
+      'Austria': 'AT',
+      'Sweden': 'SE',
+      'Norway': 'NO',
+      'Denmark': 'DK',
+      'Finland': 'FI',
+      'Poland': 'PL',
+      'Czech Republic': 'CZ',
+      'Portugal': 'PT',
+      'Greece': 'GR',
+      'Turkey': 'TR',
+      'Russia': 'RU',
+      'Mexico': 'MX',
+      'Argentina': 'AR',
+      'Chile': 'CL',
+      'Colombia': 'CO',
+      'Peru': 'PE',
+      'Venezuela': 'VE',
+      'South Africa': 'ZA',
+      'Egypt': 'EG',
+      'Morocco': 'MA',
+      'Nigeria': 'NG',
+      'Kenya': 'KE',
+      'South Korea': 'KR',
+      'Thailand': 'TH',
+      'Vietnam': 'VN',
+      'Singapore': 'SG',
+      'Malaysia': 'MY',
+      'Indonesia': 'ID',
+      'Philippines': 'PH',
+      'New Zealand': 'NZ',
+      'Israel': 'IL',
+      'Saudi Arabia': 'SA',
+      'United Arab Emirates': 'AE',
+      'Iran': 'IR',
+      'Iraq': 'IQ',
+      'Pakistan': 'PK',
+      'Bangladesh': 'BD',
+      'Sri Lanka': 'LK',
+      'Ireland': 'IE',
+      'Iceland': 'IS',
+      'Luxembourg': 'LU',
+      'Malta': 'MT',
+      'Cyprus': 'CY',
+      'Lebanon': 'LB',
+      'Tunisie': 'TN'
+    };
+    return flagCodeMap[countryName] || 'UN';
+  };
+
+  // Helper function for flag emoji fallback
+  const getFlagEmoji = (countryCode: string): string => {
+    const flagMap: Record<string, string> = {
+      'US': '🇺🇸', 'GB': '🇬🇧', 'FR': '🇫🇷', 'DE': '🇩🇪', 'ES': '🇪🇸',
+      'IT': '🇮🇹', 'CA': '🇨🇦', 'AU': '🇦🇺', 'JP': '🇯🇵', 'CN': '🇨🇳',
+      'BR': '🇧🇷', 'IN': '🇮🇳', 'NL': '🇳🇱', 'BE': '🇧🇪', 'CH': '🇨🇭',
+      'PT': '🇵🇹', 'RU': '🇷🇺', 'KR': '🇰🇷', 'IL': '🇮🇱', 'PH': '🇵🇭'
+    };
+    return flagMap[countryCode] || '🌍';
+  };
+
   const getColorIntensity = (value: number): string => {
     if (value === 0) return '#f3f4f6'; // gray-100
-    const intensity = value / maxValue;
-    const opacity = Math.max(0.3, intensity);
-    return `rgba(37, 99, 235, ${opacity})`; // blue-600 with calculated opacity
+    
+    // Utiliser une échelle logarithmique pour mieux différencier les petites valeurs
+    const logValue = Math.log(value + 1);
+    const logMax = Math.log(maxValue + 1);
+    const intensity = logValue / logMax;
+    
+    // Amplifier l'intensité pour les petites valeurs
+    const adjustedIntensity = Math.pow(intensity, 0.6);
+    
+    // Assurer une intensité minimum plus visible
+    const minIntensity = 0.3;
+    const finalIntensity = Math.max(minIntensity, adjustedIntensity);
+    
+    // Utiliser un gradient de couleurs chaudes : jaune -> orange -> rouge
+    if (finalIntensity < 0.5) {
+      // Jaune à orange
+      const ratio = finalIntensity / 0.5;
+      const r = Math.round(255);
+      const g = Math.round(255 - (60 * ratio)); // 255 -> 195
+      const b = Math.round(0);
+      return `rgb(${r}, ${g}, ${b})`;
+    } else {
+      // Orange à rouge
+      const ratio = (finalIntensity - 0.5) / 0.5;
+      const r = Math.round(255);
+      const g = Math.round(195 - (195 * ratio)); // 195 -> 0
+      const b = Math.round(0);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
   };
 
   const handleCountryClick = (geo: any) => {
-    // Debug pour voir toutes les propriétés disponibles
-    console.log('Available properties:', Object.keys(geo.properties));
-    console.log('All properties:', geo.properties);
+    const countryName = geo.properties.name;
+    const count = countryData[countryName] || 0;
     
-    // Essayer plusieurs propriétés possibles pour l'ID du pays
-    const countryCode = geo.properties.ISO_A3 || 
-                       geo.properties.ADM0_A3 || 
-                       geo.properties.ISO_A3_EH ||
-                       geo.properties.id ||
-                       geo.properties.ID ||
-                       geo.properties.iso_a3;
-                       
-    const countryName = geo.properties.NAME || 
-                       geo.properties.NAME_EN || 
-                       geo.properties.name ||
-                       geo.properties.ADMIN ||
-                       geo.properties.admin;
-    
-    const count = countryData[countryCode] || 0;
-    
-    console.log('Clicked country:', { 
-      countryCode, 
-      countryName, 
-      count,
-      allProps: geo.properties 
-    });
-    
-    if (count > 0) {
-      setSelectedCountry(countryName);
-      alert(`${countryName}: ${count} participants`);
-    } else {
-      // Debug même si count = 0
-      alert(`${countryName || 'Unknown'}: ${count} participants (Code: ${countryCode || 'Unknown'})`);
+    if (isMobile && count > 0) {
+      setTooltip({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        content: `${count} participant${count > 1 ? 's' : ''}`,
+        country: countryName,
+        flag: getCountryFlagCode(countryName),
+        count
+      });
+      
+      setTimeout(() => setTooltip(null), 3000);
+    } else if (!isMobile) {
+      if (count > 0) {
+        alert(`${countryName}: ${count} participants`);
+      }
     }
   };
 
   const handleMouseMove = (event: React.MouseEvent<SVGPathElement, MouseEvent>, geo: any) => {
-    const countryCode = geo.properties.ISO_A3 || 
-                       geo.properties.ADM0_A3 || 
-                       geo.properties.ISO_A3_EH ||
-                       geo.properties.id ||
-                       geo.properties.ID ||
-                       geo.properties.iso_a3;
-                       
-    const countryName = geo.properties.NAME || 
-                       geo.properties.NAME_EN || 
-                       geo.properties.name ||
-                       geo.properties.ADMIN ||
-                       geo.properties.admin;
-    
-    const count = countryData[countryCode] || 0;
-    
-    if (count > 0) {
-      setTooltip({
-        x: event.clientX,
-        y: event.clientY,
-        content: `${countryName}: ${count} participants`
-      });
+    if (!isMobile) {
+      const countryName = geo.properties.name;
+      const count = countryData[countryName] || 0;
+      
+      if (count > 0) {
+        setTooltip({
+          x: event.clientX,
+          y: event.clientY,
+          content: `${count} participant${count > 1 ? 's' : ''}`,
+          country: countryName,
+          flag: getCountryFlagCode(countryName),
+          count
+        });
+      }
     }
   };
 
   const handleMouseLeave = () => {
-    setTooltip(null);
+    if (!isMobile) {
+      setTooltip(null);
+    }
   };
 
   return (
@@ -252,16 +366,24 @@ export default function WorldMap() {
         >
           <ZoomableGroup>
             <Geographies geography={geoUrl}>
-              {({ geographies }: { geographies: any[] }) =>
-                geographies.map((geo) => {
-                  const countryCode = geo.properties.ISO_A3 || 
-                                     geo.properties.ADM0_A3 || 
-                                     geo.properties.ISO_A3_EH ||
-                                     geo.properties.id ||
-                                     geo.properties.ID ||
-                                     geo.properties.iso_a3;
-                  
-                  const value = countryData[countryCode] || 0;
+              {({ geographies }: { geographies: any[] }) => {
+                // Debug: chercher comment UK apparaît dans le TopoJSON
+                const ukCountries = geographies.filter(geo => 
+                  geo.properties.name && 
+                  (geo.properties.name.toLowerCase().includes('kingdom') || 
+                   geo.properties.name.toLowerCase().includes('britain') ||
+                   geo.properties.name.toLowerCase().includes('england'))
+                );
+                
+                if (ukCountries.length > 0) {
+                  console.log('🇬🇧 Found UK-related countries in TopoJSON:', 
+                    ukCountries.map(c => c.properties.name)
+                  );
+                }
+                
+                return geographies.map((geo) => {
+                  const countryName = geo.properties.name;
+                  const value = countryData[countryName] || 0;
                   
                   return (
                     <Geography
@@ -286,23 +408,55 @@ export default function WorldMap() {
                       onMouseLeave={handleMouseLeave}
                     />
                   );
-                })
-              }
+                });
+              }}
             </Geographies>
           </ZoomableGroup>
         </ComposableMap>
       </div>
 
-      {/* Tooltip */}
+      {/* Enhanced Tooltip */}
       {tooltip && (
         <div
-          className="fixed z-50 bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg pointer-events-none"
-          style={{
+          className={`fixed z-50 bg-white border border-gray-200 rounded-lg shadow-xl p-3 pointer-events-none ${
+            isMobile ? 'left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2' : ''
+          }`}
+          style={!isMobile ? {
             left: tooltip.x + 10,
-            top: tooltip.y - 30,
-          }}
+            top: tooltip.y - 60,
+          } : {}}
         >
-          {tooltip.content}
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 w-8 h-6 rounded overflow-hidden border border-gray-200">
+              <img
+                src={`https://flagsapi.com/${tooltip.flag}/flat/64.png`}
+                alt={`${tooltip.country} flag`}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = getFlagEmoji(tooltip.flag);
+                    parent.className = 'flex-shrink-0 w-8 h-6 flex items-center justify-center text-lg border border-gray-200 rounded';
+                  }
+                }}
+              />
+            </div>
+            <div>
+              <div className="font-semibold text-gray-900 text-sm">
+                {tooltip.country}
+              </div>
+              <div className="text-blue-600 font-medium text-sm">
+                {tooltip.content}
+              </div>
+            </div>
+          </div>
+          {isMobile && (
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1">
+              <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+            </div>
+          )}
         </div>
       )}
 
@@ -310,11 +464,17 @@ export default function WorldMap() {
       <div className="mt-6 flex items-center justify-center gap-4">
         <span className="text-sm text-gray-600">Less</span>
         <div className="flex h-4 w-32 rounded overflow-hidden border border-gray-200">
-          {[0.3, 0.45, 0.6, 0.75, 1.0].map((opacity, index) => (
+          {[
+            'rgb(255, 255, 0)',    // Jaune
+            'rgb(255, 210, 0)',    // Jaune-orange
+            'rgb(255, 165, 0)',    // Orange
+            'rgb(255, 100, 0)',    // Orange-rouge
+            'rgb(255, 0, 0)'       // Rouge
+          ].map((color, index) => (
             <div
               key={index}
               className="flex-1"
-              style={{ backgroundColor: `rgba(37, 99, 235, ${opacity})` }}
+              style={{ backgroundColor: color }}
             />
           ))}
         </div>
@@ -322,8 +482,9 @@ export default function WorldMap() {
       </div>
 
       <div className="text-center mt-2 text-xs text-gray-500">
-        Click on a country to see participant count
+        {isMobile ? 'Tap on a country to see participant count' : 'Hover over a country to see participant count'}
       </div>
     </div>
   );
 }
+
