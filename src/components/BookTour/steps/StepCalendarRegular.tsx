@@ -28,9 +28,10 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     const fetchAllSlots = async () => {
       try {
         const { data, error } = await supabase
-          .from("v_available_slots")
-          .select("start_time, free")
-          .eq("tour", booking.tour);
+          .from("sessions")
+          .select("id, start_time, available_spots, tour_type")
+          .eq("tour_type", booking.tour)
+          .gte("start_time", new Date().toISOString());
 
         if (error) {
           console.error("Error fetching all slots:", error);
@@ -41,7 +42,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
         const groupedSlots: Record<string, number> = {};
         data?.forEach((slot) => {
           const date = new Date(slot.start_time).toISOString().split("T")[0];
-          if (slot.free >= booking.participants) {
+          if (slot.available_spots >= booking.participants) {
             groupedSlots[date] = (groupedSlots[date] || 0) + 1;
           }
         });
@@ -62,13 +63,14 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     const fetchSlots = async () => {
       try {
         const begin = new Date(selectedDay);
+        begin.setHours(0, 0, 0, 0);
         const end = new Date(selectedDay);
         end.setHours(23, 59, 59, 999);
 
         const { data, error } = await supabase
-          .from("v_available_slots")
-          .select("*")
-          .eq("tour", booking.tour)
+          .from("sessions")
+          .select("id, start_time, available_spots")
+          .eq("tour_type", booking.tour)
           .gte("start_time", begin.toISOString())
           .lte("start_time", end.toISOString());
 
@@ -78,29 +80,38 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
         }
 
         // Filter slots that have enough availability for the group
-        const availableSlots = (data || []).filter((slot: Slot) => 
-          slot.free >= booking.participants
+        const availableSlots = (data || []).filter(
+          (slot: { available_spots: number }) => slot.available_spots >= booking.participants
         );
-        
-        setSlots(availableSlots);
+
+        // Map to the expected Slot interface
+        const mappedSlots: Slot[] = availableSlots.map((slot: any) => ({
+          id: slot.id,
+          start_time: slot.start_time,
+          free: slot.available_spots,
+          price: 50
+        }));
+
+        setSlots(mappedSlots);
       } catch (err) {
         console.error("Unexpected error fetching slots for selected day:", err);
       }
     };
-    
+
     fetchSlots();
   }, [selectedDay, booking.tour, booking.participants]);
 
+  // Select a slot and update booking
   const selectSlot = (slot: Slot) => {
     const date = new Date(slot.start_time).toISOString().split("T")[0];
     const time = new Date(slot.start_time).toTimeString().split(" ")[0].substring(0, 5);
     
-    setBooking({ 
-      ...booking, 
-      date: date, 
+    setBooking({
+      ...booking,
+      date: date,
       time: time,
       sessionId: slot.id,
-      price: 50 * booking.participants // Prix de 50€ par personne
+      price: 50 * booking.participants
     });
   };
 
@@ -130,7 +141,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
       <h3 className="text-xl font-semibold text-gray-800 mb-6">
         Step 4: Choose a session
       </h3>
-
       <div className="grid md:grid-cols-2 gap-6">
         {/* Calendar */}
         <div>
@@ -151,20 +161,17 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
             }
           />
         </div>
-
         {/* Available slots */}
         <div>
           {selectedDay && (
             <div>
               <h4 className="font-semibold text-gray-800 mb-4">
-                Available sessions for {selectedDay.toLocaleDateString()}
+                Available sessions for {selectedDay.toLocaleDateString()} for {booking.participants} {booking.participants === 1 ? 'person' : 'people'}.
               </h4>
-              
               {slots.length > 0 ? (
                 <div className="space-y-3">
                   {slots.map((slot) => {
                     const isSelected = booking.sessionId === slot.id;
-                    
                     return (
                       <button
                         key={slot.id}
@@ -206,7 +213,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
               )}
             </div>
           )}
-          
           {!selectedDay && (
             <p className="text-gray-500 text-sm">
               Select a date from the calendar to view available sessions.
@@ -214,7 +220,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           )}
         </div>
       </div>
-
       {booking.sessionId && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center gap-2">
@@ -233,5 +238,4 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     </div>
   );
 };
-
 export default StepCalendarRegular;

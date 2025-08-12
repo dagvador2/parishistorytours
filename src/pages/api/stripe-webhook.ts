@@ -1,67 +1,62 @@
 import type { APIRoute } from "astro";
 import Stripe from "stripe";
-import { supabaseServer } from "../../lib/supabase-server";
-import { fetchActivePrice } from "./stripe-price";
-
-export const prerender = false;
+import { finalizeBooking } from "../../lib/booking";
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-07-30.basil",
 });
 
+const endpointSecret = import.meta.env.STRIPE_WEBHOOK_SECRET;
+
 export const POST: APIRoute = async ({ request }) => {
-  const sig = request.headers.get("stripe-signature")!;
   const body = await request.text();
+  const sig = request.headers.get("stripe-signature");
 
   let event: Stripe.Event;
+
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      sig,
-      import.meta.env.STRIPE_WEBHOOK_SECRET!
-    );
-  } catch {
-    return new Response("Bad signature", { status: 400 });
+    event = stripe.webhooks.constructEvent(body, sig!, endpointSecret);
+  } catch (err) {
+    console.error("Webhook signature verification failed:", err);
+    return new Response("Webhook signature verification failed", { status: 400 });
   }
 
+  // Traiter l'événement
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const bookingId = session.metadata?.booking_id!;
-    const slotId = session.metadata?.slot_id!;
 
-    // 1. Confirm booking
-    await supabaseServer
-      .from("bookings")
-      .update({ status: "paid" })
-      .eq("id", bookingId);
+    try {
+      console.log("Processing successful payment:", session.id);
 
-    // 2. Increment "booked" counter
-    const price = await fetchActivePrice();
-    const incrementValue = session.amount_total! / price.unit_amount!;
+      // Récupérer les métadonnées
+      const metadata = session.metadata;
+      if (!metadata) {
+        throw new Error("No metadata found in session");
+      }
 
-    // First, get the current booked value
-    const { data: slotData, error: fetchError } = await supabaseServer
-      .from("time_slots")
-      .select("booked")
-      .eq("id", slotId)
-      .single();
+      // Finaliser la réservation
+      const result = await finalizeBooking({
+        sessionId: metadata.sessionId,
+        participants: parseInt(metadata.participants),
+        customerEmail: metadata.customerEmail,
+        customerName: metadata.customerName,
+        stripePaymentIntentId: session.payment_intent as string,
+        tour: metadata.tour,
+        date: metadata.date,
+        time: metadata.time,
+        price: parseFloat(metadata.price),
+      });
 
-    if (fetchError || !slotData) {
-      console.error("Error fetching slot:", fetchError);
-      return new Response("Failed to fetch slot", { status: 500 });
-    }
-
-    // Then update with the new value
-    const { error: updateError } = await supabaseServer
-      .from("time_slots")
-      .update({ booked: slotData.booked + incrementValue })
-      .eq("id", slotId);
-
-    if (updateError) {
-      console.error("Error updating booked counter:", updateError);
-      return new Response("Failed to update slot", { status: 500 });
+      if (result.success) {
+        console.log("✅ Booking finalized successfully:", result.booking);
+      } else {
+        console.error("❌ Error finalizing booking:", result.error);
+      }
+    } catch (error) {
+      console.error("Error processing payment completion:", error);
+      return new Response("Error processing payment", { status: 500 });
     }
   }
 
-  return new Response("ok", { status: 200 });
+  return new Response("Success", { status: 200 });
 };

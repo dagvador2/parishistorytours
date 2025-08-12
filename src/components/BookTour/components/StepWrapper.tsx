@@ -30,11 +30,11 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
     
     switch (validationKey) {
       case "tour":
-        return booking.tour && booking.tour !== "";
+        return !!booking.tour;
       case "participants":
         return booking.participants && booking.participants > 0;
       case "tourType":
-        return booking.tourType && booking.tourType !== "";
+        return !!booking.tourType;
       case "dateTime":
         if (booking.tourType === "regular") {
           return booking.sessionId && booking.sessionId !== "";

@@ -4,38 +4,34 @@ import { useBooking } from "../BookingContext";
 interface Props {
   back?: () => void;
   onEditDetails?: () => void;
+  onNext?: () => void;
 }
 
-const StepSummary: React.FC<Props> = ({ back, onEditDetails }) => {
+const StepSummary: React.FC<Props> = ({ back, onEditDetails, onNext }) => {
   const { booking } = useBooking();
   const [sending, setSending] = useState(false);
 
   const handleSubmit = async () => {
+    console.log('StepSummary handleSubmit called');
+    console.log('booking.tourType:', booking.tourType);
+    
     setSending(true);
 
     if (booking.tourType === "regular") {
-      // Pour les tours réguliers : envoyer email puis rediriger vers Stripe
+      // Pour les tours réguliers : rediriger vers Stripe Checkout
       try {
-        await fetch("/api/send-booking-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(booking),
-        });
-      } catch (emailError) {
-        console.log("Email error (non-blocking):", emailError);
-      }
-
-      // Use your checkout API instead of hardcoded links
-      try {
-        const res = await fetch("/api/checkout", {
+        const res = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            slotId: booking.sessionId,
+            sessionId: booking.sessionId,
             participants: booking.participants,
             email: booking.email,
             name: booking.name,
-            phone: booking.phone || "", // Optional field
+            tour: booking.tour,
+            date: booking.date,
+            time: booking.time,
+            price: booking.price
           }),
         });
 
@@ -49,7 +45,7 @@ const StepSummary: React.FC<Props> = ({ back, onEditDetails }) => {
           throw new Error("No redirect URL provided.");
         }
 
-        window.location.href = url; // Stripe Checkout redirect
+        window.location.href = url; // Redirection vers Stripe Checkout
       } catch (error) {
         alert("Failed to process payment. Please try again.");
         console.error("Checkout error:", error);
