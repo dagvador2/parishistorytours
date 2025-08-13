@@ -4,6 +4,7 @@ import type { BookingData } from "./types";
 interface Ctx {
   booking: BookingData;
   setBooking: (b: BookingData) => void;
+  resetBooking: () => void;
 }
 
 const BookingContext = createContext<Ctx | null>(null);
@@ -11,9 +12,25 @@ const BookingContext = createContext<Ctx | null>(null);
 export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [booking, setBooking] = useState<BookingData>({});
+  const initialBooking: BookingData = {
+    tour: undefined as unknown as BookingData["tour"],
+    participants: 1,
+    tourType: undefined as unknown as BookingData["tourType"],
+    date: "",
+    time: "",
+    name: "",
+    email: "",
+    phone: "",
+  };
+
+  const [booking, setBooking] = useState<BookingData>(initialBooking);
+
+  const resetBooking = () => {
+    setBooking(initialBooking);
+  };
+
   return (
-    <BookingContext.Provider value={{ booking, setBooking }}>
+    <BookingContext.Provider value={{ booking, setBooking, resetBooking }}>
       {children}
     </BookingContext.Provider>
   );
