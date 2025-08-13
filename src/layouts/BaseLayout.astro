@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Footer from "../components/Footer.astro";
 const { title = "Paris History Tours", description = "WWII walking tours in Paris: Right Bank and Left Bank routes exploring the Fall, Resistance, and Liberation." } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -21,5 +22,6 @@ const { title = "Paris History Tours", description = "WWII walking tours in Pari
   </head>
   <body class="font-sans text-gray-900 antialiased">
     <slot />
+    <Footer />
   </body>
 </html>
