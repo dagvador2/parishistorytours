@@ -30,6 +30,9 @@ export const POST: APIRoute = async ({ request }) => {
 
       // Récupérer les métadonnées
       const metadata = session.metadata;
+
+      console.log("metadata", metadata)
+
       if (!metadata) {
         throw new Error("No metadata found in session");
       }

@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
         price: price.toString()
       },
       customer_email: email,
-      success_url: `${request.headers.get("origin")}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${request.headers.get("origin")}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.headers.get("origin")}/tours/${tour}`,
     });
 
