@@ -116,19 +116,31 @@ export async function finalizeBooking(bookingData: BookingData) {
 function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Promise<void> {
   return (async () => {
     try {
+      // Normaliser le payload attendu par /api/send-booking-email
       const payload = {
+        // adresse de contact du client
+        email: bookingData.customerEmail,
+        // nom du client
+        name: bookingData.customerName,
+        // id de la réservation (local)
         bookingId,
-        customerEmail: bookingData.customerEmail,
-        customerName: bookingData.customerName,
+        // type de tour — finalizeBooking est appelé après paiement => regular
+        tourType: 'regular',
+        // identifiant du tour (left-bank | right-bank)
         tour: bookingData.tour,
+        // participants, date, time, price
+        participants: bookingData.participants,
         date: bookingData.date,
         time: bookingData.time,
-        participants: bookingData.participants,
-        price: bookingData.price
+        price: bookingData.price,
+        // session id utile pour debug / cross-ref
+        sessionId: bookingData.sessionId,
       };
-      console.debug('✉️ Sending confirmation email with payload:', payload);
 
-      const response = await fetch('/api/send-confirmation-email', {
+      console.debug('✉️ Sending confirmation email to internal route with payload:', payload);
+
+      // Utiliser la route existante send-booking-email (ne pas changer l'endpoint)
+      const response = await fetch('/api/send-booking-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -137,9 +149,11 @@ function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Pro
       });
 
       console.debug('📬 Email API response status:', response.status);
+      const respText = await response.text().catch(() => '<no body>');
+      console.debug('📬 Email API response body:', respText);
+
       if (!response.ok) {
-        const text = await response.text().catch(() => '<no body>');
-        console.error('❌ Failed to send confirmation email, response:', { status: response.status, body: text });
+        console.error('❌ Failed to send confirmation email, response:', { status: response.status, body: respText });
         throw new Error('Failed to send confirmation email');
       }
     } catch (error) {

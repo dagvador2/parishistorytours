@@ -20,8 +20,34 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [slots, setSlots] = useState<Slot[]>([]);
   const [availableDays, setAvailableDays] = useState<Record<string, number>>({});
+  const [pricePerPerson, setPricePerPerson] = useState<number>(0);
+  const [priceLoading, setPriceLoading] = useState<boolean>(true);
 
   if (!active || booking.tourType !== "regular") return null;
+
+  // Fetch price from Stripe API
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const response = await fetch('/api/stripe-price');
+        if (!response.ok) {
+          throw new Error('Failed to fetch price');
+        }
+        const priceData = await response.json();
+        // Convert from cents to euros (assuming Stripe price is in cents)
+        const price = priceData.unit_amount / 100;
+        setPricePerPerson(price);
+      } catch (error) {
+        console.error('Error fetching price:', error);
+        // Fallback to default price if API fails
+        setPricePerPerson(50);
+      } finally {
+        setPriceLoading(false);
+      }
+    };
+
+    fetchPrice();
+  }, []);
 
   // Fetch all slots on component load
   useEffect(() => {
@@ -89,7 +115,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           id: slot.id,
           start_time: slot.start_time,
           free: slot.available_spots,
-          price: 50
+          price: pricePerPerson
         }));
 
         setSlots(mappedSlots);
@@ -99,7 +125,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     };
 
     fetchSlots();
-  }, [selectedDay, booking.tour, booking.participants]);
+  }, [selectedDay, booking.tour, booking.participants, pricePerPerson]);
 
   // Select a slot and update booking
   const selectSlot = (slot: Slot) => {
@@ -111,7 +137,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
       date: date,
       time: time,
       sessionId: slot.id,
-      price: 50 * booking.participants
+      price: pricePerPerson * booking.participants
     });
   };
 
@@ -181,6 +207,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                             ? "border-gray-600 bg-gray-50"
                             : "border-gray-200 hover:border-blue-400 hover:bg-blue-50"
                         }`}
+                        disabled={priceLoading}
                       >
                         <div className="flex justify-between items-center">
                           <div>
@@ -193,11 +220,11 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-gray-800">
-                              €50 per person
+                              {priceLoading ? 'Loading...' : `€${pricePerPerson} per person`}
                             </div>
-                            {isSelected && (
+                            {isSelected && !priceLoading && (
                               <div className="text-sm text-blue-600">
-                                Total: €{50 * booking.participants}
+                                Total: €{pricePerPerson * booking.participants}
                               </div>
                             )}
                           </div>
