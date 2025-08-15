@@ -140,7 +140,9 @@ function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Pro
       console.debug('✉️ Sending confirmation email to internal route with payload:', payload);
 
       // Construire l'URL absolue pour la route d'email
+      // Priorité: SITE_URL (custom domain) > production domain > VERCEL_URL > localhost
       const baseUrl = process.env.SITE_URL || 
+        'https://parishistorytours.com' ||
         (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
       const emailUrl = `${baseUrl}/api/send-booking-email`;
 
