@@ -139,8 +139,15 @@ function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Pro
 
       console.debug('✉️ Sending confirmation email to internal route with payload:', payload);
 
-      // Utiliser la route existante send-booking-email (ne pas changer l'endpoint)
-      const response = await fetch('/api/send-booking-email', {
+      // Construire l'URL absolue pour la route d'email
+      const baseUrl = process.env.SITE_URL || 
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
+      const emailUrl = `${baseUrl}/api/send-booking-email`;
+
+      console.debug('📧 Using email URL:', emailUrl);
+
+      // Utiliser la route existante send-booking-email avec URL absolue
+      const response = await fetch(emailUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
