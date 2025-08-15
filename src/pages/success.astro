@@ -1,59 +1,36 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-<BaseLayout>
-<html>
-  <head>
-    <title>Thank You!</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background: linear-gradient(135deg, #91e0ab, #4d78c2);
-        overflow: hidden;
-      }
-      .thank-you-container {
-        text-align: center;
-        animation: fadeIn 2s ease-in-out;
-      }
-      .thank-you-message {
-        font-size: 2.5rem;
-        color: #fff;
-        margin-bottom: 1rem;
-      }
-      .animation {
-        font-size: 5rem;
-        color: #fff;
-        animation: bounce 1.5s infinite;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes bounce {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="thank-you-container">
-      <div class="thank-you-message">Thank you for your booking!</div>
-      <div class="animation">🎉</div>
-      <p>We will get in touch with you shortly to finalize the details.</p>
+<BaseLayout title="Booking Confirmed - Paris History Tours" description="Confirmation de réservation pour Paris History Tours">
+  <section class="py-20">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <div class="w-24 h-24 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Request Confirmed!</h1>
+      <p class="text-gray-600 mb-8" id="confirmation-subtext">
+        Thank you — your booking request has been received. We will contact you shortly with confirmation details.
+      </p>
+
+      <div id="recap" class="bg-white rounded-lg shadow-md p-6 mb-6 hidden">
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Your Request Details</h2>
+        <div class="space-y-2 text-sm text-left text-gray-700">
+          <div class="flex justify-between"><span>Tour:</span><span id="recap-tour" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>Date & Time:</span><span id="recap-datetime" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>Participants:</span><span id="recap-participants" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>Contact:</span><span id="recap-contact" class="font-medium"></span></div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a id="return-home" href="/"
+           class="inline-block px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          Return to Home
+        </a>
+      </div>
     </div>
-  </body>
-</html>
+  </section>
 </BaseLayout>
