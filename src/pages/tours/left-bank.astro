@@ -370,6 +370,7 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                   width="640"
                   height="384"
                   class="w-full h-56 object-cover"
+                  style="object-position: center top;"
                 />
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
@@ -393,6 +394,7 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                   width="640"
                   height="384"
                   class="w-full h-56 object-cover"
+                  style="object-position: center top;"
                 />
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
@@ -405,17 +407,18 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                 </div>
               </div>
             </div>
-            <!-- Stop 3 -->
+            <!-- Stop 3 (aligned with bureau) -->
             <div class="min-w-full">
               <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <img
-                  src="/photos/left_bank/Paris_WW2_resistance_2.webp"
-                  alt="La Sorbonne"
+                  src="/photos/left_bank/sorbonne_paris.webp"
+                  alt="Resistance memorial at Sorbonne"
                   loading="lazy"
                   decoding="async"
                   width="640"
                   height="384"
                   class="w-full h-56 object-cover"
+                  style="object-position: center top;"
                 />
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
@@ -428,17 +431,18 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                 </div>
               </div>
             </div>
-            <!-- Stop 4 -->
+            <!-- Stop 4 (aligned with bureau) -->
             <div class="min-w-full">
               <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <img
-                  src="/photos/left_bank/Paris_WW2_liberation_barricades.webp"
-                  alt="Notre-Dame de Paris"
+                  src="/photos/left_bank/notre-dame-de-paris.webp"
+                  alt="Liberation barricades near Notre-Dame"
                   loading="lazy"
                   decoding="async"
                   width="640"
                   height="384"
                   class="w-full h-56 object-cover"
+                  style="object-position: center top;"
                 />
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
@@ -563,30 +567,32 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
             class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide overscroll-x-contain"
             style="scroll-behavior:smooth;"
           >
-            <!-- Chaque image devient une carte -->
-            {[
-              "Paris_WW2_bullet_holes_2",
-              "Paris_WW2_german_attack",
-              "Paris_ww2_group_photo",
-              "Paris_WW2_guide",
-              "Paris_WW2_last_stop",
-              "Paris_WW2_resistance",
-              "Paris_WW2_tour_guided_group_photo_2",
-              "Paris_WW2_tour_guided_group_photo_3"
-            ].map(name => (
-              <div class="snap-center shrink-0 w-64 rounded-lg overflow-hidden shadow-md bg-white">
-                <img
-                  src={`/photos/left_bank/${name}.webp`}
-                  alt={name.replaceAll("_"," ").replace("Paris WW2","Paris WW2")}
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                  width="480"
-                  height="360"
-                  class="w-full aspect-video object-cover"
-                />
-              </div>
-            ))}
+            <!-- Chaque image devient une carte (utiliser mêmes images + alts que la version bureau) -->
+            {
+              [
+                { src: "/photos/left_bank/Paris_WW2_bullet_holes_2.webp", alt: "Bullet holes from the war" },
+                { src: "/photos/left_bank/Paris_WW2_german_attack.webp", alt: "German attack on Paris" },
+                { src: "/photos/left_bank/Paris_ww2_group_photo.webp", alt: "Tour group photo" },
+                { src: "/photos/left_bank/Paris_WW2_guide.webp", alt: "Your guide Clément" },
+                { src: "/photos/left_bank/Paris_WW2_last_stop.webp", alt: "Final stop of the tour" },
+                { src: "/photos/left_bank/Paris_WW2_resistance.webp", alt: "Resistance memorial" },
+                { src: "/photos/left_bank/Paris_WW2_tour_guided_group_photo_2.webp", alt: "Another group photo" },
+                { src: "/photos/left_bank/Paris_WW2_tour_guided_group_photo_3.webp", alt: "Group enjoying the tour" }
+              ].map(({ src, alt }) => (
+                <div class="snap-center shrink-0 w-64 rounded-lg overflow-hidden shadow-md bg-white">
+                  <img
+                    src={src}
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                    width="480"
+                    height="360"
+                    class="w-full aspect-video object-cover"
+                  />
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -807,8 +813,4 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
     currentStopIndex = (currentStopIndex - 1 + totalStops) % totalStops;
     updateStopsCarousel();
   }
-</script>
-      updateStopsCarousel();
-    });
-  });
 </script>
