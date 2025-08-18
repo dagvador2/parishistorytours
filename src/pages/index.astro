@@ -31,13 +31,11 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 	</div> -->
 
 	<!-- Bannière de navigation fixe pour desktop -->
-	<nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
+	<nav id="book-banner-desktop" class="hidden md:block fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9999] shadow-md transform -translate-y-full transition-transform duration-300">
 		<div class="max-w-4xl mx-auto flex items-center justify-center gap-8 py-4">
-			<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
-			
-			<button id="book-btn-desktop" class="bg-gray-600 text-white font-bold hover:bg-gray-700 transition-colors duration-200 px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform">{t('nav.bookTour')}</button>
-			
-			<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
+			<a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
+			<button id="book-btn-desktop" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform">{t('nav.bookTour')}</button>
+			<a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
 		</div>
 	</nav>
 
@@ -609,28 +607,39 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 			}
 		}
 
-		// Bannière Book Tour mobile au scroll
+		// Bannière Book Tour desktop et mobile au scroll
 		let lastScrollY = 0;
 		const bookBannerMobile = document.getElementById('book-banner-mobile');
+		const bookBannerDesktop = document.getElementById('book-banner-desktop');
 
 		function handleScroll() {
 			const currentScrollY = window.scrollY;
 			const bookingSection = document.getElementById('book-tour');
-			let hideThreshold = window.innerHeight; // Valeur par défaut
-			
+			let hideThreshold = window.innerHeight;
+
 			if (bookingSection) {
 				const rect = bookingSection.getBoundingClientRect();
 				const sectionTop = currentScrollY + rect.top;
-				hideThreshold = sectionTop - 100; // Cache la bannière 100px avant la section
+				hideThreshold = sectionTop - 100;
 			}
-			
-			if (currentScrollY > 200 && currentScrollY < hideThreshold) {
-				// Apparaît après 200px et disparaît avant la section booking
-				bookBannerMobile?.classList.remove('-translate-y-full');
-			} else {
-				bookBannerMobile?.classList.add('-translate-y-full');
+
+			// Mobile
+			if (bookBannerMobile) {
+				if (currentScrollY > 200 && currentScrollY < hideThreshold) {
+					bookBannerMobile.classList.remove('-translate-y-full');
+				} else {
+					bookBannerMobile.classList.add('-translate-y-full');
+				}
 			}
-			
+			// Desktop
+			if (bookBannerDesktop) {
+				if (currentScrollY > 200 && currentScrollY < hideThreshold) {
+					bookBannerDesktop.classList.remove('-translate-y-full');
+				} else {
+					bookBannerDesktop.classList.add('-translate-y-full');
+				}
+			}
+
 			lastScrollY = currentScrollY;
 		}
 
