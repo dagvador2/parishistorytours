@@ -4,25 +4,39 @@ import Welcome from "../components/Welcome.astro";
 import ToursAvailable from "../components/ToursAvailable.astro";
 import Reviews from "../components/Reviews.astro";
 import BookTour from "../components/BookTour.astro";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
 import "../styles/global.css";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 import { Picture } from "astro:assets";
 
 import guidePhoto     from "../images/guide-photo.webp";
 import pantheon       from "../images/pantheon_de_Paris.webp";
 import placeVendome   from "../images/place_vendome_paris.webp";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Create language-aware navigation links
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <meta name="description" content="Explore Paris through private WWII history tours. Discover iconic places with expert guides. Book your historical Paris tour now.">
 
 
 <BaseLayout title="Paris History Tours. Guided walking history tours in Paris on the Second World War">
+	<!-- Language switcher -->
+	<div class="fixed top-4 left-4 z-50">
+		<LanguageSwitcher />
+	</div>
+
 	<!-- Bannière de navigation fixe pour desktop -->
 	<nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
 		<div class="max-w-4xl mx-auto flex items-center justify-center gap-8 py-4">
-			<a href="/tours/left-bank" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">Paris - Left Bank Tour</a>
-			<a href="/tours/right-bank" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">Paris - Right Bank Tour</a>
-			<a href="/" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">Home</a>
+			<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
+			<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
+			<a href={langPrefix || '/'} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.home')}</a>
 		</div>
 	</nav>
 
@@ -39,11 +53,11 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 
 		<!-- Menu déroulant mobile -->
 		<div id="mobile-menu" class="hidden absolute top-14 right-0 bg-white border border-gray-200 rounded-lg shadow-xl py-2 min-w-48 opacity-0 transition-all duration-200 transform scale-95">
-			<a href="#about" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">Présentation</a>
-			<a href="#tours" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">Tours Available</a>
-			<a href="#reviews" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">Reviews</a>
-			<a href="#book-tour" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">Book your Tour</a>
-			<a href="#gallery" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 font-medium">Gallery</a>
+			<a href="#about" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.presentation')}</a>
+			<a href="#tours" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.toursAvailable')}</a>
+			<a href="#reviews" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.reviews')}</a>
+			<a href="#book-tour" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.bookTour')}</a>
+			<a href="#gallery" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 font-medium">{t('nav.gallery')}</a>
 		</div>
 	</div>
 
@@ -52,12 +66,12 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 		{/* Titre principal et sous-titre */}
 		<div class="max-w-4xl mx-auto flex flex-col items-center justify-center mb-0">
 			<h1 class="text-4xl md:text-6xl font-bold text-center text-gray-800 m-0 p-0 mb-4">
-				Discover Paris differently
+				{t('home.title')}
 			</h1>
 			{/* Séparateur fin entre les titres */}
 			<div class="w-16 h-px bg-gray-400 mb-4"></div>
 			<h2 class="text-xl md:text-2xl font-medium text-center text-gray-600 m-0 p-0">
-				Immersive visits about WW2 History in Paris
+				{t('home.subtitle')}
 			</h2>
 		</div>
 		{/* Partie photo et contenu sur fond clair */}
@@ -89,8 +103,8 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 	{/* Galerie des photos */}
 	<section id="gallery" class="py-16 bg-white">
 		<div class="max-w-6xl mx-auto px-4">
-			<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">Gallery</h2>
-			<p class="text-center text-gray-600 mb-12 text-lg">Discover the historical sites we visit</p>
+			<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('home.gallery.title')}</h2>
+			<p class="text-center text-gray-600 mb-12 text-lg">{t('home.gallery.subtitle')}</p>
 			
 			<div class="relative max-w-4xl mx-auto">
 				{/* Conteneur du carrousel */}
@@ -111,8 +125,8 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 									class="w-full h-64 md:h-96 object-cover"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">Panthéon</h3>
-									<p class="text-white/90 text-sm md:text-base">Memorial to the heroes of the French Resistance</p>
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.pantheon.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.pantheon.description')}</p>
 								</div>
 							</div>
 						</div>
@@ -132,8 +146,8 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 									class="w-full h-64 md:h-96 object-cover"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">Place Vendôme</h3>
-									<p class="text-white/90 text-sm md:text-base">Witness to the German occupation of Paris</p>
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.placeVendome.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.placeVendome.description')}</p>
 								</div>
 							</div>
 						</div>
@@ -153,8 +167,8 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 								class="w-full h-64 md:h-96 object-cover"
 							/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">Meet Clément</h3>
-									<p class="text-white/90 text-sm md:text-base">Your passionate historian and expert guide</p>
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
 								</div>
 							</div>
 						</div>
@@ -575,7 +589,7 @@ import placeVendome   from "../images/place_vendome_paris.webp";
 		</script>
 
 <script>
-  // Debug: vérifier l’URL Supabase réellement chargée côté client
+  // Debug: vérifier l'URL Supabase réellement chargée côté client
   console.log('[Env] PUBLIC_SUPABASE_URL:', import.meta.env.PUBLIC_SUPABASE_URL);
 
 

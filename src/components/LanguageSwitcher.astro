@@ -1,25 +1,35 @@
 ---
-import { getCurrentLocale, getLocalizedPath } from '../i18n/utils.js';
+import { getCurrentLocale } from '../i18n/utils';
 
 const currentLocale = getCurrentLocale(Astro.url.pathname);
 const currentPath = Astro.url.pathname;
-const isFrench = currentPath.startsWith('/fr');
 
-const englishUrl = isFrench ? currentPath.replace('/fr', '') || '/' : currentPath;
-const frenchUrl = isFrench ? currentPath : `/fr${currentPath}`;
+// Generate the alternate language URL
+let englishUrl: string;
+let frenchUrl: string;
+
+if (currentLocale === 'fr') {
+  // Currently on French page, remove /fr prefix for English
+  englishUrl = currentPath.replace(/^\/fr/, '') || '/';
+  frenchUrl = currentPath;
+} else {
+  // Currently on English page, add /fr prefix for French
+  englishUrl = currentPath;
+  frenchUrl = `/fr${currentPath}`;
+}
 ---
 
 <div class="flex items-center gap-2">
   <a 
     href={englishUrl}
-    class={`px-2 py-1 text-sm rounded transition-colors ${!isFrench ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
+    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
   >
     EN
   </a>
   <span class="text-gray-400">|</span>
   <a 
     href={frenchUrl}
-    class={`px-2 py-1 text-sm rounded transition-colors ${isFrench ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
+    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'fr' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
   >
     FR
   </a>

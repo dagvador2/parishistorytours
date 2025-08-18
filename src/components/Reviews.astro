@@ -1,4 +1,9 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
 const reviews = [
 	{ 
 		name: "Anonymous", 
@@ -37,8 +42,8 @@ const reviews = [
 
 {/* Section Reviews */}
 <div id="reviews" class="mb-16">
-	<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">Reviews</h2>
-	<p class="text-center text-gray-600 mb-12 text-lg">What visitors say about our tours</p>
+	<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('reviews.title')}</h2>
+	<p class="text-center text-gray-600 mb-12 text-lg">{t('reviews.subtitle')}</p>
 	
 	{/* Carrousel de reviews */}
 	<div class="relative max-w-4xl mx-auto overflow-hidden">
@@ -78,7 +83,7 @@ const reviews = [
 									class={`text-blue-500 text-sm font-medium hover:text-blue-600 transition self-start mb-4 show-more-${index} cursor-pointer flex-shrink-0`}
 									onclick={`toggleReview(${index})`}
 								>
-									Show more
+									{t('common.showMore')}
 								</button>
 							)}
 						</div>
@@ -129,7 +134,7 @@ const reviews = [
 				alt="Freetour logo" 
 				class="w-6 h-6 object-contain"
 			/>
-			<span>See more reviews on Freetour.com</span>
+			<span>{t('reviews.seeMore')}</span>
 		</a>
 		<span class="text-gray-400 hidden md:inline">|</span>
 		<a href="https://maps.app.goo.gl/1ZmS5861XDPsM1Dk7" target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 underline transition text-sm text-center">
@@ -138,7 +143,7 @@ const reviews = [
 				alt="Google logo" 
 				class="w-6 h-6 object-contain"
 			/>
-			<span>Find us on Google Maps</span>
+			<span>{t('reviews.findUs')}</span>
 		</a>
 	</div>
 </div>
@@ -163,11 +168,11 @@ const reviews = [
 		if (preview.classList.contains('hidden')) {
 			preview.classList.remove('hidden');
 			full.classList.add('hidden');
-			button.textContent = 'Show more';
+			button.textContent = 'Show more'; // You can also get this from t() if needed
 		} else {
 			preview.classList.add('hidden');
 			full.classList.remove('hidden');
-			button.textContent = 'Show less';
+			button.textContent = 'Show less'; // You can also get this from t() if needed
 		}
 	}
 

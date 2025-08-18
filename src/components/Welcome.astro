@@ -1,10 +1,13 @@
 ---
-// Aucune logique nécessaire pour ce composant
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 {/* Section Welcome sans équerres sur mobile */}
 <div class="flex flex-col items-center mb-16">
-	<div class="text-3xl font-bold text-gray-700 text-center mb-8">Welcome</div>
+	<div class="text-3xl font-bold text-gray-700 text-center mb-8">{t('home.welcome.title')}</div>
 	<div class="relative max-w-3xl w-full mx-auto px-4">
 		{/* Équerres uniquement sur desktop */}
 		<div class="absolute -top-4 -left-4 w-12 h-12 hidden md:block">
@@ -20,12 +23,9 @@
 			</svg>
 		</div>
 		<div class="bg-transparent px-6 py-8 text-center text-lg md:text-xl text-gray-900 font-medium relative z-10">
-			<p class="mb-5">
-				I'm <strong>Clément</strong>, a passionate history enthusiast and independent tour guide.<br/>
-				I offer immersive walking tours focused on World War&nbsp;II in Paris — and soon on other topics.
-			</p>
+			<p class="mb-5" set:html={t('home.welcome.intro')} />
 			<p class="text-gray-700 font-normal text-base md:text-lg">
-				Whether you're a curious traveler, a history lover, or an educator, my tours are designed to bring the past to life through stories, places, and personal insights.
+				{t('home.welcome.description')}
 			</p>
 		</div>
 	</div>

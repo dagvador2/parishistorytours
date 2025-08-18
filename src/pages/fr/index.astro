@@ -1,0 +1,192 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Welcome from "../../components/Welcome.astro";
+import ToursAvailable from "../../components/ToursAvailable.astro";
+import Reviews from "../../components/Reviews.astro";
+import BookTour from "../../components/BookTour.astro";
+import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
+import "../../styles/global.css";
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+import { Picture } from "astro:assets";
+
+import guidePhoto     from "../../images/guide-photo.webp";
+import pantheon       from "../../images/pantheon_de_Paris.webp";
+import placeVendome   from "../../images/place_vendome_paris.webp";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Create language-aware navigation links
+const langPrefix = '/fr';
+---
+
+<meta name="description" content="Explorez Paris à travers des visites privées d'histoire de la 2GM. Découvrez des lieux emblématiques avec des guides experts. Réservez votre visite historique de Paris maintenant.">
+
+<BaseLayout title="Paris History Tours - Visites guidées d'histoire à Paris sur la Seconde Guerre Mondiale">
+	<!-- Language switcher -->
+	<div class="fixed top-4 left-4 z-50">
+		<LanguageSwitcher />
+	</div>
+
+	<!-- Bannière de navigation fixe pour desktop -->
+	<nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
+		<div class="max-w-4xl mx-auto flex items-center justify-center gap-8 py-4">
+			<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
+			<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
+			<a href={langPrefix} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.home')}</a>
+		</div>
+	</nav>
+
+	<!-- Menu mobile hamburger -->
+	<div class="md:hidden fixed top-4 right-4 z-50">
+		<button id="mobile-menu-btn" class="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg p-3 shadow-lg hover:bg-white transition-all duration-200">
+			<svg id="hamburger-icon" class="w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+			</svg>
+			<svg id="close-icon" class="hidden w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+			</svg>
+		</button>
+
+		<!-- Menu déroulant mobile -->
+		<div id="mobile-menu" class="hidden absolute top-14 right-0 bg-white border border-gray-200 rounded-lg shadow-xl py-2 min-w-48 opacity-0 transition-all duration-200 transform scale-95">
+			<a href="#about" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.presentation')}</a>
+			<a href="#tours" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.toursAvailable')}</a>
+			<a href="#reviews" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.reviews')}</a>
+			<a href="#book-tour" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.bookTour')}</a>
+			<a href="#gallery" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 font-medium">{t('nav.gallery')}</a>
+		</div>
+	</div>
+
+	<!-- Hero section -->
+	<section id="about" class="py-8 md:py-24 md:pt-40 px-2 max-w-full text-lg leading-8 bg-[#ebebef] min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
+		<div class="max-w-4xl mx-auto flex flex-col items-center justify-center mb-0">
+			<h1 class="text-4xl md:text-6xl font-bold text-center text-gray-800 m-0 p-0 mb-4">
+				{t('home.title')}
+			</h1>
+			<div class="w-16 h-px bg-gray-400 mb-4"></div>
+			<h2 class="text-xl md:text-2xl font-medium text-center text-gray-600 m-0 p-0">
+				{t('home.subtitle')}
+			</h2>
+		</div>
+		
+		<div class="flex justify-center mb-4 max-w-4xl mx-auto">
+			<Picture
+			src={guidePhoto}
+			alt="Guide – Paris History Tours"
+			widths={[320,640,960,1280]}
+			sizes="(max-width:768px) 90vw, 480px"
+			formats={["avif","webp"]} 
+			loading="lazy"
+			decoding="async"
+			quality={80}
+			class="rounded-xl shadow-lg max-w-full h-auto mt-8 mb-8"
+		/>
+		</div>
+		
+		<div class="flex justify-center mb-8">
+			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
+		</div>
+
+		<Welcome />
+		<ToursAvailable />
+		<Reviews />
+		<BookTour />
+	</section>
+	
+	<section id="gallery" class="py-16 bg-white">
+		<div class="max-w-6xl mx-auto px-4">
+			<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('home.gallery.title')}</h2>
+			<p class="text-center text-gray-600 mb-12 text-lg">{t('home.gallery.subtitle')}</p>
+			
+			<div class="relative max-w-4xl mx-auto">
+				<div class="overflow-hidden rounded-xl shadow-lg">
+					<div class="flex transition-transform duration-500 ease-in-out" id="gallery-carousel">
+						<div class="min-w-full">
+							<div class="relative">
+								<Picture
+									src={pantheon}
+									alt="Panthéon de Paris – Memorial to Resistance heroes"
+									widths={[640,768,1024,1440]}
+									sizes="100vw"
+									formats={["avif","webp"]}
+									loading="lazy"
+									decoding="async"
+									quality={75}
+									class="w-full h-64 md:h-96 object-cover"
+								/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.pantheon.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.pantheon.description')}</p>
+								</div>
+							</div>
+						</div>
+						
+						<div class="min-w-full">
+							<div class="relative">
+								<Picture
+									src={placeVendome}
+									alt="Place Vendôme – Wartime Paris"
+									widths={[640,768,1024,1440]}
+									sizes="100vw"
+									formats={["avif","webp"]}
+									loading="lazy"
+									decoding="async"
+									quality={75}
+									class="w-full h-64 md:h-96 object-cover"
+								/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.placeVendome.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.placeVendome.description')}</p>
+								</div>
+							</div>
+						</div>
+						
+						<div class="min-w-full">
+							<div class="relative">
+								<Picture
+								src={guidePhoto}
+								alt="Clément – Your expert guide"
+								widths={[640,768,1024,1440]}
+								sizes="100vw"
+								formats={["avif","webp"]}
+								loading="lazy"
+								decoding="async"
+								quality={75}
+								class="w-full h-64 md:h-96 object-cover"
+							/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<button id="prev-gallery" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-200">
+					<svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+					</svg>
+				</button>
+				<button id="next-gallery" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-200">
+					<svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+					</svg>
+				</button>
+				
+				<div class="flex justify-center mt-6 space-x-2" id="gallery-indicators">
+					<button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</BaseLayout>
+
+<script>
+	// ...existing code...
+</script>

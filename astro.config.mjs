@@ -3,14 +3,22 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import vercel from "@astrojs/vercel";
-import sitemap from "@astrojs/sitemap"; // 👈 Ajout du plugin sitemap
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.parishistorytours.com", // 👈 Obligatoire pour le sitemap
+  site: "https://www.parishistorytours.com",
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "fr"],
+    routing: {
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false
+    }
+  },
   integrations: [
     react(),
-    sitemap(), // 👈 Activation du plugin sitemap ici
+    sitemap(),
   ],
 
   // Needed for API routes later

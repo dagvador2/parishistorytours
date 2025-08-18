@@ -4,11 +4,24 @@ import { Picture } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BookTour from "../../components/BookTour.astro";
 import TourMap from "../../components/TourMap.tsx";
-import pantheon       from "../../images/pantheon_de_Paris.webp";
+import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import pantheon from "../../images/pantheon_de_Paris.webp";
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Create language-aware navigation links
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <BaseLayout title="Left Bank Tour - Paris History Tours" description="Left Bank WWII walking tour in Paris: Fall of Paris, Resistance, and Liberation.">
+  <!-- Language switcher -->
+  <div class="fixed top-4 left-4 z-50">
+    <LanguageSwitcher />
+  </div>
+
   <!-- Hero Section -->
   <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
     <div class="absolute inset-0 bg-black/40"></div>
@@ -26,28 +39,28 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
       />
     </div>
     <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-      <h1 class="text-5xl md:text-7xl font-bold mb-6">Left Bank Tour</h1>
+      <h1 class="text-5xl md:text-7xl font-bold mb-6">{t('tours.leftBank.title')}</h1>
       <p class="text-xl md:text-2xl mb-8 opacity-90">
-        Discover Paris under the light of the Second World War
+        {t('tours.leftBank.description')}
       </p>
       <div class="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4 md:gap-8 text-lg md:text-xl">
         <div class="flex items-center justify-center gap-3">
           <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
           </svg>
-          <span class="font-medium">2 hours</span>
+          <span class="font-medium">{t('common.duration')}</span>
         </div>
         <div class="flex items-center justify-center gap-3">
           <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
           </svg>
-          <span class="font-medium">2.5 km walking</span>
+          <span class="font-medium">{t('common.distance')}</span>
         </div>
         <div class="flex items-center justify-center gap-3">
           <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span class="font-medium">4 historic stops</span>
+          <span class="font-medium">{t('common.stops')}</span>
         </div>
       </div>
     </div>
@@ -57,17 +70,17 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
   <section class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
-        A Journey Through Wartime Paris
+        {t('tours.leftBank.introduction')}
       </h2>
       <div class="text-center">
         <blockquote class="text-2xl md:text-3xl font-medium text-gray-700 italic mb-6">
-          "Paris, Paris outraged! Paris broken! Paris martyred! But Paris liberated!"
+          "{t('tours.leftBank.quote')}"
         </blockquote>
         <cite class="text-lg text-gray-600">
-          — Charles de Gaulle, 25th August 1944
+          — {t('tours.leftBank.quoteAuthor')}
         </cite>
         <p class="mt-6 text-gray-700">
-          This Left Bank Tour explores WWII Paris with stories of the Fall, the Resistance, and the Liberation, guiding you through four historic stops.
+          {t('tours.leftBank.summary')}
         </p>
       </div>
     </div>
@@ -77,7 +90,7 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
   <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
       <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
-        Three Historical Themes on WW2
+        {t('tours.themes.title')}
       </h3>
       
       <!-- Desktop Version -->
@@ -96,12 +109,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
               class="w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <h3 class="text-2xl font-bold text-white">The Fall of Paris</h3>
+              <h3 class="text-2xl font-bold text-white">{t('tours.themes.fall.title')}</h3>
             </div>
           </div>
           <div class="p-6">
             <p class="text-gray-700 leading-relaxed">
-              How did the German army reach Paris, the French Capital, in only 35 days of combat? What happened in the city during these 35 crucial days?
+              {t('tours.themes.fall.description')}
             </p>
           </div>
         </div>
@@ -120,12 +133,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
               class="w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <h3 class="text-2xl font-bold text-white">The Resistance</h3>
+              <h3 class="text-2xl font-bold text-white">{t('tours.themes.resistance.title')}</h3>
             </div>
           </div>
           <div class="p-6">
             <p class="text-gray-700 leading-relaxed">
-              How did the Resistance start in the city? We will follow the steps of an early resistance fighter who was part of the first Resistance network in the town, called Musée de l'Homme.
+              {t('tours.themes.resistance.description')}
             </p>
           </div>
         </div>
@@ -144,12 +157,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
               class="w-full h-full object-cover"
             />
             <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <h3 class="text-2xl font-bold text-white">Liberation</h3>
+              <h3 class="text-2xl font-bold text-white">{t('tours.themes.liberation.title')}</h3>
             </div>
           </div>
           <div class="p-6">
             <p class="text-gray-700 leading-relaxed">
-              How did the Allies finally free Paris after four years of occupation? We will talk about the fights that took place in the city in August 1944, and you will see how closely Paris came to being greatly damaged.
+              {t('tours.themes.liberation.description')}
             </p>
           </div>
         </div>
@@ -174,12 +187,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                       class="w-full h-full object-cover"
                     />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <h3 class="text-2xl font-bold text-white">The Fall of Paris</h3>
+                      <h3 class="text-2xl font-bold text-white">{t('tours.themes.fall.title')}</h3>
                     </div>
                   </div>
                   <div class="p-6">
                     <p class="text-gray-700 leading-relaxed">
-                      How did the German army reach Paris, the French Capital, in only 35 days of combat? What happened in the city during these 35 crucial days?
+                      {t('tours.themes.fall.description')}
                     </p>
                   </div>
                 </div>
@@ -199,12 +212,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                       class="w-full h-full object-cover"
                     />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <h3 class="text-2xl font-bold text-white">The Resistance</h3>
+                      <h3 class="text-2xl font-bold text-white">{t('tours.themes.resistance.title')}</h3>
                     </div>
                   </div>
                   <div class="p-6">
                     <p class="text-gray-700 leading-relaxed">
-                      How did the Resistance start in the city? We will follow the steps of an early resistance fighter who was part of the first Resistance network in the town, called Musée de l'Homme.
+                      {t('tours.themes.resistance.description')}
                     </p>
                   </div>
                 </div>
@@ -224,12 +237,12 @@ import pantheon       from "../../images/pantheon_de_Paris.webp";
                       class="w-full h-full object-cover"
                     />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                      <h3 class="text-2xl font-bold text-white">Liberation</h3>
+                      <h3 class="text-2xl font-bold text-white">{t('tours.themes.liberation.title')}</h3>
                     </div>
                   </div>
                   <div class="p-6">
                     <p class="text-gray-700 leading-relaxed">
-                      How did the Allies finally free Paris after four years of occupation? We will talk about the fights that took place in the city in August 1944, and you will see how closely Paris came to being greatly damaged.
+                      {t('tours.themes.liberation.description')}
                     </p>
                   </div>
                 </div>
