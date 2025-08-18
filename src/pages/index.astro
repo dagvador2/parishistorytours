@@ -24,7 +24,6 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 
 <meta name="description" content="Explore Paris through private WWII history tours. Discover iconic places with expert guides. Book your historical Paris tour now.">
 
-
 <BaseLayout title="Paris History Tours. Guided walking history tours in Paris on the Second World War">
 	<!-- Language switcher -->
 	<div class="fixed top-4 left-4 z-50">
@@ -74,43 +73,36 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 				{t('home.subtitle')}
 			</h2>
 		</div>
-		{/* Partie photo et contenu sur fond clair */}
-		<div class="flex justify-center mb-4 max-w-4xl mx-auto">
-			<Picture
-			src={guidePhoto}
-			alt="Guide – Paris History Tours"
-			widths={[320,640,960,1280]}
-			sizes="(max-width:768px) 90vw, 480px"
-			formats={["avif","webp"]} 
-			loading="lazy"
-			decoding="async"
-			quality={80}
-			class="rounded-xl shadow-lg max-w-full h-auto mt-8 mb-8"
-		/>
-		</div>
 		
-		{/* Séparateur ligne */}
-		<div class="flex justify-center mb-8">
-			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
-		</div>
-
-		<Welcome />
-		<ToursAvailable />
-		<Reviews />
-		<BookTour />
-	</section>
-	
-	{/* Galerie des photos */}
-	<section id="gallery" class="py-16 bg-white">
-		<div class="max-w-6xl mx-auto px-4">
-			<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('home.gallery.title')}</h2>
-			<p class="text-center text-gray-600 mb-12 text-lg">{t('home.gallery.subtitle')}</p>
-			
-			<div class="relative max-w-4xl mx-auto">
+		{/* Carrousel de photos déplacé ici */}
+		<div class="flex justify-center mb-4 max-w-4xl mx-auto mt-8">
+			<div class="relative max-w-4xl mx-auto w-full">
 				{/* Conteneur du carrousel */}
 				<div class="overflow-hidden rounded-xl shadow-lg">
 					<div class="flex transition-transform duration-500 ease-in-out" id="gallery-carousel">
-						{/* Panthéon */}
+						{/* Photo du guide en premier */}
+						<div class="min-w-full">
+							<div class="relative">
+								<Picture
+								src={guidePhoto}
+								alt="Clément – Your expert guide"
+								widths={[640,768,1024,1440]}
+								sizes="100vw"
+								formats={["avif","webp"]}
+								loading="lazy"
+								decoding="async"
+								quality={75}
+								class="w-full h-80 md:h-[28rem] object-cover"
+								style="object-position: center center;"
+							/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
+								</div>
+							</div>
+						</div>
+						
+						{/* Panthéon - montrer seulement la partie supérieure */}
 						<div class="min-w-full">
 							<div class="relative">
 								<Picture
@@ -122,7 +114,8 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 									loading="lazy"
 									decoding="async"
 									quality={75}
-									class="w-full h-64 md:h-96 object-cover"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
 									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.pantheon.title')}</h3>
@@ -143,7 +136,8 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 									loading="lazy"
 									decoding="async"
 									quality={75}
-									class="w-full h-64 md:h-96 object-cover"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center center;"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
 									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.placeVendome.title')}</h3>
@@ -151,24 +145,39 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 								</div>
 							</div>
 						</div>
-						
-						{/* Photo du guide */}
+
+						{/* Musée du Jeu de Paume - remonter l'image */}
 						<div class="min-w-full">
 							<div class="relative">
-								<Picture
-								src={guidePhoto}
-								alt="Clément – Your expert guide"
-								widths={[640,768,1024,1440]}
-								sizes="100vw"
-								formats={["avif","webp"]}
-								loading="lazy"
-								decoding="async"
-								quality={75}
-								class="w-full h-64 md:h-96 object-cover"
-							/>
+								<img
+									src="/photos/museu_jeu_de_paume_paris.webp"
+									alt="Musée du Jeu de Paume – Storage area for Nazi stolen artwork"
+									loading="lazy"
+									decoding="async"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top;"
+								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.jeuDePaume.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.jeuDePaume.description')}</p>
+								</div>
+							</div>
+						</div>
+
+						{/* Ministry of Foreign Affairs - remonter l'image */}
+						<div class="min-w-full">
+							<div class="relative">
+								<img
+									src="/photos/right_bank/quai_orsay_paris.webp"
+									alt="Ministry of Foreign Affairs – Crucial wartime meetings"
+									loading="lazy"
+									decoding="async"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top;"
+								/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.foreignAffairs.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.foreignAffairs.description')}</p>
 								</div>
 							</div>
 						</div>
@@ -192,9 +201,21 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 					<button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
 					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
 					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="3"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="4"></button>
 				</div>
 			</div>
 		</div>
+		
+		{/* Séparateur ligne */}
+		<div class="flex justify-center mb-8">
+			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
+		</div>
+
+		<Welcome />
+		<ToursAvailable />
+		<Reviews />
+		<BookTour />
 	</section>
 
 </BaseLayout>
@@ -432,9 +453,9 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 			});
 		}
 
-		// Gallery carousel functionality
+		// Gallery carousel functionality - Auto-play désactivé
 		let currentGalleryIndex = 0;
-		const totalImages = 3;
+		const totalImages = 5; // Mise à jour pour 5 images
 		const galleryCarousel = document.getElementById('gallery-carousel');
 		const galleryIndicators = document.querySelectorAll('#gallery-indicators button');
 		const prevGalleryBtn = document.getElementById('prev-gallery');
@@ -476,8 +497,8 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 			});
 		});
 
-		// Auto-play gallery
-		setInterval(nextGalleryImage, 4000);
+		// Auto-play gallery DÉSACTIVÉ
+		// setInterval(nextGalleryImage, 4000);
 
 		// Touch/Swipe support for mobile
 		let galleryTouchStartX = 0;

@@ -48,6 +48,14 @@ export const fr = {
       guide: {
         title: "Rencontrez Clément",
         description: "Votre historien passionné et guide expert"
+      },
+      jeuDePaume: {
+        title: "Musée du Jeu de Paume",
+        description: "Zone de stockage de toutes les œuvres d'art volées par les Nazis"
+      },
+      foreignAffairs: {
+        title: "Ministère des Affaires étrangères",
+        description: "Où des réunions cruciales ont eu lieu pendant la Bataille de France"
       }
     }
   },
@@ -108,6 +116,10 @@ export const fr = {
     subtitle: "Choisissez votre visite préférée et explorons l'histoire ensemble",
     step1: "Étape 1 : Choisissez votre visite",
     step2: "Étape 2 : Nombre de participants",
+    step3: "Étape 3 : Type de visite",
+    step4: "Étape 4 : Date et heure",
+    step5: "Étape 5 : Informations de contact",
+    step6: "Étape 6 : Résumé",
     participants: "participants",
     participant: "participant",
     moreParticipants: "5 participants ou plus",
@@ -115,6 +127,8 @@ export const fr = {
     email: "Email",
     message: "Message (optionnel)",
     send: "Envoyer la Demande",
+    back: "Retour",
+    next: "Suivant",
     success: {
       title: "Demande Confirmée !",
       message: "Merci — votre demande de réservation a été reçue. Nous vous contacterons bientôt avec les détails de confirmation.",

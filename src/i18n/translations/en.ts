@@ -47,7 +47,15 @@ export const en = {
       },
       guide: {
         title: "Meet Clément",
-        description: "Your passionate historian and expert guide"
+        description: "Your history enthusiast and expert guide"
+      },
+      jeuDePaume: {
+        title: "Musée du Jeu de Paume",
+        description: "Storage area for all the artwork stolen by the Nazis"
+      },
+      foreignAffairs: {
+        title: "Ministry of Foreign Affairs",
+        description: "Where crucial meetings took place during the Battle of France"
       }
     }
   },
@@ -99,7 +107,7 @@ export const en = {
     title: "Reviews",
     subtitle: "What visitors say about our tours",
     seeMore: "See more reviews on Freetour.com",
-    findUs: "Find us on Google Maps"
+    findUs: "Find me on Google Maps"
   },
 
   // Booking
@@ -108,6 +116,10 @@ export const en = {
     subtitle: "Choose your preferred tour and let's explore history together",
     step1: "Step 1: Choose your tour",
     step2: "Step 2: Number of participants",
+    step3: "Step 3: Tour type",
+    step4: "Step 4: Date & Time",
+    step5: "Step 5: Contact information",
+    step6: "Step 6: Summary",
     participants: "participants",
     participant: "participant",
     moreParticipants: "5 or more participants",
@@ -115,6 +127,8 @@ export const en = {
     email: "Email",
     message: "Message (optional)",
     send: "Send Request",
+    back: "Back",
+    next: "Next",
     success: {
       title: "Request Confirmed!",
       message: "Thank you — your booking request has been received. We will contact you shortly with confirmation details.",
