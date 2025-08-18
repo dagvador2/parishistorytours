@@ -22,6 +22,13 @@ const langPrefix = isDefaultLang ? '' : '/fr';
     <LanguageSwitcher />
   </div>
 
+  <!-- Bannière Book Tour (cachée par défaut, apparaît au scroll) -->
+  <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
+    <div class="flex items-center justify-center py-3 px-4">
+      <button id="book-btn-tour-page" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{t('nav.bookTour')}</button>
+    </div>
+  </nav>
+
   <!-- Hero Section -->
   <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
     <div class="absolute inset-0 bg-black/40"></div>
@@ -825,5 +832,42 @@ const langPrefix = isDefaultLang ? '' : '/fr';
   function prevStop() {
     currentStopIndex = (currentStopIndex - 1 + totalStops) % totalStops;
     updateStopsCarousel();
+  }
+</script>
+
+<script>
+  // Bannière Book Tour au scroll
+  let lastScrollY = 0;
+  const bookBanner = document.getElementById('book-banner');
+  const bookBtnTourPage = document.getElementById('book-btn-tour-page');
+
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > 200) { // Apparaît après 200px de scroll
+      bookBanner?.classList.remove('-translate-y-full');
+    } else {
+      bookBanner?.classList.add('-translate-y-full');
+    }
+    
+    lastScrollY = currentScrollY;
+  }
+
+  // Scroll vers la section booking
+  function scrollToBooking() {
+    const bookingSection = document.querySelector('[id*="book"]') || document.querySelector('.booking-section');
+    if (bookingSection) {
+      bookingSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
+  // Event listeners
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  
+  if (bookBtnTourPage) {
+    bookBtnTourPage.addEventListener('click', scrollToBooking);
   }
 </script>
