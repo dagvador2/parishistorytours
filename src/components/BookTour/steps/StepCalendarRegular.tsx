@@ -19,7 +19,9 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   const { booking, setBooking } = useBooking();
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [slots, setSlots] = useState<Slot[]>([]);
-  const [availableDays, setAvailableDays] = useState<Record<string, number>>({});
+  const [availableDays, setAvailableDays] = useState<Record<string, number>>(
+    {}
+  );
   const [pricePerPerson, setPricePerPerson] = useState<number>(0);
   const [priceLoading, setPriceLoading] = useState<boolean>(true);
 
@@ -29,16 +31,17 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch('/api/stripe-price');
+        console.log("Fetching price for tour:", booking.tour);
+        const response = await fetch(`/api/stripe-price?tour=${booking.tour}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch price');
+          throw new Error("Failed to fetch price");
         }
         const priceData = await response.json();
         // Convert from cents to euros (assuming Stripe price is in cents)
         const price = priceData.unit_amount / 100;
         setPricePerPerson(price);
       } catch (error) {
-        console.error('Error fetching price:', error);
+        console.error("Error fetching price:", error);
         // Fallback to default price if API fails
         setPricePerPerson(50);
       } finally {
@@ -85,7 +88,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   // Fetch slots for the selected day
   useEffect(() => {
     if (!selectedDay) return;
-    
+
     const fetchSlots = async () => {
       try {
         const begin = new Date(selectedDay);
@@ -107,7 +110,8 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
 
         // Filter slots that have enough availability for the group
         const availableSlots = (data || []).filter(
-          (slot: { available_spots: number }) => slot.available_spots >= booking.participants
+          (slot: { available_spots: number }) =>
+            slot.available_spots >= booking.participants
         );
 
         // Map to the expected Slot interface
@@ -115,7 +119,7 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           id: slot.id,
           start_time: slot.start_time,
           free: slot.available_spots,
-          price: pricePerPerson
+          price: pricePerPerson,
         }));
 
         setSlots(mappedSlots);
@@ -130,14 +134,17 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   // Select a slot and update booking
   const selectSlot = (slot: Slot) => {
     const date = new Date(slot.start_time).toISOString().split("T")[0];
-    const time = new Date(slot.start_time).toTimeString().split(" ")[0].substring(0, 5);
-    
+    const time = new Date(slot.start_time)
+      .toTimeString()
+      .split(" ")[0]
+      .substring(0, 5);
+
     setBooking({
       ...booking,
       date: date,
       time: time,
       sessionId: slot.id,
-      price: pricePerPerson * booking.participants
+      price: pricePerPerson * booking.participants,
     });
   };
 
@@ -182,7 +189,8 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
             ]}
             footer={
               <p className="mt-2 text-sm text-gray-600">
-                Blue dates have available sessions for {booking.participants} {booking.participants === 1 ? 'person' : 'people'}.
+                Blue dates have available sessions for {booking.participants}{" "}
+                {booking.participants === 1 ? "person" : "people"}.
               </p>
             }
           />
@@ -192,7 +200,9 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           {selectedDay && (
             <div>
               <h4 className="font-semibold text-gray-800 mb-4">
-                Available sessions for {selectedDay.toLocaleDateString()} for {booking.participants} {booking.participants === 1 ? 'person' : 'people'}.
+                Available sessions for {selectedDay.toLocaleDateString()} for{" "}
+                {booking.participants}{" "}
+                {booking.participants === 1 ? "person" : "people"}.
               </h4>
               {slots.length > 0 ? (
                 <div className="space-y-3">
@@ -220,7 +230,9 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-gray-800">
-                              {priceLoading ? 'Loading...' : `€${pricePerPerson} per person`}
+                              {priceLoading
+                                ? "Loading..."
+                                : `€${pricePerPerson} per person`}
                             </div>
                             {isSelected && !priceLoading && (
                               <div className="text-sm text-blue-600">
@@ -235,7 +247,9 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                 </div>
               ) : (
                 <p className="text-gray-500 text-sm">
-                  No available sessions for {booking.participants} {booking.participants === 1 ? 'person' : 'people'} on this date.
+                  No available sessions for {booking.participants}{" "}
+                  {booking.participants === 1 ? "person" : "people"} on this
+                  date.
                 </p>
               )}
             </div>
@@ -250,15 +264,26 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
       {booking.sessionId && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center gap-2">
-            <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            <svg
+              className="w-5 h-5 text-green-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
             </svg>
             <span className="text-green-800 font-medium">
-              Session selected: {booking.date && new Date(booking.date).toLocaleDateString()} at {booking.time}
+              Session selected:{" "}
+              {booking.date && new Date(booking.date).toLocaleDateString()} at{" "}
+              {booking.time}
             </span>
           </div>
           <p className="text-sm text-green-700 mt-1">
-            Total: €{booking.price} for {booking.participants} {booking.participants === 1 ? 'person' : 'people'}
+            Total: €{booking.price} for {booking.participants}{" "}
+            {booking.participants === 1 ? "person" : "people"}
           </p>
         </div>
       )}

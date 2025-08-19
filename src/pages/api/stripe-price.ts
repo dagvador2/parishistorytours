@@ -7,10 +7,11 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
 
 export const prerender = false;
 
-export const fetchActivePrice = async () => {
-  const productId = import.meta.env.STRIPE_PRODUCT_ID!;
+export const fetchActivePrice = async (tour: "left-bank" | "right-bank") => {
+  const productIdLeft = import.meta.env.STRIPE_PRODUCT_ID!;
+  const productIdRight = import.meta.env.STRIPE_PRODUCT_ID_RIGHT!;
   const prices = await stripe.prices.list({
-    product: productId,
+    product: tour === "left-bank" ? productIdLeft : productIdRight,
     active: true,
   });
 
@@ -21,9 +22,18 @@ export const fetchActivePrice = async () => {
   return prices.data[0]; // Return the first active price
 };
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async (ctx) => {
+  const url = new URL(ctx.request.url);
+  const tour = url.searchParams.get("tour") as "left-bank" | "right-bank";
+
+  console.log("tour", tour);
+
+  if (!tour || (tour !== "left-bank" && tour !== "right-bank")) {
+    return new Response("Invalid or missing tour parameter", { status: 400 });
+  }
+
   try {
-    const price = await fetchActivePrice();
+    const price = await fetchActivePrice(tour);
     return new Response(JSON.stringify(price), {
       headers: { "Content-Type": "application/json" },
     });
