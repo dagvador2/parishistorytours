@@ -108,6 +108,9 @@ export const fr = {
     subtitle: "Ce que disent les visiteurs de nos visites",
     seeMore: "Voir plus d'avis sur Freetour.com",
     findUs: "Nous trouver sur Google Maps"
+    ,
+    noReviews: "Pas d'avis pour le moment",
+    unavailable: "Les avis ne sont pas disponibles pour le moment"
   },
 
   // Booking
