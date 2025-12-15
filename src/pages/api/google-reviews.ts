@@ -16,6 +16,7 @@ export const GET: APIRoute = async ({ request }) => {
   console.debug('[google-reviews] API key source:', keySource, 'key length:', (API_KEY && API_KEY.length) || 0);
 
   // Use the newer Places API v1 endpoint (works with places.googleapis.com)
+    // Request reviews (displayName). Do not request user_ratings_total here — v1 may not support it and will return 400.
     const url = `https://places.googleapis.com/v1/places/${encodeURIComponent(PLACE_ID)}?fields=reviews,displayName&key=${encodeURIComponent(
       API_KEY
     )}`;
@@ -36,8 +37,8 @@ export const GET: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Invalid response from Google Places' }), { status: 502 });
     }
 
-    // Normalize reviews from either the legacy "result.reviews" or v1 top-level "reviews"
-    const reviewsRaw = (data.result && data.result.reviews) || data.reviews || [];
+  // Normalize reviews from either the legacy "result.reviews" or v1 top-level "reviews"
+  const reviewsRaw = (data.result && data.result.reviews) || data.reviews || [];
     const reviews = reviewsRaw.map((r: any) => {
       // Attempt to map multiple possible shapes returned by different Google APIs
       const name = r.author_name || r.authorDisplayName || r.author_display_name || r.author || r.name || 'Anonymous';
@@ -72,8 +73,37 @@ export const GET: APIRoute = async ({ request }) => {
         profile_photo_url: profile,
       };
     });
+    // Try to extract overall rating and total reviews from known fields (v1 may not expose these)
+    let overallRating: number | null = null;
+    let totalReviews: number | null = null;
+    if (typeof data.rating === 'number') overallRating = data.rating;
+    if (data.user_ratings_total) totalReviews = Number(data.user_ratings_total);
+    if (data.result) {
+      if (typeof data.result.rating === 'number') overallRating = data.result.rating;
+      if (data.result.user_ratings_total) totalReviews = Number(data.result.user_ratings_total);
+    }
 
-    return new Response(JSON.stringify({ reviews }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    // If v1 didn't provide rating/total, try the legacy Place Details endpoint server-side to get metadata
+    if ((overallRating === null || totalReviews === null) && API_KEY && PLACE_ID) {
+      try {
+        const legacyUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${encodeURIComponent(PLACE_ID)}&fields=rating,user_ratings_total&key=${encodeURIComponent(API_KEY)}`;
+        const legacyRes = await fetch(legacyUrl);
+        const legacyText = await legacyRes.text();
+        if (legacyRes.ok) {
+          const legacy = JSON.parse(legacyText);
+          if (legacy && legacy.result) {
+            if (typeof legacy.result.rating === 'number') overallRating = legacy.result.rating;
+            if (legacy.result.user_ratings_total) totalReviews = Number(legacy.result.user_ratings_total);
+          }
+        } else {
+          console.debug('Legacy details fetch failed', legacyRes.status, legacyText);
+        }
+      } catch (e) {
+        console.debug('Legacy details fetch error', e);
+      }
+    }
+
+    return new Response(JSON.stringify({ reviews, total: totalReviews, average_rating: overallRating }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err: any) {
     console.error('Failed to fetch google reviews', err);
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });

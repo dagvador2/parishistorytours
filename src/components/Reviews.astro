@@ -4,40 +4,8 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const reviews = [
-	{ 
-		name: "Anonymous", 
-		platform: "Freetour.com", 
-		rating: 5, 
-		text: "Best tour ever organized!",
-		details: "Clement is the best tour guide I have ever encountered, and I have traveled extensively for many years. He stands out for his enthusiasm and passion for his subject. He is clearly immersed in his topic, in this case French resistance during World War II. He provides a wealth of information, tells fascinating stories, and answers all questions with good humor and competence. He is a real talent, well educated, enthusiastic and humble. Join one of his tours if you get the chance!",
-		date: "3rd of August 2025"
-	},
-	{ 
-		name: "Anonymous", 
-		platform: "Freetour.com", 
-		rating: 5, 
-		text: "Engaging and immersive - a must do!",
-		details: "Our tour with Clement was extraordinary! We loved every minute and could have spent hours more on his circuit. Every stop was captivating and immersive. He can answer any question about WWII Paris and brings the history to life with incredible storytelling and knowledge.",
-		date: "5th of July 2025"
-	},
-	{ 
-		name: "Anonymous", 
-		platform: "Freetour.com", 
-		rating: 5, 
-		text: "Fantastic Tour",
-		details: "We did three free tours and this one was by far the best. A must for anyone interested in history. Clement was an exceptional guide with incredible knowledge and passion for the subject.",
-		date: "30th of June 2025"
-	},
-	{ 
-		name: "Anonymous", 
-		platform: "Freetour.com", 
-		rating: 5, 
-		text: "Best tour in Paris",
-		details: "Clement had incredible knowledge and passion for the tour. It started with a brief on the topic and continued with many stops filled with information. Amazing that this experience is free, the tours are perfect.",
-		date: "29th of June 2025"
-	}
-];
+// reviews will be fetched from the server (Google Places) via /api/google-reviews
+let reviews = [];
 ---
 
 {/* Section Reviews */}
@@ -47,64 +15,9 @@ const reviews = [
 	
 	{/* Carrousel de reviews */}
 	<div class="relative max-w-4xl mx-auto overflow-hidden">
-		<div class="flex transition-transform duration-500 ease-in-out" id="review-carousel">
-			{reviews.map((review, index) => (
-				<div class="min-w-full px-4">
-					<div class="bg-white rounded-xl shadow-lg p-8 mx-auto max-w-3xl border border-gray-100 min-h-96 flex flex-col">
-						{/* Header avec étoiles et date */}
-						<div class="flex items-center justify-between mb-4 gap-4">
-							<div class="flex text-yellow-400">
-								{Array.from({ length: 5 }, (_, i) => (
-									<span>
-										<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-										</svg>
-									</span>
-								))}
-							</div>
-							<span class="text-sm text-gray-500">{review.date}</span>
-						</div>
-						
-						{/* Titre du commentaire */}
-						<h3 class="text-xl font-bold text-gray-800 mb-4 leading-tight">"{review.text}"</h3>
-						
-						{/* Contenu détaillé avec affichage limité */}
-						<div class="flex-1 flex flex-col overflow-hidden">
-							<div class={`text-gray-700 leading-relaxed mb-4 flex-1 review-text-${index} break-words`}>
-								<span class={`review-preview-${index}`}>
-									{review.details.length > 150 ? review.details.substring(0, 150) + "..." : review.details}
-								</span>
-								<span class={`review-full-${index} hidden`}>
-									{review.details}
-								</span>
-							</div>
-							{review.details.length > 150 && (
-								<button 
-									class={`text-blue-500 text-sm font-medium hover:text-blue-600 transition self-start mb-4 show-more-${index} cursor-pointer flex-shrink-0`}
-									onclick={`toggleReview(${index})`}
-								>
-									{t('common.showMore')}
-								</button>
-							)}
-						</div>
-						
-						{/* Footer avec plateforme */}
-						<div class="border-t border-gray-100 pt-4 mt-auto flex-shrink-0">
-							<div class="flex items-center justify-between">
-								<div class="flex items-center gap-2">
-									<img 
-										src="/logos/Freetour_logo.png"
-										alt="Freetour logo" 
-										class="w-5 h-5 object-contain"
-									/>
-									<span class="text-sm font-medium text-gray-600">{review.platform}</span>
-								</div>
-							</div>
-						</div>
-					</div>
+				<div class="flex transition-transform duration-500 ease-in-out" id="review-carousel">
+					<!-- slides will be injected here by client script (Google reviews) -->
 				</div>
-			))}
-		</div>
 		
 		{/* Boutons de navigation */}
 		<button id="prev-review" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition cursor-pointer">
@@ -148,114 +61,215 @@ const reviews = [
 	</div>
 </div>
 
-<script>
-	// Script pour le carrousel de reviews et fonction toggleReview
-	declare global {
-		interface Window {
-			toggleReview: (index: number) => void;
-		}
-	}
-
-	function toggleReview(index: number) {
-		const preview = document.querySelector(`.review-preview-${index}`);
-		const full = document.querySelector(`.review-full-${index}`);
-		const button = document.querySelector(`.show-more-${index}`);
-		
-		if (!preview || !full || !button) {
-			return;
-		}
-
-		if (preview.classList.contains('hidden')) {
-			preview.classList.remove('hidden');
-			full.classList.add('hidden');
-			button.textContent = 'Show more'; // You can also get this from t() if needed
-		} else {
-			preview.classList.add('hidden');
-			full.classList.remove('hidden');
-			button.textContent = 'Show less'; // You can also get this from t() if needed
-		}
-	}
-
-	window.toggleReview = toggleReview;
-
-	let currentReviewIndex = 0;
-	const totalReviews = 4;
-	const carousel = document.getElementById('review-carousel');
-	const indicators = document.querySelectorAll('#review-indicators button');
+<script type="module">
+(() => {
+	// client-side: fetch Google reviews and inject slides while keeping the visual structure
+		const container = document.getElementById('review-carousel');
+		const indicatorsContainer = document.getElementById('review-indicators');
 	const prevBtn = document.getElementById('prev-review');
 	const nextBtn = document.getElementById('next-review');
 
-	function updateCarousel() {
-		const offset = -currentReviewIndex * 100;
-		if (carousel) {
-			carousel.style.transform = `translateX(${offset}%)`;
-		}
-		
-		indicators.forEach((indicator, index) => {
-			indicator.classList.toggle('bg-gray-800', index === currentReviewIndex);
-			indicator.classList.toggle('bg-gray-300', index !== currentReviewIndex);
-		});
-	}
+		if (!container || !indicatorsContainer) return;
 
-	function nextReview() {
-		currentReviewIndex = (currentReviewIndex + 1) % totalReviews;
-		updateCarousel();
-	}
-
-	function prevReview() {
-		currentReviewIndex = (currentReviewIndex - 1 + totalReviews) % totalReviews;
-		updateCarousel();
-	}
-
-	if (nextBtn) {
-		nextBtn.addEventListener('click', nextReview);
-	}
-	if (prevBtn) {
-		prevBtn.addEventListener('click', prevReview);
-	}
-
-	indicators.forEach((indicator, index) => {
-		indicator.addEventListener('click', () => {
-			currentReviewIndex = index;
-			updateCarousel();
-		});
-	});
-
-	// Touch/Swipe support for mobile
-	let touchStartX = 0;
-	let touchStartY = 0;
-	let touchEndX = 0;
-	let touchEndY = 0;
-	const minSwipeDistance = 50;
-
-	if (carousel) {
-		carousel.addEventListener('touchstart', (e) => {
-			touchStartX = e.changedTouches[0].screenX;
-			touchStartY = e.changedTouches[0].screenY;
-		}, { passive: true });
-
-		carousel.addEventListener('touchend', (e) => {
-			touchEndX = e.changedTouches[0].screenX;
-			touchEndY = e.changedTouches[0].screenY;
-			handleSwipe();
-		}, { passive: true });
-	}
-
-	function handleSwipe() {
-		const deltaX = touchEndX - touchStartX;
-		const deltaY = touchEndY - touchStartY;
-		
-		// Vérifier que c'est un swipe horizontal (et non vertical)
-		if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-			if (deltaX > 0) {
-				// Swipe vers la droite - review précédente
-				prevReview();
-			} else {
-				// Swipe vers la gauche - review suivante
-				nextReview();
+		// Aggressively clear any existing intervals that might be causing auto-rotation.
+		// Note: this clears all intervals up to the current highest id. It's aggressive but guarantees no hidden timers keep rotating the carousel.
+		try {
+			const highest = window.setInterval(() => {}, 1000);
+			for (let i = 0; i <= highest; i++) {
+				try { clearInterval(i); } catch (e) {}
 			}
+			// also clear any known stored interval id
+			if (window.__reviewsAutoRotateInterval) {
+				try { clearInterval(window.__reviewsAutoRotateInterval); } catch (e) {}
+				delete window.__reviewsAutoRotateInterval;
+			}
+		} catch (e) {
+			// ignore
+		}
+
+	const loadingHtml = '<div class="p-8 text-center text-gray-600">' + (window?.ASTRO?.env?.REVIEWS_LOADING_LABEL || 'Loading reviews...') + '</div>';
+	container.innerHTML = loadingHtml;
+
+	function escapeHtml(str) {
+		if (!str) return '';
+		return String(str).replace(/[&<>\"]/g, function (s) {
+			const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+			return map[s];
+		});
+	}
+
+	async function fetchWithTimeout(url, opts = {}, timeout = 7000) {
+		const controller = new AbortController();
+		const id = setTimeout(() => controller.abort(), timeout);
+		try {
+			const res = await fetch(url, { signal: controller.signal, ...opts });
+			return res;
+		} finally {
+			clearTimeout(id);
 		}
 	}
 
-	setInterval(nextReview, 5000);
+	(async () => {
+		let payload;
+		try {
+			const res = await fetchWithTimeout('/api/google-reviews');
+			payload = await res.json();
+			if (!res.ok || payload.error) {
+				const detail = payload?.body || payload?.error || payload?.message || '';
+				container.innerHTML = '<div class="p-8 text-center text-red-600">' + escapeHtml('Reviews currently unavailable') + (detail ? ': ' + escapeHtml(detail) : '') + '</div>';
+				console.error('google-reviews error', payload);
+				return;
+			}
+		} catch (err) {
+			console.error('fetch reviews error', err);
+			const msg = err && err.name === 'AbortError' ? 'Request timed out' : (err && err.message ? err.message : String(err));
+			container.innerHTML = '<div class="p-8 text-center text-red-600">' + escapeHtml('Reviews currently unavailable') + ': ' + escapeHtml(msg) + '</div>';
+			return;
+		}
+
+		const reviews = payload.reviews || [];
+		if (!reviews.length) {
+			container.innerHTML = '<div class="p-8 text-center text-gray-600">' + escapeHtml('No reviews yet') + '</div>';
+			return;
+		}
+
+		// Build slides
+		const frag = document.createDocumentFragment();
+		reviews.forEach((r) => {
+			const slide = document.createElement('div');
+			slide.className = 'min-w-full px-4';
+
+			const card = document.createElement('div');
+			card.className = 'bg-white rounded-xl shadow-lg p-8 mx-auto max-w-3xl border border-gray-100 min-h-96 flex flex-col';
+
+			// header
+			const header = document.createElement('div');
+			header.className = 'flex items-center justify-between mb-4 gap-4';
+			const stars = document.createElement('div');
+			stars.className = 'flex text-yellow-400';
+			for (let i = 0; i < 5; i++) {
+				const span = document.createElement('span');
+				span.innerHTML = '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
+				stars.appendChild(span);
+			}
+			const dateEl = document.createElement('span');
+			dateEl.className = 'text-sm text-gray-500';
+			if (r.time) {
+				try { dateEl.textContent = new Date(r.time * 1000).toLocaleDateString(); } catch (e) {}
+			}
+			header.appendChild(stars);
+			header.appendChild(dateEl);
+
+			// body: full review text in bold (no title)
+			const body = document.createElement('div');
+			body.className = 'flex-1 flex flex-col overflow-hidden';
+			const bodyText = document.createElement('div');
+			bodyText.className = 'text-gray-700 leading-relaxed mb-4 flex-1 break-words font-bold';
+			bodyText.textContent = r.text || r.review || '';
+			body.appendChild(bodyText);
+
+			// footer
+			const footer = document.createElement('div');
+			footer.className = 'border-t border-gray-100 pt-4 mt-auto flex-shrink-0';
+			const footerInner = document.createElement('div');
+			footerInner.className = 'flex items-center justify-between';
+			const left = document.createElement('div');
+			left.className = 'flex items-center gap-2';
+			const img = document.createElement('img');
+			img.src = r.profile_photo_url || '/guide-photo.webp';
+			img.alt = r.name || '';
+			img.className = 'w-10 h-10 rounded-full object-cover';
+			const meta = document.createElement('div');
+			meta.className = 'flex flex-col';
+			const authorEl = document.createElement('span');
+			authorEl.className = 'text-sm font-medium text-gray-600';
+			authorEl.textContent = r.name || '';
+			const platformEl = document.createElement('span');
+			platformEl.className = 'text-xs text-gray-400';
+			platformEl.textContent = 'Google Maps';
+			meta.appendChild(authorEl);
+			meta.appendChild(platformEl);
+			left.appendChild(img);
+			left.appendChild(meta);
+			footerInner.appendChild(left);
+			footer.appendChild(footerInner);
+
+			card.appendChild(header);
+			card.appendChild(body);
+			card.appendChild(footer);
+			slide.appendChild(card);
+			frag.appendChild(slide);
+		});
+
+		container.innerHTML = '';
+		container.appendChild(frag);
+
+			// indicators
+			indicatorsContainer.innerHTML = '';
+		const slides = container.querySelectorAll('.min-w-full');
+		let currentIndex = 0;
+		slides.forEach((_, i) => {
+			const btn = document.createElement('button');
+			btn.className = i === 0 ? 'w-3 h-3 rounded-full transition bg-gray-800' : 'w-3 h-3 rounded-full transition bg-gray-300';
+			btn.dataset.index = String(i);
+			btn.addEventListener('click', () => { currentIndex = i; update(); });
+			indicatorsContainer.appendChild(btn);
+		});
+
+		const total = slides.length;
+		const carousel = container;
+
+		function update() {
+			const offset = -currentIndex * 100;
+			carousel.style.transform = `translateX(${offset}%)`;
+			indicatorsContainer.querySelectorAll('button').forEach((b, idx) => {
+				b.classList.toggle('bg-gray-800', idx === currentIndex);
+				b.classList.toggle('bg-gray-300', idx !== currentIndex);
+			});
+		}
+
+		function next() { currentIndex = (currentIndex + 1) % total; update(); }
+		function prev() { currentIndex = (currentIndex - 1 + total) % total; update(); }
+
+		if (nextBtn) nextBtn.addEventListener('click', next);
+		if (prevBtn) prevBtn.addEventListener('click', prev);
+
+		// swipe
+		let sx = 0; let sy = 0; const minSwipe = 50;
+		carousel.addEventListener('touchstart', e => { sx = e.changedTouches[0].screenX; sy = e.changedTouches[0].screenY; }, { passive: true });
+		carousel.addEventListener('touchend', e => {
+			const ex = e.changedTouches[0].screenX; const ey = e.changedTouches[0].screenY;
+			const dx = ex - sx; const dy = ey - sy;
+			if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > minSwipe) { if (dx > 0) prev(); else next(); }
+		}, { passive: true });
+			// Ensure any leftover auto-rotation interval from previous scripts is cleared
+			try {
+				if (window.__reviewsAutoRotateInterval) {
+					clearInterval(window.__reviewsAutoRotateInterval);
+					delete window.__reviewsAutoRotateInterval;
+				}
+			} catch (e) {}
+
+			// Show only the initial review by default and ensure indicators reflect it
+			update();
+
+				// Summary: average rating and total count (display below indicators)
+				try {
+					const totalCount = (payload && (payload.total || payload.total === 0)) ? payload.total : reviews.length;
+					const avg = (payload && (payload.average_rating || payload.average_rating === 0)) ? payload.average_rating : (() => {
+						let sum = 0; let cnt = 0;
+						for (const rr of reviews) { const rnum = Number(rr.rating ?? rr.rate ?? rr.stars ?? 0); if (!isNaN(rnum) && rnum > 0) { sum += rnum; cnt++; } }
+						return cnt ? Math.round((sum / cnt) * 10) / 10 : null;
+					})();
+					const summaryEl = document.createElement('div');
+					summaryEl.className = 'mt-4 text-center text-sm text-gray-600';
+					summaryEl.innerHTML = `<span class="font-semibold text-gray-800">${avg !== null ? avg : '—'}</span> <span class="text-gray-500">/ 5</span> · <span class="text-gray-700">${totalCount}</span> avis`;
+					indicatorsContainer.parentNode.insertBefore(summaryEl, indicatorsContainer.nextSibling);
+				} catch (e) {
+					console.warn('Could not render reviews summary', e);
+				}
+
+			// Auto-rotation disabled per UX: users navigate manually via swipe or buttons
+	})();
+})();
 </script>
