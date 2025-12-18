@@ -9,7 +9,7 @@ let reviews = [];
 ---
 
 {/* Section Reviews */}
-<div id="reviews" class="mb-16">
+<div id="reviews" class="mb-16" data-show-more={t('common.showMore')} data-show-less={t('common.showLess')}>
 	<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('reviews.title')}</h2>
 	<p class="text-center text-gray-600 mb-12 text-lg">{t('reviews.subtitle')}</p>
 	
@@ -39,24 +39,15 @@ let reviews = [];
 		</div>
 	</div>
 	
-	{/* Liens vers les plateformes */}
+	{/* Liens vers les plateformes (Google Maps only) */}
 	<div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-8">
-		<a href="https://www.freetour.com/paris/second-world-war-tour-in-paris-fall-resistance-liberation" target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 underline transition text-sm text-center">
-			<img 
-				src="/logos/Freetour_logo.png"
-				alt="Freetour logo" 
-				class="w-6 h-6 object-contain"
-			/>
-			<span>{t('reviews.seeMore')}</span>
-		</a>
-		<span class="text-gray-400 hidden md:inline">|</span>
 		<a href="https://maps.app.goo.gl/1ZmS5861XDPsM1Dk7" target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 underline transition text-sm text-center">
 			<img 
 				src={"/logos/Google__logo.webp"}
 				alt="Google logo" 
 				class="w-6 h-6 object-contain"
 			/>
-			<span>{t('reviews.findUs')}</span>
+			<span>{t('reviews.seeMore')}</span>
 		</a>
 	</div>
 </div>
@@ -160,13 +151,49 @@ let reviews = [];
 			header.appendChild(stars);
 			header.appendChild(dateEl);
 
-			// body: full review text in bold (no title)
+			// body: truncated review text with show more / show less toggle
 			const body = document.createElement('div');
 			body.className = 'flex-1 flex flex-col overflow-hidden';
 			const bodyText = document.createElement('div');
-			bodyText.className = 'text-gray-700 leading-relaxed mb-4 flex-1 break-words font-bold';
-			bodyText.textContent = r.text || r.review || '';
+			bodyText.className = 'text-gray-700 leading-relaxed mb-2 flex-1 break-words font-bold';
+			const originalText = (r.text || r.review || '').trim();
+			const MAX_CHARS = 250;
+			const isLong = originalText.length > MAX_CHARS;
+			if (isLong) {
+				bodyText.textContent = originalText.slice(0, MAX_CHARS) + '\u2026'; // ellipsis
+			} else {
+				bodyText.textContent = originalText;
+			}
 			body.appendChild(bodyText);
+
+			if (isLong) {
+				// read localized labels from the container dataset (injected server-side)
+				const reviewsRoot = document.getElementById('reviews');
+				const SHOW_MORE = (reviewsRoot && reviewsRoot.dataset && reviewsRoot.dataset.showMore) || 'Show more';
+				const SHOW_LESS = (reviewsRoot && reviewsRoot.dataset && reviewsRoot.dataset.showLess) || 'Show less';
+
+				const toggle = document.createElement('button');
+				toggle.type = 'button';
+				toggle.className = 'mt-2 text-sm text-blue-600 hover:underline self-start';
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.textContent = SHOW_MORE;
+
+				let expanded = false;
+				toggle.addEventListener('click', () => {
+					expanded = !expanded;
+					if (expanded) {
+						bodyText.textContent = originalText;
+						toggle.textContent = SHOW_LESS;
+						toggle.setAttribute('aria-expanded', 'true');
+					} else {
+						bodyText.textContent = originalText.slice(0, MAX_CHARS) + '\u2026';
+						toggle.textContent = SHOW_MORE;
+						toggle.setAttribute('aria-expanded', 'false');
+					}
+				});
+
+				body.appendChild(toggle);
+			}
 
 			// footer
 			const footer = document.createElement('div');

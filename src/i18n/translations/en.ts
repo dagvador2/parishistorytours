@@ -106,7 +106,7 @@ export const en = {
   reviews: {
     title: "Reviews",
     subtitle: "What visitors say about our tours",
-    seeMore: "See more reviews on Freetour.com",
+  seeMore: "See more reviews on Google Maps",
     findUs: "Find me on Google Maps"
     ,
     noReviews: "No reviews yet",
