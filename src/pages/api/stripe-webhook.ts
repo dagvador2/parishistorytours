@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     event = stripe.webhooks.constructEvent(body, sig!, endpointSecret);
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
+    console.error("Webhook signature verification failed");
     return new Response("Webhook signature verification failed", { status: 400 });
   }
 
@@ -26,12 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
-      console.log("Processing successful payment:", session.id);
-
-      // Récupérer les métadonnées
       const metadata = session.metadata;
-
-      console.log("metadata", metadata)
 
       if (!metadata) {
         throw new Error("No metadata found in session");
@@ -50,13 +45,11 @@ export const POST: APIRoute = async ({ request }) => {
         price: parseFloat(metadata.price),
       });
 
-      if (result.success) {
-        console.log("✅ Booking finalized successfully:", result.booking);
-      } else {
-        console.error("❌ Error finalizing booking:", result.error);
+      if (!result.success) {
+        console.error("Booking finalization failed:", result.error);
       }
     } catch (error) {
-      console.error("Error processing payment completion:", error);
+      console.error("Error processing payment:", error instanceof Error ? error.message : error);
       return new Response("Error processing payment", { status: 500 });
     }
   }

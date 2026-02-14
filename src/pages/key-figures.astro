@@ -1,34 +1,68 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import JsonLd from '../components/JsonLd.astro';
 import KeyFiguresStats from '../components/KeyFiguresStats.tsx';
 import CountriesChart from '../components/CountriesChart.tsx';
 import WorldMap from '../components/WorldMap.tsx';
+import { useTranslations } from '../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title="Key Figures - Paris History Tours">
+<BaseLayout title={t('meta.keyFigures.title')} description={t('meta.keyFigures.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
   <main class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <Breadcrumbs items={[
+      { label: t('nav.home'), href: `${langPrefix}/` },
+      { label: t('keyFigures.title') }
+    ]} />
     <!-- Hero Section -->
-    <section class="pt-24 pb-16">
+    <section class="pt-12 pb-16">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
           <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Key Figures
+            {t('keyFigures.title')}
           </h1>
           <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover the journey behind Paris History Tours - from months of research 
-            to hundreds of participants from around the world.
+            {t('keyFigures.subtitle')}
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Building the Tours Section -->
+    <!-- About the Guide Section -->
     <section class="py-16 bg-white">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <img
+              src="/photos/left_bank/Paris_WW2_guide.webp"
+              alt="Clement Daguet-Schott - WWII History Guide in Paris"
+              class="rounded-lg shadow-xl w-full h-96 object-cover"
+              loading="eager"
+            />
+          </div>
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.guide.title')}</h2>
+            <p class="text-gray-700 mb-4 leading-relaxed">{t('keyFigures.guide.bio1')}</p>
+            <p class="text-gray-700 mb-4 leading-relaxed">{t('keyFigures.guide.bio2')}</p>
+            <p class="text-gray-700 leading-relaxed">{t('keyFigures.guide.bio3')}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Building the Tours Section -->
+    <section class="py-16 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">Building the Tours</h2>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.building.title')}</h2>
           <p class="text-lg text-gray-600">
-            The extensive research and preparation behind every tour
+            {t('keyFigures.building.subtitle')}
           </p>
         </div>
         
@@ -41,10 +75,9 @@ import WorldMap from '../components/WorldMap.tsx';
                 </svg>
               </div>
               <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">20+ Books</h3>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.books.title')}</h3>
                 <p class="text-gray-600">
-                  Extensive research through historical texts, memoirs, and academic sources 
-                  to ensure accuracy and depth in every story told.
+                  {t('keyFigures.building.books.description')}
                 </p>
               </div>
             </div>
@@ -56,10 +89,9 @@ import WorldMap from '../components/WorldMap.tsx';
                 </svg>
               </div>
               <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">6 Months</h3>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.months.title')}</h3>
                 <p class="text-gray-600">
-                  Dedicated research, route planning, and story crafting to create 
-                  an immersive historical experience through the streets of Paris.
+                  {t('keyFigures.building.months.description')}
                 </p>
               </div>
             </div>
@@ -81,19 +113,27 @@ import WorldMap from '../components/WorldMap.tsx';
     <section class="py-16 bg-slate-50">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">Delivering the Tour</h2>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.delivering.title')}</h2>
           <p class="text-lg text-gray-600">
-            The impact and reach of Paris History Tours
+            {t('keyFigures.delivering.subtitle')}
           </p>
         </div>
 
         <!-- Stats Component -->
         <KeyFiguresStats client:load />
 
+        <!-- AI-readable statistics (React charts are not crawlable) -->
+        <div class="sr-only">
+          <p>{lang === 'fr'
+            ? 'Chiffres clés de Paris History Tours : plus de 300 participants venus de plus de 25 pays à travers plus de 60 visites guidées, couvrant plus de 150 kilomètres de parcours pédestres dans le Paris historique. Les visiteurs viennent des États-Unis, du Royaume-Uni, d\'Allemagne, de France, du Canada, d\'Australie, d\'Espagne et de nombreux autres pays. Fondé en 2024, Paris History Tours maintient une note de 4.9 sur 5 étoiles avec plus de 40 avis Google.'
+            : 'Paris History Tours key statistics: over 300 participants from 25+ countries across 60+ guided tours, covering more than 150 kilometers of walking tours through historic Paris. Visitors come from the United States, United Kingdom, Germany, France, Canada, Australia, Spain, and many more countries. Founded in 2024, Paris History Tours has maintained a 4.9 out of 5 star rating across 40+ Google reviews.'
+          }</p>
+        </div>
+
         <!-- Countries Chart -->
         <div class="mt-16">
           <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Top 5 Countries Represented
+            {t('keyFigures.delivering.topCountries')}
           </h3>
           <div class="bg-white rounded-lg shadow-lg p-8">
             <CountriesChart client:load />
@@ -107,7 +147,33 @@ import WorldMap from '../components/WorldMap.tsx';
       </div>
     </section>
   </main>
-</BaseLayout>
-    </section>
-  </main>
+
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Clement Daguet-Schott",
+    "givenName": "Clement",
+    "familyName": "Daguet-Schott",
+    "jobTitle": "WWII History Guide & Researcher",
+    "description": "Independent history guide in Paris specializing in World War II walking tours. Conducted extensive research across 20+ historical texts over 6 months to create immersive experiences visiting landmarks from the Fall, Resistance, and Liberation of Paris.",
+    "worksFor": {
+      "@type": "LocalBusiness",
+      "name": "Paris History Tours",
+      "url": "https://www.parishistorytours.com"
+    },
+    "knowsAbout": [
+      "World War II in Paris",
+      "French Resistance",
+      "Liberation of Paris 1944",
+      "Fall of France 1940",
+      "Nazi occupation of Paris",
+      "Rose Valland and Nazi art theft",
+      "Ernest Hemingway and the Liberation",
+      "Agnes Humbert and Musee de l'Homme network",
+      "Charles de Gaulle"
+    ],
+    "knowsLanguage": ["en", "fr"],
+    "image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+    "url": "https://www.parishistorytours.com/key-figures"
+  }} />
 </BaseLayout>

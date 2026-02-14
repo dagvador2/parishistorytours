@@ -5,13 +5,17 @@ interface Ctx {
   booking: BookingData;
   setBooking: (b: BookingData) => void;
   resetBooking: () => void;
+  t: Record<string, any>;
+  lang: string;
 }
 
 const BookingContext = createContext<Ctx | null>(null);
 
-export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const BookingProvider: React.FC<{
+  children: React.ReactNode;
+  translations: Record<string, any>;
+  lang: string;
+}> = ({ children, translations, lang }) => {
   const initialBooking: BookingData = {
     tour: undefined as unknown as BookingData["tour"],
     participants: 1,
@@ -30,7 +34,7 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <BookingContext.Provider value={{ booking, setBooking, resetBooking }}>
+    <BookingContext.Provider value={{ booking, setBooking, resetBooking, t: translations, lang }}>
       {children}
     </BookingContext.Provider>
   );

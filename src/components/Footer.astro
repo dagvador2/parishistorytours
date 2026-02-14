@@ -1,4 +1,10 @@
 ---
+import { useTranslations } from '../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <footer class="bg-gray-900 text-white py-12">
@@ -8,7 +14,7 @@
       <div class="col-span-1 md:col-span-1">
         <h3 class="text-xl font-bold mb-4">Paris History Tours</h3>
         <p class="text-gray-300 mb-4">
-          Discover the hidden stories of Paris during World War II through our expert-guided walking tours.
+          {t('footer.description')}
         </p>
         <div class="flex space-x-4">
         </div>
@@ -16,25 +22,26 @@
 
       <!-- Tours Section -->
       <div>
-        <h4 class="text-lg font-semibold mb-4">Tours</h4>
+        <h4 class="text-lg font-semibold mb-4">{t('footer.tours')}</h4>
         <ul class="space-y-2">
-          <li><a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
-          <li><a href="/tours/left-bank" class="text-gray-300 hover:text-white transition-colors">Left Bank Tour</a></li>
-          <li><a href="/tours/right-bank" class="text-gray-300 hover:text-white transition-colors">Right Bank Tour</a></li>
+          <li><a href={`${langPrefix}/`} class="text-gray-300 hover:text-white transition-colors">{t('footer.home')}</a></li>
+          <li><a href={`${langPrefix}/tours/left-bank`} class="text-gray-300 hover:text-white transition-colors">{t('footer.leftBankTour')}</a></li>
+          <li><a href={`${langPrefix}/tours/right-bank`} class="text-gray-300 hover:text-white transition-colors">{t('footer.rightBankTour')}</a></li>
         </ul>
       </div>
 
       <!-- Info Section -->
       <div>
-        <h4 class="text-lg font-semibold mb-4">Info</h4>
+        <h4 class="text-lg font-semibold mb-4">{t('footer.info')}</h4>
         <ul class="space-y-2">
-          <li><a href="/key-figures" class="text-gray-300 hover:text-white transition-colors">About me & the tours</a></li>
+          <li><a href={`${langPrefix}/key-figures`} class="text-gray-300 hover:text-white transition-colors">{t('footer.aboutMe')}</a></li>
+          <li><a href={`${langPrefix}/blog`} class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
         </ul>
       </div>
 
       <!-- Contact Section -->
       <div>
-        <h4 class="text-lg font-semibold mb-4">Contact</h4>
+        <h4 class="text-lg font-semibold mb-4">{t('footer.contact')}</h4>
         <ul class="space-y-2">
           <li>
             <a href="https://wa.me/+33620622480" class="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
@@ -80,7 +87,7 @@
     <div class="border-t border-gray-800 mt-8 pt-8">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <p class="text-gray-300 text-sm">
-          © {new Date().getFullYear()} Paris History Tours. All rights reserved.
+          &copy; {new Date().getFullYear()} {t('footer.copyright')}
         </p>
       </div>
     </div>

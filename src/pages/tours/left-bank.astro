@@ -5,10 +5,13 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import BookTour from "../../components/BookTour.astro";
 import TourMap from "../../components/TourMap.tsx";
 import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import JsonLd from "../../components/JsonLd.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import FAQ from "../../components/FAQ.astro";
+import { useTranslations } from '../../i18n/utils';
 import pantheon from "../../images/pantheon_de_Paris.webp";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 // Create language-aware navigation links
@@ -16,18 +19,23 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title="Left Bank Tour - Paris History Tours" description="Left Bank WWII walking tour in Paris: Fall of Paris, Resistance, and Liberation.">
-  <!-- Language switcher -->
-  <!-- <div class="fixed top-4 left-4 z-50">
-    <LanguageSwitcher />
-  </div> -->
-
+<BaseLayout title={t('meta.leftBank.title')} description={t('meta.leftBank.description')} ogImage="/photos/left_bank/Paris_WW2_tour_guided_group_photo_2.webp">
   <!-- Bannière Book Tour (cachée par défaut, apparaît au scroll) -->
   <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
-    <div class="flex items-center justify-center py-3 px-4">
+    <div class="flex items-center justify-between py-3 px-4">
+      <div class="flex-1"></div>
       <button id="book-btn-tour-page" class="bg-white text-gray-600 font-bold transform hover:scale-105 hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{t('nav.bookTour')}</button>
+      <div class="flex-1 flex justify-end">
+        <LanguageSwitcher dark />
+      </div>
     </div>
   </nav>
+
+  <Breadcrumbs items={[
+    { label: t('nav.home'), href: `${langPrefix}/` },
+    { label: t('tours.title'), href: `${langPrefix}/#tours` },
+    { label: t('booking.leftBank') }
+  ]} />
 
   <!-- Hero Section -->
   <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
@@ -39,9 +47,9 @@ const langPrefix = isDefaultLang ? '' : '/fr';
       widths={[640,768,1024,1440]}
       sizes="100vw"
       formats={["avif","webp"]}
-      loading="lazy"
+      loading="eager"
       decoding="async"
-      quality={75} 
+      quality={75}
         class="w-full h-full object-cover"
       />
     </div>
@@ -93,13 +101,28 @@ const langPrefix = isDefaultLang ? '' : '/fr';
     </div>
   </section>
 
+  <!-- Did You Know? Historical Context -->
+  <section class="py-12 bg-amber-50 border-l-4 border-amber-400">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">{t('tours.leftBank.didYouKnow.title')}</h2>
+      <div class="space-y-4">
+        {(t('tours.leftBank.didYouKnow.facts') as string[]).map((fact: string) => (
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 font-bold text-xl mt-0.5 flex-shrink-0">*</span>
+            <p class="text-gray-700 leading-relaxed">{fact}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- Three Topics Section -->
   <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
-      <h3 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
         {t('tours.themes.title')}
-      </h3>
-      
+      </h2>
+
       <!-- Desktop Version -->
       <div class="hidden md:grid md:grid-cols-3 gap-8">
         <!-- The Fall -->
@@ -272,7 +295,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
   <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-        Our 4 Historic Stops
+        {t('tours.stops.our4Stops')}
       </h2>
       
       <!-- Desktop Version - Grid normale -->
@@ -282,10 +305,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
           <div>
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">1</div>
-              <h3 class="text-2xl font-bold text-gray-800">Boulevard Saint-Michel - Introduction</h3>
+              <h3 class="text-2xl font-bold text-gray-800">{t('tours.leftBank.stops.stop1.title')}</h3>
             </div>
             <p class="text-lg text-gray-700 leading-relaxed">
-              Begin your journey at this iconic boulevard with a presentation of the tour and a quick history quiz to put everyone on the same page! Discover how Paris looked on the eve of the German invasion and see the first signs of the war that still remain in the city to this day.
+              {t('tours.leftBank.stops.stop1.description')}
             </p>
           </div>
           <div class="relative">
@@ -306,10 +329,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
           <div class="md:order-2">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">2</div>
-              <h3 class="text-2xl font-bold text-gray-800">Palais du Luxembourg - The Fall</h3>
+              <h3 class="text-2xl font-bold text-gray-800">{t('tours.leftBank.stops.stop2.title')}</h3>
             </div>
             <p class="text-lg text-gray-700 leading-relaxed">
-              Walk through the gardens of this magnificent palace and discover how Paris fell to the German army in only 35 days of combat. Learn about the crucial 35 days that changed the city forever and how the Nazis transformed this symbol of French culture into their Air Force command center.
+              {t('tours.leftBank.stops.stop2.description')}
             </p>
           </div>
           <div class="md:order-1 relative">
@@ -330,10 +353,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
           <div>
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
-              <h3 class="text-2xl font-bold text-gray-800">La Sorbonne - The Resistance</h3>
+              <h3 class="text-2xl font-bold text-gray-800">{t('tours.leftBank.stops.stop3.title')}</h3>
             </div>
             <p class="text-lg text-gray-700 leading-relaxed">
-              Near this historic university, discover the story of Agnès Humbert, a brave French Resistance fighter who was part of the first organized resistance network in Paris, called Musée de l'Homme. Learn about one of the earliest resistance movements in the city and how these courageous individuals risked everything to fight against the occupation.
+              {t('tours.leftBank.stops.stop3.description')}
             </p>
           </div>
           <div class="relative">
@@ -355,10 +378,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
           <div class="md:order-2">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">4</div>
-              <h3 class="text-2xl font-bold text-gray-800">Notre-Dame de Paris - Liberation</h3>
+              <h3 class="text-2xl font-bold text-gray-800">{t('tours.leftBank.stops.stop4.title')}</h3>
             </div>
             <p class="text-lg text-gray-700 leading-relaxed">
-              Conclude our tour at this iconic cathedral, witness to the liberation of Paris in August 1944. Learn more about the fights that took place in Paris 81 years ago. Stand where General de Gaulle proclaimed the freedom of the capital and discover how closely Paris came to being greatly damaged.
+              {t('tours.leftBank.stops.stop4.description')}
             </p>
           </div>
           <div class="md:order-1 relative">
@@ -395,10 +418,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <h3 class="text-xl font-bold text-gray-800">Boulevard Saint-Michel - Introduction</h3>
+                    <h3 class="text-xl font-bold text-gray-800">{t('tours.leftBank.stops.stop1.title')}</h3>
                   </div>
                   <p class="text-sm text-gray-700 leading-relaxed">
-                    Begin your journey at this iconic boulevard with a presentation of the tour and a quick history quiz to put everyone on the same page! Discover how Paris looked on the eve of the German invasion and see the first signs of the war that still remain in the city to this day.
+                    {t('tours.leftBank.stops.stop1.description')}
                   </p>
                 </div>
               </div>
@@ -419,10 +442,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                    <h3 class="text-xl font-bold text-gray-800">Palais du Luxembourg - The Fall</h3>
+                    <h3 class="text-xl font-bold text-gray-800">{t('tours.leftBank.stops.stop2.title')}</h3>
                   </div>
                   <p class="text-sm text-gray-700 leading-relaxed">
-                    Walk through the gardens of this magnificent palace and discover how Paris fell to the German army in only 35 days of combat. Learn about the crucial 35 days that changed the city forever and how the Nazis transformed this symbol of French culture into their Air Force command center.
+                    {t('tours.leftBank.stops.stop2.description')}
                   </p>
                 </div>
               </div>
@@ -443,10 +466,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                    <h3 class="text-xl font-bold text-gray-800">La Sorbonne - The Resistance</h3>
+                    <h3 class="text-xl font-bold text-gray-800">{t('tours.leftBank.stops.stop3.title')}</h3>
                   </div>
                   <p class="text-sm text-gray-700 leading-relaxed">
-                    Near this historic university, discover the story of Agnès Humbert, a brave French Resistance fighter who was part of the first organized resistance network in Paris, called Musée de l'Homme. Learn about one of the earliest resistance movements in the city and how these courageous individuals risked everything to fight against the occupation.
+                    {t('tours.leftBank.stops.stop3.description')}
                   </p>
                 </div>
               </div>
@@ -467,10 +490,10 @@ const langPrefix = isDefaultLang ? '' : '/fr';
                 <div class="p-6">
                   <div class="flex items-center gap-3 mb-4">
                     <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
-                    <h3 class="text-xl font-bold text-gray-800">Notre-Dame de Paris - Liberation</h3>
+                    <h3 class="text-xl font-bold text-gray-800">{t('tours.leftBank.stops.stop4.title')}</h3>
                   </div>
                   <p class="text-sm text-gray-700 leading-relaxed">
-                    Conclude our tour at this iconic cathedral, witness to the liberation of Paris in August 1944. Learn more about the fights that took place in Paris 81 years ago. Stand where General de Gaulle proclaimed the freedom of the capital and discover how closely Paris came to being greatly damaged.
+                    {t('tours.leftBank.stops.stop4.description')}
                   </p>
                 </div>
               </div>
@@ -491,7 +514,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
   <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
-        Our Route Through Paris
+        {t('tours.stops.ourRoute')}
       </h2>
       <TourMap tour="left-bank" client:visible />
     </div>
@@ -501,7 +524,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
   <section class="py-16 bg-gray-50">
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-        Experience the History
+        {t('tours.stops.experienceHistory')}
       </h2>
       
       <!-- Desktop Version - Grid normale -->
@@ -624,6 +647,84 @@ const langPrefix = isDefaultLang ? '' : '/fr';
     </div>
   </section>
 
+  <!-- Cross-link to other tour -->
+  <section class="py-12 bg-gray-100">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">
+        {lang === 'fr' ? 'Découvrez aussi notre autre visite' : 'Also discover our other tour'}
+      </h2>
+      <p class="text-gray-600 mb-6">
+        {lang === 'fr'
+          ? 'Complétez votre expérience avec la visite Rive Droite : Place Vendôme, Concorde et les histoires de la Libération.'
+          : 'Complete your experience with the Right Bank tour: Place Vendôme, Concorde, and the Liberation stories.'}
+      </p>
+      <a href={`${langPrefix}/tours/right-bank`}
+         class="inline-block bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium">
+        {t('booking.rightBankTour')} →
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <FAQ />
+
+  <!-- JSON-LD TouristTrip -->
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "name": t('tours.leftBank.title') + " - Paris WWII Walking Tour",
+    "description": t('meta.leftBank.description'),
+    "touristType": ["History enthusiast", "Cultural traveler"],
+    "itinerary": {
+      "@type": "ItemList",
+      "numberOfItems": 4,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": t('tours.leftBank.stops.stop1.title') },
+        { "@type": "ListItem", "position": 2, "name": t('tours.leftBank.stops.stop2.title') },
+        { "@type": "ListItem", "position": 3, "name": t('tours.leftBank.stops.stop3.title') },
+        { "@type": "ListItem", "position": 4, "name": t('tours.leftBank.stops.stop4.title') }
+      ]
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "availability": "https://schema.org/InStock",
+      "url": "https://www.parishistorytours.com/tours/left-bank"
+    },
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Paris History Tours",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "40"
+      }
+    },
+    "guide": {
+      "@type": "Person",
+      "name": "Clement Daguet-Schott",
+      "jobTitle": "WWII History Guide & Researcher"
+    },
+    "location": {
+      "@type": "Place",
+      "name": "Left Bank, Paris, France",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Paris",
+        "addressCountry": "FR"
+      }
+    },
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": 14,
+      "audienceType": "History enthusiasts, tourists, students, educators"
+    },
+    "maximumAttendeeCapacity": 10,
+    "isAccessibleForFree": false,
+    "duration": "PT2H",
+    "inLanguage": ["en", "fr"]
+  }} />
 </BaseLayout>
 
 <style>

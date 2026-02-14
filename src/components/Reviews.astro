@@ -1,7 +1,7 @@
 ---
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
 
-const lang = getLangFromUrl(Astro.url);
+const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 // reviews will be fetched from the server (Google Places) via /api/google-reviews
@@ -9,16 +9,61 @@ let reviews = [];
 ---
 
 {/* Section Reviews */}
-<div id="reviews" class="mb-16" data-show-more={t('common.showMore')} data-show-less={t('common.showLess')}>
+<div id="reviews" class="mb-24" data-show-more={t('common.showMore')} data-show-less={t('common.showLess')}>
 	<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('reviews.title')}</h2>
 	<p class="text-center text-gray-600 mb-12 text-lg">{t('reviews.subtitle')}</p>
-	
-	{/* Carrousel de reviews */}
-	<div class="relative max-w-4xl mx-auto overflow-hidden">
-				<div class="flex transition-transform duration-500 ease-in-out" id="review-carousel">
-					<!-- slides will be injected here by client script (Google reviews) -->
+
+	<!-- Compact rating: numeric value above, 5 stars row (last star 90% filled), reviews count below -->
+	<div class="max-w-4xl mx-auto mb-6 text-center">
+		<div class="mb-1">
+			<span class="text-2xl font-bold text-gray-800">4.9</span>
+			<span class="ml-1 text-sm text-gray-600">/ 5</span>
+		</div>
+		<div class="w-full flex justify-center items-center gap-3 px-2" style="max-width:520px;margin-left:auto;margin-right:auto;" role="img" aria-label="Rating: 4.9 out of 5">
+			<div class="relative w-12 h-12 flex-shrink-0" aria-hidden="true">
+				<svg class="w-full h-full text-gray-200 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				<div class="absolute inset-0 overflow-hidden" style="width:100%;">
+					<svg class="w-full h-full text-yellow-400 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
 				</div>
-		
+			</div>
+			<div class="relative w-12 h-12 flex-shrink-0" aria-hidden="true">
+				<svg class="w-full h-full text-gray-200 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				<div class="absolute inset-0 overflow-hidden" style="width:100%;">
+					<svg class="w-full h-full text-yellow-400 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				</div>
+			</div>
+			<div class="relative w-12 h-12 flex-shrink-0" aria-hidden="true">
+				<svg class="w-full h-full text-gray-200 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				<div class="absolute inset-0 overflow-hidden" style="width:100%;">
+					<svg class="w-full h-full text-yellow-400 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				</div>
+			</div>
+			<div class="relative w-12 h-12 flex-shrink-0" aria-hidden="true">
+				<svg class="w-full h-full text-gray-200 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				<div class="absolute inset-0 overflow-hidden" style="width:100%;">
+					<svg class="w-full h-full text-yellow-400 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				</div>
+			</div>
+			<div class="relative w-12 h-12 flex-shrink-0" aria-hidden="true">
+				<svg class="w-full h-full text-gray-200 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				<div class="absolute inset-0 overflow-hidden" style="width:90%;">
+					<svg class="w-full h-full text-yellow-400 block" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+				</div>
+			</div>
+		</div>
+		<div class="mt-2 text-sm text-gray-700">
+			<span class="font-semibold">40</span> reviews
+		</div>
+	</div>
+
+	{/* Carrousel de reviews */}
+	<div class="relative max-w-4xl mx-auto w-full">
+		<div class="overflow-hidden">
+			<div class="flex transition-transform duration-500 ease-in-out" id="review-carousel">
+				<!-- slides will be injected here by client script (Google reviews) -->
+			</div>
+		</div>
+
 		{/* Boutons de navigation */}
 		<button id="prev-review" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition cursor-pointer">
 			<svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +75,7 @@ let reviews = [];
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
 			</svg>
 		</button>
-		
+
 		{/* Indicateurs */}
 		<div class="flex justify-center mt-6 space-x-2" id="review-indicators">
 			{Array.from({ length: 4 }, (_, i) => (
@@ -38,7 +83,7 @@ let reviews = [];
 			))}
 		</div>
 	</div>
-	
+
 	{/* Liens vers les plateformes (Google Maps only) */}
 	<div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-8">
 		<a href="https://maps.app.goo.gl/1ZmS5861XDPsM1Dk7" target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 underline transition text-sm text-center">
@@ -118,7 +163,10 @@ let reviews = [];
 			return;
 		}
 
-		const reviews = payload.reviews || [];
+		let reviews = payload.reviews || [];
+		// Sort by date descending (most recent first) and keep only the 5 latest
+		reviews.sort((a, b) => (b.time || 0) - (a.time || 0));
+		reviews = reviews.slice(0, 5);
 		if (!reviews.length) {
 			container.innerHTML = '<div class="p-8 text-center text-gray-600">' + escapeHtml('No reviews yet') + '</div>';
 			return;
@@ -280,21 +328,7 @@ let reviews = [];
 			// Show only the initial review by default and ensure indicators reflect it
 			update();
 
-				// Summary: average rating and total count (display below indicators)
-				try {
-					const totalCount = (payload && (payload.total || payload.total === 0)) ? payload.total : reviews.length;
-					const avg = (payload && (payload.average_rating || payload.average_rating === 0)) ? payload.average_rating : (() => {
-						let sum = 0; let cnt = 0;
-						for (const rr of reviews) { const rnum = Number(rr.rating ?? rr.rate ?? rr.stars ?? 0); if (!isNaN(rnum) && rnum > 0) { sum += rnum; cnt++; } }
-						return cnt ? Math.round((sum / cnt) * 10) / 10 : null;
-					})();
-					const summaryEl = document.createElement('div');
-					summaryEl.className = 'mt-4 text-center text-sm text-gray-600';
-					summaryEl.innerHTML = `<span class="font-semibold text-gray-800">${avg !== null ? avg : '—'}</span> <span class="text-gray-500">/ 5</span> · <span class="text-gray-700">${totalCount}</span> avis`;
-					indicatorsContainer.parentNode.insertBefore(summaryEl, indicatorsContainer.nextSibling);
-				} catch (e) {
-					console.warn('Could not render reviews summary', e);
-				}
+				// client-side summary removed: using hard-coded rating/count above the carousel
 
 			// Auto-rotation disabled per UX: users navigate manually via swipe or buttons
 	})();

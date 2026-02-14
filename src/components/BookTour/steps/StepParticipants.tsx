@@ -1,13 +1,8 @@
 import React from "react";
 import { useBooking } from "../BookingContext";
 
-interface Props {
-  next?: () => void;
-  back?: () => void;
-}
-
-const StepParticipants: React.FC<Props> = ({ back }) => {
-  const { booking, setBooking } = useBooking();
+const StepParticipants: React.FC = () => {
+  const { booking, setBooking, t } = useBooking();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = parseInt(e.target.value, 10);
@@ -24,25 +19,14 @@ const StepParticipants: React.FC<Props> = ({ back }) => {
         className="w-full border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-gray-600 text-gray-700"
       >
         <option value="" disabled>
-          Select...
+          {t.select}
         </option>
         {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
           <option key={n} value={n}>
-            {n} {n === 1 ? "person" : "people"}
+            {n} {n === 1 ? t.person : t.people}
           </option>
         ))}
       </select>
-
-      <div className="flex justify-between mt-8">
-        {back && (
-          <button
-            onClick={back}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm"
-          >
-            ← Retour
-          </button>
-        )}
-      </div>
     </div>
   );
 };

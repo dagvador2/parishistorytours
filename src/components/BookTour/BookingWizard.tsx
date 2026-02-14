@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookingProvider } from "./BookingContext";
+import { BookingProvider, useBooking } from "./BookingContext";
 import ProgressIndicator from "./components/ProgressIndicator";
 import StepWrapper from "./components/StepWrapper";
 import StepTourSelection from "./steps/StepTourSelection";
@@ -11,6 +11,7 @@ import StepContact from "./steps/StepContact";
 import StepSummary from "./steps/StepSummary";
 
 const Wizard: React.FC = () => {
+  const { t } = useBooking();
   const [step, setStep] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -42,13 +43,13 @@ const Wizard: React.FC = () => {
         return (
           <StepWrapper
             {...stepProps}
-            nextLabel="Next"
+            nextLabel={t.next}
             showBack={false}
             validationKey="tour"
-            validationMessage="Please select a tour"
+            validationMessage={t.validation.selectTour}
           >
             <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              Step 1: Choose your tour
+              {t.step1}
             </h3>
             <StepTourSelection />
           </StepWrapper>
@@ -57,12 +58,12 @@ const Wizard: React.FC = () => {
         return (
           <StepWrapper
             {...stepProps}
-            nextLabel="Next"
+            nextLabel={t.next}
             validationKey="participants"
-            validationMessage="Please choose the number of participants"
+            validationMessage={t.validation.selectParticipants}
           >
             <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              Step 2: Number of participants
+              {t.step2}
             </h3>
             <StepParticipants />
           </StepWrapper>
@@ -71,12 +72,12 @@ const Wizard: React.FC = () => {
         return (
           <StepWrapper
             {...stepProps}
-            nextLabel="Next"
+            nextLabel={t.next}
             validationKey="tourType"
-            validationMessage="Please choose a tour type"
+            validationMessage={t.validation.selectType}
           >
             <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              Step 3: Choose your tour type
+              {t.step3}
             </h3>
             <StepTourType />
           </StepWrapper>
@@ -85,9 +86,9 @@ const Wizard: React.FC = () => {
         return (
           <StepWrapper
             {...stepProps}
-            nextLabel="Next"
+            nextLabel={t.next}
             validationKey="dateTime"
-            validationMessage="Please choose a session"
+            validationMessage={t.validation.chooseSession}
           >
             <StepCalendarRegular active={true} />
             <StepDateTimePrivate active={true} />
@@ -97,9 +98,9 @@ const Wizard: React.FC = () => {
         return (
           <StepWrapper
             {...stepProps}
-            nextLabel="Next"
+            nextLabel={t.next}
             validationKey="contact"
-            validationMessage="Please fill in your name and email"
+            validationMessage={t.validation.fillContact}
           >
             <StepContact />
           </StepWrapper>
@@ -107,7 +108,7 @@ const Wizard: React.FC = () => {
       case 6:
         return (
           <StepWrapper {...stepProps} showBack={false}>
-            <StepSummary onEditDetails={() => setStep(5)} />
+            <StepSummary onEditDetails={() => setStep(5)} onRestart={() => setStep(1)} />
           </StepWrapper>
         );
       default:
@@ -118,10 +119,10 @@ const Wizard: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto px-4">
       <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">
-        Book your tour
+        {t.title}
       </h2>
       <p className="text-center text-gray-600 mb-12 text-lg">
-        Let's organize your visit step by step
+        {t.subtitle}
       </p>
 
       <ProgressIndicator currentStep={step} />
@@ -131,14 +132,17 @@ const Wizard: React.FC = () => {
   );
 };
 
-const BookingWizard: React.FC = () => {
+interface BookingWizardProps {
+  translations: Record<string, any>;
+  lang: string;
+}
+
+const BookingWizard: React.FC<BookingWizardProps> = ({ translations, lang }) => {
   return (
-    <BookingProvider>
+    <BookingProvider translations={translations} lang={lang}>
       <Wizard />
     </BookingProvider>
   );
 };
 
 export default BookingWizard;
-
-

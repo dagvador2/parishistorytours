@@ -2,12 +2,9 @@ import type { APIRoute } from 'astro';
 import { supabase } from '../../lib/supabase';
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('=== API Booking Called ===');
-  
   try {
     const bookingData = await request.json();
-    console.log('Data received:', bookingData);
-    
+
     const { data: booking, error: dbError } = await supabase
       .from('bookings')
       .insert({
@@ -24,20 +21,17 @@ export const POST: APIRoute = async ({ request }) => {
       .single();
 
     if (dbError) {
-      console.error('Database error:', dbError);
-      return new Response(JSON.stringify({ 
-        error: 'Failed to save booking',
-        details: dbError.message
+      console.error('Booking DB error:', dbError.code);
+      return new Response(JSON.stringify({
+        error: 'Failed to save booking'
       }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    console.log('SUCCESS! Booking saved:', booking);
-
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       bookingId: booking.id,
       message: 'Booking saved successfully!'
     }), {
@@ -46,10 +40,9 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Server error',
-      details: String(error)
+    console.error('Booking error:', error instanceof Error ? error.message : error);
+    return new Response(JSON.stringify({
+      error: 'Server error'
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

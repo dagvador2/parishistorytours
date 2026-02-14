@@ -2,35 +2,21 @@ import React from "react";
 import { useBooking } from "../BookingContext";
 import type { TourType } from "../types";
 
-interface Props {
-  next: () => void;
-  back: () => void;
-}
-
-const tourTypes: { id: TourType; title: string; description: string }[] = [
-  {
-    id: "regular",
-    title: "Regular Tour",
-    description: "Join a tour with up to 10 travelers",
-  },
-  {
-    id: "private",
-    title: "Private Tour",
-    description: "Schedule a private tour for your group only",
-  },
-];
-
-const StepTourType: React.FC<Props> = ({ next, back }) => {
-  const { booking, setBooking } = useBooking();
+const StepTourType: React.FC = () => {
+  const { booking, setBooking, t } = useBooking();
   const selectedType = booking.tourType;
 
   const selectType = (tourType: TourType) => {
     setBooking({ ...booking, tourType });
   };
 
+  const tourTypes: { id: TourType; title: string; description: string }[] = [
+    { id: "regular", title: t.regularTour, description: t.regularTourDesc },
+    { id: "private", title: t.privateTour, description: t.privateTourDesc },
+  ];
+
   return (
     <div>
-
       <div className="flex flex-col md:flex-row gap-6 justify-center">
         {tourTypes.map(({ id, title, description }) => (
           <button

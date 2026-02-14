@@ -3,17 +3,12 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ request }) => {
   try {
-  // Prefer process.env at runtime (dev server) but fall back to import.meta.env
-  const API_KEY = process.env.GOOGLE_PLACES_API_KEY || import.meta.env.GOOGLE_PLACES_API_KEY;
-  const PLACE_ID = process.env.GOOGLE_PLACE_ID || import.meta.env.GOOGLE_PLACE_ID;
+  const API_KEY = import.meta.env.GOOGLE_PLACES_API_KEY;
+  const PLACE_ID = import.meta.env.GOOGLE_PLACE_ID;
 
     if (!API_KEY || !PLACE_ID) {
       return new Response(JSON.stringify({ error: 'Missing configuration' }), { status: 500 });
     }
-
-  // Debug: log whether we have an API key and which source (process.env vs import.meta.env)
-  const keySource = process.env.GOOGLE_PLACES_API_KEY ? 'process.env' : (import.meta.env.GOOGLE_PLACES_API_KEY ? 'import.meta.env' : 'none');
-  console.debug('[google-reviews] API key source:', keySource, 'key length:', (API_KEY && API_KEY.length) || 0);
 
   // Use the newer Places API v1 endpoint (works with places.googleapis.com)
     // Request reviews (displayName). Do not request user_ratings_total here — v1 may not support it and will return 400.
@@ -24,16 +19,15 @@ export const GET: APIRoute = async ({ request }) => {
     const res = await fetch(url);
     const text = await res.text();
     if (!res.ok) {
-      console.error('Google Places error', res.status, text);
-      // return the underlying error message for easier debugging (no secrets)
-      return new Response(JSON.stringify({ error: 'Google Places API error', status: res.status, body: text }), { status: 502 });
+      console.error('Google Places error', res.status);
+      return new Response(JSON.stringify({ error: 'Google Places API error', status: res.status }), { status: 502 });
     }
 
     let data;
     try {
       data = JSON.parse(text);
     } catch (e) {
-      console.error('Failed to parse Google response', e, text);
+      console.error('Failed to parse Google response');
       return new Response(JSON.stringify({ error: 'Invalid response from Google Places' }), { status: 502 });
     }
 
@@ -95,17 +89,15 @@ export const GET: APIRoute = async ({ request }) => {
             if (typeof legacy.result.rating === 'number') overallRating = legacy.result.rating;
             if (legacy.result.user_ratings_total) totalReviews = Number(legacy.result.user_ratings_total);
           }
-        } else {
-          console.debug('Legacy details fetch failed', legacyRes.status, legacyText);
         }
       } catch (e) {
-        console.debug('Legacy details fetch error', e);
+        // Legacy fallback failed silently — v1 data is still returned
       }
     }
 
     return new Response(JSON.stringify({ reviews, total: totalReviews, average_rating: overallRating }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err: any) {
-    console.error('Failed to fetch google reviews', err);
+    console.error('Failed to fetch google reviews');
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 };

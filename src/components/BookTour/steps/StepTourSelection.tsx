@@ -5,23 +5,19 @@ import type { Tour } from "../types";
 import pantheonThumb from "../../../images/pantheon_de_Paris.webp";
 import vendomeThumb from "../../../images/place_vendome_paris.webp";
 
-interface Props {
-  next: () => void;
-}
-
-const tours: { id: Tour; label: string; img: string }[] = [
-  { id: "left-bank", label: "Left Bank", img: pantheonThumb.src },
-  { id: "right-bank", label: "Right Bank", img: vendomeThumb.src },
-];
-
-const StepTourSelection: React.FC<Props> = ({ next }) => {
-  const { booking, setBooking } = useBooking();
+const StepTourSelection: React.FC = () => {
+  const { booking, setBooking, t } = useBooking();
   const choose = (tour: Tour) => setBooking({ ...booking, tour });
+
+  const tours: { id: Tour; label: string; desc: string; img: string }[] = [
+    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: pantheonThumb.src },
+    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: vendomeThumb.src },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-        {tours.map(({ id, label, img }) => {
+        {tours.map(({ id, label, desc, img }) => {
           const isSelected = booking.tour === id;
 
           return (
@@ -37,7 +33,6 @@ const StepTourSelection: React.FC<Props> = ({ next }) => {
                   isSelected ? "ring-4 ring-gray-600" : ""
                 }`}
               >
-                {/* Optimised file URL + lazy/async flags */}
                 <img
                   src={img}
                   alt={label}
@@ -55,11 +50,7 @@ const StepTourSelection: React.FC<Props> = ({ next }) => {
                 </div>
               </div>
               <div className="mt-3 text-center">
-                <p className="text-gray-600 text-sm">
-                  {id === "left-bank"
-                    ? "Discover WW2 on the left side of Paris"
-                    : "Discover WW2 on the right side of Paris"}
-                </p>
+                <p className="text-gray-600 text-sm">{desc}</p>
               </div>
             </div>
           );

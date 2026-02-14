@@ -6,15 +6,17 @@ import Reviews from "../components/Reviews.astro";
 import BookTour from "../components/BookTour.astro";
 import LanguageSwitcher from "../components/LanguageSwitcher.astro";
 import "../styles/global.css";
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
 
+import JsonLd from "../components/JsonLd.astro";
+import FAQ from "../components/FAQ.astro";
 import { Picture } from "astro:assets";
 
 import guidePhoto     from "../images/guide-photo.webp";
 import pantheon       from "../images/pantheon_de_Paris.webp";
 import placeVendome   from "../images/place_vendome_paris.webp";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 // Create language-aware navigation links
@@ -22,27 +24,24 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<meta name="description" content="Explore Paris through private WWII history tours. Discover iconic places with expert guides. Book your historical Paris tour now.">
-
-<BaseLayout title="Paris History Tours. Guided walking history tours in Paris on the Second World War">
-	<!-- Language switcher -->
-	<!-- <div class="fixed top-4 left-4 z-50">
-		<LanguageSwitcher />
-	</div> -->
-
+<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
 	<!-- Bannière de navigation fixe pour desktop -->
 	<nav id="book-banner-desktop" class="hidden md:block fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9999] shadow-md transform -translate-y-full transition-transform duration-300">
-		<div class="max-w-4xl mx-auto flex items-center justify-center gap-8 py-4">
-			<a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
-			<button id="book-btn-desktop" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform">{t('nav.bookTour')}</button>
-			<a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
+		<div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
+			<div class="flex items-center gap-8 flex-1 justify-center">
+				<a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
+				<button id="book-btn-desktop" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform">{t('nav.bookTour')}</button>
+				<a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
+			</div>
+			<LanguageSwitcher dark />
 		</div>
 	</nav>
 
 	<!-- Bannière mobile Book Tour (cachée par défaut, apparaît au scroll) -->
 	<nav id="book-banner-mobile" class="md:hidden fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
-		<div class="flex items-center justify-center py-3 px-4">
+		<div class="flex items-center justify-between py-3 px-4">
 			<button id="book-btn-mobile" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{t('nav.bookTour')}</button>
+			<LanguageSwitcher dark />
 		</div>
 	</nav>
 
@@ -75,7 +74,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 								widths={[640,768,1024,1440]}
 								sizes="100vw"
 								formats={["avif","webp"]}
-								loading="lazy"
+								loading="eager"
 								decoding="async"
 								quality={75}
 								class="w-full h-80 md:h-[28rem] object-cover"
@@ -201,9 +200,122 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 		<Welcome />
 		<ToursAvailable />
 		<Reviews />
+
+		<!-- Social Proof / Trust Signals -->
+		<section class="py-12 bg-white/60 rounded-2xl mx-4 my-8">
+			<div class="max-w-4xl mx-auto px-4 text-center">
+				<h2 class="text-2xl font-bold text-gray-800 mb-6">{t('socialProof.title')}</h2>
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">4.9/5</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.googleRating')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">40+</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.reviews')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">25+</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.countries')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">2024</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.founded')}</div>
+					</div>
+				</div>
+				<p class="mt-8 text-gray-600 text-lg">{t('socialProof.description')}</p>
+			</div>
+		</section>
+
 		<BookTour />
+		<FAQ />
 	</section>
 
+	<JsonLd data={{
+		"@context": "https://schema.org",
+		"@type": ["LocalBusiness", "TravelAgency"],
+		"name": "Paris History Tours",
+		"alternateName": "Paris History Tours - WWII Walking Tours",
+		"description": t('meta.home.description'),
+		"url": "https://www.parishistorytours.com",
+		"telephone": "+33620622480",
+		"email": "clemdaguetschott@gmail.com",
+		"foundingDate": "2024",
+		"slogan": "Discover Paris through the eyes of World War II",
+		"knowsLanguage": ["en", "fr"],
+		"currenciesAccepted": "EUR",
+		"paymentAccepted": "Credit Card, Stripe",
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Paris",
+			"addressRegion": "Ile-de-France",
+			"addressCountry": "FR"
+		},
+		"geo": {
+			"@type": "GeoCoordinates",
+			"latitude": 48.8566,
+			"longitude": 2.3522
+		},
+		"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+		"priceRange": "$$",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "4.9",
+			"bestRating": "5",
+			"ratingCount": "40"
+		},
+		"founder": {
+			"@type": "Person",
+			"name": "Clement Daguet-Schott",
+			"givenName": "Clement",
+			"familyName": "Daguet-Schott",
+			"jobTitle": "WWII History Guide & Researcher",
+			"description": "Independent history guide specializing in World War II Paris. After 6 months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring wartime Paris to life.",
+			"knowsAbout": ["World War II history", "Paris during WWII", "French Resistance", "Liberation of Paris 1944", "Nazi occupation of France"],
+			"knowsLanguage": ["en", "fr"],
+			"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+			"url": "https://www.parishistorytours.com/key-figures"
+		},
+		"hasOfferCatalog": {
+			"@type": "OfferCatalog",
+			"name": "WWII Walking Tours in Paris",
+			"itemListElement": [
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "TouristTrip",
+						"name": "Left Bank WWII Tour",
+						"description": "Walk through wartime Paris: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops covering the Fall, Resistance & Liberation.",
+						"touristType": ["History enthusiast", "Cultural traveler"],
+						"duration": "PT2H",
+						"url": "https://www.parishistorytours.com/tours/left-bank"
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "TouristTrip",
+						"name": "Right Bank WWII Tour",
+						"description": "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops.",
+						"touristType": ["History enthusiast", "Cultural traveler"],
+						"duration": "PT2H",
+						"url": "https://www.parishistorytours.com/tours/right-bank"
+					}
+				}
+			]
+		},
+		"areaServed": {
+			"@type": "City",
+			"name": "Paris",
+			"containedInPlace": {
+				"@type": "Country",
+				"name": "France"
+			}
+		},
+		"sameAs": [
+			"https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8"
+		]
+	}} />
 </BaseLayout>
 
 <script>

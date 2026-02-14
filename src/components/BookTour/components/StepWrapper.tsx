@@ -22,7 +22,7 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
   validationKey,
   validationMessage
 }) => {
-  const { booking } = useBooking();
+  const { booking, t } = useBooking();
   const [attempted, setAttempted] = useState(false);
 
   const isStepValid = () => {
@@ -69,7 +69,7 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
                 onClick={onBack}
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors text-sm md:text-base"
               >
-                Back
+                {t.back}
               </button>
             )}
           </div>

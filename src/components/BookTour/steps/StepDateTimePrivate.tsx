@@ -2,14 +2,11 @@ import React from "react";
 import { useBooking } from "../BookingContext";
 
 interface Props {
-  next: () => void;
-  back: () => void;
   active: boolean;
 }
 
-const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
-  const { booking, setBooking } = useBooking();
-  // Utiliser directement les valeurs du contexte
+const StepDateTimePrivate: React.FC<Props> = ({ active }) => {
+  const { booking, setBooking, t, lang } = useBooking();
   const date = booking.date || "";
   const time = booking.time || "";
 
@@ -24,21 +21,13 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
   };
 
   const timeOptions = [
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
+    "08:00", "09:00", "10:00", "11:00", "12:00",
+    "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
   ];
 
-  const formatTime = (time: string) => {
-    const hour = parseInt(time.split(":")[0]);
+  const formatTimeLabel = (val: string) => {
+    if (lang === "fr") return val;
+    const hour = parseInt(val.split(":")[0]);
     const ampm = hour >= 12 ? "PM" : "AM";
     const displayHour = hour % 12 || 12;
     return `${displayHour}:00 ${ampm}`;
@@ -47,7 +36,7 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 mb-6">
-        Step 4: Choose your preferred date and time
+        {t.step4Private}
       </h3>
 
       <div className="space-y-6">
@@ -56,7 +45,7 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
             htmlFor="tour-date"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Preferred Date
+            {t.private.preferredDate}
           </label>
           <input
             type="date"
@@ -73,7 +62,7 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
             htmlFor="tour-time"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Preferred Time
+            {t.private.preferredTime}
           </label>
           <select
             id="tour-time"
@@ -81,10 +70,10 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
             value={time}
             onChange={(e) => updateTime(e.target.value)}
           >
-            <option value="">Select a time...</option>
+            <option value="">{t.private.selectTime}</option>
             {timeOptions.map((timeValue) => (
               <option key={timeValue} value={timeValue}>
-                {formatTime(timeValue)}
+                {formatTimeLabel(timeValue)}
               </option>
             ))}
           </select>
@@ -92,13 +81,10 @@ const StepDateTimePrivate: React.FC<Props> = ({ next, back, active }) => {
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-blue-700">
-            <strong>Note:</strong> This is your preferred date and time. We will
-            confirm availability and get back to you within 12 hours.
+            <strong>{t.private.note}</strong> {t.private.noteText}
           </p>
         </div>
       </div>
-
-      {/* Supprimer le bouton back */}
     </div>
   );
 };

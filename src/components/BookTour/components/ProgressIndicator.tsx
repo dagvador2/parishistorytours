@@ -1,17 +1,20 @@
 import React from "react";
+import { useBooking } from "../BookingContext";
 
 interface ProgressIndicatorProps {
   currentStep: number;
 }
 
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep }) => {
+  const { t } = useBooking();
+
   const steps = [
-    { number: 1, label: "Tour" },
-    { number: 2, label: "Participants" },
-    { number: 3, label: "Type" },
-    { number: 4, label: "Date & Time" },
-    { number: 5, label: "Contact" },
-    { number: 6, label: "Summary" },
+    { number: 1, label: t.progress.tour },
+    { number: 2, label: t.progress.participants },
+    { number: 3, label: t.progress.type },
+    { number: 4, label: t.progress.dateTime },
+    { number: 5, label: t.progress.contact },
+    { number: 6, label: t.progress.summary },
   ];
 
   return (

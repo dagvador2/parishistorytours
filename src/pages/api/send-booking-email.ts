@@ -1,36 +1,41 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { en } from '../../i18n/translations/en';
+import { fr } from '../../i18n/translations/fr';
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
+const translations: Record<string, typeof en> = { en, fr };
+
 export const POST: APIRoute = async ({ request }) => {
-  console.log('=== Email API Called ===');
-  console.log('API Key present:', !!import.meta.env.RESEND_API_KEY);
-  console.log('API Key starts with re_:', import.meta.env.RESEND_API_KEY?.startsWith('re_'));
-  
   try {
     const bookingData = await request.json();
-    console.log('Email data received:', bookingData);
+    const locale = bookingData.locale === 'fr' ? 'fr' : 'en';
+    const t = translations[locale].email.client;
+    const dateLocale = locale === 'fr' ? 'fr-FR' : 'en-GB';
 
-    // Email au client
+    // Email au client (translated)
+    const tourName = bookingData.tour === 'left-bank' ? t.leftBankTour : t.rightBankTour;
+    const typeName = bookingData.tourType === 'regular' ? t.regularTour : t.privateTour;
+    const subject = bookingData.tourType === 'regular' ? t.subjectConfirmation : t.subjectRequest;
+    const thankYou = bookingData.tourType === 'regular' ? t.thankYouPaid : t.thankYouRequest;
+    const statusMessage = bookingData.tourType === 'regular' ? t.confirmedMessage : t.requestMessage;
+
     const clientEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2563eb;">Booking ${bookingData.tourType === 'regular' ? 'Confirmation' : 'Request'} - Paris History Tours</h2>
-        <p>Dear ${bookingData.name},</p>
-        <p>Thank you for your booking ${bookingData.tourType === 'regular' ? 'and payment' : 'request'}! Here are the details:</p>
+        <h2 style="color: #2563eb;">${subject}</h2>
+        <p>${t.greeting} ${bookingData.name},</p>
+        <p>${thankYou}</p>
         <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>Tour:</strong> ${bookingData.tour === 'left-bank' ? 'Left Bank Tour' : 'Right Bank Tour'}</p>
-          <p><strong>Participants:</strong> ${bookingData.participants} ${bookingData.participants === 1 ? 'person' : 'people'}</p>
-          <p><strong>Type:</strong> ${bookingData.tourType === 'regular' ? 'Regular Tour' : 'Private Tour'}</p>
-          <p><strong>Date:</strong> ${new Date(bookingData.date).toLocaleDateString('en-GB')}</p>
-          <p><strong>Time:</strong> ${bookingData.time}</p>
-          ${bookingData.price ? `<p><strong>Total:</strong> €${bookingData.price}</p>` : ''}
+          <p><strong>${t.tour}</strong> ${tourName}</p>
+          <p><strong>${t.participants}</strong> ${bookingData.participants} ${bookingData.participants === 1 ? t.person : t.people}</p>
+          <p><strong>${t.type}</strong> ${typeName}</p>
+          <p><strong>${t.date}</strong> ${new Date(bookingData.date).toLocaleDateString(dateLocale)}</p>
+          <p><strong>${t.time}</strong> ${bookingData.time}</p>
+          ${bookingData.price ? `<p><strong>${t.total}</strong> €${bookingData.price}</p>` : ''}
         </div>
-        <p>${bookingData.tourType === 'regular' 
-          ? 'Your booking is confirmed! We will send you meeting point details 24 hours before the tour.' 
-          : 'We will confirm availability and contact you within 24 hours.'
-        }</p>
-        <p>Best regards,<br><strong>Clément - Paris History Tours</strong></p>
+        <p>${statusMessage}</p>
+        <p>${t.regards}<br><strong>Clément - Paris History Tours</strong></p>
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
         <p style="font-size: 12px; color: #6b7280;">
           Paris History Tours | Email: clemdaguetschott@gmail.com | WhatsApp: +33620622480
@@ -41,11 +46,9 @@ export const POST: APIRoute = async ({ request }) => {
     const clientEmailResult = await resend.emails.send({
       from: 'Paris History Tours <bookings@parishistorytours.com>',
       to: bookingData.email,
-      subject: `Booking ${bookingData.tourType === 'regular' ? 'Confirmation' : 'Request'} - Paris History Tours`,
+      subject,
       html: clientEmailHtml,
     });
-
-    console.log('Client email sent:', clientEmailResult);
 
     // Email à vous (admin)
     const adminEmailHtml = `
@@ -75,9 +78,7 @@ export const POST: APIRoute = async ({ request }) => {
       html: adminEmailHtml,
     });
 
-    console.log('Admin email sent:', adminEmailResult);
-
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       success: true,
       message: 'Emails sent successfully',
       clientEmailId: clientEmailResult.data?.id,
@@ -88,11 +89,9 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
   } catch (error) {
-    console.error('Email error:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Failed to send emails',
-      details: String(error),
-      hasApiKey: !!import.meta.env.RESEND_API_KEY
+    console.error('Email error:', error instanceof Error ? error.message : error);
+    return new Response(JSON.stringify({
+      error: 'Failed to send emails'
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

@@ -26,8 +26,6 @@ export const GET: APIRoute = async (ctx) => {
   const url = new URL(ctx.request.url);
   const tour = url.searchParams.get("tour") as "left-bank" | "right-bank";
 
-  console.log("tour", tour);
-
   if (!tour || (tour !== "left-bank" && tour !== "right-bank")) {
     return new Response("Invalid or missing tour parameter", { status: 400 });
   }

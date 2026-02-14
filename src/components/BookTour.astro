@@ -1,8 +1,14 @@
 ---
 import BookingWizard from "./BookTour/BookingWizard";
+import { en } from '../i18n/translations/en';
+import { fr } from '../i18n/translations/fr';
+
+const lang = Astro.locals.lang;
+const allTranslations = { en, fr };
+const bookingT = allTranslations[lang].booking;
 ---
 
 {/* Section Book your tour */}
 <div id="book-tour" class="mb-16">
-	<BookingWizard client:load />
+	<BookingWizard client:load translations={bookingT} lang={lang} />
 </div>

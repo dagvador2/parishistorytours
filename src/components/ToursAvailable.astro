@@ -1,30 +1,34 @@
 ---
-/* No logic necessary for this component */
 import { Picture } from "astro:assets";
+import { useTranslations } from '../i18n/utils';
 
-/* Images must live inside /src to be processed */
 import pantheon     from "../images/pantheon_de_Paris.webp";
 import placeVendome from "../images/place_vendome_paris.webp";
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 {/* Section – Tours available */}
 <div id="tours" class="mb-16">
 	<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">
-		Tours available
+		{t('tours.title')}
 	</h2>
 	<p class="text-center text-gray-600 mb-12 text-lg">
-		Here are the tours about WW2 I propose in Paris.
+		{t('tours.subtitle')}
 	</p>
 
 	<div class="flex flex-col md:flex-row gap-8 justify-center items-center max-w-5xl mx-auto px-4">
 
 		{/* Left Bank */}
-		<a href="/tours/left-bank"
+		<a href={`${langPrefix}/tours/left-bank`}
 		   class="group block w-full md:w-1/2 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
 			<div class="relative">
 				<Picture
 					src={pantheon}
-					alt="Left Bank Tour"
+					alt={t('tours.leftBank.title')}
 					widths={[480,640,768,1024]}
 					sizes="(max-width: 768px) 100vw, 50vw"
 					formats={["avif","webp"]}
@@ -35,19 +39,19 @@ import placeVendome from "../images/place_vendome_paris.webp";
 				/>
 				<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
 					<span class="text-white text-3xl md:text-4xl font-bold tracking-wider drop-shadow-lg">
-						Left Bank
+						{t('booking.leftBank')}
 					</span>
 				</div>
 			</div>
 		</a>
 
 		{/* Right Bank */}
-		<a href="/tours/right-bank"
+		<a href={`${langPrefix}/tours/right-bank`}
 		   class="group block w-full md:w-1/2 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
 			<div class="relative">
 				<Picture
 					src={placeVendome}
-					alt="Right Bank Tour"
+					alt={t('tours.rightBank.title')}
 					widths={[480,640,768,1024]}
 					sizes="(max-width: 768px) 100vw, 50vw"
 					formats={["avif","webp"]}
@@ -58,7 +62,7 @@ import placeVendome from "../images/place_vendome_paris.webp";
 				/>
 				<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
 					<span class="text-white text-3xl md:text-4xl font-bold tracking-wider drop-shadow-lg">
-						Right Bank
+						{t('booking.rightBank')}
 					</span>
 				</div>
 			</div>

@@ -115,7 +115,6 @@ const countryNameToTopoName: Record<string, string> = {
 export default function WorldMap() {
   const [countryData, setCountryData] = useState<CountryData>({});
   const [maxValue, setMaxValue] = useState(0);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string; country: string; flag: string; count: number } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -140,8 +139,6 @@ export default function WorldMap() {
 
         if (error) throw error;
 
-        console.log('Raw data from Supabase:', data);
-
         const countryCount = new Map<string, number>();
         data?.forEach(row => {
           const country = row.pays;
@@ -154,32 +151,18 @@ export default function WorldMap() {
           }
         });
 
-        console.log('Country count map:', Array.from(countryCount.entries()));
-
         // Convert to TopoJSON country names
         const countryNameMap: CountryData = {};
         let max = 0;
         
         countryCount.forEach((count, country) => {
           const topoName = countryNameToTopoName[country];
-          console.log(`Mapping ${country} to ${topoName} (count: ${count})`);
           if (topoName) {
             // Cumuler les valeurs au lieu de les écraser
             countryNameMap[topoName] = (countryNameMap[topoName] || 0) + count;
             max = Math.max(max, countryNameMap[topoName]);
-          } else {
-            console.warn(`⚠️ No mapping found for: ${country}`);
           }
         });
-
-        // Debug spécifique pour UK
-        console.log('🔍 UK Debug:', {
-          'UK in countryCount': countryCount.get('UK'),
-          'United Kingdom in final map': countryNameMap['United Kingdom']
-        });
-
-        console.log('Final country name map:', countryNameMap);
-        console.log('Max value:', max);
 
         setCountryData(countryNameMap);
         setMaxValue(max);
@@ -367,20 +350,6 @@ export default function WorldMap() {
           <ZoomableGroup>
             <Geographies geography={geoUrl}>
               {({ geographies }: { geographies: any[] }) => {
-                // Debug: chercher comment UK apparaît dans le TopoJSON
-                const ukCountries = geographies.filter(geo => 
-                  geo.properties.name && 
-                  (geo.properties.name.toLowerCase().includes('kingdom') || 
-                   geo.properties.name.toLowerCase().includes('britain') ||
-                   geo.properties.name.toLowerCase().includes('england'))
-                );
-                
-                if (ukCountries.length > 0) {
-                  console.log('🇬🇧 Found UK-related countries in TopoJSON:', 
-                    ukCountries.map(c => c.properties.name)
-                  );
-                }
-                
                 return geographies.map((geo) => {
                   const countryName = geo.properties.name;
                   const value = countryData[countryName] || 0;

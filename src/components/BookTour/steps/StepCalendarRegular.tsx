@@ -16,7 +16,7 @@ interface Slot {
 }
 
 const StepCalendarRegular: React.FC<Props> = ({ active }) => {
-  const { booking, setBooking } = useBooking();
+  const { booking, setBooking, t, lang } = useBooking();
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [slots, setSlots] = useState<Slot[]>([]);
   const [availableDays, setAvailableDays] = useState<Record<string, number>>(
@@ -27,22 +27,22 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
 
   if (!active || booking.tourType !== "regular") return null;
 
+  const locale = lang === "fr" ? "fr-FR" : "en-US";
+  const participantsLabel = booking.participants === 1 ? t.person : t.people;
+
   // Fetch price from Stripe API
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        console.log("Fetching price for tour:", booking.tour);
         const response = await fetch(`/api/stripe-price?tour=${booking.tour}`);
         if (!response.ok) {
           throw new Error("Failed to fetch price");
         }
         const priceData = await response.json();
-        // Convert from cents to euros (assuming Stripe price is in cents)
         const price = priceData.unit_amount / 100;
         setPricePerPerson(price);
       } catch (error) {
         console.error("Error fetching price:", error);
-        // Fallback to default price if API fails
         setPricePerPerson(50);
       } finally {
         setPriceLoading(false);
@@ -67,7 +67,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           return;
         }
 
-        // Group slots by date and count available slots
         const groupedSlots: Record<string, number> = {};
         data?.forEach((slot) => {
           const date = new Date(slot.start_time).toISOString().split("T")[0];
@@ -108,13 +107,11 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           return;
         }
 
-        // Filter slots that have enough availability for the group
         const availableSlots = (data || []).filter(
           (slot: { available_spots: number }) =>
             slot.available_spots >= booking.participants
         );
 
-        // Map to the expected Slot interface
         const mappedSlots: Slot[] = availableSlots.map((slot: any) => ({
           id: slot.id,
           start_time: slot.start_time,
@@ -131,7 +128,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     fetchSlots();
   }, [selectedDay, booking.tour, booking.participants, pricePerPerson]);
 
-  // Select a slot and update booking
   const selectSlot = (slot: Slot) => {
     const date = new Date(slot.start_time).toISOString().split("T")[0];
     const time = new Date(slot.start_time)
@@ -148,7 +144,6 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     });
   };
 
-  // Highlight days with available slots
   const modifiers = {
     available: Object.keys(availableDays).map((date) => new Date(date)),
   };
@@ -162,17 +157,17 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
   };
 
   const formatTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleTimeString("en-US", {
+    return new Date(dateTime).toLocaleTimeString(locale, {
       hour: "numeric",
       minute: "2-digit",
-      hour12: true,
+      hour12: lang !== "fr",
     });
   };
 
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 mb-6">
-        Step 4: Choose a session
+        {t.step4Calendar}
       </h3>
       <div className="grid md:grid-cols-2 gap-6">
         {/* Calendar */}
@@ -185,12 +180,12 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
             modifiers={modifiers}
             modifiersStyles={modifiersStyles}
             disabled={[
-              { before: new Date() }, // Disable past dates
+              { before: new Date() },
             ]}
             footer={
               <p className="mt-2 text-sm text-gray-600">
-                Blue dates have available sessions for {booking.participants}{" "}
-                {booking.participants === 1 ? "person" : "people"}.
+                {t.calendar.blueDates} {booking.participants}{" "}
+                {participantsLabel}.
               </p>
             }
           />
@@ -200,9 +195,9 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
           {selectedDay && (
             <div>
               <h4 className="font-semibold text-gray-800 mb-4">
-                Available sessions for {selectedDay.toLocaleDateString()} for{" "}
+                {t.calendar.availableSessions} {selectedDay.toLocaleDateString(locale)} {t.calendar.for}{" "}
                 {booking.participants}{" "}
-                {booking.participants === 1 ? "person" : "people"}.
+                {participantsLabel}.
               </h4>
               {slots.length > 0 ? (
                 <div className="space-y-3">
@@ -225,18 +220,18 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                               {formatTime(slot.start_time)}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {slot.free} spots available
+                              {slot.free} {t.calendar.spotsAvailable}
                             </div>
                           </div>
                           <div className="text-right">
                             <div className="font-semibold text-gray-800">
                               {priceLoading
-                                ? "Loading..."
-                                : `€${pricePerPerson} per person`}
+                                ? t.calendar.loading
+                                : `€${pricePerPerson} ${t.calendar.perPerson}`}
                             </div>
                             {isSelected && !priceLoading && (
                               <div className="text-sm text-blue-600">
-                                Total: €{pricePerPerson * booking.participants}
+                                {t.calendar.total} €{pricePerPerson * booking.participants}
                               </div>
                             )}
                           </div>
@@ -247,16 +242,15 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
                 </div>
               ) : (
                 <p className="text-gray-500 text-sm">
-                  No available sessions for {booking.participants}{" "}
-                  {booking.participants === 1 ? "person" : "people"} on this
-                  date.
+                  {t.calendar.noSessions} {booking.participants}{" "}
+                  {participantsLabel} {t.calendar.onThisDate}
                 </p>
               )}
             </div>
           )}
           {!selectedDay && (
             <p className="text-gray-500 text-sm">
-              Select a date from the calendar to view available sessions.
+              {t.calendar.selectDate}
             </p>
           )}
         </div>
@@ -276,14 +270,14 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
               />
             </svg>
             <span className="text-green-800 font-medium">
-              Session selected:{" "}
-              {booking.date && new Date(booking.date).toLocaleDateString()} at{" "}
+              {t.calendar.sessionSelected}{" "}
+              {booking.date && new Date(booking.date).toLocaleDateString(locale)} {t.calendar.at}{" "}
               {booking.time}
             </span>
           </div>
           <p className="text-sm text-green-700 mt-1">
-            Total: €{booking.price} for {booking.participants}{" "}
-            {booking.participants === 1 ? "person" : "people"}
+            {t.calendar.total} €{booking.price} {t.calendar.for} {booking.participants}{" "}
+            {participantsLabel}
           </p>
         </div>
       )}

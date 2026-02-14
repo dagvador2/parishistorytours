@@ -6,35 +6,33 @@ import Reviews from "../../components/Reviews.astro";
 import BookTour from "../../components/BookTour.astro";
 import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
 import "../../styles/global.css";
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
 
+import JsonLd from "../../components/JsonLd.astro";
+import FAQ from "../../components/FAQ.astro";
 import { Picture } from "astro:assets";
 
 import guidePhoto     from "../../images/guide-photo.webp";
 import pantheon       from "../../images/pantheon_de_Paris.webp";
 import placeVendome   from "../../images/place_vendome_paris.webp";
 
-const lang = getLangFromUrl(Astro.url);
+const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 // Create language-aware navigation links
 const langPrefix = '/fr';
 ---
 
-<meta name="description" content="Explorez Paris à travers des visites privées d'histoire de la 2GM. Découvrez des lieux emblématiques avec des guides experts. Réservez votre visite historique de Paris maintenant.">
-
-<BaseLayout title="Paris History Tours - Visites guidées d'histoire à Paris sur la Seconde Guerre Mondiale">
-	<!-- Language switcher -->
-	<div class="fixed top-4 left-4 z-50">
-		<LanguageSwitcher />
-	</div>
-
+<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
 	<!-- Bannière de navigation fixe pour desktop -->
 	<nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
-		<div class="max-w-4xl mx-auto flex items-center justify-center gap-8 py-4">
-			<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
-			<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
-			<a href={langPrefix} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.home')}</a>
+		<div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
+			<div class="flex items-center gap-8 flex-1 justify-center">
+				<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
+				<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
+				<a href={langPrefix} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.home')}</a>
+			</div>
+			<LanguageSwitcher />
 		</div>
 	</nav>
 
@@ -71,38 +69,35 @@ const langPrefix = '/fr';
 			</h2>
 		</div>
 		
-		<div class="flex justify-center mb-4 max-w-4xl mx-auto">
-			<Picture
-			src={guidePhoto}
-			alt="Guide – Paris History Tours"
-			widths={[320,640,960,1280]}
-			sizes="(max-width:768px) 90vw, 480px"
-			formats={["avif","webp"]} 
-			loading="lazy"
-			decoding="async"
-			quality={80}
-			class="rounded-xl shadow-lg max-w-full h-auto mt-8 mb-8"
-		/>
-		</div>
-		
-		<div class="flex justify-center mb-8">
-			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
-		</div>
-
-		<Welcome />
-		<ToursAvailable />
-		<Reviews />
-		<BookTour />
-	</section>
-	
-	<section id="gallery" class="py-16 bg-white">
-		<div class="max-w-6xl mx-auto px-4">
-			<h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">{t('home.gallery.title')}</h2>
-			<p class="text-center text-gray-600 mb-12 text-lg">{t('home.gallery.subtitle')}</p>
-			
-			<div class="relative max-w-4xl mx-auto">
+		{/* Carrousel de photos */}
+		<div class="flex justify-center mb-4 max-w-4xl mx-auto mt-8">
+			<div class="relative max-w-4xl mx-auto w-full">
+				{/* Conteneur du carrousel */}
 				<div class="overflow-hidden rounded-xl shadow-lg">
 					<div class="flex transition-transform duration-500 ease-in-out" id="gallery-carousel">
+						{/* Photo du guide en premier */}
+						<div class="min-w-full">
+							<div class="relative">
+								<Picture
+								src={guidePhoto}
+								alt="Clément – Your expert guide"
+								widths={[640,768,1024,1440]}
+								sizes="100vw"
+								formats={["avif","webp"]}
+								loading="eager"
+								decoding="async"
+								quality={75}
+								class="w-full h-80 md:h-[28rem] object-cover"
+								style="object-position: center center;"
+							/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
+								</div>
+							</div>
+						</div>
+
+						{/* Panthéon */}
 						<div class="min-w-full">
 							<div class="relative">
 								<Picture
@@ -114,7 +109,8 @@ const langPrefix = '/fr';
 									loading="lazy"
 									decoding="async"
 									quality={75}
-									class="w-full h-64 md:h-96 object-cover"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
 									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.pantheon.title')}</h3>
@@ -122,7 +118,8 @@ const langPrefix = '/fr';
 								</div>
 							</div>
 						</div>
-						
+
+						{/* Place Vendôme */}
 						<div class="min-w-full">
 							<div class="relative">
 								<Picture
@@ -134,7 +131,8 @@ const langPrefix = '/fr';
 									loading="lazy"
 									decoding="async"
 									quality={75}
-									class="w-full h-64 md:h-96 object-cover"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center center;"
 								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
 									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.placeVendome.title')}</h3>
@@ -142,29 +140,46 @@ const langPrefix = '/fr';
 								</div>
 							</div>
 						</div>
-						
+
+						{/* Musée du Jeu de Paume */}
 						<div class="min-w-full">
 							<div class="relative">
-								<Picture
-								src={guidePhoto}
-								alt="Clément – Your expert guide"
-								widths={[640,768,1024,1440]}
-								sizes="100vw"
-								formats={["avif","webp"]}
-								loading="lazy"
-								decoding="async"
-								quality={75}
-								class="w-full h-64 md:h-96 object-cover"
-							/>
+								<img
+									src="/photos/museu_jeu_de_paume_paris.webp"
+									alt="Musée du Jeu de Paume – Storage area for Nazi stolen artwork"
+									loading="lazy"
+									decoding="async"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top;"
+								/>
 								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.jeuDePaume.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.jeuDePaume.description')}</p>
+								</div>
+							</div>
+						</div>
+
+						{/* Ministry of Foreign Affairs */}
+						<div class="min-w-full">
+							<div class="relative">
+								<img
+									src="/photos/right_bank/quai_orsay_paris.webp"
+									alt="Ministry of Foreign Affairs – Crucial wartime meetings"
+									loading="lazy"
+									decoding="async"
+									class="w-full h-80 md:h-[28rem] object-cover"
+									style="object-position: center top;"
+								/>
+								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.foreignAffairs.title')}</h3>
+									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.foreignAffairs.description')}</p>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				
+
+				{/* Boutons de navigation */}
 				<button id="prev-gallery" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-200">
 					<svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -175,18 +190,248 @@ const langPrefix = '/fr';
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
 					</svg>
 				</button>
-				
+
+				{/* Indicateurs */}
 				<div class="flex justify-center mt-6 space-x-2" id="gallery-indicators">
 					<button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
 					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
 					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="3"></button>
+					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="4"></button>
 				</div>
 			</div>
 		</div>
+		
+		<div class="flex justify-center mb-8">
+			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
+		</div>
+
+		<Welcome />
+		<ToursAvailable />
+		<Reviews />
+
+		<!-- Social Proof / Trust Signals -->
+		<section class="py-12 bg-white/60 rounded-2xl mx-4 my-8">
+			<div class="max-w-4xl mx-auto px-4 text-center">
+				<h2 class="text-2xl font-bold text-gray-800 mb-6">{t('socialProof.title')}</h2>
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">4.9/5</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.googleRating')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">40+</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.reviews')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">25+</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.countries')}</div>
+					</div>
+					<div class="text-center">
+						<div class="text-3xl font-bold text-gray-800">2024</div>
+						<div class="text-sm text-gray-600 mt-1">{t('socialProof.founded')}</div>
+					</div>
+				</div>
+				<p class="mt-8 text-gray-600 text-lg">{t('socialProof.description')}</p>
+			</div>
+		</section>
+
+		<BookTour />
+		<FAQ />
 	</section>
 
+	<JsonLd data={{
+		"@context": "https://schema.org",
+		"@type": ["LocalBusiness", "TravelAgency"],
+		"name": "Paris History Tours",
+		"alternateName": "Paris History Tours - Visites guidées Seconde Guerre mondiale à Paris",
+		"description": t('meta.home.description'),
+		"url": "https://www.parishistorytours.com",
+		"telephone": "+33620622480",
+		"email": "clemdaguetschott@gmail.com",
+		"foundingDate": "2024",
+		"slogan": "Découvrez Paris à travers les yeux de la Seconde Guerre mondiale",
+		"knowsLanguage": ["en", "fr"],
+		"currenciesAccepted": "EUR",
+		"paymentAccepted": "Credit Card, Stripe",
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Paris",
+			"addressRegion": "Ile-de-France",
+			"addressCountry": "FR"
+		},
+		"geo": {
+			"@type": "GeoCoordinates",
+			"latitude": 48.8566,
+			"longitude": 2.3522
+		},
+		"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+		"priceRange": "$$",
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "4.9",
+			"bestRating": "5",
+			"ratingCount": "40"
+		},
+		"founder": {
+			"@type": "Person",
+			"name": "Clement Daguet-Schott",
+			"givenName": "Clement",
+			"familyName": "Daguet-Schott",
+			"jobTitle": "Guide & chercheur spécialisé Seconde Guerre mondiale",
+			"description": "Guide indépendant spécialisé dans l'histoire de la Seconde Guerre mondiale à Paris. Après 6 mois de recherche intensive à travers plus de 20 ouvrages historiques et mémoires, Clément a créé des visites à pied immersives qui font revivre le Paris en guerre.",
+			"knowsAbout": ["Histoire de la Seconde Guerre mondiale", "Paris pendant la Seconde Guerre mondiale", "Résistance française", "Libération de Paris 1944", "Occupation nazie de la France"],
+			"knowsLanguage": ["en", "fr"],
+			"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+			"url": "https://www.parishistorytours.com/key-figures"
+		},
+		"hasOfferCatalog": {
+			"@type": "OfferCatalog",
+			"name": "Visites guidées Seconde Guerre mondiale à Paris",
+			"itemListElement": [
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "TouristTrip",
+						"name": "Visite Seconde Guerre mondiale Rive Gauche",
+						"description": "Parcourez le Paris en guerre : Boulevard Saint-Michel, Palais du Luxembourg, Sorbonne & Notre-Dame. 2 heures, 4 arrêts sur la Chute, la Résistance & la Libération.",
+						"touristType": ["Passionné d'histoire", "Voyageur culturel"],
+						"duration": "PT2H",
+						"url": "https://www.parishistorytours.com/fr/tours/left-bank"
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "TouristTrip",
+						"name": "Visite Seconde Guerre mondiale Rive Droite",
+						"description": "Découvrez le Paris de la Seconde Guerre mondiale : Pont Alexandre III, Place de la Concorde, Place Vendôme & le Ritz. Vol d'art, Hemingway & Libération. 2 heures, 4 arrêts.",
+						"touristType": ["Passionné d'histoire", "Voyageur culturel"],
+						"duration": "PT2H",
+						"url": "https://www.parishistorytours.com/fr/tours/right-bank"
+					}
+				}
+			]
+		},
+		"areaServed": {
+			"@type": "City",
+			"name": "Paris",
+			"containedInPlace": {
+				"@type": "Country",
+				"name": "France"
+			}
+		},
+		"sameAs": [
+			"https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8"
+		]
+	}} />
 </BaseLayout>
 
 <script>
-	// ...existing code...
+	// Gallery carousel functionality
+	let currentGalleryIndex = 0;
+	const totalImages = 5;
+	const galleryCarousel = document.getElementById('gallery-carousel');
+	const galleryIndicators = document.querySelectorAll('#gallery-indicators button');
+	const prevGalleryBtn = document.getElementById('prev-gallery');
+	const nextGalleryBtn = document.getElementById('next-gallery');
+
+	function updateGalleryCarousel() {
+		const offset = -currentGalleryIndex * 100;
+		if (galleryCarousel) {
+			galleryCarousel.style.transform = `translateX(${offset}%)`;
+		}
+		galleryIndicators.forEach((indicator, index) => {
+			indicator.classList.toggle('bg-gray-800', index === currentGalleryIndex);
+			indicator.classList.toggle('bg-gray-300', index !== currentGalleryIndex);
+		});
+	}
+
+	function nextGalleryImage() {
+		currentGalleryIndex = (currentGalleryIndex + 1) % totalImages;
+		updateGalleryCarousel();
+	}
+
+	function prevGalleryImage() {
+		currentGalleryIndex = (currentGalleryIndex - 1 + totalImages) % totalImages;
+		updateGalleryCarousel();
+	}
+
+	if (nextGalleryBtn) nextGalleryBtn.addEventListener('click', nextGalleryImage);
+	if (prevGalleryBtn) prevGalleryBtn.addEventListener('click', prevGalleryImage);
+
+	galleryIndicators.forEach((indicator, index) => {
+		indicator.addEventListener('click', () => {
+			currentGalleryIndex = index;
+			updateGalleryCarousel();
+		});
+	});
+
+	// Touch/Swipe support
+	let galleryTouchStartX = 0;
+	let galleryTouchStartY = 0;
+	const minSwipeDistance = 50;
+
+	if (galleryCarousel) {
+		galleryCarousel.addEventListener('touchstart', (e) => {
+			galleryTouchStartX = e.changedTouches[0].screenX;
+			galleryTouchStartY = e.changedTouches[0].screenY;
+		}, { passive: true });
+
+		galleryCarousel.addEventListener('touchend', (e) => {
+			const deltaX = e.changedTouches[0].screenX - galleryTouchStartX;
+			const deltaY = e.changedTouches[0].screenY - galleryTouchStartY;
+			if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+				if (deltaX > 0) prevGalleryImage(); else nextGalleryImage();
+			}
+		}, { passive: true });
+	}
+
+	// Mobile menu functionality
+	const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+	const mobileMenu = document.getElementById('mobile-menu');
+	const hamburgerIcon = document.getElementById('hamburger-icon');
+	const closeIcon = document.getElementById('close-icon');
+	const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
+
+	let isMenuOpen = false;
+
+	function toggleMobileMenu() {
+		isMenuOpen = !isMenuOpen;
+		if (isMenuOpen) {
+			mobileMenu?.classList.remove('hidden');
+			setTimeout(() => {
+				mobileMenu?.classList.remove('opacity-0', 'scale-95');
+				mobileMenu?.classList.add('opacity-100', 'scale-100');
+			}, 10);
+			hamburgerIcon?.classList.add('hidden');
+			closeIcon?.classList.remove('hidden');
+		} else {
+			mobileMenu?.classList.remove('opacity-100', 'scale-100');
+			mobileMenu?.classList.add('opacity-0', 'scale-95');
+			setTimeout(() => { mobileMenu?.classList.add('hidden'); }, 200);
+			hamburgerIcon?.classList.remove('hidden');
+			closeIcon?.classList.add('hidden');
+		}
+	}
+
+	mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+
+	mobileMenuItems.forEach(item => {
+		item.addEventListener('click', (e) => {
+			e.preventDefault();
+			const targetId = item.getAttribute('href')?.substring(1);
+			const targetElement = document.getElementById(targetId || '');
+			if (targetElement) {
+				targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				setTimeout(() => toggleMobileMenu(), 300);
+			}
+		});
+	});
+
+	document.addEventListener('click', (e) => {
+		if (isMenuOpen && mobileMenu && !mobileMenu.contains(e.target as Node) && mobileMenuBtn && !mobileMenuBtn.contains(e.target as Node)) {
+			toggleMobileMenu();
+		}
+	});
 </script>

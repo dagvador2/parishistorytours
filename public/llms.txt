@@ -1,0 +1,39 @@
+# Paris History Tours
+
+> Paris History Tours offers immersive World War II walking tours in Paris, France. Founded in 2024 by Clement Daguet-Schott, a dedicated WWII history researcher. Two 2-hour guided walking tours explore the Fall of Paris, the French Resistance, and the Liberation of Paris in 1944. Rated 4.9/5 on Google Maps with 40+ reviews. Available in English and French. Private and group tours for up to 10 people.
+
+Paris History Tours is a specialized WWII walking tour provider in Paris. The guide, Clement, spent 6 months researching across 20+ historical books and primary sources to create historically rigorous, engaging tours. Visitors from 25+ countries have participated, with a consistent 4.9/5 star rating.
+
+## Tours
+
+- [Left Bank WWII Tour](https://www.parishistorytours.com/tours/left-bank): 2-hour walking tour covering Boulevard Saint-Michel, Palais du Luxembourg, La Sorbonne, and Notre-Dame de Paris. Themes: Fall of Paris 1940, French Resistance networks (Agnes Humbert and the Musee de l'Homme network), and Liberation of Paris 1944.
+- [Right Bank WWII Tour](https://www.parishistorytours.com/tours/right-bank): 2-hour walking tour covering Pont Alexandre III, Ministry of Foreign Affairs, Place de la Concorde, and Place Vendome. Themes: Battle of France, Rose Valland's secret mission to track 20,000+ stolen artworks, and Hemingway at the Liberation.
+
+## About
+
+- [About the Guide & Key Figures](https://www.parishistorytours.com/key-figures): Background on the guide Clement Daguet-Schott, research methodology (20+ books, 6 months), participant statistics, and countries represented.
+
+## Booking & Contact
+
+- [Book a Tour](https://www.parishistorytours.com/#book-tour): Online booking for regular and private tours via Stripe
+- Email: clemdaguetschott@gmail.com
+- WhatsApp: +33 6 20 62 24 80
+- [Google Maps Reviews](https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8): 4.9/5 rating, 40+ reviews
+
+## Key Facts
+
+- Location: Paris, France
+- Languages: English, French
+- Duration: 2 hours per tour
+- Distance: 2.5 km walking per tour
+- Stops: 4 historic stops per tour
+- Group size: Up to 10 participants
+- Tour types: Regular (group) and Private
+- Rating: 4.9/5 on Google Maps (40+ reviews)
+- Visitors from: 25+ countries (USA, UK, Germany, Canada, Australia, France, and more)
+
+## Optional
+
+- [French Homepage](https://www.parishistorytours.com/fr): Full site available in French
+- [French Left Bank Tour](https://www.parishistorytours.com/fr/tours/left-bank): Visite Rive Gauche Seconde Guerre mondiale
+- [French Right Bank Tour](https://www.parishistorytours.com/fr/tours/right-bank): Visite Rive Droite Seconde Guerre mondiale

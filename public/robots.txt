@@ -1,14 +1,53 @@
-# Fichier robots.txt pour https://www.parishistorytours.com/
-# Dernière mise à jour : 2025-08-09
+# robots.txt for https://www.parishistorytours.com
+# Last updated: 2026-02
 
-# S'applique à tous les robots
+# Default rules for all crawlers
 User-agent: *
+Allow: /
+Disallow: /daguet/admin/dashboard
+Disallow: /success
+Disallow: /fr/success
+Disallow: /api/
 
-# Autoriser l'exploration de tout le site...
+# OpenAI crawlers
+User-agent: GPTBot
 Allow: /
 
-# ... sauf la page d'administration
-Disallow: /daguet/admin/dashboard
+User-agent: OAI-SearchBot
+Allow: /
 
-# Lien vers la sitemap pour accélérer l'indexation
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude crawlers
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Google AI crawler
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity crawler
+User-agent: PerplexityBot
+Allow: /
+
+# Common Crawl (used by many AI models)
+User-agent: CCBot
+Allow: /
+
+# Meta AI crawler
+User-agent: FacebookBot
+Allow: /
+
+# Apple AI
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemap
 Sitemap: https://www.parishistorytours.com/sitemap-index.xml

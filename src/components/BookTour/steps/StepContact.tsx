@@ -1,14 +1,8 @@
 import React from "react";
 import { useBooking } from "../BookingContext";
 
-interface Props {
-  next: () => void;
-  back: () => void;
-}
-
-const StepContact: React.FC<Props> = ({ next, back }) => {
-  const { booking, setBooking } = useBooking();
-  // Utiliser directement les valeurs du contexte au lieu de states locaux
+const StepContact: React.FC = () => {
+  const { booking, setBooking, t } = useBooking();
   const name = booking.name || "";
   const email = booking.email || "";
   const phone = booking.phone || "";
@@ -28,7 +22,7 @@ const StepContact: React.FC<Props> = ({ next, back }) => {
   return (
     <div>
       <h3 className="text-xl font-semibold text-gray-800 mb-6">
-        Step 5: Contact Information
+        {t.step5}
       </h3>
 
       <div className="space-y-6">
@@ -37,14 +31,14 @@ const StepContact: React.FC<Props> = ({ next, back }) => {
             htmlFor="contact-name"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Name *
+            {t.contact.name}
           </label>
           <input
             type="text"
             id="contact-name"
             required
             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-blue-400 focus:outline-none"
-            placeholder="Your full name"
+            placeholder={t.contact.namePlaceholder}
             value={name}
             onChange={(e) => updateName(e.target.value)}
           />
@@ -55,14 +49,14 @@ const StepContact: React.FC<Props> = ({ next, back }) => {
             htmlFor="contact-email"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Email *
+            {t.contact.email}
           </label>
           <input
             type="email"
             id="contact-email"
             required
             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-blue-400 focus:outline-none"
-            placeholder="your.email@example.com"
+            placeholder={t.contact.emailPlaceholder}
             value={email}
             onChange={(e) => updateEmail(e.target.value)}
           />
@@ -73,13 +67,13 @@ const StepContact: React.FC<Props> = ({ next, back }) => {
             htmlFor="contact-phone"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Phone Number (optional)
+            {t.contact.phone}
           </label>
           <input
             type="tel"
             id="contact-phone"
             className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-blue-400 focus:outline-none"
-            placeholder="+33 1 23 45 67 89"
+            placeholder={t.contact.phonePlaceholder}
             value={phone}
             onChange={(e) => updatePhone(e.target.value)}
           />

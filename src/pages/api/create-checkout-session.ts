@@ -7,8 +7,9 @@ const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY, {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { sessionId, participants, email, name, tour, date, time, price } =
+    const { sessionId, participants, email, name, tour, date, time, price, locale } =
       await request.json();
+    const langPrefix = locale === 'fr' ? '/fr' : '';
 
     const productIdLeft = import.meta.env.STRIPE_PRODUCT_ID!;
     const productIdRight = import.meta.env.STRIPE_PRODUCT_ID_RIGHT!;
@@ -45,9 +46,10 @@ export const POST: APIRoute = async ({ request }) => {
         time,
         price: price.toString(),
       },
+      locale: locale === 'fr' ? 'fr' : 'en',
       customer_email: email,
-      success_url: `${request.headers.get("origin")}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.headers.get("origin")}/tours/${tour}`,
+      success_url: `${request.headers.get("origin")}${langPrefix}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${request.headers.get("origin")}${langPrefix}/tours/${tour}`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), {

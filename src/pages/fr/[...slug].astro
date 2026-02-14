@@ -14,7 +14,6 @@ export async function getStaticPaths() {
     // Other pages: /fr/key-figures -> uses key-figures.astro with French translations  
     { params: { slug: 'key-figures' } },
     { params: { slug: 'success' } },
-    { params: { slug: 'booking-success' } },
   ];
 }
 
@@ -26,8 +25,6 @@ if (!slug) {
   return Astro.redirect('/');
 } else if (slug === 'tours/left-bank') {
   // /fr/tours/left-bank -> route to left-bank tour page
-  const response = await Astro.glob('../tours/left-bank.astro');
-  const LeftBankPage = response[0].default;
   return Astro.rewrite('/tours/left-bank');
 } else if (slug === 'tours/right-bank') {
   // /fr/tours/right-bank -> route to right-bank tour page  
@@ -38,9 +35,6 @@ if (!slug) {
 } else if (slug === 'success') {
   // /fr/success -> route to success page
   return Astro.rewrite('/success');
-} else if (slug === 'booking-success') {
-  // /fr/booking-success -> route to booking-success page
-  return Astro.rewrite('/booking-success');
 } else {
   // Unknown route, return 404
   return new Response(null, { status: 404 });

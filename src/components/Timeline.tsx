@@ -1,5 +1,5 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import "./../styles/timeline.css";
 
 export default function Timeline({
@@ -9,11 +9,6 @@ export default function Timeline({
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { margin: "0px 0px -10% 0px", amount: 0.1 });
-
-  useEffect(() => {
-    console.log("Ref element:", ref.current);
-    console.log("In view:", inView);
-  }, [inView]);
 
   return (
     <ul ref={ref} className="relative pl-6">

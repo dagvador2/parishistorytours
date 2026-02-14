@@ -1,7 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { useTranslations } from '../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const langPrefix = lang === 'fr' ? '/fr' : '';
 ---
-<BaseLayout title="Booking Confirmed - Paris History Tours" description="Confirmation de réservation pour Paris History Tours">
+<BaseLayout title={t('meta.success.title')} description={t('meta.success.description')} noindex={true}>
   <section class="py-20">
     <div class="max-w-3xl mx-auto px-4 text-center">
       <div class="w-24 h-24 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
@@ -10,25 +15,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </svg>
       </div>
 
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">Request Confirmed!</h1>
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">{t('booking.success.title')}</h1>
       <p class="text-gray-600 mb-8" id="confirmation-subtext">
-        Thank you — your booking request has been received. We will contact you shortly with confirmation details.
+        {t('booking.success.message')}
       </p>
 
       <div id="recap" class="bg-white rounded-lg shadow-md p-6 mb-6 hidden">
-        <h2 class="text-lg font-semibold text-gray-800 mb-3">Your Request Details</h2>
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">{t('booking.success.details')}</h2>
         <div class="space-y-2 text-sm text-left text-gray-700">
-          <div class="flex justify-between"><span>Tour:</span><span id="recap-tour" class="font-medium"></span></div>
-          <div class="flex justify-between"><span>Date & Time:</span><span id="recap-datetime" class="font-medium"></span></div>
-          <div class="flex justify-between"><span>Participants:</span><span id="recap-participants" class="font-medium"></span></div>
-          <div class="flex justify-between"><span>Contact:</span><span id="recap-contact" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>{t('booking.success.tour')}</span><span id="recap-tour" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>{t('booking.success.dateTime')}</span><span id="recap-datetime" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>{t('booking.success.participants')}</span><span id="recap-participants" class="font-medium"></span></div>
+          <div class="flex justify-between"><span>{t('booking.success.contact')}</span><span id="recap-contact" class="font-medium"></span></div>
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a id="return-home" href="/"
+        <a id="return-home" href={`${langPrefix}/`}
            class="inline-block px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-          Return to Home
+          {t('booking.success.returnHome')}
         </a>
       </div>
     </div>

@@ -1,35 +1,33 @@
 ---
-import { getCurrentLocale } from '../i18n/utils';
-
-const currentLocale = getCurrentLocale(Astro.url.pathname);
-const currentPath = Astro.url.pathname;
-
-// Generate the alternate language URL
-let englishUrl: string;
-let frenchUrl: string;
-
-if (currentLocale === 'fr') {
-  // Currently on French page, remove /fr prefix for English
-  englishUrl = currentPath.replace(/^\/fr/, '') || '/';
-  frenchUrl = currentPath;
-} else {
-  // Currently on English page, add /fr prefix for French
-  englishUrl = currentPath;
-  frenchUrl = `/fr${currentPath}`;
+interface Props {
+  dark?: boolean;
 }
+
+const { dark = false } = Astro.props;
+const currentLocale = Astro.locals.lang;
+const pathname = Astro.url.pathname;
+
+// Compute base path (without /fr prefix) - works with both direct and rewritten URLs
+const basePath = pathname.startsWith('/fr') ? (pathname.replace(/^\/fr/, '') || '/') : pathname;
+const englishUrl = basePath;
+const frenchUrl = basePath === '/' ? '/fr' : `/fr${basePath}`;
+
+const activeClass = dark ? 'bg-white text-gray-800 font-semibold' : 'bg-blue-600 text-white';
+const inactiveClass = dark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-blue-600';
+const separatorClass = dark ? 'text-gray-400' : 'text-gray-400';
 ---
 
 <div class="flex items-center gap-2">
-  <a 
+  <a
     href={englishUrl}
-    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'en' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
+    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'en' ? activeClass : inactiveClass}`}
   >
     EN
   </a>
-  <span class="text-gray-400">|</span>
-  <a 
+  <span class={separatorClass}>|</span>
+  <a
     href={frenchUrl}
-    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'fr' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-blue-600'}`}
+    class={`px-2 py-1 text-sm rounded transition-colors ${currentLocale === 'fr' ? activeClass : inactiveClass}`}
   >
     FR
   </a>

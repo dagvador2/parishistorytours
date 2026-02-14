@@ -95,7 +95,7 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
 
       // Ajouter les petits points pour les arrêts rapides
       if (tour === 'left-bank') {
-        leftBankWaypoints.forEach((waypoint, index) => {
+        leftBankWaypoints.forEach((waypoint) => {
           const el = document.createElement('div');
           el.className = 'waypoint-marker';
           el.innerHTML = `
@@ -115,7 +115,7 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
             .addTo(map.current!);
         });
       } else if (tour === 'right-bank') {
-        rightBankWaypoints.forEach((waypoint, index) => {
+        rightBankWaypoints.forEach((waypoint) => {
           const el = document.createElement('div');
           el.className = 'waypoint-marker';
           el.innerHTML = `
@@ -263,9 +263,7 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
         const distance = (route.distance / 1000).toFixed(1); // en km
         const duration = Math.round(route.duration / 60); // en minutes
         
-        console.log(`Route calculée: ${distance}km, ${duration} minutes`);
-        
-        // Optionnel: mettre à jour l'affichage avec les vraies données
+        // Mettre à jour l'affichage avec les vraies données
         updateRouteInfo(distance, duration);
       }
     } catch (error) {
