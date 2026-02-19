@@ -10,11 +10,8 @@ import { useTranslations } from '../i18n/utils';
 
 import JsonLd from "../components/JsonLd.astro";
 import FAQ from "../components/FAQ.astro";
-import { Picture } from "astro:assets";
-
-import guidePhoto     from "../images/guide-photo.webp";
-import pantheon       from "../images/pantheon_de_Paris.webp";
-import placeVendome   from "../images/place_vendome_paris.webp";
+import LocationCarousel from "../components/ui/LocationCarousel.tsx";
+import { AuroraBackground } from "../components/ui/aurora-background.tsx";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -46,7 +43,14 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 	</nav>
 
 	<!-- Hero section -->
-	<section id="about" class="py-8 md:py-24 md:pt-20 px-2 max-w-full text-lg leading-8 bg-[#ebebef] min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
+	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
+		{/* Aurora background — rendered as a fixed visual layer behind all content */}
+		<div class="absolute inset-0 z-0">
+			<AuroraBackground client:only="react" className="min-h-full" />
+		</div>
+
+		{/* Page content — rendered server-side as normal Astro HTML */}
+		<div class="relative z-10 py-8 md:py-24 md:pt-20 px-2">
 		{/* Titre principal et sous-titre */}
 		<div class="max-w-4xl mx-auto flex flex-col items-center justify-center mb-0">
 			<h1 class="text-4xl md:text-6xl font-bold text-center text-gray-800 m-0 p-0 mb-4">
@@ -58,138 +62,52 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 				{t('home.subtitle')}
 			</h2>
 		</div>
-		
-		{/* Carrousel de photos déplacé ici */}
-		<div class="flex justify-center mb-4 max-w-4xl mx-auto mt-8">
-			<div class="relative max-w-4xl mx-auto w-full">
-				{/* Conteneur du carrousel */}
-				<div class="overflow-hidden rounded-xl shadow-lg">
-					<div class="flex transition-transform duration-500 ease-in-out" id="gallery-carousel">
-						{/* Photo du guide en premier */}
-						<div class="min-w-full">
-							<div class="relative">
-								<Picture
-								src={guidePhoto}
-								alt="Clément – Your expert guide"
-								widths={[640,768,1024,1440]}
-								sizes="100vw"
-								formats={["avif","webp"]}
-								loading="eager"
-								decoding="async"
-								quality={75}
-								class="w-full h-80 md:h-[28rem] object-cover"
-								style="object-position: center center;"
-							/>
-								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.guide.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.guide.description')}</p>
-								</div>
-							</div>
-						</div>
-						
-						{/* Panthéon - montrer seulement la partie supérieure */}
-						<div class="min-w-full">
-							<div class="relative">
-								<Picture
-									src={pantheon}
-									alt="Panthéon de Paris – Memorial to Resistance heroes"
-									widths={[640,768,1024,1440]}
-									sizes="100vw"
-									formats={["avif","webp"]}
-									loading="lazy"
-									decoding="async"
-									quality={75}
-									class="w-full h-80 md:h-[28rem] object-cover"
-									style="object-position: center top"
-								/>
-								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.pantheon.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.pantheon.description')}</p>
-								</div>
-							</div>
-						</div>
-						
-						{/* Place Vendôme */}
-						<div class="min-w-full">
-							<div class="relative">
-								<Picture
-									src={placeVendome}
-									alt="Place Vendôme – Wartime Paris"
-									widths={[640,768,1024,1440]}
-									sizes="100vw"
-									formats={["avif","webp"]}
-									loading="lazy"
-									decoding="async"
-									quality={75}
-									class="w-full h-80 md:h-[28rem] object-cover"
-									style="object-position: center center;"
-								/>
-								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.placeVendome.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.placeVendome.description')}</p>
-								</div>
-							</div>
-						</div>
 
-						{/* Musée du Jeu de Paume - remonter l'image */}
-						<div class="min-w-full">
-							<div class="relative">
-								<img
-									src="/photos/museu_jeu_de_paume_paris.webp"
-									alt="Musée du Jeu de Paume – Storage area for Nazi stolen artwork"
-									loading="lazy"
-									decoding="async"
-									class="w-full h-80 md:h-[28rem] object-cover"
-									style="object-position: center top;"
-								/>
-								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.jeuDePaume.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.jeuDePaume.description')}</p>
-								</div>
-							</div>
-						</div>
-
-						{/* Ministry of Foreign Affairs - remonter l'image */}
-						<div class="min-w-full">
-							<div class="relative">
-								<img
-									src="/photos/right_bank/quai_orsay_paris.webp"
-									alt="Ministry of Foreign Affairs – Crucial wartime meetings"
-									loading="lazy"
-									decoding="async"
-									class="w-full h-80 md:h-[28rem] object-cover"
-									style="object-position: center top;"
-								/>
-								<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-									<h3 class="text-white text-xl md:text-2xl font-bold mb-2">{t('home.gallery.foreignAffairs.title')}</h3>
-									<p class="text-white/90 text-sm md:text-base">{t('home.gallery.foreignAffairs.description')}</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				{/* Boutons de navigation */}
-				<button id="prev-gallery" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-200">
-					<svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-					</svg>
-				</button>
-				<button id="next-gallery" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-200">
-					<svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-					</svg>
-				</button>
-				
-				{/* Indicateurs */}
-				<div class="flex justify-center mt-6 space-x-2" id="gallery-indicators">
-					<button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
-					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
-					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
-					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="3"></button>
-					<button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="4"></button>
-				</div>
-			</div>
+		{/* Hero gallery — Full-width location carousel */}
+		<div class="max-w-5xl mx-auto mt-8 mb-4 px-4">
+			<LocationCarousel
+				client:only="react"
+				cardsPerView={3}
+				autoPlayMs={4000}
+				height="30rem"
+				cards={[
+					{
+						imgUrl: '/photos/left_bank/luxembourg_palace_paris.webp',
+						title: t('home.gallery.pantheon.title'),
+						subtitle: 'Left Bank Tour — Stop 2',
+						description: t('home.gallery.pantheon.description') + ' The Palais du Luxembourg served as the Luftwaffe headquarters during the 4-year Nazi occupation of Paris.',
+						tag: 'Left Bank Tour',
+					},
+					{
+						imgUrl: '/photos/right_bank/place_vendome_paris_day.webp',
+						title: t('home.gallery.placeVendome.title'),
+						subtitle: 'Right Bank Tour — Stop 4',
+						description: t('home.gallery.placeVendome.description') + ' This is where Ernest Hemingway famously arrived to "liberate" the Ritz bar on August 25, 1944.',
+						tag: 'Right Bank Tour',
+					},
+					{
+						imgUrl: '/photos/left_bank/notre-dame-de-paris.webp',
+						title: 'Notre-Dame de Paris',
+						subtitle: 'Left Bank Tour — Stop 4',
+						description: "Witness to the Liberation of Paris in August 1944. General de Gaulle led a victory march here despite active sniper fire along the route.",
+						tag: 'Left Bank Tour',
+					},
+					{
+						imgUrl: '/photos/right_bank/bridge_alexander_third_paris.webp',
+						title: 'Pont Alexandre III',
+						subtitle: 'Right Bank Tour — Stop 1',
+						description: "One of the bridges Hitler ordered to be destroyed before the Allied advance. It survived thanks to the German garrison's decision to disobey the demolition order.",
+						tag: 'Right Bank Tour',
+					},
+					{
+						imgUrl: '/photos/right_bank/place_concorde_paris.webp',
+						title: 'Place de la Concorde',
+						subtitle: 'Right Bank Tour — Stop 3',
+						description: t('home.gallery.jeuDePaume.description') + " The site of the first French flag raised over a public building during the Liberation, replacing the swastika.",
+						tag: 'Right Bank Tour',
+					},
+				]}
+			/>
 		</div>
 		
 		{/* Séparateur ligne */}
@@ -202,7 +120,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 		<Reviews />
 
 		<!-- Social Proof / Trust Signals -->
-		<section class="py-12 bg-white/60 rounded-2xl mx-4 my-8">
+		<section class="py-12 bg-white/60 backdrop-blur-sm rounded-2xl mx-4 my-8">
 			<div class="max-w-4xl mx-auto px-4 text-center">
 				<h2 class="text-2xl font-bold text-gray-800 mb-6">{t('socialProof.title')}</h2>
 				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -229,6 +147,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 
 		<BookTour />
 		<FAQ />
+		</div>
 	</section>
 
 	<JsonLd data={{
@@ -551,85 +470,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 			});
 		}
 
-		// Gallery carousel functionality - Auto-play désactivé
-		let currentGalleryIndex = 0;
-		const totalImages = 5; // Mise à jour pour 5 images
-		const galleryCarousel = document.getElementById('gallery-carousel');
-		const galleryIndicators = document.querySelectorAll('#gallery-indicators button');
-		const prevGalleryBtn = document.getElementById('prev-gallery');
-		const nextGalleryBtn = document.getElementById('next-gallery');
-
-		function updateGalleryCarousel() {
-			const offset = -currentGalleryIndex * 100;
-			if (galleryCarousel) {
-				galleryCarousel.style.transform = `translateX(${offset}%)`;
-			}
-			
-			galleryIndicators.forEach((indicator, index) => {
-				indicator.classList.toggle('bg-gray-800', index === currentGalleryIndex);
-				indicator.classList.toggle('bg-gray-300', index !== currentGalleryIndex);
-			});
-		}
-
-		function nextGalleryImage() {
-			currentGalleryIndex = (currentGalleryIndex + 1) % totalImages;
-			updateGalleryCarousel();
-		}
-
-		function prevGalleryImage() {
-			currentGalleryIndex = (currentGalleryIndex - 1 + totalImages) % totalImages;
-			updateGalleryCarousel();
-		}
-
-		if (nextGalleryBtn) {
-			nextGalleryBtn.addEventListener('click', nextGalleryImage);
-		}
-		if (prevGalleryBtn) {
-			prevGalleryBtn.addEventListener('click', prevGalleryImage);
-		}
-
-		galleryIndicators.forEach((indicator, index) => {
-			indicator.addEventListener('click', () => {
-				currentGalleryIndex = index;
-				updateGalleryCarousel();
-			});
-		});
-
-		// Auto-play gallery DÉSACTIVÉ
-		// setInterval(nextGalleryImage, 4000);
-
-		// Touch/Swipe support for mobile
-		let galleryTouchStartX = 0;
-		let galleryTouchStartY = 0;
-		let galleryTouchEndX = 0;
-		let galleryTouchEndY = 0;
-		const minSwipeDistance = 50;
-
-		if (galleryCarousel) {
-			galleryCarousel.addEventListener('touchstart', (e) => {
-				galleryTouchStartX = e.changedTouches[0].screenX;
-				galleryTouchStartY = e.changedTouches[0].screenY;
-			}, { passive: true });
-
-			galleryCarousel.addEventListener('touchend', (e) => {
-				galleryTouchEndX = e.changedTouches[0].screenX;
-				galleryTouchEndY = e.changedTouches[0].screenY;
-				handleGallerySwipe();
-			}, { passive: true });
-		}
-
-		function handleGallerySwipe() {
-			const deltaX = galleryTouchEndX - galleryTouchStartX;
-			const deltaY = galleryTouchEndY - galleryTouchStartY;
-			
-			if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-				if (deltaX > 0) {
-					prevGalleryImage();
-				} else {
-					nextGalleryImage();
-				}
-			}
-		}
+		// Gallery carousel is now handled by the React LocationCarousel component
 
 		// Menu mobile functionality
 		const mobileMenuBtn = document.getElementById('mobile-menu-btn');

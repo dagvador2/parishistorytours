@@ -15,106 +15,177 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <BaseLayout title={t('meta.keyFigures.title')} description={t('meta.keyFigures.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
-  <main class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+  <main class="min-h-screen bg-white">
     <Breadcrumbs items={[
       { label: t('nav.home'), href: `${langPrefix}/` },
       { label: t('keyFigures.title') }
     ]} />
-    <!-- Hero Section -->
-    <section class="pt-12 pb-16">
+
+    <!-- Hero Section — Dark with photo background, matching tour pages -->
+    <section class="relative flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 py-24 md:py-32 overflow-hidden">
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="absolute inset-0">
+        <img
+          src="/photos/left_bank/Paris_ww2_group_photo_4.webp"
+          alt=""
+          class="w-full h-full object-cover opacity-40"
+          loading="eager"
+          aria-hidden="true"
+        />
+      </div>
+      <div class="relative z-10 text-center text-white max-w-3xl mx-auto px-4">
+        <p class="text-sm md:text-base uppercase tracking-[0.2em] text-blue-300 mb-4 font-medium">Paris History Tours</p>
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          {t('keyFigures.title')}
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+          {t('keyFigures.subtitle')}
+        </p>
+      </div>
+    </section>
+
+    <!-- About the Guide Section — Improved layout with stat callouts -->
+    <section class="py-20 bg-white">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {t('keyFigures.title')}
-          </h1>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('keyFigures.subtitle')}
-          </p>
+        <div class="grid md:grid-cols-5 gap-12 items-start">
+          <!-- Photo column (2/5) -->
+          <div class="md:col-span-2">
+            <div class="relative">
+              <img
+                src="/photos/left_bank/Paris_WW2_guide.webp"
+                alt="Clement Daguet-Schott - WWII History Guide in Paris"
+                class="rounded-2xl shadow-2xl w-full aspect-[3/4] object-cover"
+                loading="eager"
+              />
+              <!-- Floating badge -->
+              <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-4 py-3 border border-gray-100">
+                <div class="flex items-center gap-2">
+                  <div class="flex text-yellow-400 text-sm">★★★★★</div>
+                  <span class="text-sm font-bold text-gray-900">4.9/5</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5">Google Maps</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio column (3/5) -->
+          <div class="md:col-span-3">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t('keyFigures.guide.title')}</h2>
+
+            <p class="text-gray-700 mb-6 leading-relaxed text-lg">{t('keyFigures.guide.bio1')}</p>
+
+            <!-- Inline highlight stats -->
+            <div class="grid grid-cols-3 gap-4 my-8 py-6 px-5 bg-slate-50 rounded-xl border border-slate-100">
+              <div class="text-center">
+                <div class="text-2xl md:text-3xl font-bold text-blue-600">20+</div>
+                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Livres consultés' : 'Books researched'}</div>
+              </div>
+              <div class="text-center border-x border-slate-200">
+                <div class="text-2xl md:text-3xl font-bold text-blue-600">25+</div>
+                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Pays représentés' : 'Countries represented'}</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl md:text-3xl font-bold text-blue-600">4.9<span class="text-lg">/5</span></div>
+                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Note moyenne' : 'Average rating'}</div>
+              </div>
+            </div>
+
+            <p class="text-gray-700 mb-6 leading-relaxed">{t('keyFigures.guide.bio2')}</p>
+            <p class="text-gray-600 leading-relaxed">{t('keyFigures.guide.bio3')}</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- About the Guide Section -->
-    <section class="py-16 bg-white">
+    <!-- Building the Tours Section — Enhanced cards -->
+    <section class="py-20 bg-slate-50">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <img
-              src="/photos/left_bank/Paris_WW2_guide.webp"
-              alt="Clement Daguet-Schott - WWII History Guide in Paris"
-              class="rounded-lg shadow-xl w-full h-96 object-cover"
-              loading="eager"
-            />
-          </div>
-          <div>
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.guide.title')}</h2>
-            <p class="text-gray-700 mb-4 leading-relaxed">{t('keyFigures.guide.bio1')}</p>
-            <p class="text-gray-700 mb-4 leading-relaxed">{t('keyFigures.guide.bio2')}</p>
-            <p class="text-gray-700 leading-relaxed">{t('keyFigures.guide.bio3')}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Building the Tours Section -->
-    <section class="py-16 bg-slate-50">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.building.title')}</h2>
-          <p class="text-lg text-gray-600">
+        <div class="text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('keyFigures.building.title')}</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('keyFigures.building.subtitle')}
           </p>
         </div>
-        
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div class="space-y-8">
-            <div class="flex items-start space-x-4">
-              <div class="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.books.title')}</h3>
-                <p class="text-gray-600">
-                  {t('keyFigures.building.books.description')}
-                </p>
+
+        <div class="grid md:grid-cols-2 gap-8 items-stretch">
+          <!-- Research cards -->
+          <div class="space-y-6">
+            <!-- 20+ Books card -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+              <div class="flex items-start gap-5">
+                <div class="flex-shrink-0 w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.books.title')}</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    {t('keyFigures.building.books.description')}
+                  </p>
+                </div>
               </div>
             </div>
-            
-            <div class="flex items-start space-x-4">
-              <div class="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+
+            <!-- 6 Months card -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+              <div class="flex items-start gap-5">
+                <div class="flex-shrink-0 w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center">
+                  <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.months.title')}</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    {t('keyFigures.building.months.description')}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.months.title')}</h3>
-                <p class="text-gray-600">
-                  {t('keyFigures.building.months.description')}
-                </p>
+            </div>
+
+            <!-- 3 Themes card (new) -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+              <div class="flex items-start gap-5">
+                <div class="flex-shrink-0 w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center">
+                  <svg class="w-7 h-7 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{lang === 'fr' ? '3 Thèmes Historiques' : '3 Historical Themes'}</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    {lang === 'fr'
+                      ? 'La Chute de Paris, la Résistance et la Libération — trois fils narratifs entrelacés dans chaque visite pour une compréhension complète de la période.'
+                      : 'The Fall of Paris, the Resistance, and the Liberation — three interwoven narrative threads in every tour for a complete understanding of the period.'}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-          
-          <div class="relative">
-            <img 
-              src="/photos/book_ww2_guide_paris.webp" 
-              alt="Historical research books"
-              class="rounded-lg shadow-xl w-full h-96 object-cover"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+
+          <!-- Photo -->
+          <div class="relative flex items-center">
+            <div class="relative w-full">
+              <img
+                src="/photos/book_ww2_guide_paris.webp"
+                alt="Historical research books used for tour preparation"
+                class="rounded-2xl shadow-xl w-full h-full min-h-[400px] object-cover"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-2xl"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Delivering the Tour Section -->
-    <section class="py-16 bg-slate-50">
+    <!-- Delivering the Tour Section — Stats & visualizations -->
+    <section class="py-20 bg-white">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">{t('keyFigures.delivering.title')}</h2>
-          <p class="text-lg text-gray-600">
+        <div class="text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('keyFigures.delivering.title')}</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('keyFigures.delivering.subtitle')}
           </p>
         </div>
@@ -130,19 +201,60 @@ const langPrefix = isDefaultLang ? '' : '/fr';
           }</p>
         </div>
 
-        <!-- Countries Chart -->
-        <div class="mt-16">
-          <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">
-            {t('keyFigures.delivering.topCountries')}
-          </h3>
-          <div class="bg-white rounded-lg shadow-lg p-8">
+        <!-- Countries & Map in 2-column layout on desktop -->
+        <div class="mt-16 grid md:grid-cols-2 gap-8">
+          <!-- Countries Chart -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">
+              {t('keyFigures.delivering.topCountries')}
+            </h3>
             <CountriesChart client:load />
           </div>
-        </div>
 
-        <!-- World Map - Garder seulement celle-ci -->
-        <div class="mt-16">
-          <WorldMap client:load />
+          <!-- World Map -->
+          <div>
+            <WorldMap client:load />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section — Book your tour -->
+    <section class="py-20 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
+      <div class="absolute inset-0">
+        <img
+          src="/photos/right_bank/bridge_alexander_third_paris.webp"
+          alt=""
+          class="w-full h-full object-cover opacity-20"
+          loading="lazy"
+          aria-hidden="true"
+        />
+      </div>
+      <div class="relative z-10 max-w-3xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+          {lang === 'fr' ? 'Prêt à découvrir Paris autrement ?' : 'Ready to experience Paris differently?'}
+        </h2>
+        <p class="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
+          {lang === 'fr'
+            ? 'Rejoignez les centaines de visiteurs qui ont redécouvert Paris à travers les récits de la Seconde Guerre mondiale.'
+            : 'Join the hundreds of visitors who have rediscovered Paris through the stories of World War II.'}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href={`${langPrefix}/#book`}
+            class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-blue-50 transition-colors duration-200 shadow-lg hover:shadow-xl text-lg"
+          >
+            {t('common.bookNow')}
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+            </svg>
+          </a>
+          <a
+            href={`${langPrefix}/tours/left-bank`}
+            class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors duration-200 text-lg"
+          >
+            {t('common.learnMore')}
+          </a>
         </div>
       </div>
     </section>
