@@ -10,7 +10,7 @@ import { useTranslations } from '../../i18n/utils';
 import JsonLd from "../../components/JsonLd.astro";
 import FAQ from "../../components/FAQ.astro";
 import LocationCarousel from "../../components/ui/LocationCarousel.tsx";
-import { AuroraBackground } from "../../components/ui/aurora-background.tsx";
+import AuroraBackground from "../../components/AuroraBackground.astro";
 import Navbar from "../../components/Navbar.astro";
 import MobileMenu from "../../components/MobileMenu.astro";
 
@@ -33,7 +33,7 @@ const langPrefix = '/fr';
 	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
 		{/* Aurora background — rendered as a fixed visual layer behind all content */}
 		<div class="absolute inset-0 z-0">
-			<AuroraBackground client:only="react" className="min-h-full" />
+			<AuroraBackground class="min-h-full" />
 		</div>
 
 		{/* Page content — rendered server-side as normal Astro HTML */}
