@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useBooking } from "../BookingContext";
-import { supabase } from "../../../lib/supabase";
 
 interface Props {
   back?: () => void;
@@ -53,27 +52,25 @@ const StepSummary: React.FC<Props> = ({ back, onEditDetails, onNext, onRestart }
       }
     } else {
       try {
-        const { data: privateBooking, error: bookingError } = await supabase
-          .from('bookings')
-          .insert({
-            session_id: null,
-            customer_email: booking.email,
-            customer_name: booking.name,
-            participants_count: booking.participants,
-            total_price: null,
-            stripe_payment_intent_id: null,
-            tour_type: booking.tour,
-            booking_date: booking.date,
-            booking_time: booking.time,
-            status: 'pending',
-            created_at: new Date().toISOString()
-          })
-          .select()
-          .single();
+        const bookingRes = await fetch("/api/bookings/private", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: booking.email,
+            name: booking.name,
+            participants: booking.participants,
+            tour: booking.tour,
+            date: booking.date,
+            time: booking.time,
+          }),
+        });
 
-        if (bookingError) {
-          throw new Error(`Error creating private booking: ${bookingError.message}`);
+        if (!bookingRes.ok) {
+          const errData = await bookingRes.json();
+          throw new Error(`Error creating private booking: ${errData.error}`);
         }
+
+        const { booking: privateBooking } = await bookingRes.json();
 
         const response = await fetch("/api/send-booking-email", {
           method: "POST",

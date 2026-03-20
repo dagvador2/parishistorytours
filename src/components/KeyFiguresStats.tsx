@@ -5,7 +5,6 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { supabase } from '../lib/supabase';
 
 type StatColor = 'blue' | 'green' | 'purple' | 'orange';
 
@@ -89,11 +88,9 @@ export default function KeyFiguresStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { data, error } = await supabase
-          .from('data_participants_tour')
-          .select('*');
-
-        if (error) throw error;
+        const res = await fetch('/api/participants-data');
+        if (!res.ok) throw new Error('Failed to fetch participants data');
+        const { data } = await res.json();
         if (!data || data.length === 0) return;
 
         const sessionSet = new Set<number>();

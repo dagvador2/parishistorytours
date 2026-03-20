@@ -6,7 +6,6 @@
 import { useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { supabase } from '../lib/supabase';
 
 interface CountryData {
   country: string;
@@ -68,11 +67,9 @@ export default function CountriesChart() {
   useEffect(() => {
     const fetchCountryData = async () => {
       try {
-        const { data, error } = await supabase
-          .from('data_participants_tour')
-          .select('pays, taille_du_groupe');
-
-        if (error) throw error;
+        const res = await fetch('/api/participants-data');
+        if (!res.ok) throw new Error('Failed to fetch participants data');
+        const { data } = await res.json();
 
         const countryCount = new Map<string, number>();
         data?.forEach(row => {

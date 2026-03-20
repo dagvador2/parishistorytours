@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useBooking } from "../BookingContext";
-import { supabase } from "../../../lib/supabase";
 
 interface Props {
   active: boolean;
@@ -52,30 +51,17 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     fetchPrice();
   }, []);
 
-  // Fetch all slots on component load
+  // Fetch all available days via API
   useEffect(() => {
     const fetchAllSlots = async () => {
       try {
-        const { data, error } = await supabase
-          .from("sessions")
-          .select("id, start_time, available_spots, tour_type")
-          .eq("tour_type", booking.tour)
-          .gte("start_time", new Date().toISOString());
-
-        if (error) {
-          console.error("Error fetching all slots:", error);
+        const res = await fetch(`/api/sessions?tour=${booking.tour}&participants=${booking.participants}`);
+        if (!res.ok) {
+          console.error("Error fetching sessions:", await res.text());
           return;
         }
-
-        const groupedSlots: Record<string, number> = {};
-        data?.forEach((slot) => {
-          const date = new Date(slot.start_time).toISOString().split("T")[0];
-          if (slot.available_spots >= booking.participants) {
-            groupedSlots[date] = (groupedSlots[date] || 0) + 1;
-          }
-        });
-
-        setAvailableDays(groupedSlots);
+        const { availableDays: days } = await res.json();
+        setAvailableDays(days || {});
       } catch (err) {
         console.error("Unexpected error fetching all slots:", err);
       }
@@ -84,41 +70,23 @@ const StepCalendarRegular: React.FC<Props> = ({ active }) => {
     fetchAllSlots();
   }, [booking.tour, booking.participants]);
 
-  // Fetch slots for the selected day
+  // Fetch slots for the selected day via API
   useEffect(() => {
     if (!selectedDay) return;
 
     const fetchSlots = async () => {
       try {
-        const begin = new Date(selectedDay);
-        begin.setHours(0, 0, 0, 0);
-        const end = new Date(selectedDay);
-        end.setHours(23, 59, 59, 999);
-
-        const { data, error } = await supabase
-          .from("sessions")
-          .select("id, start_time, available_spots")
-          .eq("tour_type", booking.tour)
-          .gte("start_time", begin.toISOString())
-          .lte("start_time", end.toISOString());
-
-        if (error) {
-          console.error("Error fetching slots for selected day:", error);
+        const dateStr = selectedDay.toISOString().split("T")[0];
+        const res = await fetch(`/api/sessions/${dateStr}?tour=${booking.tour}&participants=${booking.participants}`);
+        if (!res.ok) {
+          console.error("Error fetching slots for selected day:", await res.text());
           return;
         }
-
-        const availableSlots = (data || []).filter(
-          (slot: { available_spots: number }) =>
-            slot.available_spots >= booking.participants
-        );
-
-        const mappedSlots: Slot[] = availableSlots.map((slot: any) => ({
-          id: slot.id,
-          start_time: slot.start_time,
-          free: slot.available_spots,
+        const { slots: fetchedSlots } = await res.json();
+        const mappedSlots: Slot[] = (fetchedSlots || []).map((slot: any) => ({
+          ...slot,
           price: pricePerPerson,
         }));
-
         setSlots(mappedSlots);
       } catch (err) {
         console.error("Unexpected error fetching slots for selected day:", err);
