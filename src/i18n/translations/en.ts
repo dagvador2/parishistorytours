@@ -39,11 +39,35 @@ export const en = {
       subtitle: "Discover the historical sites we visit",
       pantheon: {
         title: "Panthéon",
-        description: "Memorial to the heroes of the French Resistance"
+        description: "Memorial to the heroes of the French Resistance",
+        fullDescription: "Memorial to the heroes of the French Resistance. The Palais du Luxembourg served as the Luftwaffe headquarters during the 4-year Nazi occupation of Paris.",
+        cardSubtitle: "Left Bank Tour — Stop 2",
+        tag: "Left Bank Tour"
       },
       placeVendome: {
         title: "Place Vendôme",
-        description: "Witness to the German occupation of Paris"
+        description: "Witness to the German occupation of Paris",
+        fullDescription: "Witness to the German occupation of Paris. This is where Ernest Hemingway famously arrived to \"liberate\" the Ritz bar on August 25, 1944.",
+        cardSubtitle: "Right Bank Tour — Stop 4",
+        tag: "Right Bank Tour"
+      },
+      notreDame: {
+        title: "Notre-Dame de Paris",
+        fullDescription: "Witness to the Liberation of Paris in August 1944. General de Gaulle led a victory march here despite active sniper fire along the route.",
+        cardSubtitle: "Left Bank Tour — Stop 4",
+        tag: "Left Bank Tour"
+      },
+      pontAlexandre: {
+        title: "Pont Alexandre III",
+        fullDescription: "One of the bridges Hitler ordered to be destroyed before the Allied advance. It survived thanks to the German garrison's decision to disobey the demolition order.",
+        cardSubtitle: "Right Bank Tour — Stop 1",
+        tag: "Right Bank Tour"
+      },
+      placeConcorde: {
+        title: "Place de la Concorde",
+        fullDescription: "Storage area for all the artwork stolen by the Nazis. The site of the first French flag raised over a public building during the Liberation, replacing the swastika.",
+        cardSubtitle: "Right Bank Tour — Stop 3",
+        tag: "Right Bank Tour"
       },
       guide: {
         title: "Meet Clément",
@@ -395,6 +419,17 @@ export const en = {
     leftBankTour: "Left Bank Tour",
     rightBankTour: "Right Bank Tour",
     routeInfo: "2.5km • 4 stops • 2 hours"
+  },
+
+  // JsonLd structured data
+  jsonLd: {
+    alternateName: "Paris History Tours - WWII Walking Tours",
+    slogan: "Discover Paris through the eyes of World War II",
+    founderJobTitle: "WWII History Guide & Researcher",
+    founderDescription: "Independent history guide specializing in World War II Paris. After 6 months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring wartime Paris to life.",
+    offerCatalogName: "WWII Walking Tours in Paris",
+    leftBankDescription: "Walk through wartime Paris: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops covering the Fall, Resistance & Liberation.",
+    rightBankDescription: "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops."
   },
 
   // Emails

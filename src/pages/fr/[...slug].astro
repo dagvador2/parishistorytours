@@ -21,8 +21,8 @@ const { slug } = Astro.params;
 
 // Route to the appropriate page based on the slug
 if (!slug) {
-  // /fr -> route to homepage
-  return Astro.redirect('/');
+  // /fr -> route to homepage (rewrite to serve FR content from index.astro)
+  return Astro.rewrite('/');
 } else if (slug === 'tours/left-bank') {
   // /fr/tours/left-bank -> route to left-bank tour page
   return Astro.rewrite('/tours/left-bank');

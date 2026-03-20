@@ -39,11 +39,35 @@ export const fr = {
       subtitle: "Découvrez les sites historiques que nous visitons",
       pantheon: {
         title: "Panthéon",
-        description: "Mémorial aux héros de la Résistance française"
+        description: "Mémorial aux héros de la Résistance française",
+        fullDescription: "Mémorial aux héros de la Résistance française. Le Palais du Luxembourg a servi de quartier général de la Luftwaffe pendant les 4 années d'occupation nazie de Paris.",
+        cardSubtitle: "Visite Rive Gauche — Arrêt 2",
+        tag: "Visite Rive Gauche"
       },
       placeVendome: {
         title: "Place Vendôme",
-        description: "Témoin de l'occupation allemande de Paris"
+        description: "Témoin de l'occupation allemande de Paris",
+        fullDescription: "Témoin de l'occupation allemande de Paris. C'est ici qu'Ernest Hemingway est arrivé pour \"libérer\" le bar du Ritz le 25 août 1944.",
+        cardSubtitle: "Visite Rive Droite — Arrêt 4",
+        tag: "Visite Rive Droite"
+      },
+      notreDame: {
+        title: "Notre-Dame de Paris",
+        fullDescription: "Témoin de la Libération de Paris en août 1944. Le général de Gaulle y a mené une marche victorieuse malgré des tirs de snipers actifs le long du parcours.",
+        cardSubtitle: "Visite Rive Gauche — Arrêt 4",
+        tag: "Visite Rive Gauche"
+      },
+      pontAlexandre: {
+        title: "Pont Alexandre III",
+        fullDescription: "Un des ponts qu'Hitler a ordonné de détruire avant l'avancée alliée. Il a survécu grâce à la décision de la garnison allemande de désobéir à l'ordre de démolition.",
+        cardSubtitle: "Visite Rive Droite — Arrêt 1",
+        tag: "Visite Rive Droite"
+      },
+      placeConcorde: {
+        title: "Place de la Concorde",
+        fullDescription: "Zone de stockage de toutes les œuvres d'art volées par les Nazis. Le site du premier drapeau français hissé sur un bâtiment public lors de la Libération, remplaçant la croix gammée.",
+        cardSubtitle: "Visite Rive Droite — Arrêt 3",
+        tag: "Visite Rive Droite"
       },
       guide: {
         title: "Rencontrez Clément",
@@ -395,6 +419,17 @@ export const fr = {
     leftBankTour: "Visite Rive Gauche",
     rightBankTour: "Visite Rive Droite",
     routeInfo: "2,5km • 4 arrêts • 2 heures"
+  },
+
+  // JsonLd structured data
+  jsonLd: {
+    alternateName: "Paris History Tours - Visites guidées Seconde Guerre mondiale à Paris",
+    slogan: "Découvrez Paris à travers les yeux de la Seconde Guerre mondiale",
+    founderJobTitle: "Guide & chercheur spécialisé Seconde Guerre mondiale",
+    founderDescription: "Guide indépendant spécialisé dans l'histoire de la Seconde Guerre mondiale à Paris. Après 6 mois de recherche intensive à travers plus de 20 ouvrages historiques et mémoires, Clément a créé des visites à pied immersives qui font revivre le Paris en guerre.",
+    offerCatalogName: "Visites guidées Seconde Guerre mondiale à Paris",
+    leftBankDescription: "Parcourez le Paris en guerre : Boulevard Saint-Michel, Palais du Luxembourg, Sorbonne & Notre-Dame. 2 heures, 4 arrêts sur la Chute, la Résistance & la Libération.",
+    rightBankDescription: "Découvrez le Paris de la Seconde Guerre mondiale : Pont Alexandre III, Place de la Concorde, Place Vendôme & le Ritz. Vol d'art, Hemingway & Libération. 2 heures, 4 arrêts."
   },
 
   // Emails

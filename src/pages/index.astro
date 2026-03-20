@@ -12,13 +12,27 @@ import FAQ from "../components/FAQ.astro";
 import LocationCarousel from "../components/ui/LocationCarousel.tsx";
 import AuroraBackground from "../components/AuroraBackground.astro";
 import Navbar from "../components/Navbar.astro";
+import MobileMenu from "../components/MobileMenu.astro";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
-	<Navbar variant="homepage" />
+	{isDefaultLang ? (
+		<Navbar variant="homepage" />
+	) : (
+		<>
+			<Navbar variant="fixed" links={[
+				{ label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
+				{ label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
+				{ label: t('nav.home'), href: langPrefix },
+			]} />
+			<MobileMenu />
+		</>
+	)}
 
 	<!-- Hero section -->
 	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
@@ -28,7 +42,7 @@ const t = useTranslations(lang);
 		</div>
 
 		{/* Page content — rendered server-side as normal Astro HTML */}
-		<div class="relative z-10 py-8 md:py-24 md:pt-20 px-2">
+		<div class:list={["relative z-10 py-8 md:py-24 px-2", isDefaultLang ? "md:pt-20" : "md:pt-40"]}>
 		{/* Titre principal et sous-titre */}
 		<div class="max-w-4xl mx-auto flex flex-col items-center justify-center mb-0">
 			<h1 class="text-4xl md:text-6xl font-bold text-center text-gray-800 m-0 p-0 mb-4">
@@ -52,37 +66,37 @@ const t = useTranslations(lang);
 					{
 						imgUrl: '/photos/left_bank/luxembourg_palace_paris.webp',
 						title: t('home.gallery.pantheon.title'),
-						subtitle: 'Left Bank Tour — Stop 2',
-						description: t('home.gallery.pantheon.description') + ' The Palais du Luxembourg served as the Luftwaffe headquarters during the 4-year Nazi occupation of Paris.',
-						tag: 'Left Bank Tour',
+						subtitle: t('home.gallery.pantheon.cardSubtitle'),
+						description: t('home.gallery.pantheon.fullDescription'),
+						tag: t('home.gallery.pantheon.tag'),
 					},
 					{
 						imgUrl: '/photos/right_bank/place_vendome_paris_day.webp',
 						title: t('home.gallery.placeVendome.title'),
-						subtitle: 'Right Bank Tour — Stop 4',
-						description: t('home.gallery.placeVendome.description') + ' This is where Ernest Hemingway famously arrived to "liberate" the Ritz bar on August 25, 1944.',
-						tag: 'Right Bank Tour',
+						subtitle: t('home.gallery.placeVendome.cardSubtitle'),
+						description: t('home.gallery.placeVendome.fullDescription'),
+						tag: t('home.gallery.placeVendome.tag'),
 					},
 					{
 						imgUrl: '/photos/left_bank/notre-dame-de-paris.webp',
-						title: 'Notre-Dame de Paris',
-						subtitle: 'Left Bank Tour — Stop 4',
-						description: "Witness to the Liberation of Paris in August 1944. General de Gaulle led a victory march here despite active sniper fire along the route.",
-						tag: 'Left Bank Tour',
+						title: t('home.gallery.notreDame.title'),
+						subtitle: t('home.gallery.notreDame.cardSubtitle'),
+						description: t('home.gallery.notreDame.fullDescription'),
+						tag: t('home.gallery.notreDame.tag'),
 					},
 					{
 						imgUrl: '/photos/right_bank/bridge_alexander_third_paris.webp',
-						title: 'Pont Alexandre III',
-						subtitle: 'Right Bank Tour — Stop 1',
-						description: "One of the bridges Hitler ordered to be destroyed before the Allied advance. It survived thanks to the German garrison's decision to disobey the demolition order.",
-						tag: 'Right Bank Tour',
+						title: t('home.gallery.pontAlexandre.title'),
+						subtitle: t('home.gallery.pontAlexandre.cardSubtitle'),
+						description: t('home.gallery.pontAlexandre.fullDescription'),
+						tag: t('home.gallery.pontAlexandre.tag'),
 					},
 					{
 						imgUrl: '/photos/right_bank/place_concorde_paris.webp',
-						title: 'Place de la Concorde',
-						subtitle: 'Right Bank Tour — Stop 3',
-						description: t('home.gallery.jeuDePaume.description') + " The site of the first French flag raised over a public building during the Liberation, replacing the swastika.",
-						tag: 'Right Bank Tour',
+						title: t('home.gallery.placeConcorde.title'),
+						subtitle: t('home.gallery.placeConcorde.cardSubtitle'),
+						description: t('home.gallery.placeConcorde.fullDescription'),
+						tag: t('home.gallery.placeConcorde.tag'),
 					},
 				]}
 			/>
@@ -132,13 +146,13 @@ const t = useTranslations(lang);
 		"@context": "https://schema.org",
 		"@type": ["LocalBusiness", "TravelAgency"],
 		"name": "Paris History Tours",
-		"alternateName": "Paris History Tours - WWII Walking Tours",
+		"alternateName": t('jsonLd.alternateName'),
 		"description": t('meta.home.description'),
 		"url": "https://www.parishistorytours.com",
 		"telephone": "+33620622480",
 		"email": "clemdaguetschott@gmail.com",
 		"foundingDate": "2024",
-		"slogan": "Discover Paris through the eyes of World War II",
+		"slogan": t('jsonLd.slogan'),
 		"knowsLanguage": ["en", "fr"],
 		"currenciesAccepted": "EUR",
 		"paymentAccepted": "Credit Card, Stripe",
@@ -166,8 +180,8 @@ const t = useTranslations(lang);
 			"name": "Clement Daguet-Schott",
 			"givenName": "Clement",
 			"familyName": "Daguet-Schott",
-			"jobTitle": "WWII History Guide & Researcher",
-			"description": "Independent history guide specializing in World War II Paris. After 6 months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring wartime Paris to life.",
+			"jobTitle": t('jsonLd.founderJobTitle'),
+			"description": t('jsonLd.founderDescription'),
 			"knowsAbout": ["World War II history", "Paris during WWII", "French Resistance", "Liberation of Paris 1944", "Nazi occupation of France"],
 			"knowsLanguage": ["en", "fr"],
 			"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
@@ -175,28 +189,28 @@ const t = useTranslations(lang);
 		},
 		"hasOfferCatalog": {
 			"@type": "OfferCatalog",
-			"name": "WWII Walking Tours in Paris",
+			"name": t('jsonLd.offerCatalogName'),
 			"itemListElement": [
 				{
 					"@type": "Offer",
 					"itemOffered": {
 						"@type": "TouristTrip",
-						"name": "Left Bank WWII Tour",
-						"description": "Walk through wartime Paris: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops covering the Fall, Resistance & Liberation.",
+						"name": t('booking.leftBankTour'),
+						"description": t('jsonLd.leftBankDescription'),
 						"touristType": ["History enthusiast", "Cultural traveler"],
 						"duration": "PT2H",
-						"url": "https://www.parishistorytours.com/tours/left-bank"
+						"url": `https://www.parishistorytours.com${langPrefix}/tours/left-bank`
 					}
 				},
 				{
 					"@type": "Offer",
 					"itemOffered": {
 						"@type": "TouristTrip",
-						"name": "Right Bank WWII Tour",
-						"description": "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops.",
+						"name": t('booking.rightBankTour'),
+						"description": t('jsonLd.rightBankDescription'),
 						"touristType": ["History enthusiast", "Cultural traveler"],
 						"duration": "PT2H",
-						"url": "https://www.parishistorytours.com/tours/right-bank"
+						"url": `https://www.parishistorytours.com${langPrefix}/tours/right-bank`
 					}
 				}
 			]
