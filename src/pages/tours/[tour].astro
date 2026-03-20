@@ -1,0 +1,489 @@
+---
+import { Picture } from "astro:assets";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BookTour from "../../components/BookTour.astro";
+import TourMap from "../../components/TourMap.tsx";
+import JsonLd from "../../components/JsonLd.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import FAQ from "../../components/FAQ.astro";
+import Navbar from "../../components/Navbar.astro";
+import { useTranslations } from '../../i18n/utils';
+import { tours } from '../../data/tours';
+
+import pantheon from "../../images/pantheon_de_Paris.webp";
+import vendome from "../../images/place_vendome_paris.webp";
+
+const heroImages: Record<string, ImageMetadata> = {
+  'left-bank': pantheon,
+  'right-bank': vendome,
+};
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { tour: 'left-bank' } },
+    { params: { tour: 'right-bank' } },
+  ];
+}
+
+const { tour: tourSlug } = Astro.params;
+const tourConfig = tours[tourSlug];
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+// Create language-aware navigation links
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
+
+// Translation key helpers
+const tp = tourConfig.translationPrefix; // 'leftBank' or 'rightBank'
+
+const heroImage = heroImages[tourConfig.heroImageKey];
+
+const themeKeys = ['fall', 'resistance', 'liberation'] as const;
+
+const galleryAutoPlayAttr = tourConfig.galleryAutoPlayMs
+  ? `data-autoplay="${tourConfig.galleryAutoPlayMs}"`
+  : '';
+---
+
+<BaseLayout title={t(`meta.${tp}.title`)} description={t(`meta.${tp}.description`)} ogImage={tourConfig.ogImage}>
+  <Navbar variant="tour" />
+
+  <Breadcrumbs items={[
+    { label: t('nav.home'), href: `${langPrefix}/` },
+    { label: t('tours.title'), href: `${langPrefix}/#tours` },
+    { label: t(`booking.${tourConfig.breadcrumbKey}`) }
+  ]} />
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0">
+      <Picture
+        src={heroImage}
+        alt={tourConfig.heroAlt}
+        widths={[640,768,1024,1440]}
+        sizes="100vw"
+        formats={["avif","webp"]}
+        loading="eager"
+        decoding="async"
+        quality={75}
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6">{t(`tours.${tp}.title`)}</h1>
+      <p class="text-xl md:text-2xl mb-8 opacity-90">
+        {t(`tours.${tp}.description`)}
+      </p>
+      <div class="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4 md:gap-8 text-lg md:text-xl">
+        <div class="flex items-center justify-center gap-3">
+          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+          </svg>
+          <span class="font-medium">{t('common.duration')}</span>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg>
+          <span class="font-medium">{t('common.distance')}</span>
+        </div>
+        <div class="flex items-center justify-center gap-3">
+          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="font-medium">{t('common.stops')}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Introduction Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
+        {t(`tours.${tp}.introduction`)}
+      </h2>
+      <div class="text-center">
+        <blockquote class="text-2xl md:text-3xl font-medium text-gray-700 italic mb-6">
+          "{t(`tours.${tp}.quote`)}"
+        </blockquote>
+        <cite class="text-lg text-gray-600">
+          — {t(`tours.${tp}.quoteAuthor`)}
+        </cite>
+        <p class="mt-6 text-gray-700">
+          {t(`tours.${tp}.summary`)}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Did You Know? Historical Context -->
+  <section class="py-12 bg-amber-50 border-l-4 border-amber-400">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">{t(`tours.${tp}.didYouKnow.title`)}</h2>
+      <div class="space-y-4">
+        {(t(`tours.${tp}.didYouKnow.facts`) as string[]).map((fact: string) => (
+          <div class="flex items-start gap-3">
+            <span class="text-amber-500 font-bold text-xl mt-0.5 flex-shrink-0">*</span>
+            <p class="text-gray-700 leading-relaxed">{fact}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Three Topics Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
+        {t('tours.themes.title')}
+      </h2>
+
+      <!-- Desktop Version -->
+      <div class="hidden md:grid md:grid-cols-3 gap-8">
+        {themeKeys.map((theme, i) => (
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="h-48 relative">
+              <img
+                src={tourConfig.topics[i].src}
+                alt={tourConfig.topics[i].alt}
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+                width="640"
+                height="384"
+                class="w-full h-full object-cover"
+                style={tourConfig.topics[i].objectPosition ? `object-position: ${tourConfig.topics[i].objectPosition}` : undefined}
+              />
+              <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <h3 class="text-2xl font-bold text-white">{t(`tours.themes.${theme}.title`)}</h3>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 leading-relaxed">
+                {t(`tours.themes.${theme}.description`)}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Mobile Version with Swipe Carousel -->
+      <div class="md:hidden">
+        <div class="relative max-w-sm mx-auto">
+          <div class="overflow-hidden rounded-xl">
+            <div class="flex transition-transform duration-300 ease-in-out" id="topics-carousel">
+              {themeKeys.map((theme, i) => (
+                <div class="min-w-full">
+                  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="h-48 relative">
+                      <img
+                        src={tourConfig.topics[i].src}
+                        alt={tourConfig.topics[i].alt}
+                        loading="lazy"
+                        decoding="async"
+                        width="640"
+                        height="384"
+                        class="w-full h-full object-cover"
+                        style={tourConfig.topics[i].objectPosition ? `object-position: ${tourConfig.topics[i].objectPosition}` : undefined}
+                      />
+                      <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <h3 class="text-2xl font-bold text-white">{t(`tours.themes.${theme}.title`)}</h3>
+                      </div>
+                    </div>
+                    <div class="p-6">
+                      <p class="text-gray-700 leading-relaxed">
+                        {t(`tours.themes.${theme}.description`)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Indicators -->
+          <div class="flex justify-center mt-4 space-x-2" id="topics-indicators">
+            <button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
+            <button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
+            <button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tour Stops Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+        {t('tours.stops.our4Stops')}
+      </h2>
+
+      <!-- Desktop Version - Grid normale -->
+      <div class="hidden md:block">
+        {tourConfig.stops.map((stop, i) => {
+          const stopNum = i + 1;
+          const isEven = stopNum % 2 === 0;
+          return (
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-16">
+              <div class={isEven ? 'md:order-2' : undefined}>
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">{stopNum}</div>
+                  <h3 class="text-2xl font-bold text-gray-800">{t(`tours.${tp}.stops.stop${stopNum}.title`)}</h3>
+                </div>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                  {t(`tours.${tp}.stops.stop${stopNum}.description`)}
+                </p>
+              </div>
+              <div class={isEven ? 'md:order-1 relative' : 'relative'}>
+                <img
+                  src={stop.src}
+                  alt={stop.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width="800"
+                  height="426"
+                  class="rounded-lg shadow-lg w-full h-64 object-cover"
+                  style={stop.objectPosition ? `object-position: ${stop.objectPosition};` : undefined}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <!-- Mobile Version - Full-width Carousel -->
+      <div class="md:hidden relative">
+        <div class="overflow-hidden rounded-xl">
+          <div class="flex transition-transform duration-300 ease-in-out" id="stops-carousel">
+            {tourConfig.stops.map((stop, i) => {
+              const stopNum = i + 1;
+              return (
+                <div class="min-w-full">
+                  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <img
+                      src={stop.src}
+                      alt={stop.alt}
+                      loading="lazy"
+                      decoding="async"
+                      width="640"
+                      height="384"
+                      class="w-full h-56 object-cover"
+                      style="object-position: center top;"
+                    />
+                    <div class="p-6">
+                      <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">{stopNum}</div>
+                        <h3 class="text-xl font-bold text-gray-800">{t(`tours.${tp}.stops.stop${stopNum}.title`)}</h3>
+                      </div>
+                      <p class="text-sm text-gray-700 leading-relaxed">
+                        {t(`tours.${tp}.stops.stop${stopNum}.description`)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div class="flex justify-center mt-6 space-x-2" id="stops-indicators">
+          <button class="w-3 h-3 rounded-full bg-gray-800 transition-all duration-200" data-index="0"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="1"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="2"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 transition-all duration-200" data-index="3"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tour Route Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
+        {t('tours.stops.ourRoute')}
+      </h2>
+      <TourMap tour={tourConfig.slug} client:visible />
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+        {t('tours.stops.experienceHistory')}
+      </h2>
+
+      <!-- Desktop Version - Grid normale -->
+      <div class="hidden md:grid md:grid-cols-4 gap-4">
+        {tourConfig.galleryDesktop.map((img) => (
+          <img
+            src={img.src}
+            alt={img.alt}
+            loading="lazy"
+            decoding="async"
+            width="400"
+            height="300"
+            class="rounded-lg shadow-md w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+          />
+        ))}
+      </div>
+
+      <!-- Mobile Version - Scroll Snap -->
+      <div class="md:hidden">
+        <div class="-mx-4 px-4">
+          <div
+            class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide overscroll-x-contain"
+            style="scroll-behavior:smooth;"
+          >
+            {tourConfig.galleryMobile.map(({ src, alt }) => (
+              <div class="snap-center shrink-0 w-64 rounded-lg overflow-hidden shadow-md bg-white">
+                <img
+                  src={src}
+                  alt={alt}
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                  width="480"
+                  height="360"
+                  class="w-full aspect-video object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Section -->
+      <div class="mt-16 max-w-4x1 mx-auto">
+        <BookTour tourFilter={tourConfig.slug} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Cross-link to other tour -->
+  <section class="py-12 bg-gray-100">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">
+        {lang === 'fr' ? 'Decouvrez aussi notre autre visite' : 'Also discover our other tour'}
+      </h2>
+      <p class="text-gray-600 mb-6">
+        {lang === 'fr'
+          ? tourConfig.crossLink.descriptionFr
+          : tourConfig.crossLink.descriptionEn}
+      </p>
+      <a href={`${langPrefix}/tours/${tourConfig.crossLink.slug}`}
+         class="inline-block bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium">
+        {t(`booking.${tourConfig.crossLink.bookingKey}`)} &rarr;
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <FAQ />
+
+  <!-- JSON-LD TouristTrip -->
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "name": t(`tours.${tp}.title`) + " - Paris WWII Walking Tour",
+    "description": t(`meta.${tp}.description`),
+    "touristType": ["History enthusiast", "Cultural traveler"],
+    "itinerary": {
+      "@type": "ItemList",
+      "numberOfItems": 4,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": t(`tours.${tp}.stops.stop1.title`) },
+        { "@type": "ListItem", "position": 2, "name": t(`tours.${tp}.stops.stop2.title`) },
+        { "@type": "ListItem", "position": 3, "name": t(`tours.${tp}.stops.stop3.title`) },
+        { "@type": "ListItem", "position": 4, "name": t(`tours.${tp}.stops.stop4.title`) }
+      ]
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "availability": "https://schema.org/InStock",
+      "url": `https://www.parishistorytours.com/tours/${tourConfig.slug}`
+    },
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Paris History Tours",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "40"
+      }
+    },
+    "guide": {
+      "@type": "Person",
+      "name": "Clement Daguet-Schott",
+      "jobTitle": "WWII History Guide & Researcher"
+    },
+    "location": {
+      "@type": "Place",
+      "name": tourConfig.locationName,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Paris",
+        "addressCountry": "FR"
+      }
+    },
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": 14,
+      "audienceType": "History enthusiasts, tourists, students, educators"
+    },
+    "maximumAttendeeCapacity": 10,
+    "isAccessibleForFree": false,
+    "duration": "PT2H",
+    "inLanguage": ["en", "fr"]
+  }} />
+</BaseLayout>
+
+<style>
+  /* Masquer scrollbar (mobile / webkit) */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  /* Meilleure inertie iOS */
+  .scrollbar-hide { -webkit-overflow-scrolling: touch; }
+</style>
+
+<script define:vars={{ tourSlug: tourConfig.slug, galleryAutoPlayMs: tourConfig.galleryAutoPlayMs }}>
+  // Pass tour-specific data to the client-side script via define:vars
+  window.__tourSlug = tourSlug;
+  window.__galleryAutoPlayMs = galleryAutoPlayMs;
+</script>
+
+<script>
+  import { initCarousel } from '../../scripts/carousel';
+  import { initScrollBanner } from '../../scripts/scroll-banner';
+
+  // Topics carousel (mobile)
+  initCarousel({ carouselId: 'topics-carousel', indicatorsId: 'topics-indicators', totalItems: 3 });
+
+  // Gallery carousel
+  const autoPlayMs = (window as any).__galleryAutoPlayMs;
+  const galleryOpts: any = { carouselId: 'gallery-carousel', indicatorsId: 'gallery-indicators', totalItems: 8, prevBtnId: 'prev-gallery', nextBtnId: 'next-gallery' };
+  if (autoPlayMs) {
+    galleryOpts.autoPlayMs = autoPlayMs;
+  }
+  initCarousel(galleryOpts);
+
+  // Stops carousel (mobile)
+  initCarousel({ carouselId: 'stops-carousel', indicatorsId: 'stops-indicators', totalItems: 4 });
+
+  // Scroll banner
+  initScrollBanner({
+    bannerIds: ['book-banner'],
+    bookBtnIds: ['book-btn-tour-page'],
+    showAfterPx: 200,
+    bookingSectionSelector: 'div[id*="book-tour"], [id="book-tour"]',
+  });
+</script>
