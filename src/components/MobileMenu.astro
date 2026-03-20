@@ -1,0 +1,47 @@
+---
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  items?: Array<{ label: string; href: string }>;
+}
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const { items } = Astro.props;
+
+const defaultItems = [
+  { label: t('nav.presentation'), href: '#about' },
+  { label: t('nav.toursAvailable'), href: '#tours' },
+  { label: t('nav.reviews'), href: '#reviews' },
+  { label: t('nav.bookTour'), href: '#book-tour' },
+  { label: t('nav.gallery'), href: '#gallery' },
+];
+
+const menuItems = items ?? defaultItems;
+---
+
+<div class="md:hidden fixed top-4 right-4 z-50">
+  <button id="mobile-menu-btn" class="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg p-3 shadow-lg hover:bg-white transition-all duration-200">
+    <svg id="hamburger-icon" class="w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <svg id="close-icon" class="hidden w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+  </button>
+
+  <div id="mobile-menu" class="hidden absolute top-14 right-0 bg-white border border-gray-200 rounded-lg shadow-xl py-2 min-w-48 opacity-0 transition-all duration-200 transform scale-95">
+    {menuItems.map((item, i) => (
+      <a
+        href={item.href}
+        class:list={[
+          'mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 font-medium',
+          i < menuItems.length - 1 && 'border-b border-gray-100',
+        ]}
+      >
+        {item.label}
+      </a>
+    ))}
+  </div>
+</div>

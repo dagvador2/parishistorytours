@@ -1,0 +1,70 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  variant: 'homepage' | 'tour' | 'fixed';
+  links?: Array<{ label: string; href: string }>;
+  bookLabel?: string;
+  bookTarget?: string;
+}
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
+
+const {
+  variant,
+  links,
+  bookLabel = t('nav.bookTour'),
+  bookTarget = '#book-tour',
+} = Astro.props;
+---
+
+{variant === 'homepage' && (
+  <!-- Desktop scroll banner -->
+  <nav id="book-banner-desktop" class="hidden md:block fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9999] shadow-md transform -translate-y-full transition-transform duration-300">
+    <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
+      <div class="flex items-center gap-8 flex-1 justify-center">
+        <a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
+        <button id="book-btn-desktop" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-transform">{bookLabel}</button>
+        <a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
+      </div>
+      <LanguageSwitcher dark />
+    </div>
+  </nav>
+
+  <!-- Mobile scroll banner -->
+  <nav id="book-banner-mobile" class="md:hidden fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
+    <div class="flex items-center justify-between py-3 px-4">
+      <button id="book-btn-mobile" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{bookLabel}</button>
+      <LanguageSwitcher dark />
+    </div>
+  </nav>
+)}
+
+{variant === 'tour' && (
+  <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
+    <div class="flex items-center justify-between py-3 px-4">
+      <div class="flex-1"></div>
+      <button id="book-btn-tour-page" class="bg-white text-gray-600 font-bold transform hover:scale-105 hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{bookLabel}</button>
+      <div class="flex-1 flex justify-end">
+        <LanguageSwitcher dark />
+      </div>
+    </div>
+  </nav>
+)}
+
+{variant === 'fixed' && (
+  <nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
+    <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
+      <div class="flex items-center gap-8 flex-1 justify-center">
+        {links?.map(link => (
+          <a href={link.href} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{link.label}</a>
+        ))}
+      </div>
+      <LanguageSwitcher />
+    </div>
+  </nav>
+)}
