@@ -4,7 +4,6 @@ import Welcome from "../../components/Welcome.astro";
 import ToursAvailable from "../../components/ToursAvailable.astro";
 import Reviews from "../../components/Reviews.astro";
 import BookTour from "../../components/BookTour.astro";
-import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
 import "../../styles/global.css";
 import { useTranslations } from '../../i18n/utils';
 
@@ -12,6 +11,8 @@ import JsonLd from "../../components/JsonLd.astro";
 import FAQ from "../../components/FAQ.astro";
 import LocationCarousel from "../../components/ui/LocationCarousel.tsx";
 import { AuroraBackground } from "../../components/ui/aurora-background.tsx";
+import Navbar from "../../components/Navbar.astro";
+import MobileMenu from "../../components/MobileMenu.astro";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -21,38 +22,12 @@ const langPrefix = '/fr';
 ---
 
 <BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
-	<!-- Bannière de navigation fixe pour desktop -->
-	<nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
-		<div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
-			<div class="flex items-center gap-8 flex-1 justify-center">
-				<a href={`${langPrefix}/tours/left-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.leftBank')}</a>
-				<a href={`${langPrefix}/tours/right-bank`} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.rightBank')}</a>
-				<a href={langPrefix} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{t('nav.home')}</a>
-			</div>
-			<LanguageSwitcher />
-		</div>
-	</nav>
-
-	<!-- Menu mobile hamburger -->
-	<div class="md:hidden fixed top-4 right-4 z-50">
-		<button id="mobile-menu-btn" class="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-lg p-3 shadow-lg hover:bg-white transition-all duration-200">
-			<svg id="hamburger-icon" class="w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-			</svg>
-			<svg id="close-icon" class="hidden w-6 h-6 text-gray-800 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-			</svg>
-		</button>
-
-		<!-- Menu déroulant mobile -->
-		<div id="mobile-menu" class="hidden absolute top-14 right-0 bg-white border border-gray-200 rounded-lg shadow-xl py-2 min-w-48 opacity-0 transition-all duration-200 transform scale-95">
-			<a href="#about" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.presentation')}</a>
-			<a href="#tours" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.toursAvailable')}</a>
-			<a href="#reviews" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.reviews')}</a>
-			<a href="#book-tour" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 border-b border-gray-100 font-medium">{t('nav.bookTour')}</a>
-			<a href="#gallery" class="mobile-menu-item block px-4 py-3 text-gray-800 hover:bg-gray-50 font-medium">{t('nav.gallery')}</a>
-		</div>
-	</div>
+	<Navbar variant="fixed" links={[
+		{ label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
+		{ label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
+		{ label: t('nav.home'), href: langPrefix },
+	]} />
+	<MobileMenu />
 
 	<!-- Hero section -->
 	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
@@ -248,51 +223,6 @@ const langPrefix = '/fr';
 </BaseLayout>
 
 <script>
-	// Mobile menu functionality
-	const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-	const mobileMenu = document.getElementById('mobile-menu');
-	const hamburgerIcon = document.getElementById('hamburger-icon');
-	const closeIcon = document.getElementById('close-icon');
-	const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
-
-	let isMenuOpen = false;
-
-	function toggleMobileMenu() {
-		isMenuOpen = !isMenuOpen;
-		if (isMenuOpen) {
-			mobileMenu?.classList.remove('hidden');
-			setTimeout(() => {
-				mobileMenu?.classList.remove('opacity-0', 'scale-95');
-				mobileMenu?.classList.add('opacity-100', 'scale-100');
-			}, 10);
-			hamburgerIcon?.classList.add('hidden');
-			closeIcon?.classList.remove('hidden');
-		} else {
-			mobileMenu?.classList.remove('opacity-100', 'scale-100');
-			mobileMenu?.classList.add('opacity-0', 'scale-95');
-			setTimeout(() => { mobileMenu?.classList.add('hidden'); }, 200);
-			hamburgerIcon?.classList.remove('hidden');
-			closeIcon?.classList.add('hidden');
-		}
-	}
-
-	mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
-
-	mobileMenuItems.forEach(item => {
-		item.addEventListener('click', (e) => {
-			e.preventDefault();
-			const targetId = item.getAttribute('href')?.substring(1);
-			const targetElement = document.getElementById(targetId || '');
-			if (targetElement) {
-				targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				setTimeout(() => toggleMobileMenu(), 300);
-			}
-		});
-	});
-
-	document.addEventListener('click', (e) => {
-		if (isMenuOpen && mobileMenu && !mobileMenu.contains(e.target as Node) && mobileMenuBtn && !mobileMenuBtn.contains(e.target as Node)) {
-			toggleMobileMenu();
-		}
-	});
+	import { initMobileMenu } from '../../scripts/mobile-menu';
+	initMobileMenu();
 </script>

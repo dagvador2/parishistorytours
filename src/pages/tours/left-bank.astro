@@ -4,10 +4,10 @@ import { Picture } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BookTour from "../../components/BookTour.astro";
 import TourMap from "../../components/TourMap.tsx";
-import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
 import JsonLd from "../../components/JsonLd.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import FAQ from "../../components/FAQ.astro";
+import Navbar from "../../components/Navbar.astro";
 import { useTranslations } from '../../i18n/utils';
 import pantheon from "../../images/pantheon_de_Paris.webp";
 
@@ -20,16 +20,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <BaseLayout title={t('meta.leftBank.title')} description={t('meta.leftBank.description')} ogImage="/photos/left_bank/Paris_WW2_tour_guided_group_photo_2.webp">
-  <!-- Bannière Book Tour (cachée par défaut, apparaît au scroll) -->
-  <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
-    <div class="flex items-center justify-between py-3 px-4">
-      <div class="flex-1"></div>
-      <button id="book-btn-tour-page" class="bg-white text-gray-600 font-bold transform hover:scale-105 hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{t('nav.bookTour')}</button>
-      <div class="flex-1 flex justify-end">
-        <LanguageSwitcher dark />
-      </div>
-    </div>
-  </nav>
+  <Navbar variant="tour" />
 
   <Breadcrumbs items={[
     { label: t('nav.home'), href: `${langPrefix}/` },
@@ -736,248 +727,23 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 </style>
 
 <script>
-  // Mobile topics carousel functionality
-  let currentTopicIndex = 0;
-  const totalTopics = 3;
-  const topicsCarousel = document.getElementById('topics-carousel');
-  const topicsIndicators = document.querySelectorAll('#topics-indicators button');
+  import { initCarousel } from '../../scripts/carousel';
+  import { initScrollBanner } from '../../scripts/scroll-banner';
 
-  function updateTopicsCarousel() {
-    const offset = -currentTopicIndex * 100;
-    if (topicsCarousel) {
-      topicsCarousel.style.transform = `translateX(${offset}%)`;
-    }
-    
-    topicsIndicators.forEach((indicator, index) => {
-      indicator.classList.toggle('bg-gray-800', index === currentTopicIndex);
-      indicator.classList.toggle('bg-gray-300', index !== currentTopicIndex);
-    });
-  }
+  // Topics carousel (mobile)
+  initCarousel({ carouselId: 'topics-carousel', indicatorsId: 'topics-indicators', totalItems: 3 });
 
-  function nextTopic() {
-    currentTopicIndex = (currentTopicIndex + 1) % totalTopics;
-    updateTopicsCarousel();
-  }
+  // Gallery carousel
+  initCarousel({ carouselId: 'gallery-carousel', indicatorsId: 'gallery-indicators', totalItems: 8, prevBtnId: 'prev-gallery', nextBtnId: 'next-gallery', autoPlayMs: 6000 });
 
-  // Indicators click
-  topicsIndicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => {
-      currentTopicIndex = index;
-      updateTopicsCarousel();
-    });
+  // Stops carousel (mobile)
+  initCarousel({ carouselId: 'stops-carousel', indicatorsId: 'stops-indicators', totalItems: 4 });
+
+  // Scroll banner
+  initScrollBanner({
+    bannerIds: ['book-banner'],
+    bookBtnIds: ['book-btn-tour-page'],
+    showAfterPx: 200,
+    bookingSectionSelector: 'div[id*="book-tour"], [id="book-tour"]',
   });
-
-  // Touch/Swipe support for topics
-  let topicsTouchStartX = 0;
-  let topicsTouchEndX = 0;
-  const minSwipeDistance = 50;
-
-  if (topicsCarousel) {
-    topicsCarousel.addEventListener('touchstart', (e) => {
-      topicsTouchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    topicsCarousel.addEventListener('touchend', (e) => {
-      topicsTouchEndX = e.changedTouches[0].screenX;
-      handleTopicsSwipe();
-    }, { passive: true });
-  }
-
-  function handleTopicsSwipe() {
-    const deltaX = topicsTouchEndX - topicsTouchStartX;
-    
-    if (Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        // Swipe right - previous
-        currentTopicIndex = (currentTopicIndex - 1 + totalTopics) % totalTopics;
-      } else {
-        // Swipe left - next
-        currentTopicIndex = (currentTopicIndex + 1) % totalTopics;
-      }
-      updateTopicsCarousel();
-    }
-  }
-
-  // Auto-play désactivé (inutile / gênant UX)
-  // setInterval(nextTopic, 10000);
-</script>
-
-<script>
-  // Gallery carousel functionality (inchangé)
-  let currentGalleryIndex = 0;
-  const totalGalleryImages = 8;
-  const galleryCarousel = document.getElementById('gallery-carousel');
-  const galleryIndicators = document.querySelectorAll('#gallery-indicators button');
-  const prevGalleryBtn = document.getElementById('prev-gallery');
-  const nextGalleryBtn = document.getElementById('next-gallery');
-
-  function updateGalleryCarousel() {
-    const offset = -currentGalleryIndex * 100;
-    if (galleryCarousel) {
-      galleryCarousel.style.transform = `translateX(${offset}%)`;
-    }
-    
-    galleryIndicators.forEach((indicator, index) => {
-      indicator.classList.toggle('bg-gray-800', index === currentGalleryIndex);
-      indicator.classList.toggle('bg-gray-300', index !== currentGalleryIndex);
-    });
-  }
-
-  function nextGalleryImage() {
-    currentGalleryIndex = (currentGalleryIndex + 1) % totalGalleryImages;
-    updateGalleryCarousel();
-  }
-
-  function prevGalleryImage() {
-    currentGalleryIndex = (currentGalleryIndex - 1 + totalGalleryImages) % totalGalleryImages;
-    updateGalleryCarousel();
-  }
-
-  // Event listeners pour la gallery
-  if (nextGalleryBtn) {
-    nextGalleryBtn.addEventListener('click', nextGalleryImage);
-  }
-  if (prevGalleryBtn) {
-    prevGalleryBtn.addEventListener('click', prevGalleryImage);
-  }
-
-  // Indicateurs cliquables pour la gallery
-  galleryIndicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => {
-      currentGalleryIndex = index;
-      updateGalleryCarousel();
-    });
-  });
-
-  // Support tactile pour la gallery
-  let galleryTouchStartX = 0;
-  let galleryTouchEndX = 0;
-  const minSwipeDistance = 50;
-
-  if (galleryCarousel) {
-    galleryCarousel.addEventListener('touchstart', (e) => {
-      galleryTouchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    galleryCarousel.addEventListener('touchend', (e) => {
-      galleryTouchEndX = e.changedTouches[0].screenX;
-      handleGallerySwipe();
-    }, { passive: true });
-  }
-
-  function handleGallerySwipe() {
-    const deltaX = galleryTouchEndX - galleryTouchStartX;
-    
-    if (Math.abs(deltaX) > minSwipeDistance) {
-      if (deltaX > 0) {
-        // Swipe right - previous
-        prevGalleryImage();
-      } else {
-        // Swipe left - next
-        nextGalleryImage();
-      }
-    }
-  }
-
-  // Auto-play gallery (optionnel)
-  setInterval(nextGalleryImage, 6000);
-</script>
-
-<script>
-  // Stops carousel functionality (mobile)
-  let currentStopIndex = 0;
-  const totalStops = 4;
-  const stopsCarousel = document.getElementById('stops-carousel');
-  const stopsIndicators = document.querySelectorAll('#stops-indicators button');
-
-  function updateStopsCarousel() {
-    const offset = -currentStopIndex * 100;
-    if (stopsCarousel) stopsCarousel.style.transform = `translateX(${offset}%)`;
-    stopsIndicators.forEach((indicator, index) => {
-      indicator.classList.toggle('bg-gray-800', index === currentStopIndex);
-      indicator.classList.toggle('bg-gray-300', index !== currentStopIndex);
-    });
-  }
-
-  // Swipe (conservation du contrôle gestuel)
-  let stopsTouchStartX = 0;
-  let stopsTouchEndX = 0;
-  const minSwipeDistanceStops = 50;
-  if (stopsCarousel) {
-    stopsCarousel.addEventListener('touchstart', e => { stopsTouchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    stopsCarousel.addEventListener('touchend', e => { stopsTouchEndX = e.changedTouches[0].screenX; handleStopsSwipe(); }, { passive: true });
-  }
-  function handleStopsSwipe() {
-    const deltaX = stopsTouchEndX - stopsTouchStartX;
-    if (Math.abs(deltaX) > minSwipeDistanceStops) {
-      currentStopIndex = deltaX > 0
-        ? (currentStopIndex - 1 + totalStops) % totalStops
-        : (currentStopIndex + 1) % totalStops;
-      updateStopsCarousel();
-    }
-  }
-
-  // Indicateurs cliquables
-  stopsIndicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => { currentStopIndex = index; updateStopsCarousel(); });
-  });
-
-  // Auto-play désactivé (meilleure UX)
-  // setInterval(nextStop, 15000);
-
-  // Fonctions prev/next conservées si réutilisation future, mais non déclenchées automatiquement
-  function nextStop() {
-    currentStopIndex = (currentStopIndex + 1) % totalStops;
-    updateStopsCarousel();
-  }
-  function prevStop() {
-    currentStopIndex = (currentStopIndex - 1 + totalStops) % totalStops;
-    updateStopsCarousel();
-  }
-</script>
-
-<script>
-  // Bannière Book Tour au scroll
-  let lastScrollY = 0;
-  const bookBanner = document.getElementById('book-banner');
-  const bookBtnTourPage = document.getElementById('book-btn-tour-page');
-
-  function handleScroll() {
-    const currentScrollY = window.scrollY;
-    const bookingSection = document.querySelector('div[id*="book-tour"]') || document.querySelector('[id="book-tour"]');
-    let hideThreshold = window.innerHeight; // Valeur par défaut
-    
-    if (bookingSection) {
-      const rect = bookingSection.getBoundingClientRect();
-      const sectionTop = currentScrollY + rect.top;
-      hideThreshold = sectionTop - 100; // Cache la bannière 100px avant la section
-    }
-    
-    if (currentScrollY > 200 && currentScrollY < hideThreshold) {
-      // Apparaît après 200px et disparaît avant la section booking
-      bookBanner?.classList.remove('-translate-y-full');
-    } else {
-      bookBanner?.classList.add('-translate-y-full');
-    }
-    
-    lastScrollY = currentScrollY;
-  }
-
-  // Scroll vers la section booking
-  function scrollToBooking() {
-    const bookingSection = document.querySelector('div[id*="book-tour"]') || document.querySelector('[id="book-tour"]');
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  }
-
-  // Event listeners
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  
-  if (bookBtnTourPage) {
-    bookBtnTourPage.addEventListener('click', scrollToBooking);
-  }
 </script>
