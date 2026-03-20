@@ -2,6 +2,8 @@
 // This catch-all route handles all /fr/* paths and routes them to the same content
 // as the English versions, but with French translations
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   return [
     // Homepage
