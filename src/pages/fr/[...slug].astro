@@ -4,14 +4,14 @@
 
 export async function getStaticPaths() {
   return [
-    // Homepage: /fr -> uses index.astro with French translations
+    // Homepage
     { params: { slug: undefined } },
-    
-    // Tour pages: /fr/tours/left-bank -> uses tours/left-bank.astro with French translations
+
+    // Tour pages
     { params: { slug: 'tours/left-bank' } },
     { params: { slug: 'tours/right-bank' } },
-    
-    // Other pages: /fr/key-figures -> uses key-figures.astro with French translations  
+
+    // Other pages
     { params: { slug: 'key-figures' } },
     { params: { slug: 'success' } },
   ];
@@ -19,24 +19,12 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// Route to the appropriate page based on the slug
+// Rewrite all /fr/* paths to their EN equivalents (translations handled via Astro.locals.lang)
 if (!slug) {
-  // /fr -> route to homepage (rewrite to serve FR content from index.astro)
   return Astro.rewrite('/');
-} else if (slug === 'tours/left-bank') {
-  // /fr/tours/left-bank -> route to left-bank tour page
-  return Astro.rewrite('/tours/left-bank');
-} else if (slug === 'tours/right-bank') {
-  // /fr/tours/right-bank -> route to right-bank tour page  
-  return Astro.rewrite('/tours/right-bank');
-} else if (slug === 'key-figures') {
-  // /fr/key-figures -> route to key-figures page
-  return Astro.rewrite('/key-figures');
-} else if (slug === 'success') {
-  // /fr/success -> route to success page
-  return Astro.rewrite('/success');
+} else if (slug === 'blog' || slug?.startsWith('blog/')) {
+  return Astro.rewrite(`/${slug}`);
 } else {
-  // Unknown route, return 404
-  return new Response(null, { status: 404 });
+  return Astro.rewrite(`/${slug}`);
 }
 ---
