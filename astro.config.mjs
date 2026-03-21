@@ -19,7 +19,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !page.includes('/success'),
+      filter: (page) => !page.includes('/success') && !page.includes('/admin'),
       serialize(item) {
         if (item.url.endsWith('.com/') || item.url.includes('/fr/') && !item.url.includes('/tours/') && !item.url.includes('/key-figures') && !item.url.includes('/blog')) {
           item.priority = 1.0;

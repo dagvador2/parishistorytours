@@ -1,0 +1,215 @@
+---
+// Admin dashboard — password-protected via cookie
+// Not prerendered: requires server-side cookie check
+export const prerender = false;
+
+const adminPassword = import.meta.env.ADMIN_PASSWORD;
+const adminToken = Astro.cookies.get('admin_token')?.value;
+const isAuthenticated = adminToken && adminToken === adminPassword;
+
+// Handle login POST
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const password = formData.get('password')?.toString();
+  if (password === adminPassword) {
+    Astro.cookies.set('admin_token', password, {
+      path: '/admin',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24, // 24h
+    });
+    return Astro.redirect('/admin');
+  }
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin - Paris History Tours</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, system-ui, sans-serif; background: #f3f4f6; color: #111827; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.5rem; margin-bottom: 24px; }
+    h2 { font-size: 1.25rem; margin-bottom: 16px; color: #374151; }
+    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 4px; }
+    input, select, textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.875rem; margin-bottom: 12px; }
+    button { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.875rem; }
+    button:hover { background: #1d4ed8; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #6b7280; }
+    .btn-secondary:hover { background: #4b5563; }
+    .sessions-grid { display: grid; gap: 12px; }
+    .session-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .session-card .info { font-size: 0.875rem; }
+    .session-card .spots { font-weight: 600; }
+    .spots-good { color: #059669; }
+    .spots-low { color: #d97706; }
+    .spots-full { color: #dc2626; }
+    .login-container { max-width: 400px; margin: 100px auto; }
+    .msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem; }
+    .msg-success { background: #d1fae5; color: #065f46; }
+    .msg-error { background: #fee2e2; color: #991b1b; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; border: 1px solid #d1d5db; background: white; }
+    .tab.active { background: #2563eb; color: white; border-color: #2563eb; }
+  </style>
+</head>
+<body>
+
+{!isAuthenticated ? (
+  <div class="login-container">
+    <div class="card">
+      <h1>Admin Login</h1>
+      <form method="POST">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autofocus />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+) : (
+  <div class="container">
+    <h1>Admin Dashboard — Paris History Tours</h1>
+
+    <!-- Upcoming sessions -->
+    <div class="card">
+      <h2>Upcoming Sessions</h2>
+      <div id="sessions-loading">Loading sessions...</div>
+      <div id="sessions-grid" class="sessions-grid" style="display:none;"></div>
+      <div id="sessions-empty" style="display:none; color:#6b7280; font-size:0.875rem;">No upcoming sessions found.</div>
+    </div>
+
+    <!-- Add OTA Booking -->
+    <div class="card">
+      <h2>Add OTA Booking</h2>
+      <div id="ota-message"></div>
+      <form id="ota-form">
+        <label for="ota-source">Source</label>
+        <select id="ota-source" required>
+          <option value="">Select source...</option>
+          <option value="gyg">GetYourGuide</option>
+          <option value="viator">Viator</option>
+          <option value="tripadvisor">TripAdvisor</option>
+          <option value="other">Other</option>
+        </select>
+
+        <label for="ota-session">Session</label>
+        <select id="ota-session" required>
+          <option value="">Select a session...</option>
+        </select>
+
+        <label for="ota-participants">Participants</label>
+        <input type="number" id="ota-participants" min="1" max="10" value="1" required />
+
+        <label for="ota-customer">Customer Name (optional)</label>
+        <input type="text" id="ota-customer" placeholder="OTA customer name" />
+
+        <label for="ota-reference">OTA Reference (optional)</label>
+        <input type="text" id="ota-reference" placeholder="Booking reference number" />
+
+        <button type="submit">Add OTA Booking</button>
+      </form>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Fetch and display upcoming sessions
+    async function loadSessions() {
+      try {
+        const res = await fetch('/api/admin/sessions-list');
+        if (!res.ok) throw new Error('Failed to load sessions');
+        const { sessions } = await res.json();
+
+        const grid = document.getElementById('sessions-grid');
+        const loading = document.getElementById('sessions-loading');
+        const empty = document.getElementById('sessions-empty');
+        const sessionSelect = document.getElementById('ota-session');
+        loading.style.display = 'none';
+
+        if (!sessions || sessions.length === 0) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        grid.style.display = 'grid';
+        grid.innerHTML = '';
+
+        sessions.forEach(function(s) {
+          const date = new Date(s.start_time);
+          const dateStr = date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+          const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+          const spotsClass = s.available_spots >= 5 ? 'spots-good' : s.available_spots > 0 ? 'spots-low' : 'spots-full';
+
+          const card = document.createElement('div');
+          card.className = 'session-card';
+          card.innerHTML =
+            '<div class="info">' +
+              '<strong>' + (s.tour_type === 'left-bank' ? 'Left Bank' : 'Right Bank') + '</strong>' +
+              ' — ' + dateStr + ' at ' + timeStr +
+            '</div>' +
+            '<div class="spots ' + spotsClass + '">' + s.available_spots + '/' + s.max_spots + ' spots</div>';
+          grid.appendChild(card);
+
+          // Also populate the session select
+          if (s.available_spots > 0) {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = (s.tour_type === 'left-bank' ? 'LB' : 'RB') + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
+            opt.dataset.tour = s.tour_type;
+            sessionSelect.appendChild(opt);
+          }
+        });
+      } catch (err) {
+        document.getElementById('sessions-loading').textContent = 'Error loading sessions: ' + err.message;
+      }
+    }
+
+    // Handle OTA form submission
+    document.getElementById('ota-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var msgEl = document.getElementById('ota-message');
+      var sessionSelect = document.getElementById('ota-session');
+      var selectedOption = sessionSelect.options[sessionSelect.selectedIndex];
+
+      var body = {
+        sessionId: sessionSelect.value,
+        participants: parseInt(document.getElementById('ota-participants').value),
+        source: document.getElementById('ota-source').value,
+        customerName: document.getElementById('ota-customer').value || null,
+        otaReference: document.getElementById('ota-reference').value || null,
+        tour: selectedOption.dataset ? selectedOption.dataset.tour : null,
+      };
+
+      try {
+        var res = await fetch('/api/admin/add-ota-booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (!res.ok) {
+          var err = await res.json();
+          throw new Error(err.error || 'Failed');
+        }
+
+        msgEl.innerHTML = '<div class="msg msg-success">OTA booking added successfully!</div>';
+        document.getElementById('ota-form').reset();
+        loadSessions(); // Refresh
+      } catch (err) {
+        msgEl.innerHTML = '<div class="msg msg-error">Error: ' + err.message + '</div>';
+      }
+    });
+
+    loadSessions();
+  </script>
+)}
+
+</body>
+</html>

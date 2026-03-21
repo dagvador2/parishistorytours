@@ -5,6 +5,7 @@
 User-agent: *
 Allow: /
 Disallow: /daguet/admin/dashboard
+Disallow: /admin
 Disallow: /success
 Disallow: /fr/success
 Disallow: /api/
