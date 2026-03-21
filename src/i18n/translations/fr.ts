@@ -229,6 +229,12 @@ export const fr = {
       messageLabel: "Message ou demande particulière (optionnel)",
       messagePlaceholder: "Toute demande spécifique ou question...",
     },
+    privateSetup: {
+      title: "Configurez votre visite privée",
+      both: "Les deux visites",
+      bothDesc: "Rive Gauche + Rive Droite",
+      validation: "Veuillez sélectionner une visite, une date et une heure.",
+    },
     checkout: {
       contactTitle: "Vos coordonnées",
       summaryTitle: "Récapitulatif",

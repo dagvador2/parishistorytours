@@ -21,6 +21,13 @@ export const tourInfo: Record<string, TourInfo> = {
     stopsEN: 'Pont Alexandre III · Concorde · Vendôme',
     stopsFR: 'Pont Alexandre III · Concorde · Vendôme',
   },
+  'both': {
+    slug: 'both',
+    nameEN: 'Both Tours (Left Bank + Right Bank)',
+    nameFR: 'Les deux visites (Rive Gauche + Rive Droite)',
+    stopsEN: 'All 8 historic stops',
+    stopsFR: 'Les 8 arrêts historiques',
+  },
 };
 
 export const getTourName = (slug: string, lang: string): string => {

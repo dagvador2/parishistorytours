@@ -229,6 +229,12 @@ export const en = {
       messageLabel: "Message or special request (optional)",
       messagePlaceholder: "Any specific requests or questions...",
     },
+    privateSetup: {
+      title: "Configure your private tour",
+      both: "Both tours",
+      bothDesc: "Left Bank + Right Bank",
+      validation: "Please select a tour, date, and time.",
+    },
     checkout: {
       contactTitle: "Your details",
       summaryTitle: "Booking summary",
