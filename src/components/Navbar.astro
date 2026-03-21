@@ -83,6 +83,7 @@ const mobileBookLabel = priceLabel || bookLabel;
         {links?.map(link => (
           <a href={link.href} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{link.label}</a>
         ))}
+        <a href={bookTarget} class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-all duration-200 px-6 py-2.5 rounded-lg shadow-lg shadow-amber-900/30 text-sm tracking-wide">{bookLabel}</a>
       </div>
       <LanguageSwitcher dark />
     </div>
