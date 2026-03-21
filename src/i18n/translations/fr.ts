@@ -198,15 +198,7 @@ export const fr = {
   booking: {
     title: "Réservez votre Visite",
     subtitle: "Organisez votre visite étape par étape",
-    step1: "Étape 1 : Choisissez votre visite",
-    step2: "Étape 2 : Nombre de participants",
-    step3: "Étape 3 : Choisissez votre type de visite",
-    step4: "Étape 4 : Date et heure",
-    step4Calendar: "Étape 4 : Choisissez une session",
-    step4Private: "Étape 4 : Choisissez votre date et heure préférées",
-    step5: "Étape 5 : Informations de contact",
-    step6: "Étape 6 : Résumé de la réservation",
-    // New 3-step flow
+    // 3-step flow
     step1Setup: {
       chooseTour: "Choisissez votre visite",
       participants: "Nombre de participants",

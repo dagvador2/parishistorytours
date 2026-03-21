@@ -198,15 +198,7 @@ export const en = {
   booking: {
     title: "Book your Tour",
     subtitle: "Let's organize your visit step by step",
-    step1: "Step 1: Choose your tour",
-    step2: "Step 2: Number of participants",
-    step3: "Step 3: Choose your tour type",
-    step4: "Step 4: Date & Time",
-    step4Calendar: "Step 4: Choose a session",
-    step4Private: "Step 4: Choose your preferred date and time",
-    step5: "Step 5: Contact Information",
-    step6: "Step 6: Booking Summary",
-    // New 3-step flow
+    // 3-step flow
     step1Setup: {
       chooseTour: "Choose your tour",
       participants: "Number of participants",
