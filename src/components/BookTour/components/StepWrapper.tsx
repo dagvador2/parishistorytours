@@ -35,6 +35,8 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
         return booking.participants && booking.participants > 0;
       case "tourType":
         return !!booking.tourType;
+      case "tourSetup":
+        return !!booking.tour && booking.participants > 0 && !!booking.tourType;
       case "dateTime":
         if (booking.tourType === "regular") {
           return booking.sessionId && booking.sessionId !== "";

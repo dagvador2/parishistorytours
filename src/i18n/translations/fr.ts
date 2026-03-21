@@ -206,6 +206,37 @@ export const fr = {
     step4Private: "Étape 4 : Choisissez votre date et heure préférées",
     step5: "Étape 5 : Informations de contact",
     step6: "Étape 6 : Résumé de la réservation",
+    // New 3-step flow
+    step1Setup: {
+      chooseTour: "Choisissez votre visite",
+      participants: "Nombre de participants",
+      tourType: "Type de visite",
+      groupMax: "groupe, max 10",
+      privateSubtitle: "Date flexible, tarif sur demande",
+    },
+    step2Regular: {
+      title: "Choisissez une date et une session",
+    },
+    step2Private: {
+      title: "Choisissez votre date et heure préférées",
+      messageLabel: "Message ou demande particulière (optionnel)",
+      messagePlaceholder: "Toute demande spécifique ou question...",
+    },
+    checkout: {
+      contactTitle: "Vos coordonnées",
+      summaryTitle: "Récapitulatif",
+      paymentTitle: "Comment souhaitez-vous régler ?",
+      payOnline: "Payer en ligne",
+      payOnlineDesc: "Paiement sécurisé via Stripe",
+      payOnSite: "Payer sur place",
+      payOnSiteDesc: "Le jour de la visite",
+      payOnSiteLabel: "à régler sur place",
+      payNowBtn: "Payer maintenant",
+      reserveBtn: "Réserver",
+      sendRequest: "Envoyer la demande",
+      modify: "← Modifier",
+      onSiteConfirmMessage: "Votre réservation est confirmée ! Vous réglerez le jour de la visite. Nous vous avons envoyé un email de confirmation avec tous les détails.",
+    },
     participants: "participants",
     participant: "participant",
     moreParticipants: "5 participants ou plus",
@@ -283,14 +314,17 @@ export const fr = {
       type: "Type",
       dateTime: "Date",
       contact: "Contact",
-      summary: "Résumé"
+      summary: "Résumé",
+      setup: "Configuration",
+      checkout: "Paiement"
     },
     validation: {
       selectTour: "Veuillez sélectionner une visite",
       selectParticipants: "Veuillez choisir le nombre de participants",
       selectType: "Veuillez choisir un type de visite",
       chooseSession: "Veuillez choisir une session",
-      fillContact: "Veuillez renseigner votre nom et email"
+      fillContact: "Veuillez renseigner votre nom et email",
+      completeTourSetup: "Veuillez sélectionner une visite, le nombre de participants et le type de visite"
     },
     success: {
       title: "Demande Confirmée !",
@@ -454,6 +488,8 @@ export const fr = {
       rightBankTour: "Visite Rive Droite",
       confirmedMessage: "Votre réservation est confirmée ! Nous vous enverrons les détails du point de rendez-vous 24 heures avant la visite.",
       requestMessage: "Nous confirmerons la disponibilité et vous contacterons dans les 24 heures.",
+      onSiteMessage: "Votre réservation est confirmée ! Vous réglerez le jour de la visite. Nous vous enverrons les détails du point de rendez-vous 24 heures avant.",
+      onSitePaymentNote: "Paiement sur place — Merci de prévoir le montant exact en espèces ou par carte.",
       regards: "Cordialement,",
       amountPaid: "Montant payé :"
     }

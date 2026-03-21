@@ -15,16 +15,18 @@ export const BookingProvider: React.FC<{
   children: React.ReactNode;
   translations: Record<string, any>;
   lang: string;
-}> = ({ children, translations, lang }) => {
+  defaultTour?: string;
+}> = ({ children, translations, lang, defaultTour }) => {
   const initialBooking: BookingData = {
-    tour: undefined as unknown as BookingData["tour"],
-    participants: 1,
+    tour: (defaultTour as BookingData["tour"]) || (undefined as unknown as BookingData["tour"]),
+    participants: 2,
     tourType: undefined as unknown as BookingData["tourType"],
     date: "",
     time: "",
     name: "",
     email: "",
     phone: "",
+    message: "",
   };
 
   const [booking, setBooking] = useState<BookingData>(initialBooking);

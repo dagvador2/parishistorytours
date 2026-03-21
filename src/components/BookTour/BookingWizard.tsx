@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import { BookingProvider, useBooking } from "./BookingContext";
 import ProgressIndicator from "./components/ProgressIndicator";
 import StepWrapper from "./components/StepWrapper";
-import StepTourSelection from "./steps/StepTourSelection";
-import StepParticipants from "./steps/StepParticipants";
-import StepTourType from "./steps/StepTourType";
-import StepCalendarRegular from "./steps/StepCalendarRegular";
-import StepDateTimePrivate from "./steps/StepDateTimePrivate";
-import StepContact from "./steps/StepContact";
-import StepSummary from "./steps/StepSummary";
+import Step1TourSetup from "./steps/Step1TourSetup";
+import Step2DateRegular from "./steps/Step2DateRegular";
+import Step2DatePrivate from "./steps/Step2DatePrivate";
+import Step3Checkout from "./steps/Step3Checkout";
 
 const Wizard: React.FC = () => {
-  const { t } = useBooking();
+  const { booking, t } = useBooking();
   const [step, setStep] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -34,7 +31,7 @@ const Wizard: React.FC = () => {
   const renderStep = () => {
     const stepProps = {
       isTransitioning,
-      onNext: step < 6 ? next : undefined,
+      onNext: step < 3 ? next : undefined,
       onBack: step > 1 ? back : undefined,
     };
 
@@ -45,71 +42,38 @@ const Wizard: React.FC = () => {
             {...stepProps}
             nextLabel={t.next}
             showBack={false}
-            validationKey="tour"
-            validationMessage={t.validation.selectTour}
+            validationKey="tourSetup"
+            validationMessage={t.validation.completeTourSetup}
           >
-            <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              {t.step1}
-            </h3>
-            <StepTourSelection />
+            <Step1TourSetup />
           </StepWrapper>
         );
       case 2:
-        return (
-          <StepWrapper
-            {...stepProps}
-            nextLabel={t.next}
-            validationKey="participants"
-            validationMessage={t.validation.selectParticipants}
-          >
-            <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              {t.step2}
-            </h3>
-            <StepParticipants />
-          </StepWrapper>
-        );
-      case 3:
-        return (
-          <StepWrapper
-            {...stepProps}
-            nextLabel={t.next}
-            validationKey="tourType"
-            validationMessage={t.validation.selectType}
-          >
-            <h3 className="text-xl font-semibold text-gray-800 mb-6">
-              {t.step3}
-            </h3>
-            <StepTourType />
-          </StepWrapper>
-        );
-      case 4:
-        return (
+        return booking.tourType === "regular" ? (
           <StepWrapper
             {...stepProps}
             nextLabel={t.next}
             validationKey="dateTime"
             validationMessage={t.validation.chooseSession}
           >
-            <StepCalendarRegular active={true} />
-            <StepDateTimePrivate active={true} />
+            <Step2DateRegular />
           </StepWrapper>
-        );
-      case 5:
-        return (
+        ) : (
           <StepWrapper
             {...stepProps}
             nextLabel={t.next}
-            validationKey="contact"
-            validationMessage={t.validation.fillContact}
+            validationKey="dateTime"
+            validationMessage={t.validation.chooseSession}
           >
-            <StepContact />
+            <Step2DatePrivate />
           </StepWrapper>
         );
-      case 6:
+      case 3:
         return (
-          <StepWrapper {...stepProps} showBack={false}>
-            <StepSummary onEditDetails={() => setStep(5)} onRestart={() => setStep(1)} />
-          </StepWrapper>
+          <Step3Checkout
+            onBack={back}
+            onRestart={() => setStep(1)}
+          />
         );
       default:
         return null;
@@ -135,11 +99,12 @@ const Wizard: React.FC = () => {
 interface BookingWizardProps {
   translations: Record<string, any>;
   lang: string;
+  defaultTour?: string;
 }
 
-const BookingWizard: React.FC<BookingWizardProps> = ({ translations, lang }) => {
+const BookingWizard: React.FC<BookingWizardProps> = ({ translations, lang, defaultTour }) => {
   return (
-    <BookingProvider translations={translations} lang={lang}>
+    <BookingProvider translations={translations} lang={lang} defaultTour={defaultTour}>
       <Wizard />
     </BookingProvider>
   );

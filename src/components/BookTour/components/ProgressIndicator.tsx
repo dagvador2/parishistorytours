@@ -9,12 +9,9 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep }) =>
   const { t } = useBooking();
 
   const steps = [
-    { number: 1, label: t.progress.tour },
-    { number: 2, label: t.progress.participants },
-    { number: 3, label: t.progress.type },
-    { number: 4, label: t.progress.dateTime },
-    { number: 5, label: t.progress.contact },
-    { number: 6, label: t.progress.summary },
+    { number: 1, label: t.progress.setup },
+    { number: 2, label: t.progress.dateTime },
+    { number: 3, label: t.progress.checkout },
   ];
 
   return (
@@ -45,7 +42,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep }) =>
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div className={`h-0.5 w-8 sm:w-12 mx-2 transition-colors duration-200 ${
+              <div className={`h-0.5 w-12 sm:w-20 mx-3 transition-colors duration-200 ${
                 currentStep > stepItem.number ? "bg-gray-800" : "bg-gray-200"
               }`} />
             )}

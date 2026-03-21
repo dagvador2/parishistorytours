@@ -206,6 +206,37 @@ export const en = {
     step4Private: "Step 4: Choose your preferred date and time",
     step5: "Step 5: Contact Information",
     step6: "Step 6: Booking Summary",
+    // New 3-step flow
+    step1Setup: {
+      chooseTour: "Choose your tour",
+      participants: "Number of participants",
+      tourType: "Tour type",
+      groupMax: "group, max 10",
+      privateSubtitle: "Flexible date, price on request",
+    },
+    step2Regular: {
+      title: "Choose a date and session",
+    },
+    step2Private: {
+      title: "Choose your preferred date and time",
+      messageLabel: "Message or special request (optional)",
+      messagePlaceholder: "Any specific requests or questions...",
+    },
+    checkout: {
+      contactTitle: "Your details",
+      summaryTitle: "Booking summary",
+      paymentTitle: "How would you like to pay?",
+      payOnline: "Pay online",
+      payOnlineDesc: "Secure payment via Stripe",
+      payOnSite: "Pay on site",
+      payOnSiteDesc: "Pay on the day of the tour",
+      payOnSiteLabel: "to pay on site",
+      payNowBtn: "Pay now",
+      reserveBtn: "Reserve",
+      sendRequest: "Send request",
+      modify: "← Modify",
+      onSiteConfirmMessage: "Your booking is confirmed! You will pay on the day of the tour. We've sent you a confirmation email with all the details.",
+    },
     participants: "participants",
     participant: "participant",
     moreParticipants: "5 or more participants",
@@ -283,14 +314,17 @@ export const en = {
       type: "Type",
       dateTime: "Date & Time",
       contact: "Contact",
-      summary: "Summary"
+      summary: "Summary",
+      setup: "Tour Setup",
+      checkout: "Checkout"
     },
     validation: {
       selectTour: "Please select a tour",
       selectParticipants: "Please choose the number of participants",
       selectType: "Please choose a tour type",
       chooseSession: "Please choose a session",
-      fillContact: "Please fill in your name and email"
+      fillContact: "Please fill in your name and email",
+      completeTourSetup: "Please select a tour, number of participants, and tour type"
     },
     success: {
       title: "Request Confirmed!",
@@ -454,6 +488,8 @@ export const en = {
       rightBankTour: "Right Bank Tour",
       confirmedMessage: "Your booking is confirmed! We will send you meeting point details 24 hours before the tour.",
       requestMessage: "We will confirm availability and contact you within 24 hours.",
+      onSiteMessage: "Your booking is confirmed! You will pay on the day of the tour. We will send you meeting point details 24 hours before.",
+      onSitePaymentNote: "Payment on site — Please bring the exact amount in cash or a card.",
       regards: "Best regards,",
       amountPaid: "Amount Paid:"
     }

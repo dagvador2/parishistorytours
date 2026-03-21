@@ -13,13 +13,30 @@ export const POST: APIRoute = async ({ request }) => {
     const locale = bookingData.locale === 'fr' ? 'fr' : 'en';
     const t = translations[locale].email.client;
     const dateLocale = locale === 'fr' ? 'fr-FR' : 'en-GB';
+    const paymentMethod = bookingData.paymentMethod || null;
 
     // Email au client (translated)
     const tourName = bookingData.tour === 'left-bank' ? t.leftBankTour : t.rightBankTour;
     const typeName = bookingData.tourType === 'regular' ? t.regularTour : t.privateTour;
-    const subject = bookingData.tourType === 'regular' ? t.subjectConfirmation : t.subjectRequest;
-    const thankYou = bookingData.tourType === 'regular' ? t.thankYouPaid : t.thankYouRequest;
-    const statusMessage = bookingData.tourType === 'regular' ? t.confirmedMessage : t.requestMessage;
+
+    // Determine subject and content based on payment method
+    let subject: string;
+    let thankYou: string;
+    let statusMessage: string;
+
+    if (paymentMethod === 'on_site') {
+      subject = t.subjectConfirmation;
+      thankYou = t.thankYouRequest;
+      statusMessage = t.onSiteMessage;
+    } else if (bookingData.tourType === 'regular') {
+      subject = t.subjectConfirmation;
+      thankYou = t.thankYouPaid;
+      statusMessage = t.confirmedMessage;
+    } else {
+      subject = t.subjectRequest;
+      thankYou = t.thankYouRequest;
+      statusMessage = t.requestMessage;
+    }
 
     const clientEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -33,6 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
           <p><strong>${t.date}</strong> ${new Date(bookingData.date).toLocaleDateString(dateLocale)}</p>
           <p><strong>${t.time}</strong> ${bookingData.time}</p>
           ${bookingData.price ? `<p><strong>${t.total}</strong> €${bookingData.price}</p>` : ''}
+          ${paymentMethod === 'on_site' ? `<p style="color: #d97706; font-weight: bold;">${t.onSitePaymentNote}</p>` : ''}
         </div>
         <p>${statusMessage}</p>
         <p>${t.regards}<br><strong>Clément - Paris History Tours</strong></p>
@@ -51,10 +69,28 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     // Email à vous (admin)
+    let adminBanner: string;
+    let adminBannerColor: string;
+    let adminBannerBorder: string;
+
+    if (paymentMethod === 'on_site') {
+      adminBanner = '⚠️ PAY ON SITE';
+      adminBannerColor = '#d97706';
+      adminBannerBorder = '#f59e0b';
+    } else if (bookingData.tourType === 'regular') {
+      adminBanner = 'PAID';
+      adminBannerColor = '#059669';
+      adminBannerBorder = '#10b981';
+    } else {
+      adminBanner = 'Action required';
+      adminBannerColor = '#d97706';
+      adminBannerBorder = '#f59e0b';
+    }
+
     const adminEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #dc2626;">New Booking ${bookingData.tourType === 'regular' ? '(PAID)' : 'Request'}</h2>
-        <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
+        <h2 style="color: ${adminBannerColor};">New Booking ${adminBanner}</h2>
+        <div style="background: ${paymentMethod === 'on_site' ? '#fffbeb' : bookingData.tourType === 'regular' ? '#f0fdf4' : '#fef2f2'}; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid ${adminBannerBorder};">
           <p><strong>Customer:</strong> ${bookingData.name}</p>
           <p><strong>Email:</strong> ${bookingData.email}</p>
           <p><strong>Phone:</strong> ${bookingData.phone || 'Not provided'}</p>
@@ -63,18 +99,30 @@ export const POST: APIRoute = async ({ request }) => {
           <p><strong>Type:</strong> ${bookingData.tourType}</p>
           <p><strong>Date:</strong> ${new Date(bookingData.date).toLocaleDateString('en-GB')}</p>
           <p><strong>Time:</strong> ${bookingData.time}</p>
-          ${bookingData.price ? `<p><strong>Amount Paid:</strong> €${bookingData.price}</p>` : ''}
+          ${bookingData.price ? `<p><strong>Amount:</strong> €${bookingData.price}</p>` : ''}
+          ${paymentMethod === 'on_site' ? '<p style="color: #d97706; font-weight: bold; font-size: 16px;">⚠️ PAYMENT ON SITE - Client will pay on the day of the tour</p>' : ''}
+          ${bookingData.message ? `<p><strong>Message:</strong> ${bookingData.message}</p>` : ''}
         </div>
-        <p style="color: ${bookingData.tourType === 'regular' ? '#059669' : '#d97706'};">
-          ${bookingData.tourType === 'regular' ? 'PAYMENT CONFIRMED - Tour booked!' : 'Action required: Contact client within 24h'}
+        <p style="color: ${adminBannerColor};">
+          ${paymentMethod === 'on_site'
+            ? '⚠️ PAY ON SITE - Confirm with client and collect payment on tour day'
+            : bookingData.tourType === 'regular'
+            ? 'PAYMENT CONFIRMED - Tour booked!'
+            : 'Action required: Contact client within 24h'}
         </p>
       </div>
     `;
 
+    const adminSubjectPrefix = paymentMethod === 'on_site'
+      ? '⚠️ PAY ON SITE'
+      : bookingData.tourType === 'regular'
+      ? '💰 PAID'
+      : '📋 Private';
+
     const adminEmailResult = await resend.emails.send({
       from: 'Paris History Tours <bookings@parishistorytours.com>',
       to: 'clemdaguetschott@gmail.com',
-      subject: `🔔 New ${bookingData.tourType === 'regular' ? 'PAID' : 'Private'} Booking - ${bookingData.name}`,
+      subject: `${adminSubjectPrefix} Booking - ${bookingData.name}`,
       html: adminEmailHtml,
     });
 
