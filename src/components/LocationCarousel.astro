@@ -5,6 +5,8 @@
  */
 interface Card {
   imgUrl: string;
+  srcset?: string;
+  sizes?: string;
   title: string;
   subtitle: string;
   description: string;
@@ -58,6 +60,8 @@ const pct = 100 / cardsPerView;
           <div class="card-wrap relative overflow-hidden rounded-2xl shadow-xl h-full group cursor-pointer ring-1 ring-black/5">
             <img
               src={card.imgUrl}
+              srcset={card.srcset}
+              sizes={card.sizes || "(max-width: 768px) 100vw, 33vw"}
               alt={card.title}
               width={640}
               height={427}

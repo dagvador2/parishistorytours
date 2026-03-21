@@ -20,7 +20,7 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={["/photos/left_bank/luxembourg_palace_paris.webp"]}>
+<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={[{ srcset: "/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w", sizes: "(max-width: 768px) 100vw, 33vw" }]}>
 	{isDefaultLang ? (
 		<Navbar variant="homepage" />
 	) : (
@@ -64,6 +64,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 				cards={[
 					{
 						imgUrl: '/photos/left_bank/luxembourg_palace_paris.webp',
+						srcset: '/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w',
 						title: t('home.gallery.pantheon.title'),
 						subtitle: t('home.gallery.pantheon.cardSubtitle'),
 						description: t('home.gallery.pantheon.fullDescription'),
@@ -71,6 +72,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 					},
 					{
 						imgUrl: '/photos/right_bank/place_vendome_paris_day.webp',
+						srcset: '/photos/mobile/place_vendome_paris_day-375.webp 375w, /photos/mobile/place_vendome_paris_day-640.webp 640w, /photos/right_bank/place_vendome_paris_day.webp 1920w',
 						title: t('home.gallery.placeVendome.title'),
 						subtitle: t('home.gallery.placeVendome.cardSubtitle'),
 						description: t('home.gallery.placeVendome.fullDescription'),
@@ -78,6 +80,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 					},
 					{
 						imgUrl: '/photos/left_bank/notre-dame-de-paris.webp',
+						srcset: '/photos/mobile/notre-dame-de-paris-375.webp 375w, /photos/mobile/notre-dame-de-paris-640.webp 640w, /photos/left_bank/notre-dame-de-paris.webp 1200w',
 						title: t('home.gallery.notreDame.title'),
 						subtitle: t('home.gallery.notreDame.cardSubtitle'),
 						description: t('home.gallery.notreDame.fullDescription'),
@@ -85,6 +88,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 					},
 					{
 						imgUrl: '/photos/right_bank/bridge_alexander_third_paris.webp',
+						srcset: '/photos/mobile/bridge_alexander_third_paris-375.webp 375w, /photos/mobile/bridge_alexander_third_paris-640.webp 640w, /photos/right_bank/bridge_alexander_third_paris.webp 1280w',
 						title: t('home.gallery.pontAlexandre.title'),
 						subtitle: t('home.gallery.pontAlexandre.cardSubtitle'),
 						description: t('home.gallery.pontAlexandre.fullDescription'),
@@ -92,6 +96,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 					},
 					{
 						imgUrl: '/photos/right_bank/place_concorde_paris.webp',
+						srcset: '/photos/mobile/place_concorde_paris-375.webp 375w, /photos/mobile/place_concorde_paris-640.webp 640w, /photos/right_bank/place_concorde_paris.webp 1920w',
 						title: t('home.gallery.placeConcorde.title'),
 						subtitle: t('home.gallery.placeConcorde.cardSubtitle'),
 						description: t('home.gallery.placeConcorde.fullDescription'),
