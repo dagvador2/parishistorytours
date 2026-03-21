@@ -59,6 +59,6 @@ His memoir *A Moveable Feast*, published posthumously in 1964, captures the Pari
 
 ## Walk in Hemingway's Footsteps
 
-The story of Hemingway's arrival at Place Vendôme is the dramatic finale of our **Right Bank WWII Tour**. Standing at the square itself, we bring to life the chaos and celebration of Liberation day — the snipers, the fighters, and the writer who wanted nothing more than a stiff drink at his favorite hotel.
+The story of Hemingway's arrival at Place Vendôme is the dramatic finale of our [**Right Bank WWII Tour**](/tours/right-bank). Standing at the square itself, we bring to life the chaos and celebration of Liberation day — the snipers, the fighters, and the writer who wanted nothing more than a stiff drink at his favorite hotel.
 
-*Paris History Tours offers 2-hour guided walking tours of WWII Paris, available in English and French. [Book your tour today](https://www.parishistorytours.com/#book-tour).*
+*Walk in their footsteps — [Book a WWII tour in Paris](/#book-tour).*

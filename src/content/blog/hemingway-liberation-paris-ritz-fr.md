@@ -59,6 +59,6 @@ Ses mémoires *Paris est une fête*, publiées à titre posthume en 1964, captur
 
 ## Marchez sur les traces d'Hemingway
 
-L'histoire de l'arrivée d'Hemingway Place Vendôme est le final dramatique de notre **Visite Rive Droite**. Debout sur la place même, nous donnons vie au chaos et à la célébration du jour de la Libération — les tireurs embusqués, les combattants, et l'écrivain qui ne voulait rien de plus qu'un bon verre dans son hôtel préféré.
+L'histoire de l'arrivée d'Hemingway Place Vendôme est le final dramatique de notre [**Visite Rive Droite**](/fr/tours/right-bank). Debout sur la place même, nous donnons vie au chaos et à la célébration du jour de la Libération — les tireurs embusqués, les combattants, et l'écrivain qui ne voulait rien de plus qu'un bon verre dans son hôtel préféré.
 
-*Paris History Tours propose des visites guidées à pied de 2 heures sur le Paris de la Seconde Guerre mondiale, disponibles en français et en anglais. [Réservez votre visite](https://www.parishistorytours.com/fr/#book-tour).*
+*Marchez sur leurs traces — [Réservez une visite WWII à Paris](/fr/#book-tour).*

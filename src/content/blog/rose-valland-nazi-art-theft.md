@@ -62,8 +62,8 @@ The 2014 film *The Monuments Men*, while focused on the American unit tasked wit
 
 ## Discover Rose Valland's Story in Person
 
-Rose Valland's story is one of the central narratives of our **Right Bank WWII Tour**. At our Concorde Square stop, we explore her mission in detail — standing near the very museum where she carried out her dangerous work.
+Rose Valland's story is one of the central narratives of our [**Right Bank WWII Tour**](/tours/right-bank). At our Concorde Square stop, we explore her mission in detail — standing near the very museum where she carried out her dangerous work.
 
 The tour covers the Jeu de Paume's transformation into a Nazi storage facility, Göring's personal visits, and Valland's extraordinary act of resistance through meticulous record-keeping.
 
-*Paris History Tours offers 2-hour guided walking tours of WWII Paris, available in English and French. [Book your tour today](https://www.parishistorytours.com/#book-tour).*
+*Walk in their footsteps — [Book a WWII tour in Paris](/#book-tour).*

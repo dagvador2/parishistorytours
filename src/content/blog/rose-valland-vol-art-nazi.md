@@ -60,8 +60,8 @@ Pourtant, pendant la majeure partie de sa vie, Valland resta relativement mécon
 
 ## Découvrez l'histoire de Rose Valland en personne
 
-L'histoire de Rose Valland est l'un des récits centraux de notre **Visite Rive Droite**. À notre arrêt Place de la Concorde, nous explorons sa mission en détail — tout près du musée même où elle mena son dangereux travail.
+L'histoire de Rose Valland est l'un des récits centraux de notre [**Visite Rive Droite**](/fr/tours/right-bank). À notre arrêt Place de la Concorde, nous explorons sa mission en détail — tout près du musée même où elle mena son dangereux travail.
 
 La visite couvre la transformation du Jeu de Paume en entrepôt nazi, les visites personnelles de Göring, et l'acte de résistance extraordinaire de Valland à travers sa tenue méticuleuse de registres.
 
-*Paris History Tours propose des visites guidées à pied de 2 heures sur le Paris de la Seconde Guerre mondiale, disponibles en français et en anglais. [Réservez votre visite](https://www.parishistorytours.com/fr/#book-tour).*
+*Marchez sur leurs traces — [Réservez une visite WWII à Paris](/fr/#book-tour).*
