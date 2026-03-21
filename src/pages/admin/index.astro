@@ -117,6 +117,43 @@ if (Astro.request.method === 'POST') {
         <button type="submit">Add OTA Booking</button>
       </form>
     </div>
+
+    <!-- Generate Sessions -->
+    <div class="card">
+      <h2>Generate Sessions</h2>
+      <div id="gen-message"></div>
+      <form id="gen-form">
+        <label for="gen-tour">Tour</label>
+        <select id="gen-tour" required>
+          <option value="">Select tour...</option>
+          <option value="left-bank">Left Bank</option>
+          <option value="right-bank">Right Bank</option>
+          <option value="both">Both Tours</option>
+        </select>
+
+        <label>Days of the week</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="1" /> Mon</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="2" /> Tue</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="3" /> Wed</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="4" /> Thu</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="5" /> Fri</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="6" /> Sat</label>
+          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="0" /> Sun</label>
+        </div>
+
+        <label for="gen-times">Start times (comma-separated, e.g. 10:00,14:00)</label>
+        <input type="text" id="gen-times" placeholder="10:00,14:00" required />
+
+        <label for="gen-weeks">Weeks ahead</label>
+        <input type="number" id="gen-weeks" min="1" max="8" value="4" required />
+
+        <label for="gen-spots">Max spots per session</label>
+        <input type="number" id="gen-spots" min="1" max="20" value="10" required />
+
+        <button type="submit">Generate Sessions</button>
+      </form>
+    </div>
   </div>
 
   <script is:inline>
@@ -201,6 +238,60 @@ if (Astro.request.method === 'POST') {
 
         msgEl.innerHTML = '<div class="msg msg-success">OTA booking added successfully!</div>';
         document.getElementById('ota-form').reset();
+        loadSessions(); // Refresh
+      } catch (err) {
+        msgEl.innerHTML = '<div class="msg msg-error">Error: ' + err.message + '</div>';
+      }
+    });
+
+    // Handle session generation form
+    document.getElementById('gen-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var msgEl = document.getElementById('gen-message');
+      var tourValue = document.getElementById('gen-tour').value;
+      var timesStr = document.getElementById('gen-times').value;
+      var weeksAhead = parseInt(document.getElementById('gen-weeks').value);
+      var maxSpots = parseInt(document.getElementById('gen-spots').value);
+
+      var checkedDays = [];
+      document.querySelectorAll('input[name="gen-day"]:checked').forEach(function(cb) {
+        checkedDays.push(parseInt(cb.value));
+      });
+
+      if (checkedDays.length === 0) {
+        msgEl.innerHTML = '<div class="msg msg-error">Please select at least one day</div>';
+        return;
+      }
+
+      var times = timesStr.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+      if (times.length === 0) {
+        msgEl.innerHTML = '<div class="msg msg-error">Please enter at least one time</div>';
+        return;
+      }
+
+      var tours = tourValue === 'both' ? ['left-bank', 'right-bank'] : [tourValue];
+      var schedule = [];
+      tours.forEach(function(tour) {
+        checkedDays.forEach(function(day) {
+          schedule.push({ dayOfWeek: day, times: times, tour: tour });
+        });
+      });
+
+      try {
+        var res = await fetch('/api/admin/generate-sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ weeksAhead: weeksAhead, schedule: schedule, maxSpots: maxSpots }),
+        });
+
+        if (!res.ok) {
+          var err = await res.json();
+          throw new Error(err.error || 'Failed');
+        }
+
+        var result = await res.json();
+        msgEl.innerHTML = '<div class="msg msg-success">' + result.created + ' sessions created, ' + result.skipped + ' skipped (already exist)</div>';
+        document.getElementById('gen-form').reset();
         loadSessions(); // Refresh
       } catch (err) {
         msgEl.innerHTML = '<div class="msg msg-error">Error: ' + err.message + '</div>';
