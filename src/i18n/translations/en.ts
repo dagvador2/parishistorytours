@@ -198,6 +198,15 @@ export const en = {
   booking: {
     title: "Book your Tour",
     subtitle: "Let's organize your visit step by step",
+    // Mode selector
+    modeSelector: {
+      joinTour: "Join a scheduled tour",
+      joinDesc: "See upcoming dates & book your spot. Small group, max 10 people.",
+      privateTour: "Book a private tour",
+      privateDesc: "Choose your tour, date & group size. Exclusive experience.",
+      from: "From",
+      customPricing: "Custom pricing",
+    },
     // 3-step flow
     step1Setup: {
       chooseTour: "Choose your tour",

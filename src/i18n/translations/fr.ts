@@ -198,6 +198,15 @@ export const fr = {
   booking: {
     title: "Réservez votre Visite",
     subtitle: "Organisez votre visite étape par étape",
+    // Mode selector
+    modeSelector: {
+      joinTour: "Rejoindre une visite programmée",
+      joinDesc: "Consultez les dates disponibles et réservez votre place. Petit groupe, max 10 personnes.",
+      privateTour: "Réserver une visite privée",
+      privateDesc: "Choisissez votre visite, date et taille du groupe. Expérience exclusive.",
+      from: "À partir de",
+      customPricing: "Tarif sur demande",
+    },
     // 3-step flow
     step1Setup: {
       chooseTour: "Choisissez votre visite",
