@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import JsonLd from '../../components/JsonLd.astro';
 import { getCollection } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
 
@@ -17,8 +18,8 @@ const sortedPosts = allPosts.sort((a, b) =>
 ---
 
 <BaseLayout
-  title={lang === 'fr' ? 'Blog - Histoire de Paris pendant la Seconde Guerre mondiale | Paris History Tours' : 'Blog - WWII Paris History | Paris History Tours'}
-  description={lang === 'fr' ? 'Articles sur l\'histoire de Paris pendant la Seconde Guerre mondiale : Résistance, Libération, personnages clés et lieux emblématiques.' : 'Articles about World War II history in Paris: the Resistance, Liberation, key figures and iconic landmarks.'}
+  title={t('meta.blog.title')}
+  description={t('meta.blog.description')}
 >
   <Breadcrumbs items={[
     { label: t('nav.home'), href: `${langPrefix}/` },
@@ -28,17 +29,15 @@ const sortedPosts = allPosts.sort((a, b) =>
   <main class="min-h-screen bg-gray-50 py-12">
     <div class="max-w-4xl mx-auto px-4">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-center">
-        {lang === 'fr' ? 'Histoire de Paris pendant la Seconde Guerre mondiale' : 'WWII Paris History'}
+        {t('meta.blog.heading')}
       </h1>
       <p class="text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-        {lang === 'fr'
-          ? 'Explorez les histoires fascinantes de Paris pendant la Seconde Guerre mondiale, par Clément Daguet-Schott.'
-          : 'Explore the fascinating stories of Paris during World War II, by Clement Daguet-Schott.'}
+        {t('meta.blog.subheading')}
       </p>
 
       {sortedPosts.length === 0 ? (
         <p class="text-center text-gray-500 text-lg">
-          {lang === 'fr' ? 'Articles à venir prochainement.' : 'Articles coming soon.'}
+          {t('meta.blog.empty')}
         </p>
       ) : (
         <div class="space-y-8">
@@ -76,4 +75,23 @@ const sortedPosts = allPosts.sort((a, b) =>
       )}
     </div>
   </main>
+
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Paris History Tours Blog",
+    "description": t('meta.blog.description'),
+    "url": `https://www.parishistorytours.com${langPrefix}/blog`,
+    "inLanguage": lang,
+    "author": {
+      "@type": "Person",
+      "name": "Clement Daguet-Schott",
+      "url": "https://www.parishistorytours.com/key-figures"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Paris History Tours",
+      "url": "https://www.parishistorytours.com"
+    }
+  }} />
 </BaseLayout>

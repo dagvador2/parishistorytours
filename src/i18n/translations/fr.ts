@@ -451,6 +451,13 @@ export const fr = {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
       description: "Rencontrez Clément, votre guide expert sur la Seconde Guerre mondiale à Paris. 20+ livres de recherche, 6 mois de préparation, et des centaines de visiteurs satisfaits du monde entier."
     },
+    blog: {
+      title: "Blog - Histoire de Paris pendant la Seconde Guerre mondiale | Paris History Tours",
+      description: "Articles sur l'histoire de Paris pendant la Seconde Guerre mondiale : Résistance, Libération, personnages clés et lieux emblématiques.",
+      heading: "Histoire de Paris pendant la Seconde Guerre mondiale",
+      subheading: "Explorez les histoires fascinantes de Paris pendant la Seconde Guerre mondiale, par Clément Daguet-Schott.",
+      empty: "Articles à venir prochainement."
+    },
     success: {
       title: "Réservation Confirmée - Paris History Tours",
       description: "Votre demande de réservation pour Paris History Tours a été confirmée."

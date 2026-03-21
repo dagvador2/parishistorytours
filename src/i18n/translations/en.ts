@@ -451,6 +451,13 @@ export const en = {
       title: "About Paris History Tours - Our Guide & Journey",
       description: "Meet Cl\u00e9ment, your expert WWII guide in Paris. 20+ books of research, 6 months of preparation, and hundreds of satisfied visitors from around the world."
     },
+    blog: {
+      title: "Blog - WWII Paris History | Paris History Tours",
+      description: "Articles about World War II history in Paris: the Resistance, Liberation, key figures and iconic landmarks.",
+      heading: "WWII Paris History",
+      subheading: "Explore the fascinating stories of Paris during World War II, by Clement Daguet-Schott.",
+      empty: "Articles coming soon."
+    },
     success: {
       title: "Booking Confirmed - Paris History Tours",
       description: "Your booking request for Paris History Tours has been confirmed."
