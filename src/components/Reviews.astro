@@ -99,29 +99,27 @@ let reviews = [];
 
 <script type="module">
 (() => {
-	// client-side: fetch Google reviews and inject slides while keeping the visual structure
-		const container = document.getElementById('review-carousel');
-		const indicatorsContainer = document.getElementById('review-indicators');
+	// Defer reviews fetch until section is visible (removes ~1s from critical chain)
+	const reviewsSection = document.getElementById('reviews');
+	if (!reviewsSection) return;
+
+	let loaded = false;
+	const observer = new IntersectionObserver((entries) => {
+		if (entries[0].isIntersecting && !loaded) {
+			loaded = true;
+			observer.disconnect();
+			initReviews();
+		}
+	}, { rootMargin: '200px' });
+	observer.observe(reviewsSection);
+
+	function initReviews() {
+	const container = document.getElementById('review-carousel');
+	const indicatorsContainer = document.getElementById('review-indicators');
 	const prevBtn = document.getElementById('prev-review');
 	const nextBtn = document.getElementById('next-review');
 
 		if (!container || !indicatorsContainer) return;
-
-		// Aggressively clear any existing intervals that might be causing auto-rotation.
-		// Note: this clears all intervals up to the current highest id. It's aggressive but guarantees no hidden timers keep rotating the carousel.
-		try {
-			const highest = window.setInterval(() => {}, 1000);
-			for (let i = 0; i <= highest; i++) {
-				try { clearInterval(i); } catch (e) {}
-			}
-			// also clear any known stored interval id
-			if (window.__reviewsAutoRotateInterval) {
-				try { clearInterval(window.__reviewsAutoRotateInterval); } catch (e) {}
-				delete window.__reviewsAutoRotateInterval;
-			}
-		} catch (e) {
-			// ignore
-		}
 
 	const loadingHtml = '<div class="p-8 text-center text-gray-600">' + (window?.ASTRO?.env?.REVIEWS_LOADING_LABEL || 'Loading reviews...') + '</div>';
 	container.innerHTML = loadingHtml;
@@ -332,5 +330,6 @@ let reviews = [];
 
 			// Auto-rotation disabled per UX: users navigate manually via swipe or buttons
 	})();
+	} // end initReviews
 })();
 </script>
