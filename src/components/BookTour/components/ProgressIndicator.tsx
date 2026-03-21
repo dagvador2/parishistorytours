@@ -15,16 +15,18 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep }) =>
   ];
 
   return (
-    <div className="mt-8">
+    <div className="mt-6 mb-2">
       <div className="flex items-center justify-center">
         {steps.map((stepItem, index) => (
           <React.Fragment key={stepItem.number}>
             <div className="flex flex-col items-center">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors duration-200 ${
-                  currentStep >= stepItem.number
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 text-gray-500"
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                  currentStep > stepItem.number
+                    ? "bg-gray-700 text-white shadow-md shadow-gray-300"
+                    : currentStep === stepItem.number
+                    ? "bg-gray-800 text-white shadow-md"
+                    : "bg-gray-100 text-gray-400 border-2 border-gray-200"
                 }`}
               >
                 {currentStep > stepItem.number ? (
@@ -35,15 +37,15 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep }) =>
                   stepItem.number
                 )}
               </div>
-              <span className={`text-xs mt-1 hidden sm:block ${
-                currentStep >= stepItem.number ? "text-gray-800" : "text-gray-500"
+              <span className={`text-xs mt-2 font-medium transition-colors duration-200 ${
+                currentStep >= stepItem.number ? "text-gray-800" : "text-gray-400"
               }`}>
                 {stepItem.label}
               </span>
             </div>
             {index < steps.length - 1 && (
-              <div className={`h-0.5 w-12 sm:w-20 mx-3 transition-colors duration-200 ${
-                currentStep > stepItem.number ? "bg-gray-800" : "bg-gray-200"
+              <div className={`h-0.5 w-16 sm:w-24 mx-2 sm:mx-4 transition-colors duration-300 rounded-full ${
+                currentStep > stepItem.number ? "bg-gray-700" : "bg-gray-200"
               }`} />
             )}
           </React.Fragment>

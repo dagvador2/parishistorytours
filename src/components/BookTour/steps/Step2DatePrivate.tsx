@@ -7,6 +7,7 @@ const Step2DatePrivate: React.FC = () => {
   const { booking, setBooking, t, lang } = useBooking();
 
   const locale = lang === "fr" ? "fr-FR" : "en-US";
+  const participantsLabel = booking.participants === 1 ? t.person : t.people;
 
   const today = new Date();
   const maxDate = new Date();
@@ -29,7 +30,6 @@ const Step2DatePrivate: React.FC = () => {
     setBooking({ ...booking, message: value });
   };
 
-  // 30-minute increments from 9:00 to 18:00
   const timeOptions: string[] = [];
   for (let h = 9; h <= 18; h++) {
     timeOptions.push(`${h.toString().padStart(2, "0")}:00`);
@@ -49,16 +49,16 @@ const Step2DatePrivate: React.FC = () => {
 
   return (
     <div>
-      <h3 className="text-xl font-semibold text-gray-800 mb-6">
+      <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">
         {t.step2Private.title}
       </h3>
+      <p className="text-sm text-gray-500 text-center mb-6">
+        {t.privateTour} · {booking.tour === "left-bank" ? t.leftBankTour : t.rightBankTour} · {booking.participants} {participantsLabel}
+      </p>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-8">
         {/* Calendar */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t.private.preferredDate}
-          </label>
+        <div className="flex flex-col items-center">
           <DayPicker
             mode="single"
             selected={selectedDay}
@@ -67,12 +67,12 @@ const Step2DatePrivate: React.FC = () => {
             disabled={[{ before: today }, { after: maxDate }]}
             footer={
               selectedDay && (
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-blue-700 text-center font-medium">
                   {selectedDay.toLocaleDateString(locale, {
                     weekday: "long",
-                    year: "numeric",
-                    month: "long",
                     day: "numeric",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               )
@@ -81,17 +81,17 @@ const Step2DatePrivate: React.FC = () => {
         </div>
 
         {/* Time + Message */}
-        <div className="space-y-6">
+        <div className="space-y-5">
           <div>
             <label
               htmlFor="tour-time"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-semibold text-gray-700 mb-2"
             >
               {t.private.preferredTime}
             </label>
             <select
               id="tour-time"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:border-blue-400 focus:outline-none"
+              className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-blue-600 focus:outline-none text-gray-800 transition-colors"
               value={booking.time || ""}
               onChange={(e) => updateTime(e.target.value)}
             >
@@ -107,13 +107,13 @@ const Step2DatePrivate: React.FC = () => {
           <div>
             <label
               htmlFor="private-message"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-semibold text-gray-700 mb-2"
             >
               {t.step2Private.messageLabel}
             </label>
             <textarea
               id="private-message"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-blue-400 focus:outline-none resize-none"
+              className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-blue-600 focus:outline-none resize-none text-gray-800 transition-colors"
               rows={4}
               placeholder={t.step2Private.messagePlaceholder}
               value={booking.message || ""}
@@ -121,8 +121,8 @@ const Step2DatePrivate: React.FC = () => {
             />
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-700">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <p className="text-sm text-blue-800">
               <strong>{t.private.note}</strong> {t.private.noteText}
             </p>
           </div>

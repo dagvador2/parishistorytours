@@ -27,7 +27,7 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
 
   const isStepValid = () => {
     if (!validationKey) return true;
-    
+
     switch (validationKey) {
       case "tour":
         return !!booking.tour;
@@ -61,39 +61,36 @@ const StepWrapper: React.FC<StepWrapperProps> = ({
     <div className={`transition-all duration-300 ease-in-out ${
       isTransitioning ? "opacity-0 transform translate-x-4" : "opacity-100 transform translate-x-0"
     }`}>
-      <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+      <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100">
         {children}
 
-        <div className="mt-8 flex justify-between items-center">
-          <div>
+        <div className="mt-8 flex flex-col items-center gap-3">
+          {/* Validation error */}
+          {attempted && !isStepValid() && validationMessage && (
+            <span className="text-sm text-red-500 text-center">
+              {validationMessage}
+            </span>
+          )}
+
+          {/* Buttons row */}
+          <div className="flex items-center gap-4 w-full justify-center">
             {showBack && onBack && (
               <button
                 onClick={onBack}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors text-sm md:text-base"
+                className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium"
               >
                 {t.back}
               </button>
             )}
-          </div>
 
-          <div className="flex flex-col items-end gap-2">
-            {/* Afficher le message d'erreur uniquement après une tentative */}
-            {attempted && !isStepValid() && validationMessage && (
-              <span className="text-sm text-red-500 text-right">
-                {validationMessage}
-              </span>
+            {onNext && (
+              <button
+                onClick={handleNext}
+                className="px-8 py-3 rounded-lg font-semibold transition-all cursor-pointer bg-gray-800 text-white hover:bg-gray-700 shadow-md hover:shadow-lg text-base"
+              >
+                {nextLabel}
+              </button>
             )}
-            
-            <div>
-              {onNext && (
-                <button
-                  onClick={handleNext}
-                  className="px-4 py-2 rounded-md font-medium transition-colors cursor-pointer bg-blue-600 text-white hover:bg-blue-700 text-sm md:text-base"
-                >
-                  {nextLabel}
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </div>

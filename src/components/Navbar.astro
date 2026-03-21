@@ -32,7 +32,7 @@ const mobileBookLabel = priceLabel || bookLabel;
     <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
       <div class="flex items-center gap-8 flex-1 justify-center">
         <a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
-        <button id="book-btn-desktop" class="bg-amber-500 text-white font-bold hover:bg-amber-600 transition-all duration-200 px-8 py-3 rounded-lg shadow-lg transform hover:scale-105 text-lg">{bookLabel}</button>
+        <button id="book-btn-desktop" class="bg-gray-800 text-white font-bold hover:bg-gray-700 transition-all duration-200 px-8 py-3 rounded-lg shadow-lg transform hover:scale-105 text-lg">{bookLabel}</button>
         <a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
       </div>
       <LanguageSwitcher dark />
@@ -49,7 +49,7 @@ const mobileBookLabel = priceLabel || bookLabel;
 
   <!-- Mobile CTA fixed bottom bar -->
   <div id="book-cta-mobile" class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-[9998] shadow-lg p-3 transform translate-y-full transition-transform duration-300">
-    <button id="book-btn-mobile-bottom" class="w-full bg-amber-500 text-white font-bold py-3 rounded-lg text-lg hover:bg-amber-600 transition-colors">{mobileBookLabel}</button>
+    <button id="book-btn-mobile-bottom" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg text-lg hover:bg-gray-700 transition-colors">{mobileBookLabel}</button>
   </div>
 )}
 
@@ -58,7 +58,7 @@ const mobileBookLabel = priceLabel || bookLabel;
   <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
     <div class="flex items-center justify-between py-3 px-4">
       <div class="flex-1"></div>
-      <button id="book-btn-tour-page" class="bg-amber-500 text-white font-bold transform hover:scale-105 hover:bg-amber-600 transition-all duration-200 px-8 py-2.5 rounded-lg shadow-md text-lg">{bookLabel}</button>
+      <button id="book-btn-tour-page" class="bg-gray-800 text-white font-bold transform hover:scale-105 hover:bg-gray-700 transition-all duration-200 px-8 py-2.5 rounded-lg shadow-md text-lg">{bookLabel}</button>
       <div class="flex-1 flex justify-end">
         <LanguageSwitcher dark />
       </div>
@@ -67,7 +67,7 @@ const mobileBookLabel = priceLabel || bookLabel;
 
   <!-- Mobile CTA fixed bottom bar for tour pages -->
   <div id="book-cta-mobile-tour" class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-[9998] shadow-lg p-3 transform translate-y-full transition-transform duration-300">
-    <button id="book-btn-mobile-bottom-tour" class="w-full bg-amber-500 text-white font-bold py-3 rounded-lg text-lg hover:bg-amber-600 transition-colors">{mobileBookLabel}</button>
+    <button id="book-btn-mobile-bottom-tour" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg text-lg hover:bg-gray-700 transition-colors">{mobileBookLabel}</button>
   </div>
 )}
 
