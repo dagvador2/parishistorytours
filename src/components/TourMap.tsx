@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface TourMapProps {
   tour: 'left-bank' | 'right-bank';
 }
 
 const TourMap: React.FC<TourMapProps> = ({ tour }) => {
+  const [loaded, setLoaded] = useState(false);
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<any>(null);
 
   // Définir un type unifié pour les stops principaux
   type Stop = {
@@ -51,7 +50,15 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
   const stops = tour === 'left-bank' ? leftBankStops : rightBankStops;
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!loaded || !mapContainer.current) return;
+
+    let mapboxgl: any;
+    let cleanup: (() => void) | undefined;
+
+    (async () => {
+      const mod = await import('mapbox-gl');
+      await import('mapbox-gl/dist/mapbox-gl.css');
+      mapboxgl = mod.default;
 
     mapboxgl.accessToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
 
@@ -158,12 +165,15 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
       // animateRoute(); // Function not defined, so this is commented out to prevent errors
     });
 
-    return () => {
+    cleanup = () => {
       if (map.current) {
         map.current.remove();
       }
     };
-  }, [tour]);
+    })();
+
+    return () => { cleanup?.(); };
+  }, [tour, loaded]);
 
   const drawWalkingRoute = async () => {
     try {
@@ -309,10 +319,32 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     }
   };
 
+  if (!loaded) {
+    return (
+      <div
+        className="relative w-full h-96 rounded-lg shadow-lg bg-gray-100 flex items-center justify-center cursor-pointer group"
+        style={{ minHeight: '400px' }}
+        onClick={() => setLoaded(true)}
+      >
+        <div className="text-center">
+          <svg className="w-14 h-14 mx-auto text-gray-400 mb-3 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+          </svg>
+          <p className="text-gray-600 font-medium group-hover:text-gray-800 transition-colors">
+            Click to load interactive map
+          </p>
+          <p className="text-sm text-gray-400 mt-1">
+            {tour === 'left-bank' ? 'Left Bank Tour' : 'Right Bank Tour'} • 4 stops • ~2 hours
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
-      <div 
-        ref={mapContainer} 
+      <div
+        ref={mapContainer}
         className="w-full h-96 rounded-lg shadow-lg"
         style={{ minHeight: '400px' }}
       />
