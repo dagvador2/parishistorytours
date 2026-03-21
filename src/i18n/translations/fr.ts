@@ -437,19 +437,19 @@ export const fr = {
   meta: {
     home: {
       title: "Paris History Tours - Visites privées Seconde Guerre mondiale à Paris | 4.9\u2605",
-      description: "Explorez Paris à travers des visites privées sur la Seconde Guerre mondiale. Rive Gauche & Rive Droite : Chute, Résistance & Libération. Noté 4.9/5. Réservez maintenant."
+      description: "Visites privées Seconde Guerre mondiale à Paris notées 4.9/5. Chute, Résistance & Libération sur la Rive Gauche & Droite avec un guide personnel. Réservez."
     },
     leftBank: {
       title: "Visite Seconde Guerre mondiale Rive Gauche - Panthéon, Sorbonne, Notre-Dame | Paris History Tours",
-      description: "Parcourez le Paris en guerre sur notre visite Rive Gauche : Boulevard Saint-Michel, Luxembourg, Sorbonne & Notre-Dame. 2 heures, 4 arrêts. Visites privées et groupes."
+      description: "Visite à pied WWII Rive Gauche de 2h : Saint-Michel, Luxembourg, Sorbonne & Notre-Dame. 4 arrêts sur la Chute, Résistance & Libération. Réservez maintenant."
     },
     rightBank: {
       title: "Visite Seconde Guerre mondiale Rive Droite - Vendôme, Concorde, Ritz | Paris History Tours",
-      description: "Découvrez le Paris de la Seconde Guerre mondiale Rive Droite : Pont Alexandre III, Concorde, Vendôme & le Ritz. Vol d'art, Hemingway & Libération. Réservez votre visite."
+      description: "Visite à pied WWII Rive Droite de 2h : Pont Alexandre III, Concorde, Vendôme & le Ritz. Rose Valland, Hemingway & Libération. Noté 4.9/5. Réservez."
     },
     keyFigures: {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
-      description: "Rencontrez Clément, votre guide expert sur la Seconde Guerre mondiale à Paris. 20+ livres de recherche, 6 mois de préparation, et des centaines de visiteurs satisfaits du monde entier."
+      description: "Rencontrez Clément, chercheur WWII et guide personnel à Paris. 20+ livres de recherche, visiteurs de 25+ pays et une note de 4.9/5 sur Google Maps."
     },
     blog: {
       title: "Blog - Histoire de Paris pendant la Seconde Guerre mondiale | Paris History Tours",

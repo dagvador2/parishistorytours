@@ -437,19 +437,19 @@ export const en = {
   meta: {
     home: {
       title: "Paris History Tours - Private WWII Walking Tours in Paris | 4.9\u2605",
-      description: "Explore Paris through private WWII walking tours. Visit iconic Left Bank & Right Bank locations from the Fall, Resistance & Liberation. Rated 4.9/5. Book now."
+      description: "Private WWII walking tours in Paris rated 4.9/5. Explore the Fall, Resistance & Liberation across Left Bank & Right Bank with a personal guide. Book your tour."
     },
     leftBank: {
       title: "Left Bank WWII Tour - Panth\u00e9on, Sorbonne, Notre-Dame | Paris History Tours",
-      description: "Walk through wartime Paris on our Left Bank tour: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops. Private & group tours available."
+      description: "2-hour Left Bank WWII walking tour: Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 4 historic stops on the Fall, Resistance & Liberation. Book now."
     },
     rightBank: {
       title: "Right Bank WWII Tour - Vend\u00f4me, Concorde, Ritz | Paris History Tours",
-      description: "Discover WWII Paris on the Right Bank: Pont Alexandre III, Place de la Concorde, Place Vend\u00f4me & the Ritz. Art theft, Hemingway & Liberation stories. Book your tour."
+      description: "2-hour Right Bank WWII walking tour: Pont Alexandre III, Concorde, Vend\u00f4me & the Ritz. Rose Valland, Hemingway & Liberation stories. Rated 4.9/5. Book now."
     },
     keyFigures: {
       title: "About Paris History Tours - Our Guide & Journey",
-      description: "Meet Cl\u00e9ment, your expert WWII guide in Paris. 20+ books of research, 6 months of preparation, and hundreds of satisfied visitors from around the world."
+      description: "Meet Cl\u00e9ment, WWII researcher and personal guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google Maps rating."
     },
     blog: {
       title: "Blog - WWII Paris History | Paris History Tours",
