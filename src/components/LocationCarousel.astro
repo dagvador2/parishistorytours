@@ -36,7 +36,7 @@ const pct = 100 / cardsPerView;
 
 <div
   class="carousel-root relative w-full"
-  style={`height: ${height}`}
+  style={`height: ${height}; contain: layout style;`}
   data-cards-per-view={cardsPerView}
   data-auto-play-ms={autoPlayMs}
   data-total={cards.length}
@@ -59,6 +59,8 @@ const pct = 100 / cardsPerView;
             <img
               src={card.imgUrl}
               alt={card.title}
+              width={640}
+              height={427}
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading={isFirstVisible ? "eager" : "lazy"}
               fetchpriority={isFirstVisible ? "high" : undefined}
