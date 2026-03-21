@@ -1,92 +1,92 @@
 import React, { useState, useEffect } from "react";
 import { BookingProvider, useBooking } from "./BookingContext";
-import ProgressIndicator from "./components/ProgressIndicator";
-import StepWrapper from "./components/StepWrapper";
-import Step1TourSetup from "./steps/Step1TourSetup";
-import Step2DateRegular from "./steps/Step2DateRegular";
-import Step2DatePrivate from "./steps/Step2DatePrivate";
-import Step3Checkout from "./steps/Step3Checkout";
+import ModeSelector from "./steps/ModeSelector";
+import RegularCalendar from "./steps/RegularCalendar";
+import RegularCheckout from "./steps/RegularCheckout";
+import PrivateSetup from "./steps/PrivateSetup";
+import PrivateCheckout from "./steps/PrivateCheckout";
+
+type Mode = "choose" | "regular" | "private";
 
 const Wizard: React.FC = () => {
   const { booking, setBooking, t } = useBooking();
+  const [mode, setMode] = useState<Mode>("choose");
+  const [step, setStep] = useState(1);
 
-  // Read ?tour= from URL and pre-select if valid
+  // Read ?tour= from URL — pre-select tour for private path
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tourParam = params.get("tour");
-    if (tourParam && ["left-bank", "right-bank"].includes(tourParam) && !booking.tour) {
-      setBooking({ ...booking, tour: tourParam as "left-bank" | "right-bank" });
+    if (
+      tourParam &&
+      ["left-bank", "right-bank"].includes(tourParam) &&
+      !booking.tour
+    ) {
+      setBooking({
+        ...booking,
+        tour: tourParam as "left-bank" | "right-bank",
+      });
     }
   }, []);
-  const [step, setStep] = useState(1);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const next = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setStep((s) => s + 1);
-      setIsTransitioning(false);
-    }, 300);
+  const goToMode = (m: Mode) => {
+    setMode(m);
+    setStep(1);
   };
 
-  const back = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setStep((s) => Math.max(1, s - 1));
-      setIsTransitioning(false);
-    }, 300);
-  };
-
-  const renderStep = () => {
-    const stepProps = {
-      isTransitioning,
-      onNext: step < 3 ? next : undefined,
-      onBack: step > 1 ? back : undefined,
-    };
-
-    switch (step) {
-      case 1:
-        return (
-          <StepWrapper
-            {...stepProps}
-            nextLabel={t.next}
-            showBack={false}
-            validationKey="tourSetup"
-            validationMessage={t.validation.completeTourSetup}
-          >
-            <Step1TourSetup />
-          </StepWrapper>
-        );
-      case 2:
-        return booking.tourType === "regular" ? (
-          <StepWrapper
-            {...stepProps}
-            nextLabel={t.next}
-            validationKey="dateTime"
-            validationMessage={t.validation.chooseSession}
-          >
-            <Step2DateRegular />
-          </StepWrapper>
-        ) : (
-          <StepWrapper
-            {...stepProps}
-            nextLabel={t.next}
-            validationKey="dateTime"
-            validationMessage={t.validation.chooseSession}
-          >
-            <Step2DatePrivate />
-          </StepWrapper>
-        );
-      case 3:
-        return (
-          <Step3Checkout
-            onBack={back}
-            onRestart={() => setStep(1)}
-          />
-        );
-      default:
-        return null;
+  const renderContent = () => {
+    if (mode === "choose") {
+      return (
+        <ModeSelector
+          onSelectRegular={() => goToMode("regular")}
+          onSelectPrivate={() => goToMode("private")}
+        />
+      );
     }
+
+    if (mode === "regular") {
+      switch (step) {
+        case 1:
+          return (
+            <RegularCalendar
+              onNext={() => setStep(2)}
+              onBack={() => goToMode("choose")}
+            />
+          );
+        case 2:
+          return (
+            <RegularCheckout
+              onBack={() => setStep(1)}
+              onRestart={() => goToMode("choose")}
+            />
+          );
+        default:
+          return null;
+      }
+    }
+
+    if (mode === "private") {
+      switch (step) {
+        case 1:
+          return (
+            <PrivateSetup
+              onNext={() => setStep(2)}
+              onBack={() => goToMode("choose")}
+            />
+          );
+        case 2:
+          return (
+            <PrivateCheckout
+              onBack={() => setStep(1)}
+              onRestart={() => goToMode("choose")}
+            />
+          );
+        default:
+          return null;
+      }
+    }
+
+    return null;
   };
 
   return (
@@ -98,9 +98,7 @@ const Wizard: React.FC = () => {
         {t.subtitle}
       </p>
 
-      <ProgressIndicator currentStep={step} />
-
-      <div className="min-h-[400px] mt-8">{renderStep()}</div>
+      <div className="min-h-[400px]">{renderContent()}</div>
     </div>
   );
 };
@@ -111,7 +109,11 @@ interface BookingWizardProps {
   defaultTour?: string;
 }
 
-const BookingWizard: React.FC<BookingWizardProps> = ({ translations, lang, defaultTour }) => {
+const BookingWizard: React.FC<BookingWizardProps> = ({
+  translations,
+  lang,
+  defaultTour,
+}) => {
   return (
     <BookingProvider translations={translations} lang={lang} defaultTour={defaultTour}>
       <Wizard />
