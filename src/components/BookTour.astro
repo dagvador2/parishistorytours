@@ -18,5 +18,5 @@ const bookingT = allTranslations[lang].booking;
 
 {/* Section Book your tour */}
 <div id="book-tour" class="mb-16">
-	<BookingWizard client:load translations={bookingT} lang={lang} defaultTour={resolvedTour} />
+	<BookingWizard client:visible translations={bookingT} lang={lang} defaultTour={resolvedTour} />
 </div>

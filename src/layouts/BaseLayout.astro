@@ -27,21 +27,34 @@ const canonicalUrl = lang === 'fr' ? `${origin}${frPath}` : `${origin}${enPath}`
 <!DOCTYPE html>
 <html lang={lang}>
   <head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K6M2KKL7');</script>
-<!-- End Google Tag Manager -->
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-26695P8H33"></script>
+    <!-- Google Tag Manager + gtag — deferred to reduce unused JS on initial load -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-26695P8H33');
+  function loadAnalytics() {
+    // GTM
+    dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    var j = document.createElement('script');
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-K6M2KKL7';
+    document.head.appendChild(j);
+
+    // gtag
+    var g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=G-26695P8H33';
+    document.head.appendChild(g);
+    gtag('js', new Date());
+    gtag('config', 'G-26695P8H33');
+  }
+
+  // Load analytics after page is idle (3.5s delay)
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadAnalytics, { timeout: 3500 });
+  } else {
+    setTimeout(loadAnalytics, 3500);
+  }
 </script>
     <meta charset="utf-8" />
     <!-- Fallback for some analyzers expecting http-equiv -->
