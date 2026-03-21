@@ -68,6 +68,17 @@ export const POST: APIRoute = async ({ request }) => {
       html: clientEmailHtml,
     });
 
+    if (clientEmailResult.error) {
+      console.error('Resend client email error:', JSON.stringify(clientEmailResult.error));
+      return new Response(JSON.stringify({
+        error: 'Failed to send client email',
+        details: clientEmailResult.error.message,
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     // Email à vous (admin)
     let adminBanner: string;
     let adminBannerColor: string;
@@ -125,6 +136,10 @@ export const POST: APIRoute = async ({ request }) => {
       subject: `${adminSubjectPrefix} Booking - ${bookingData.name}`,
       html: adminEmailHtml,
     });
+
+    if (adminEmailResult.error) {
+      console.error('Resend admin email error:', JSON.stringify(adminEmailResult.error));
+    }
 
     return new Response(JSON.stringify({
       success: true,

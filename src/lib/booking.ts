@@ -115,8 +115,7 @@ function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Pro
 
     // Construire l'URL absolue pour la route d'email
     const baseUrl = process.env.SITE_URL ||
-      'https://parishistorytours.com' ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.parishistorytours.com');
     const emailUrl = `${baseUrl}/api/send-booking-email`;
 
     const response = await fetch(emailUrl, {
