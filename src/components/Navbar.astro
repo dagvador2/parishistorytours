@@ -28,37 +28,41 @@ const mobileBookLabel = priceLabel || bookLabel;
 
 {variant === 'homepage' && (
   <!-- Desktop scroll banner -->
-  <nav id="book-banner-desktop" class="hidden md:block fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9999] shadow-md transform -translate-y-full transition-transform duration-300">
-    <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
-      <div class="flex items-center gap-8 flex-1 justify-center">
-        <a href={`${langPrefix}/tours/left-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.leftBank')}</a>
-        <button id="book-btn-desktop" class="bg-gray-800 text-white font-bold hover:bg-gray-700 transition-all duration-200 px-8 py-3 rounded-lg shadow-lg transform hover:scale-105 text-lg">{bookLabel}</button>
-        <a href={`${langPrefix}/tours/right-bank`} class="text-white font-semibold hover:text-blue-200 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-700">{t('nav.rightBank')}</a>
+  <nav id="book-banner-desktop" class="hidden md:block fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-amber-900/30 z-[9999] shadow-[0_2px_20px_rgba(0,0,0,0.3)] transform -translate-y-full transition-transform duration-300">
+    <div class="max-w-5xl mx-auto flex items-center justify-between py-3 px-6">
+      <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
+      <div class="flex items-center gap-6">
+        <a href={`${langPrefix}/tours/left-bank`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.leftBank')}</a>
+        <button id="book-btn-desktop" class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-all duration-200 px-6 py-2.5 rounded-lg shadow-lg shadow-amber-900/30 hover:shadow-amber-800/40 text-sm tracking-wide">{bookLabel}</button>
+        <a href={`${langPrefix}/tours/right-bank`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.rightBank')}</a>
       </div>
       <LanguageSwitcher dark />
     </div>
   </nav>
 
   <!-- Mobile scroll banner (TOP) -->
-  <nav id="book-banner-mobile" class="md:hidden fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
+  <nav id="book-banner-mobile" class="md:hidden fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-amber-900/30 z-[9998] shadow-[0_2px_20px_rgba(0,0,0,0.3)] transform -translate-y-full transition-transform duration-300">
     <div class="flex items-center justify-between py-3 px-4">
-      <button id="book-btn-mobile" class="bg-white text-gray-600 font-bold hover:bg-blue-50 transition-colors duration-200 px-6 py-2 rounded-lg shadow-md">{bookLabel}</button>
-      <LanguageSwitcher dark />
+      <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
+      <div class="flex items-center gap-3">
+        <button id="book-btn-mobile" class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-colors duration-200 px-5 py-2 rounded-lg shadow-md text-sm">{bookLabel}</button>
+        <LanguageSwitcher dark />
+      </div>
     </div>
   </nav>
 
   <!-- Mobile CTA fixed bottom bar -->
-  <div id="book-cta-mobile" class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-[9998] shadow-lg p-3 transform translate-y-full transition-transform duration-300">
-    <button id="book-btn-mobile-bottom" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg text-lg hover:bg-gray-700 transition-colors">{mobileBookLabel}</button>
+  <div id="book-cta-mobile" class="md:hidden fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-t border-amber-900/30 z-[9998] shadow-[0_-2px_20px_rgba(0,0,0,0.3)] p-3 transform translate-y-full transition-transform duration-300">
+    <button id="book-btn-mobile-bottom" class="w-full bg-amber-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-amber-500 transition-colors shadow-lg shadow-amber-900/30">{mobileBookLabel}</button>
   </div>
 )}
 
 {variant === 'tour' && (
   <!-- Desktop top banner for tour pages -->
-  <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-600 border-b border-gray-700 z-[9998] shadow-lg transform -translate-y-full transition-transform duration-300">
+  <nav id="book-banner" class="fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-amber-900/30 z-[9998] shadow-[0_2px_20px_rgba(0,0,0,0.3)] transform -translate-y-full transition-transform duration-300">
     <div class="flex items-center justify-between py-3 px-4">
-      <div class="flex-1"></div>
-      <button id="book-btn-tour-page" class="bg-gray-800 text-white font-bold transform hover:scale-105 hover:bg-gray-700 transition-all duration-200 px-8 py-2.5 rounded-lg shadow-md text-lg">{bookLabel}</button>
+      <span class="flex-1 text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
+      <button id="book-btn-tour-page" class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-all duration-200 px-6 py-2.5 rounded-lg shadow-lg shadow-amber-900/30 text-sm tracking-wide">{bookLabel}</button>
       <div class="flex-1 flex justify-end">
         <LanguageSwitcher dark />
       </div>
@@ -66,20 +70,21 @@ const mobileBookLabel = priceLabel || bookLabel;
   </nav>
 
   <!-- Mobile CTA fixed bottom bar for tour pages -->
-  <div id="book-cta-mobile-tour" class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-[9998] shadow-lg p-3 transform translate-y-full transition-transform duration-300">
-    <button id="book-btn-mobile-bottom-tour" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg text-lg hover:bg-gray-700 transition-colors">{mobileBookLabel}</button>
+  <div id="book-cta-mobile-tour" class="md:hidden fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-t border-amber-900/30 z-[9998] shadow-[0_-2px_20px_rgba(0,0,0,0.3)] p-3 transform translate-y-full transition-transform duration-300">
+    <button id="book-btn-mobile-bottom-tour" class="w-full bg-amber-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-amber-500 transition-colors shadow-lg shadow-amber-900/30">{mobileBookLabel}</button>
   </div>
 )}
 
 {variant === 'fixed' && (
-  <nav class="fixed top-0 left-0 w-full bg-white border-b border-gray-300 z-[9999] shadow-md hidden md:block">
-    <div class="max-w-5xl mx-auto flex items-center justify-between py-4 px-6">
-      <div class="flex items-center gap-8 flex-1 justify-center">
+  <nav class="fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-amber-900/30 z-[9999] shadow-[0_2px_20px_rgba(0,0,0,0.3)] hidden md:block">
+    <div class="max-w-5xl mx-auto flex items-center justify-between py-3 px-6">
+      <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
+      <div class="flex items-center gap-6">
         {links?.map(link => (
-          <a href={link.href} class="text-gray-800 font-semibold hover:text-blue-600 transition-colors duration-200 px-4 py-2 rounded-md hover:bg-gray-50">{link.label}</a>
+          <a href={link.href} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{link.label}</a>
         ))}
       </div>
-      <LanguageSwitcher />
+      <LanguageSwitcher dark />
     </div>
   </nav>
 )}
