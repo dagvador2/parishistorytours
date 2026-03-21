@@ -1,0 +1,91 @@
+---
+/**
+ * CountriesChart — Horizontal bar chart showing top 5 countries.
+ * Data passed as props (server-side fetched). Animations via CSS + IntersectionObserver.
+ */
+interface CountryItem {
+  country: string;
+  count: number;
+  code: string;
+  percentage: number;
+}
+
+interface Props {
+  countries: CountryItem[];
+}
+
+const { countries } = Astro.props;
+
+const barGradients = [
+  'from-blue-500 to-blue-600',
+  'from-blue-400 to-blue-500',
+  'from-sky-400 to-blue-400',
+  'from-sky-300 to-sky-400',
+  'from-sky-200 to-sky-300',
+];
+
+function getFlagEmoji(code: string): string {
+  const map: Record<string, string> = {
+    'US': '\u{1F1FA}\u{1F1F8}', 'FR': '\u{1F1EB}\u{1F1F7}', 'GB': '\u{1F1EC}\u{1F1E7}',
+    'DE': '\u{1F1E9}\u{1F1EA}', 'ES': '\u{1F1EA}\u{1F1F8}', 'IT': '\u{1F1EE}\u{1F1F9}',
+    'CA': '\u{1F1E8}\u{1F1E6}', 'AU': '\u{1F1E6}\u{1F1FA}',
+  };
+  return map[code] || '\u{1F30D}';
+}
+---
+
+<div class="cc-root space-y-5">
+  {countries.map((item, index) => (
+    <div
+      class="cc-row flex items-center gap-4 opacity-0"
+      style={`transform: translateX(-20px); transition: opacity 0.4s ease ${index * 100}ms, transform 0.4s ease ${index * 100}ms;`}
+    >
+      <div class="flex-shrink-0 w-7 text-sm font-bold text-gray-400">#{index + 1}</div>
+      <div class="flex-shrink-0 w-9 h-7 rounded-md overflow-hidden border border-gray-200 shadow-sm">
+        <img
+          src={`https://flagsapi.com/${item.code}/flat/64.png`}
+          alt={`${item.country} flag`}
+          class="w-full h-full object-cover"
+          loading="lazy"
+          onerror={`this.style.display='none';this.parentElement.innerHTML='${getFlagEmoji(item.code)}';this.parentElement.className='flex-shrink-0 w-9 h-7 flex items-center justify-center text-lg border border-gray-200 rounded-md';`}
+        />
+      </div>
+      <div class="flex-shrink-0 w-24 text-sm font-semibold text-gray-700 truncate">{item.country}</div>
+      <div class="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
+        <div
+          class={`cc-bar h-full rounded-full bg-gradient-to-r ${barGradients[index] || barGradients[4]}`}
+          style="width: 0%;"
+          data-width={`${item.percentage}%`}
+        />
+      </div>
+      <div class="flex-shrink-0 w-12 text-right">
+        <span class="text-sm font-bold text-gray-900">{item.count}</span>
+        <span class="text-xs text-gray-400 ml-0.5">pax</span>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Reveal rows
+        entry.target.querySelectorAll<HTMLDivElement>('.cc-row').forEach(row => {
+          row.style.opacity = '1';
+          row.style.transform = 'translateX(0)';
+        });
+        // Animate bars
+        setTimeout(() => {
+          entry.target.querySelectorAll<HTMLDivElement>('.cc-bar').forEach(bar => {
+            bar.style.transition = 'width 1s ease-out';
+            bar.style.width = bar.dataset.width || '0%';
+          });
+        }, 300);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.cc-root').forEach(el => observer.observe(el));
+</script>

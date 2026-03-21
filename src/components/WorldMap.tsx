@@ -10,50 +10,12 @@ interface CountryData {
   [countryCode: string]: number;
 }
 
-const geoUrl = '/data/world-110m.json';
+interface WorldMapProps {
+  countryData: CountryData;
+  maxValue: number;
+}
 
-// Mapping des noms de pays de Supabase vers les noms TopoJSON
-const countryNameToTopoName: Record<string, string> = {
-  'USA': 'United States of America', 'UK': 'United Kingdom',
-  'United Kingdom': 'United Kingdom', 'Royaume-Uni': 'United Kingdom',
-  'Grande-Bretagne': 'United Kingdom', 'France': 'France',
-  'Allemagne': 'Germany', 'Espagne': 'Spain', 'Italie': 'Italy',
-  'Canada': 'Canada', 'Australie': 'Australia', 'Japon': 'Japan',
-  'Chine': 'China', 'Brésil': 'Brazil', 'Inde': 'India',
-  'Pays Bas': 'Netherlands', 'Belgique': 'Belgium', 'Suisse': 'Switzerland',
-  'Autriche': 'Austria', 'Suède': 'Sweden', 'Norvège': 'Norway',
-  'Danemark': 'Denmark', 'Finlande': 'Finland', 'Pologne': 'Poland',
-  'République tchèque': 'Czech Republic', 'Portugal': 'Portugal',
-  'Grèce': 'Greece', 'Turquie': 'Turkey', 'Russie': 'Russia',
-  'Mexique': 'Mexico', 'Argentine': 'Argentina', 'Chili': 'Chile',
-  'Colombie': 'Colombia', 'Pérou': 'Peru', 'Venezuela': 'Venezuela',
-  'Afrique du Sud': 'South Africa', 'Egypte': 'Egypt', 'Maroc': 'Morocco',
-  'Nigeria': 'Nigeria', 'Kenya': 'Kenya', 'Corée du Sud': 'South Korea',
-  'Thailande': 'Thailand', 'Vietnam': 'Vietnam', 'Singapour': 'Singapore',
-  'Malaisie': 'Malaysia', 'Indonésie': 'Indonesia', 'Philippines': 'Philippines',
-  'Nouvelle Zélande': 'New Zealand', 'Israel': 'Israel',
-  'Arabie saoudite': 'Saudi Arabia', 'Émirats arabes unis': 'United Arab Emirates',
-  'Iran': 'Iran', 'Irak': 'Iraq', 'Pakistan': 'Pakistan',
-  'Bangladesh': 'Bangladesh', 'Sri Lanka': 'Sri Lanka', 'Myanmar': 'Myanmar',
-  'Cambodge': 'Cambodia', 'Laos': 'Laos', 'Mongolie': 'Mongolia',
-  'Kazakhstan': 'Kazakhstan', 'Ouzbékistan': 'Uzbekistan',
-  'Turkménistan': 'Turkmenistan', 'Kirghizistan': 'Kyrgyzstan',
-  'Tadjikistan': 'Tajikistan', 'Afghanistan': 'Afghanistan',
-  'Ukraine': 'Ukraine', 'Biélorussie': 'Belarus', 'Lituanie': 'Lithuania',
-  'Lettonie': 'Latvia', 'Estonie': 'Estonia', 'Moldavie': 'Moldova',
-  'Roumanie': 'Romania', 'Bulgarie': 'Bulgaria', 'Serbie': 'Serbia',
-  'Croatie': 'Croatia', 'Bosnie-Herzégovine': 'Bosnia and Herzegovina',
-  'Monténégro': 'Montenegro', 'Albanie': 'Albania',
-  'Macédoine du Nord': 'North Macedonia', 'Slovenie': 'Slovenia',
-  'Slovaquie': 'Slovakia', 'Hongrie': 'Hungary', 'Irlande': 'Ireland',
-  'Islande': 'Iceland', 'Luxembourg': 'Luxembourg', 'Malte': 'Malta',
-  'Chypre': 'Cyprus', 'Cameroun': 'Cameroon',
-  'Irlande du Nord': 'United Kingdom', 'Hong Kong': 'Hong Kong',
-  'Liban': 'Lebanon', 'Tunisie': 'Tunisia', 'Azerbaidjan': 'Azerbaijan',
-  'Costa Rica': 'Costa Rica', 'Ecosse': 'Scotland',
-  'Equateur': 'Ecuador', 'Taiwan': 'Taiwan',
-  'République Tchèque': 'Czech Republic', 'Ireland': 'Ireland',
-};
+const geoUrl = '/data/world-110m.json';
 
 const getCountryFlagCode = (countryName: string): string => {
   const flagCodeMap: Record<string, string> = {
@@ -88,9 +50,7 @@ function getFlagEmoji(countryCode: string): string {
   return flagMap[countryCode] || '🌍';
 }
 
-export default function WorldMap() {
-  const [countryData, setCountryData] = useState<CountryData>({});
-  const [maxValue, setMaxValue] = useState(0);
+export default function WorldMap({ countryData, maxValue }: WorldMapProps) {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string; country: string; flag: string; count: number } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -99,43 +59,6 @@ export default function WorldMap() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const fetchCountryData = async () => {
-      try {
-        const res = await fetch('/api/participants-data');
-        if (!res.ok) throw new Error('Failed to fetch participants data');
-        const { data } = await res.json();
-
-        const countryCount = new Map<string, number>();
-        data?.forEach(row => {
-          const country = row.pays;
-          const participants = row.taille_du_groupe ?? 1;
-          if (country) {
-            countryCount.set(country, (countryCount.get(country) || 0) + participants);
-          }
-        });
-
-        const countryNameMap: CountryData = {};
-        let max = 0;
-
-        countryCount.forEach((count, country) => {
-          const topoName = countryNameToTopoName[country];
-          if (topoName) {
-            countryNameMap[topoName] = (countryNameMap[topoName] || 0) + count;
-            max = Math.max(max, countryNameMap[topoName]);
-          }
-        });
-
-        setCountryData(countryNameMap);
-        setMaxValue(max);
-      } catch (error) {
-        console.error('Error fetching country data:', error);
-      }
-    };
-
-    fetchCountryData();
   }, []);
 
   // Blue-toned color scale matching the site design

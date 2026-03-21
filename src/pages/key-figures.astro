@@ -2,16 +2,109 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import JsonLd from '../components/JsonLd.astro';
-import KeyFiguresStats from '../components/KeyFiguresStats.tsx';
-import CountriesChart from '../components/CountriesChart.tsx';
+import KeyFiguresStats from '../components/KeyFiguresStats.astro';
+import CountriesChart from '../components/CountriesChart.astro';
 import WorldMap from '../components/WorldMap.tsx';
 import { useTranslations } from '../i18n/utils';
+import { supabase } from '../lib/supabase';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
+
+// Fetch participants data server-side
+let participantsData: any[] = [];
+try {
+  const { data } = await supabase.from('data_participants_tour').select('*');
+  participantsData = data || [];
+} catch (e) {
+  console.error('Failed to fetch participants data:', e);
+}
+
+// Compute stats server-side
+const sessionSet = new Set<number>();
+let totalParticipants = 0;
+const countryMap = new Map<string, number>();
+
+participantsData.forEach(row => {
+  if (row.id_session) sessionSet.add(row.id_session);
+  const count = Number(row.taille_du_groupe) || 0;
+  totalParticipants += count;
+  const country = row.pays;
+  if (country) {
+    const key = String(country).trim();
+    countryMap.set(key, (countryMap.get(key) || 0) + count);
+  }
+});
+
+const sessionsCount = sessionSet.size;
+const distanceKm = Math.round(sessionsCount * 2.5);
+const uniqueCountries = countryMap.size;
+
+const stats = [
+  { id: 'participants', label: lang === 'fr' ? 'Participants' : 'Total Participants', value: totalParticipants, color: 'blue' as const },
+  { id: 'sessions', label: lang === 'fr' ? 'Visites guidées' : 'Tours Conducted', value: sessionsCount, color: 'green' as const },
+  { id: 'kilometers', label: lang === 'fr' ? 'Kilomètres parcourus' : 'Kilometers Walked', value: distanceKm, color: 'purple' as const },
+  { id: 'countries', label: lang === 'fr' ? 'Pays représentés' : 'Countries Represented', value: uniqueCountries, color: 'orange' as const },
+];
+
+// Country code mapping for flags
+const codeMap: Record<string, string> = {
+  'USA': 'US', 'UK': 'GB', 'États-Unis': 'US', 'Etats-Unis': 'US',
+  'France': 'FR', 'Allemagne': 'DE', 'Espagne': 'ES', 'Italie': 'IT',
+  'Canada': 'CA', 'Australie': 'AU', 'Japon': 'JP', 'Chine': 'CN',
+  'Brésil': 'BR', 'Inde': 'IN', 'Pays-Bas': 'NL', 'Pays Bas': 'NL',
+  'Belgique': 'BE', 'Suisse': 'CH', 'Portugal': 'PT', 'Irlande': 'IE',
+  'Israël': 'IL', 'Israel': 'IL', 'Philippines': 'PH',
+};
+
+const sortedCountries = Array.from(countryMap.entries())
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 5);
+const maxCount = Math.max(...sortedCountries.map(([, c]) => c), 1);
+const topCountries = sortedCountries.map(([country, count]) => ({
+  country,
+  count,
+  code: codeMap[country] || 'UN',
+  percentage: (count / maxCount) * 100,
+}));
+
+// Prepare WorldMap data (country name -> topo name mapping + counts)
+const countryNameToTopoName: Record<string, string> = {
+  'USA': 'United States of America', 'UK': 'United Kingdom',
+  'Royaume-Uni': 'United Kingdom', 'France': 'France',
+  'Allemagne': 'Germany', 'Espagne': 'Spain', 'Italie': 'Italy',
+  'Canada': 'Canada', 'Australie': 'Australia', 'Japon': 'Japan',
+  'Chine': 'China', 'Brésil': 'Brazil', 'Inde': 'India',
+  'Pays Bas': 'Netherlands', 'Pays-Bas': 'Netherlands',
+  'Belgique': 'Belgium', 'Suisse': 'Switzerland',
+  'Portugal': 'Portugal', 'Irlande': 'Ireland', 'Israël': 'Israel',
+  'Israel': 'Israel', 'Philippines': 'Philippines',
+  'Mexique': 'Mexico', 'Argentine': 'Argentina', 'Colombie': 'Colombia',
+  'Afrique du Sud': 'South Africa', 'Egypte': 'Egypt', 'Maroc': 'Morocco',
+  'Corée du Sud': 'South Korea', 'Thailande': 'Thailand',
+  'Singapour': 'Singapore', 'Nouvelle Zélande': 'New Zealand',
+  'Costa Rica': 'Costa Rica', 'Equateur': 'Ecuador',
+  'Taiwan': 'Taiwan', 'République Tchèque': 'Czech Republic',
+  'République tchèque': 'Czech Republic', 'Ireland': 'Ireland',
+  'Autriche': 'Austria', 'Suède': 'Sweden', 'Norvège': 'Norway',
+  'Danemark': 'Denmark', 'Finlande': 'Finland', 'Pologne': 'Poland',
+  'Grèce': 'Greece', 'Turquie': 'Turkey', 'Russie': 'Russia',
+  'Ukraine': 'Ukraine', 'Roumanie': 'Romania', 'Hongrie': 'Hungary',
+  'Croatie': 'Croatia', 'Serbie': 'Serbia', 'Bulgarie': 'Bulgaria',
+};
+
+const worldMapData: Record<string, number> = {};
+let worldMapMax = 0;
+countryMap.forEach((count, country) => {
+  const topoName = countryNameToTopoName[country];
+  if (topoName) {
+    worldMapData[topoName] = (worldMapData[topoName] || 0) + count;
+    worldMapMax = Math.max(worldMapMax, worldMapData[topoName]);
+  }
+});
 ---
 
 <BaseLayout title={t('meta.keyFigures.title')} description={t('meta.keyFigures.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
@@ -191,7 +284,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
         </div>
 
         <!-- Stats Component -->
-        <KeyFiguresStats client:load />
+        <KeyFiguresStats stats={stats} />
 
         <!-- AI-readable statistics (React charts are not crawlable) -->
         <div class="sr-only">
@@ -208,12 +301,12 @@ const langPrefix = isDefaultLang ? '' : '/fr';
             <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">
               {t('keyFigures.delivering.topCountries')}
             </h3>
-            <CountriesChart client:load />
+            <CountriesChart countries={topCountries} />
           </div>
 
           <!-- World Map -->
           <div>
-            <WorldMap client:load />
+            <WorldMap client:visible countryData={worldMapData} maxValue={worldMapMax} />
           </div>
         </div>
       </div>
