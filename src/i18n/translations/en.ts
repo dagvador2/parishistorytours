@@ -231,8 +231,6 @@ export const en = {
     },
     privateSetup: {
       title: "Configure your private tour",
-      both: "Both tours",
-      bothDesc: "Left Bank + Right Bank",
       validation: "Please select a tour, date, and time.",
     },
     checkout: {

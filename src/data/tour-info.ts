@@ -4,6 +4,7 @@ export interface TourInfo {
   nameFR: string;
   stopsEN: string;
   stopsFR: string;
+  thumb: string;
 }
 
 export const tourInfo: Record<string, TourInfo> = {
@@ -13,6 +14,7 @@ export const tourInfo: Record<string, TourInfo> = {
     nameFR: 'Visite Rive Gauche',
     stopsEN: 'Panthéon · Sorbonne · Notre-Dame',
     stopsFR: 'Panthéon · Sorbonne · Notre-Dame',
+    thumb: '/photos/thumbnails/pantheon_thumb.webp',
   },
   'right-bank': {
     slug: 'right-bank',
@@ -20,13 +22,7 @@ export const tourInfo: Record<string, TourInfo> = {
     nameFR: 'Visite Rive Droite',
     stopsEN: 'Pont Alexandre III · Concorde · Vendôme',
     stopsFR: 'Pont Alexandre III · Concorde · Vendôme',
-  },
-  'both': {
-    slug: 'both',
-    nameEN: 'Both Tours (Left Bank + Right Bank)',
-    nameFR: 'Les deux visites (Rive Gauche + Rive Droite)',
-    stopsEN: 'All 8 historic stops',
-    stopsFR: 'Les 8 arrêts historiques',
+    thumb: '/photos/thumbnails/vendome_thumb.webp',
   },
 };
 

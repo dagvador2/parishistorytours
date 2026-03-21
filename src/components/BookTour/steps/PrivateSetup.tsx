@@ -75,10 +75,9 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
     }
   };
 
-  const tourOptions: { id: Tour; label: string; desc: string }[] = [
-    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc },
-    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc },
-    { id: "both", label: t.privateSetup?.both || "Both tours", desc: t.privateSetup?.bothDesc || "Left Bank + Right Bank" },
+  const tourOptions: { id: Tour; label: string; desc: string; img: string }[] = [
+    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: "/photos/thumbnails/pantheon_thumb.webp" },
+    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: "/photos/thumbnails/vendome_thumb.webp" },
   ];
 
   return (
@@ -92,26 +91,48 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
         <h4 className="text-sm font-semibold text-gray-700 mb-3">
           {t.step1Setup.chooseTour}
         </h4>
-        <div className="flex flex-col sm:flex-row gap-3">
-          {tourOptions.map(({ id, label, desc }) => {
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {tourOptions.map(({ id, label, desc, img }) => {
             const isSelected = booking.tour === id;
             return (
-              <button
+              <div
                 key={id}
                 onClick={() => chooseTour(id)}
-                className={`flex-1 p-4 border-2 rounded-xl text-center transition-all duration-200 ${
-                  isSelected
-                    ? "border-blue-600 bg-blue-50 shadow-md shadow-blue-100"
-                    : "border-gray-200 hover:border-blue-300 hover:bg-blue-50/50"
-                }`}
+                className={`flex-1 max-w-xs cursor-pointer transition-all duration-300 transform hover:scale-[1.03]
+                  ${!isSelected && booking.tour ? "opacity-40 scale-[0.97]" : "opacity-100"}`}
               >
-                <div className={`font-bold text-sm ${isSelected ? "text-blue-700" : "text-gray-800"}`}>
-                  {label}
+                <div
+                  className={`relative rounded-xl overflow-hidden shadow-lg ${
+                    isSelected ? "ring-4 ring-blue-600 shadow-blue-200/50" : "ring-1 ring-gray-200"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={label}
+                    width={640}
+                    height={427}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-36 object-cover"
+                  />
+                  <div
+                    className={`absolute inset-0 flex flex-col items-center justify-center transition-colors
+                      ${isSelected ? "bg-black/40" : "bg-black/25 hover:bg-black/35"}`}
+                  >
+                    <span className="text-white text-xl font-bold tracking-wide drop-shadow-lg">
+                      {label}
+                    </span>
+                    <span className="text-white/90 text-xs mt-1 drop-shadow">{desc}</span>
+                  </div>
+                  {isSelected && (
+                    <div className="absolute top-3 right-3 w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
-                <p className={`text-xs mt-0.5 ${isSelected ? "text-blue-600" : "text-gray-500"}`}>
-                  {desc}
-                </p>
-              </button>
+              </div>
             );
           })}
         </div>

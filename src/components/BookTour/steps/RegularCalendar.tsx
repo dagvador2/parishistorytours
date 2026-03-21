@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useBooking } from "../BookingContext";
-import { getTourName, getTourStops } from "../../../data/tour-info";
+import { getTourName, getTourStops, tourInfo } from "../../../data/tour-info";
 
 interface Slot {
   id: string;
@@ -204,18 +204,32 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
                         ? "text-orange-500 font-semibold"
                         : "text-gray-500";
 
+                    const tourThumb = tourInfo[slot.tour_type]?.thumb;
+
                     return (
                       <button
                         key={slot.id}
                         onClick={() => selectSlot(slot)}
-                        className={`w-full p-4 border-2 rounded-xl text-left transition-all duration-200 ${
+                        className={`w-full border-2 rounded-xl text-left transition-all duration-200 overflow-hidden ${
                           isSelected
                             ? "border-blue-600 bg-blue-50 shadow-md shadow-blue-100"
                             : "border-gray-200 hover:border-blue-300 hover:bg-blue-50/50"
                         }`}
                         disabled={priceLoading}
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex items-stretch">
+                          {tourThumb && (
+                            <img
+                              src={tourThumb}
+                              alt={tourName}
+                              width={120}
+                              height={90}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-24 h-auto object-cover flex-shrink-0 hidden sm:block"
+                            />
+                          )}
+                          <div className="flex justify-between items-start flex-1 p-4">
                           <div className="flex-1">
                             <div className="font-bold text-gray-800 text-lg">
                               {formatTime(slot.start_time)}
@@ -251,6 +265,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
                               </svg>
                             </div>
                           )}
+                          </div>
                         </div>
                       </button>
                     );

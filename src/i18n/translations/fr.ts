@@ -231,8 +231,6 @@ export const fr = {
     },
     privateSetup: {
       title: "Configurez votre visite privée",
-      both: "Les deux visites",
-      bothDesc: "Rive Gauche + Rive Droite",
       validation: "Veuillez sélectionner une visite, une date et une heure.",
     },
     checkout: {
