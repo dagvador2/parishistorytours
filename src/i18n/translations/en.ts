@@ -218,6 +218,12 @@ export const en = {
     step2Regular: {
       title: "Choose a date and session",
     },
+    regularCalendar: {
+      title: "Choose a session",
+      subtitle: "Select a date to see available tours",
+      highlightedDates: "Highlighted dates have available sessions.",
+      tooManyParticipants: "Not enough spots available for this session.",
+    },
     step2Private: {
       title: "Choose your preferred date and time",
       messageLabel: "Message or special request (optional)",
