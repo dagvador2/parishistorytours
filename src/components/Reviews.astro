@@ -87,9 +87,11 @@ let reviews = [];
 	{/* Liens vers les plateformes (Google Maps only) */}
 	<div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-8">
 		<a href="https://maps.app.goo.gl/1ZmS5861XDPsM1Dk7" target="_blank" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 underline transition text-sm text-center">
-			<img 
-				src={"/logos/Google__logo.webp"}
-				alt="Google logo" 
+			<img
+				src={"/logos/Google__logo_sm.webp"}
+				alt="Google logo"
+				width={24}
+				height={24}
 				class="w-6 h-6 object-contain"
 			/>
 			<span>{t('reviews.seeMore')}</span>
