@@ -3,11 +3,11 @@ import { supabase } from '../../../lib/supabase';
 
 export const GET: APIRoute = async ({ params, url }) => {
   const date = params.date;
-  const tour = url.searchParams.get('tour');
+  const tour = url.searchParams.get('tour'); // optional — omit to get all tours
   const participants = parseInt(url.searchParams.get('participants') || '1');
 
-  if (!date || !tour) {
-    return new Response(JSON.stringify({ error: 'Missing date or tour parameter' }), {
+  if (!date) {
+    return new Response(JSON.stringify({ error: 'Missing date parameter' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -19,12 +19,17 @@ export const GET: APIRoute = async ({ params, url }) => {
     const end = new Date(date);
     end.setHours(23, 59, 59, 999);
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('sessions')
-      .select('id, start_time, available_spots')
-      .eq('tour_type', tour)
+      .select('id, start_time, available_spots, tour_type')
       .gte('start_time', begin.toISOString())
       .lte('start_time', end.toISOString());
+
+    if (tour) {
+      query = query.eq('tour_type', tour);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -39,6 +44,7 @@ export const GET: APIRoute = async ({ params, url }) => {
         id: slot.id,
         start_time: slot.start_time,
         free: slot.available_spots,
+        tour_type: slot.tour_type,
       }));
 
     return new Response(JSON.stringify({ slots }), {

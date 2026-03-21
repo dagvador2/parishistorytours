@@ -2,22 +2,20 @@ import type { APIRoute } from 'astro';
 import { supabase } from '../../lib/supabase';
 
 export const GET: APIRoute = async ({ url }) => {
-  const tour = url.searchParams.get('tour');
+  const tour = url.searchParams.get('tour'); // optional — omit to get all tours
   const participants = parseInt(url.searchParams.get('participants') || '1');
 
-  if (!tour) {
-    return new Response(JSON.stringify({ error: 'Missing tour parameter' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('sessions')
       .select('id, start_time, available_spots, tour_type')
-      .eq('tour_type', tour)
       .gte('start_time', new Date().toISOString());
+
+    if (tour) {
+      query = query.eq('tour_type', tour);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
