@@ -9,7 +9,7 @@ import { useTranslations } from '../i18n/utils';
 
 import JsonLd from "../components/JsonLd.astro";
 import FAQ from "../components/FAQ.astro";
-import LocationCarousel from "../components/ui/LocationCarousel.tsx";
+import LocationCarousel from "../components/LocationCarousel.astro";
 import AuroraBackground from "../components/AuroraBackground.astro";
 import Navbar from "../components/Navbar.astro";
 import MobileMenu from "../components/MobileMenu.astro";
@@ -58,7 +58,6 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 		{/* Hero gallery — Full-width location carousel */}
 		<div class="max-w-5xl mx-auto mt-8 mb-4 px-4">
 			<LocationCarousel
-				client:only="react"
 				cardsPerView={3}
 				autoPlayMs={4000}
 				height="30rem"

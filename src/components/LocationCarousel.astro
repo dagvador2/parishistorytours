@@ -1,0 +1,204 @@
+---
+/**
+ * LocationCarousel — Infinite sliding carousel (zero-JS-framework).
+ * Clone-based approach for seamless infinite scrolling, same as the old React version.
+ */
+interface Card {
+  imgUrl: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  tag: string;
+}
+
+interface Props {
+  cards: Card[];
+  cardsPerView?: number;
+  autoPlayMs?: number;
+  height?: string;
+}
+
+const {
+  cards,
+  cardsPerView = 3,
+  autoPlayMs = 4000,
+  height = '30rem',
+} = Astro.props;
+
+const buffer = cardsPerView;
+const extended = [
+  ...cards.slice(-buffer),
+  ...cards,
+  ...cards.slice(0, buffer),
+];
+const pct = 100 / cardsPerView;
+---
+
+<div
+  class="carousel-root relative w-full"
+  style={`height: ${height}`}
+  data-cards-per-view={cardsPerView}
+  data-auto-play-ms={autoPlayMs}
+  data-total={cards.length}
+>
+  <!-- Overflow clip -->
+  <div class="overflow-hidden h-full rounded-2xl">
+    <!-- Sliding track -->
+    <div
+      class="carousel-track flex h-full will-change-transform"
+      style={`transform: translateX(-${buffer * pct}%); transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);`}
+    >
+      {extended.map((card, idx) => (
+        <div
+          class="px-1.5 first:pl-0 last:pr-0 h-full shrink-0"
+          style={`width: ${pct}%`}
+        >
+          <div class="card-wrap relative overflow-hidden rounded-2xl shadow-xl h-full group cursor-pointer ring-1 ring-black/5">
+            <img
+              src={card.imgUrl}
+              alt={card.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+
+            {/* Permanent bottom gradient + title */}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent pointer-events-none" />
+            <div class="absolute bottom-0 left-0 right-0 p-4 transition-transform duration-300 group-hover:-translate-y-2">
+              <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-white/60 mb-1">
+                {card.tag}
+              </span>
+              <h3 class="text-white font-bold text-base md:text-lg leading-tight">{card.title}</h3>
+              <p class="text-white/70 text-xs mt-0.5">{card.subtitle}</p>
+            </div>
+
+            {/* Hover overlay — slides up */}
+            <div class="absolute inset-0 bg-black/85 text-white p-5 transition-transform duration-500 transform translate-y-full group-hover:translate-y-0 overflow-y-auto flex flex-col justify-center">
+              <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-blue-300 mb-3">
+                {card.tag}
+              </span>
+              <h3 class="font-bold text-lg mb-3 leading-tight">{card.title}</h3>
+              <p class="text-sm text-white/80 leading-relaxed">{card.description}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Nav arrows */}
+  {cards.length > cardsPerView && (
+    <>
+      <button
+        class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
+        aria-label="Previous"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
+        aria-label="Next"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </>
+  )}
+
+  {/* Dot indicators */}
+  <div class="carousel-dots absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+    {cards.map((_, i) => (
+      <button
+        class:list={["h-1.5 rounded-full transition-all duration-300", i === 0 ? "w-6 bg-white" : "w-1.5 bg-white/40"]}
+        aria-label={`Go to slide ${i + 1}`}
+        data-dot={i}
+      />
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLDivElement>('.carousel-root').forEach(root => {
+    const track = root.querySelector<HTMLDivElement>('.carousel-track')!;
+    const prevBtn = root.querySelector<HTMLButtonElement>('.carousel-prev');
+    const nextBtn = root.querySelector<HTMLButtonElement>('.carousel-next');
+    const dots = root.querySelectorAll<HTMLButtonElement>('.carousel-dots button');
+
+    const cardsPerView = parseInt(root.dataset.cardsPerView || '3');
+    const autoPlayMs = parseInt(root.dataset.autoPlayMs || '4000');
+    const total = parseInt(root.dataset.total || '0');
+    if (total === 0) return;
+
+    const pct = 100 / cardsPerView;
+    const buffer = cardsPerView;
+    let pos = 0;
+    let locked = false;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function setOffset(animated: boolean) {
+      track.style.transition = animated
+        ? 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1)'
+        : 'none';
+      track.style.transform = `translateX(-${(pos + buffer) * pct}%)`;
+    }
+
+    function updateDots() {
+      const real = ((pos % total) + total) % total;
+      dots.forEach((dot, i) => {
+        dot.className = i === real
+          ? 'h-1.5 rounded-full transition-all duration-300 w-6 bg-white'
+          : 'h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/40';
+      });
+    }
+
+    function slide(next: number) {
+      if (locked) return;
+      locked = true;
+      pos = next;
+      setOffset(true);
+      updateDots();
+    }
+
+    track.addEventListener('transitionend', () => {
+      if (pos >= total) {
+        pos -= total;
+        setOffset(false);
+      } else if (pos < 0) {
+        pos += total;
+        setOffset(false);
+      }
+      requestAnimationFrame(() => { locked = false; });
+    });
+
+    function startAutoPlay() {
+      if (timer) clearInterval(timer);
+      if (autoPlayMs > 0 && total > cardsPerView) {
+        timer = setInterval(() => slide(pos + 1), autoPlayMs);
+      }
+    }
+
+    // Arrows
+    prevBtn?.addEventListener('click', () => { slide(pos - 1); startAutoPlay(); });
+    nextBtn?.addEventListener('click', () => { slide(pos + 1); startAutoPlay(); });
+
+    // Show/hide arrows on hover
+    root.addEventListener('mouseenter', () => {
+      prevBtn?.classList.replace('opacity-0', 'opacity-100');
+      nextBtn?.classList.replace('opacity-0', 'opacity-100');
+    });
+    root.addEventListener('mouseleave', () => {
+      prevBtn?.classList.replace('opacity-100', 'opacity-0');
+      nextBtn?.classList.replace('opacity-100', 'opacity-0');
+    });
+
+    // Dots
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => { slide(i); startAutoPlay(); });
+    });
+
+    startAutoPlay();
+  });
+</script>
