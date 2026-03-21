@@ -12,6 +12,7 @@ const {
   ogImage = "/photos/left_bank/Paris_WW2_guide.webp",
   ogType = "website",
   noindex = false,
+  preloadImages = [] as string[],
 } = Astro.props;
 
 const origin = Astro.url.origin;
@@ -84,6 +85,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <!-- Self-hosted Montserrat — preload latin subset -->
     <link rel="preload" href="/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin />
+    {preloadImages.map((src: string) => (
+      <link rel="preload" as="image" href={src} />
+    ))}
   </head>
 
   <body class="font-sans text-gray-900 antialiased">

@@ -20,7 +20,7 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
+<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={["/photos/left_bank/luxembourg_palace_paris.webp"]}>
 	{isDefaultLang ? (
 		<Navbar variant="homepage" />
 	) : (
