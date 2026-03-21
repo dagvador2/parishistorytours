@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BookingProvider, useBooking } from "./BookingContext";
 import ProgressIndicator from "./components/ProgressIndicator";
 import StepWrapper from "./components/StepWrapper";
@@ -8,7 +8,16 @@ import Step2DatePrivate from "./steps/Step2DatePrivate";
 import Step3Checkout from "./steps/Step3Checkout";
 
 const Wizard: React.FC = () => {
-  const { booking, t } = useBooking();
+  const { booking, setBooking, t } = useBooking();
+
+  // Read ?tour= from URL and pre-select if valid
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tourParam = params.get("tour");
+    if (tourParam && ["left-bank", "right-bank"].includes(tourParam) && !booking.tour) {
+      setBooking({ ...booking, tour: tourParam as "left-bank" | "right-bank" });
+    }
+  }, []);
   const [step, setStep] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
