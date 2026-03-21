@@ -398,6 +398,7 @@ export const fr = {
     info: "Info",
     aboutMe: "À propos de moi et des visites",
     contact: "Contact",
+    alsoOn: "Également disponible sur",
     copyright: "Paris History Tours. Tous droits réservés."
   },
 
