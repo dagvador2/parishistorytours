@@ -38,6 +38,10 @@ export default defineConfig({
   // Needed for API routes later
   output: "server",
 
+  build: {
+    inlineStylesheets: 'auto',
+  },
+
   vite: {
     // @ts-ignore
     plugins: [tailwindcss()],
