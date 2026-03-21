@@ -39,7 +39,7 @@ export default defineConfig({
   output: "server",
 
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
 
   vite: {

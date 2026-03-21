@@ -2,16 +2,16 @@ import React from "react";
 import { useBooking } from "../BookingContext";
 import type { Tour } from "../types";
 
-import pantheonThumb from "../../../images/pantheon_de_Paris.webp";
-import vendomeThumb from "../../../images/place_vendome_paris.webp";
+const pantheonThumbSrc = "/photos/thumbnails/pantheon_thumb.webp";
+const vendomeThumbSrc = "/photos/thumbnails/vendome_thumb.webp";
 
 const StepTourSelection: React.FC = () => {
   const { booking, setBooking, t } = useBooking();
   const choose = (tour: Tour) => setBooking({ ...booking, tour });
 
   const tours: { id: Tour; label: string; desc: string; img: string }[] = [
-    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: pantheonThumb.src },
-    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: vendomeThumb.src },
+    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: pantheonThumbSrc },
+    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: vendomeThumbSrc },
   ];
 
   return (
@@ -36,6 +36,8 @@ const StepTourSelection: React.FC = () => {
                 <img
                   src={img}
                   alt={label}
+                  width={640}
+                  height={427}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-48 object-cover"

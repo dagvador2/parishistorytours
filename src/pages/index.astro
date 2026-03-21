@@ -20,7 +20,7 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={[{ srcset: "/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w", sizes: "(max-width: 768px) 100vw, 33vw" }]}>
+<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={[{ srcset: "/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w", sizes: "33vw" }]}>
 	{isDefaultLang ? (
 		<Navbar variant="homepage" />
 	) : (

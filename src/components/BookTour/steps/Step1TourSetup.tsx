@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useBooking } from "../BookingContext";
 import type { Tour, TourType } from "../types";
 
-import pantheonThumb from "../../../images/pantheon_de_Paris.webp";
-import vendomeThumb from "../../../images/place_vendome_paris.webp";
+// Use pre-generated 640px thumbnails instead of full 2000px source images
+const pantheonThumbSrc = "/photos/thumbnails/pantheon_thumb.webp";
+const vendomeThumbSrc = "/photos/thumbnails/vendome_thumb.webp";
 
 const Step1TourSetup: React.FC = () => {
   const { booking, setBooking, t } = useBooking();
@@ -41,8 +42,8 @@ const Step1TourSetup: React.FC = () => {
   }, [booking.tour]);
 
   const tours: { id: Tour; label: string; desc: string; img: string }[] = [
-    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: pantheonThumb.src },
-    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: vendomeThumb.src },
+    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: pantheonThumbSrc },
+    { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: vendomeThumbSrc },
   ];
 
   const tourTypes: { id: TourType; title: string; subtitle: string; icon: string }[] = [
@@ -87,6 +88,8 @@ const Step1TourSetup: React.FC = () => {
                   <img
                     src={img}
                     alt={label}
+                    width={640}
+                    height={427}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-40 object-cover"
