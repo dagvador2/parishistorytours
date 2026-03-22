@@ -4,6 +4,7 @@ export const en = {
     home: "Home",
     leftBank: "Paris - Left Bank Tour",
     rightBank: "Paris - Right Bank Tour",
+    generalHistory: "Paris - General History Tour",
     presentation: "About",
     toursAvailable: "Tours Available",
     reviews: "Reviews",
@@ -19,6 +20,9 @@ export const en = {
     duration: "2 hours",
     distance: "2.5 km walking",
     stops: "4 historic stops",
+    durationGeneralHistory: "1.5 hours",
+    distanceGeneralHistory: "2.5 km walking",
+    stopsGeneralHistory: "3 historic stops",
     bookNow: "Book Now",
     learnMore: "Learn More",
     showMore: "Show more",
@@ -90,6 +94,7 @@ export const en = {
     subtitle: "Choose your historical journey through Paris",
     themes: {
       title: "Three Historical Themes on WW2",
+      titleGeneralHistory: "Three Eras of Paris History",
       fall: {
         title: "The Fall of Paris",
         description: "Discover how Paris fell to the hands of the German army in only 35 days of active combat, and learn more about the crucial decisions taken during that period."
@@ -101,6 +106,18 @@ export const en = {
       liberation: {
         title: "Liberation",
         description: "Revisit the Liberation of Paris in August 1944, when the city came on the brink of destruction, and learn how some famous characters were involved in the event."
+      },
+      roman: {
+        title: "Roman Paris",
+        description: "Discover the origins of Paris as Lutetia, a Gallic settlement conquered by Rome. From the fierce battle of 52 BC to 300 years of Pax Romana, explore how the Romans shaped the city with baths, forums, and theaters."
+      },
+      medieval: {
+        title: "Medieval Paris",
+        description: "Experience the dramatic Viking siege of 885-886, when 700 ships carrying 10,000 warriors laid siege to the Île de la Cité. Follow the eyewitness account of the monk Abbon and the heroic defense led by Count Eudes."
+      },
+      revolution: {
+        title: "The French Revolution",
+        description: "Relive the night of June 20, 1791, when Louis XVI and Marie Antoinette attempted their daring escape from Paris — a comedy of errors with dramatic consequences that sealed the fate of the French monarchy."
       }
     },
     rightBank: {
@@ -175,11 +192,45 @@ export const en = {
         }
       }
     },
+    generalHistory: {
+      title: "General History of Paris",
+      description: "2,000 years of Parisian history in one walk",
+      introduction: "A Journey Through Time",
+      quote: "To know Paris is to know a great deal of France.",
+      quoteAuthor: "Victor Hugo",
+      summary: "This tour takes you on a journey spanning nearly 2,000 years of Parisian history. Across three stops and three distinct eras, you'll discover the fierce battle that gave Rome control of Lutetia, the terrifying Viking siege that forged a new dynasty, and the royal escape attempt that sealed the fate of the French monarchy.",
+      didYouKnow: {
+        title: "Did You Know? Fascinating Facts About Paris History",
+        facts: [
+          "The Parisii, the Gallic tribe who gave Paris its name, minted their own gold coins featuring a stylized head of Apollo on one side and a horse with a net above its head on the other.",
+          "In 52 BC, the Gauls destroyed both bridges connecting the Île de la Cité to prevent the Roman general Labienus from reaching their fortress — but his brilliant overnight river crossing outmaneuvered them.",
+          "The Roman baths of Cluny, still standing over 13 meters tall near our first stop, were the largest public baths in Roman Lutetia and are among the best-preserved Roman ruins in France.",
+          "During the Viking siege of 885-886, the monk Abbon described a fleet of 700 ships covering the Seine — an armada so vast it terrified the 5,000 civilians sheltering on the Île de la Cité.",
+          "When Marie Antoinette escaped the Tuileries Palace on the night of June 20, 1791, she crossed paths with Lafayette's carriage, pressed herself against a wall in the dark, then took a wrong turn toward the Seine before doubling back."
+        ]
+      },
+      stops: {
+        stop1: {
+          title: "Thermes de Cluny — Roman Lutetia",
+          description: "Begin at the imposing Roman baths, still standing after nearly 2,000 years. Here we set the scene: the arrival of the Parisii tribe, their gold coinage, and the dramatic battle of 52 BC where the Roman general Labienus outwitted the Gallic warrior Camulogène with a daring overnight river crossing. Discover how Rome transformed the settlement into a thriving city with forums, theaters, and the road you walked to get here."
+        },
+        stop2: {
+          title: "Île de la Cité — The Viking Siege",
+          description: "Standing on the very island where Parisians sheltered during the siege of 885-886, relive the dramatic events through the eyes of the monk Abbon. With only 200 soldiers against 10,000 Vikings, Count Eudes mounted a legendary defense. Experience the heroism, the starvation, and the political betrayal that ended a dynasty and crowned a new king."
+        },
+        stop3: {
+          title: "Tuileries Garden — The Flight to Varennes",
+          description: "On the site of the vanished Tuileries Palace, discover the night of June 20, 1791 — when Louis XVI and Marie Antoinette attempted their escape from Revolutionary Paris. A story worthy of a thriller: disguises, near-misses with Lafayette's patrol, a wrong turn in the dark, and a chase through the night that ended in a small-town grocery store."
+        }
+      }
+    },
     stops: {
       our4Stops: "Our 4 Historic Stops",
+      our3Stops: "Our 3 Historic Stops",
       experienceHistory: "Experience the History",
       ourRoute: "Our Route Through Paris"
-    }
+    },
+    discoverOtherTours: "Discover our other tours"
   },
 
   // Reviews
@@ -263,10 +314,13 @@ export const en = {
     people: "people",
     leftBank: "Left Bank",
     rightBank: "Right Bank",
+    generalHistory: "General History",
     leftBankDesc: "Discover WW2 on the left side of Paris",
     rightBankDesc: "Discover WW2 on the right side of Paris",
+    generalHistoryDesc: "Walk through 2,000 years of Paris history",
     leftBankTour: "Left Bank Tour",
     rightBankTour: "Right Bank Tour",
+    generalHistoryTour: "General History Tour",
     regularTour: "Regular Tour",
     privateTour: "Private Tour",
     regularTourDesc: "Join a tour with up to 10 travelers",
@@ -395,6 +449,7 @@ export const en = {
     home: "Home",
     leftBankTour: "Left Bank Tour",
     rightBankTour: "Right Bank Tour",
+    generalHistoryTour: "General History Tour",
     info: "Info",
     aboutMe: "About me & the tours",
     contact: "Contact",
@@ -447,6 +502,10 @@ export const en = {
       title: "Right Bank WWII Tour - Vend\u00f4me, Concorde, Ritz | Paris History Tours",
       description: "2-hour Right Bank WWII walking tour: Pont Alexandre III, Concorde, Vend\u00f4me & the Ritz. Rose Valland, Hemingway & Liberation stories. Rated 4.9/5. Book now."
     },
+    generalHistory: {
+      title: "General History of Paris Tour - 2,000 Years in 1.5 Hours | Paris History Tours",
+      description: "Walk through 2,000 years of Paris history: Roman Lutetia, the Viking siege of 885, and the French Revolution. 3 stops, 1.5 hours. Small group with a local guide."
+    },
     keyFigures: {
       title: "About Paris History Tours - Our Guide & Journey",
       description: "Meet Cl\u00e9ment, WWII researcher and personal guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google Maps rating."
@@ -471,7 +530,9 @@ export const en = {
     quickStop: "Quick stop",
     leftBankTour: "Left Bank Tour",
     rightBankTour: "Right Bank Tour",
-    routeInfo: "2.5km • 4 stops • 2 hours"
+    generalHistoryTour: "General History Tour",
+    routeInfo: "2.5km • 4 stops • 2 hours",
+    routeInfoGeneralHistory: "2.5km • 3 stops • 1.5 hours"
   },
 
   // JsonLd structured data
@@ -482,7 +543,8 @@ export const en = {
     founderDescription: "Independent history guide specializing in World War II Paris. After 6 months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring wartime Paris to life.",
     offerCatalogName: "WWII Walking Tours in Paris",
     leftBankDescription: "Walk through wartime Paris: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops covering the Fall, Resistance & Liberation.",
-    rightBankDescription: "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops."
+    rightBankDescription: "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops.",
+    generalHistoryDescription: "Walk through 2,000 years of Paris history: Roman baths of Cluny, Viking siege of the Île de la Cité, and the French Revolution at the Tuileries. 1.5 hours, 3 stops."
   },
 
   // Emails
@@ -505,6 +567,7 @@ export const en = {
       privateTour: "Private Tour",
       leftBankTour: "Left Bank Tour",
       rightBankTour: "Right Bank Tour",
+      generalHistoryTour: "General History Tour",
       confirmedMessage: "Your booking is confirmed! We will send you meeting point details 24 hours before the tour.",
       requestMessage: "We will confirm availability and contact you within 24 hours.",
       onSiteMessage: "Your booking is confirmed! You will pay on the day of the tour. We will send you meeting point details 24 hours before.",
