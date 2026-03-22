@@ -206,7 +206,7 @@ export const fr = {
           "En 52 avant J.-C., les Gaulois détruisirent les deux ponts reliant l'Île de la Cité pour empêcher le général romain Labienus d'atteindre leur forteresse — mais sa traversée nocturne du fleuve déjoua leur stratégie.",
           "Les thermes romains de Cluny, toujours debout à plus de 13 mètres de haut près de notre premier arrêt, étaient les plus grands bains publics de Lutèce romaine et comptent parmi les ruines romaines les mieux conservées de France.",
           "Lors du siège viking de 885-886, le moine Abbon décrivit une flotte de 700 navires couvrant la Seine — une armada si vaste qu'elle terrorisa les 5 000 civils réfugiés sur l'Île de la Cité.",
-          "Quand Marie-Antoinette s'est échappée du palais des Tuileries dans la nuit du 20 juin 1791, elle a croisé le carrosse de Lafayette, s'est plaquée contre un mur dans l'obscurité, puis a tourné à gauche vers la Seine au lieu de tourner à droite, avant de faire demi-tour."
+          "Dans la nuit du 20 juin 1791, Louis XVI et Marie-Antoinette se déguisèrent et s'enfuirent du palais des Tuileries dans une grande voiture verte appelée la berline. Ils furent reconnus par un maître de poste dans la petite ville de Sainte-Menehould — une erreur qui mena à leur arrestation à Varennes et scella le destin de la monarchie française."
         ]
       },
       stops: {

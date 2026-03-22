@@ -206,7 +206,7 @@ export const en = {
           "In 52 BC, the Gauls destroyed both bridges connecting the Île de la Cité to prevent the Roman general Labienus from reaching their fortress — but his brilliant overnight river crossing outmaneuvered them.",
           "The Roman baths of Cluny, still standing over 13 meters tall near our first stop, were the largest public baths in Roman Lutetia and are among the best-preserved Roman ruins in France.",
           "During the Viking siege of 885-886, the monk Abbon described a fleet of 700 ships covering the Seine — an armada so vast it terrified the 5,000 civilians sheltering on the Île de la Cité.",
-          "When Marie Antoinette escaped the Tuileries Palace on the night of June 20, 1791, she crossed paths with Lafayette's carriage, pressed herself against a wall in the dark, then took a wrong turn toward the Seine before doubling back."
+          "On the night of June 20, 1791, Louis XVI and Marie Antoinette disguised themselves and fled the Tuileries Palace in a large green coach called the berline. They were recognized by a postmaster in the small town of Sainte-Menehould — a blunder that led to their arrest in Varennes and ultimately sealed the fate of the French monarchy."
         ]
       },
       stops: {
