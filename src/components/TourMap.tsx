@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 interface TourMapProps {
-  tour: 'left-bank' | 'right-bank';
+  tour: 'left-bank' | 'right-bank' | 'general-history';
 }
 
 const TourMap: React.FC<TourMapProps> = ({ tour }) => {
@@ -46,7 +46,24 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     { name: "Rue Saint-Honoré", coords: [2.328747, 48.866584] },
   ];
 
-  const stops = tour === 'left-bank' ? leftBankStops : rightBankStops;
+  // Coordonnées des stops principaux General History
+  const generalHistoryStops: Stop[] = [
+    { name: "Thermes de Cluny", coords: [2.3442, 48.8509], theme: "Roman Lutetia" },
+    { name: "Île de la Cité", coords: [2.3470, 48.8534], theme: "The Viking Siege" },
+    { name: "Jardin des Tuileries", coords: [2.3275, 48.8635], theme: "The French Revolution" },
+  ];
+
+  // Points de passage rapides General History
+  const generalHistoryWaypoints = [
+    { name: "Rue Saint-Jacques", coords: [2.3440, 48.8490] as [number, number] },
+    { name: "Pont Neuf", coords: [2.3415, 48.8568] as [number, number] },
+  ];
+
+  const stops = tour === 'left-bank'
+    ? leftBankStops
+    : tour === 'right-bank'
+      ? rightBankStops
+      : generalHistoryStops;
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -62,9 +79,11 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     mapboxgl.accessToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
 
     // Calculer le centre en fonction du tour
-    const centerCoords: [number, number] = tour === 'left-bank' 
+    const centerCoords: [number, number] = tour === 'left-bank'
       ? [2.3444, 48.8500] // Centre pour Left Bank
-      : [2.3215, 48.8655]; // Centre pour Right Bank
+      : tour === 'right-bank'
+        ? [2.3215, 48.8655] // Centre pour Right Bank
+        : [2.3380, 48.8560]; // Centre pour General History
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -100,68 +119,48 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
       });
 
       // Ajouter les petits points pour les arrêts rapides
-      if (tour === 'left-bank') {
-        leftBankWaypoints.forEach((waypoint) => {
-          const el = document.createElement('div');
-          el.className = 'waypoint-marker';
-          el.innerHTML = `
-            <div class="w-4 h-4 bg-gray-500 border-2 border-white rounded-full shadow-md"></div>
-          `;
+      const waypoints = tour === 'left-bank'
+        ? leftBankWaypoints
+        : tour === 'right-bank'
+          ? rightBankWaypoints
+          : generalHistoryWaypoints;
 
-          new mapboxgl.Marker(el)
-            .setLngLat(waypoint.coords as [number, number])
-            .setPopup(
-              new mapboxgl.Popup({ offset: 15 }).setHTML(`
-                <div class="p-2 text-center">
-                  <h3 class="font-bold text-gray-800 text-sm">${waypoint.name}</h3>
-                  <p class="text-xs text-gray-600">Quick stop</p>
-                </div>
-              `)
-            )
-            .addTo(map.current!);
-        });
-      } else if (tour === 'right-bank') {
-        rightBankWaypoints.forEach((waypoint) => {
-          const el = document.createElement('div');
-          el.className = 'waypoint-marker';
-          el.innerHTML = `
-            <div class="w-4 h-4 bg-gray-500 border-2 border-white rounded-full shadow-md"></div>
-          `;
+      waypoints.forEach((waypoint) => {
+        const el = document.createElement('div');
+        el.className = 'waypoint-marker';
+        el.innerHTML = `
+          <div class="w-4 h-4 bg-gray-500 border-2 border-white rounded-full shadow-md"></div>
+        `;
 
-          new mapboxgl.Marker(el)
-            .setLngLat(waypoint.coords as [number, number])
-            .setPopup(
-              new mapboxgl.Popup({ offset: 15 }).setHTML(`
-                <div class="p-2 text-center">
-                  <h3 class="font-bold text-gray-800 text-sm">${waypoint.name}</h3>
-                  <p class="text-xs text-gray-600">Quick stop</p>
-                </div>
-              `)
-            )
-            .addTo(map.current!);
-        });
-      }
+        new mapboxgl.Marker(el)
+          .setLngLat(waypoint.coords as [number, number])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 15 }).setHTML(`
+              <div class="p-2 text-center">
+                <h3 class="font-bold text-gray-800 text-sm">${waypoint.name}</h3>
+                <p class="text-xs text-gray-600">Quick stop</p>
+              </div>
+            `)
+          )
+          .addTo(map.current!);
+      });
 
       // Calculer l'itinéraire piéton réel
       await drawWalkingRoute();
 
       // Ajuster la vue pour inclure tous les points du tour
       const bounds = new mapboxgl.LngLatBounds();
-      const waypoints = tour === 'left-bank' ? leftBankWaypoints : rightBankWaypoints;
-      
+
       // Ajouter tous les stops principaux aux bounds
       stops.forEach(stop => bounds.extend(stop.coords as mapboxgl.LngLatLike));
       // Ajouter tous les waypoints aux bounds
       waypoints.forEach(waypoint => bounds.extend(waypoint.coords as mapboxgl.LngLatLike));
-      
+
       // Ajuster la vue avec un padding approprié
-      map.current!.fitBounds(bounds, { 
+      map.current!.fitBounds(bounds, {
         padding: { top: 50, bottom: 50, left: 50, right: 50 },
         maxZoom: 15
       });
-
-      // Animation du parcours
-      // animateRoute(); // Function not defined, so this is commented out to prevent errors
     });
 
     cleanup = () => {
@@ -177,55 +176,47 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
   const drawWalkingRoute = async () => {
     try {
       // Combiner tous les points dans l'ordre du parcours
-      const allPoints = [];
-      
+      const allPoints: [number, number][] = [];
+
       if (tour === 'left-bank') {
-        // Organisation de l'ordre du parcours selon votre séquence
-        allPoints.push(leftBankStops[0].coords); // Boulevard Saint-Michel (stop 1)
-        
-        allPoints.push(leftBankStops[1].coords); // Palais du Luxembourg (stop 2)
-        
-        allPoints.push(leftBankWaypoints[0].coords); // Théâtre de l'Odéon (petit point)
-        
-        allPoints.push(leftBankWaypoints[1].coords); // Rue Monsieur le Prince (petit point)
-        
-        allPoints.push(leftBankWaypoints[2].coords); // Collège de France (petit point)
-        
-        allPoints.push(leftBankStops[2].coords); // La Sorbonne (stop 3)
-        
-        allPoints.push(leftBankWaypoints[3].coords); // Saint Severin Church (petit point)
-        
-        allPoints.push(leftBankStops[3].coords); // Notre-Dame (stop 4)
+        allPoints.push(leftBankStops[0].coords);
+        allPoints.push(leftBankStops[1].coords);
+        allPoints.push(leftBankWaypoints[0].coords as [number, number]);
+        allPoints.push(leftBankWaypoints[1].coords as [number, number]);
+        allPoints.push(leftBankWaypoints[2].coords as [number, number]);
+        allPoints.push(leftBankStops[2].coords);
+        allPoints.push(leftBankWaypoints[3].coords as [number, number]);
+        allPoints.push(leftBankStops[3].coords);
       } else if (tour === 'right-bank') {
-        // Organisation de l'ordre du parcours Right Bank
-        allPoints.push(rightBankStops[0].coords); // Bridge Alexander III (stop 1)
-        
-        allPoints.push(rightBankStops[1].coords); // Ministry of Foreign Affairs (stop 2)
-        
-        allPoints.push(rightBankWaypoints[0].coords); // Concorde Bridge (petit point)
-        
-        allPoints.push(rightBankStops[2].coords); // Concorde Square (stop 3)
-        
-        allPoints.push(rightBankWaypoints[1].coords); // Musée du Jeu de Paume (petit point)
-        
-        allPoints.push(rightBankWaypoints[2].coords); // Rue Saint-Honoré (petit point)
-        
-        allPoints.push(rightBankStops[3].coords); // Place Vendôme - The Ritz (stop 4)
+        allPoints.push(rightBankStops[0].coords);
+        allPoints.push(rightBankStops[1].coords);
+        allPoints.push(rightBankWaypoints[0].coords as [number, number]);
+        allPoints.push(rightBankStops[2].coords);
+        allPoints.push(rightBankWaypoints[1].coords as [number, number]);
+        allPoints.push(rightBankWaypoints[2].coords as [number, number]);
+        allPoints.push(rightBankStops[3].coords);
+      } else {
+        // General History route
+        allPoints.push(generalHistoryStops[0].coords); // Thermes de Cluny
+        allPoints.push(generalHistoryWaypoints[0].coords); // Rue Saint-Jacques
+        allPoints.push(generalHistoryStops[1].coords); // Île de la Cité
+        allPoints.push(generalHistoryWaypoints[1].coords); // Pont Neuf
+        allPoints.push(generalHistoryStops[2].coords); // Jardin des Tuileries
       }
-      
+
       // Créer la chaîne de coordonnées pour l'API Directions
       const coordinates = allPoints.map(coords => coords.join(',')).join(';');
-      
+
       // Appel à l'API Directions de Mapbox pour l'itinéraire piéton
       const directionsResponse = await fetch(
         `https://api.mapbox.com/directions/v5/mapbox/walking/${coordinates}?geometries=geojson&access_token=${mapboxgl.accessToken}`
       );
-      
+
       const directionsData = await directionsResponse.json();
-      
+
       if (directionsData.routes && directionsData.routes.length > 0) {
         const route = directionsData.routes[0];
-        
+
         // Ajouter l'itinéraire réel à la carte
         map.current!.addSource('walking-route', {
           'type': 'geojson',
@@ -271,16 +262,16 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
         // Mettre à jour les infos de distance et durée
         const distance = (route.distance / 1000).toFixed(1); // en km
         const duration = Math.round(route.duration / 60); // en minutes
-        
+
         // Mettre à jour l'affichage avec les vraies données
         updateRouteInfo(distance, duration);
       }
     } catch (error) {
       console.error('Erreur lors du calcul de l\'itinéraire:', error);
-      
+
       // Fallback: tracer une ligne droite si l'API échoue
       const routeCoords = stops.map(stop => stop.coords);
-      
+
       map.current!.addSource('fallback-route', {
         'type': 'geojson',
         'data': {
@@ -318,6 +309,16 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     }
   };
 
+  const tourLabel = tour === 'left-bank'
+    ? 'Left Bank Tour'
+    : tour === 'right-bank'
+      ? 'Right Bank Tour'
+      : 'General History Tour';
+
+  const defaultRouteInfo = tour === 'general-history'
+    ? '2.5km • 3 stops • 1.5 hours'
+    : '2.5km • 4 stops • 2 hours';
+
   return (
     <div className="relative">
       <div
@@ -327,9 +328,9 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
       />
       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
         <h4 className="font-semibold text-gray-800">
-          {tour === 'left-bank' ? 'Left Bank Tour' : 'Right Bank Tour'}
+          {tourLabel}
         </h4>
-        <p className="text-sm text-gray-600 route-info">2.5km • 4 stops • 2 hours</p>
+        <p className="text-sm text-gray-600 route-info">{defaultRouteInfo}</p>
       </div>
     </div>
   );
