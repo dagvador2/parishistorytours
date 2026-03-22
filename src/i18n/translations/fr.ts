@@ -4,6 +4,7 @@ export const fr = {
     home: "Accueil",
     leftBank: "Paris - Visite Rive Gauche",
     rightBank: "Paris - Visite Rive Droite",
+    generalHistory: "Paris - Histoire Générale",
     presentation: "Présentation",
     toursAvailable: "Visites Disponibles",
     reviews: "Avis",
@@ -19,6 +20,9 @@ export const fr = {
     duration: "2 heures",
     distance: "2,5 km à pied",
     stops: "4 arrêts historiques",
+    durationGeneralHistory: "1h30",
+    distanceGeneralHistory: "2,5 km à pied",
+    stopsGeneralHistory: "3 arrêts historiques",
     bookNow: "Réserver",
     learnMore: "En savoir plus",
     showMore: "Voir plus",
@@ -90,6 +94,7 @@ export const fr = {
     subtitle: "Choisissez votre voyage historique à travers Paris",
     themes: {
       title: "Trois Thèmes Historiques sur la Seconde Guerre mondiale",
+      titleGeneralHistory: "Trois Époques de l'Histoire de Paris",
       fall: {
         title: "La Chute de Paris",
         description: "Découvrez comment Paris est tombé aux mains de l'armée allemande en seulement 35 jours de combat actif, et apprenez-en plus sur les décisions cruciales prises pendant cette période."
@@ -101,6 +106,18 @@ export const fr = {
       liberation: {
         title: "Libération",
         description: "Revivez la Libération de Paris en août 1944, quand la ville était au bord de la destruction, et découvrez comment des personnages célèbres ont été impliqués dans l'événement."
+      },
+      roman: {
+        title: "Paris Romain",
+        description: "Découvrez les origines de Paris en tant que Lutèce, colonie gauloise conquise par Rome. De la bataille féroce de 52 avant J.-C. à 300 ans de Pax Romana, explorez comment les Romains ont façonné la ville avec des thermes, forums et théâtres."
+      },
+      medieval: {
+        title: "Paris Médiéval",
+        description: "Vivez le dramatique siège viking de 885-886, quand 700 navires portant 10 000 guerriers assiégèrent l'Île de la Cité. Suivez le témoignage oculaire du moine Abbon et la défense héroïque menée par le comte Eudes."
+      },
+      revolution: {
+        title: "La Révolution Française",
+        description: "Revivez la nuit du 20 juin 1791, quand Louis XVI et Marie-Antoinette tentèrent leur audacieuse évasion de Paris — une comédie d'erreurs aux conséquences dramatiques qui scella le destin de la monarchie française."
       }
     },
     rightBank: {
@@ -175,11 +192,45 @@ export const fr = {
         }
       }
     },
+    generalHistory: {
+      title: "Histoire Générale de Paris",
+      description: "2 000 ans d'histoire parisienne en une promenade",
+      introduction: "Un Voyage à Travers le Temps",
+      quote: "Qui connaît Paris connaît le fond des choses humaines.",
+      quoteAuthor: "Victor Hugo",
+      summary: "Cette visite vous emmène dans un voyage de près de 2 000 ans à travers l'histoire de Paris. En trois arrêts et trois époques distinctes, vous découvrirez la bataille féroce qui donna Rome maîtresse de Lutèce, le terrifiant siège viking qui forgea une nouvelle dynastie, et la tentative d'évasion royale qui scella le destin de la monarchie française.",
+      didYouKnow: {
+        title: "Le Saviez-Vous ? Faits Fascinants sur l'Histoire de Paris",
+        facts: [
+          "Les Parisii, la tribu gauloise qui a donné son nom à Paris, frappaient leur propre monnaie en or avec une tête d'Apollon stylisée d'un côté et un cheval avec un filet au-dessus de la tête de l'autre.",
+          "En 52 avant J.-C., les Gaulois détruisirent les deux ponts reliant l'Île de la Cité pour empêcher le général romain Labienus d'atteindre leur forteresse — mais sa traversée nocturne du fleuve déjoua leur stratégie.",
+          "Les thermes romains de Cluny, toujours debout à plus de 13 mètres de haut près de notre premier arrêt, étaient les plus grands bains publics de Lutèce romaine et comptent parmi les ruines romaines les mieux conservées de France.",
+          "Lors du siège viking de 885-886, le moine Abbon décrivit une flotte de 700 navires couvrant la Seine — une armada si vaste qu'elle terrorisa les 5 000 civils réfugiés sur l'Île de la Cité.",
+          "Quand Marie-Antoinette s'est échappée du palais des Tuileries dans la nuit du 20 juin 1791, elle a croisé le carrosse de Lafayette, s'est plaquée contre un mur dans l'obscurité, puis a tourné à gauche vers la Seine au lieu de tourner à droite, avant de faire demi-tour."
+        ]
+      },
+      stops: {
+        stop1: {
+          title: "Thermes de Cluny — Lutèce Romaine",
+          description: "Commencez devant les imposants thermes romains, toujours debout après près de 2 000 ans. Ici, nous plantons le décor : l'arrivée de la tribu des Parisii, leur monnaie d'or, et la bataille dramatique de 52 avant J.-C. où le général romain Labienus déjoua le guerrier gaulois Camulogène par une audacieuse traversée nocturne du fleuve. Découvrez comment Rome transforma ce village en une cité florissante."
+        },
+        stop2: {
+          title: "Île de la Cité — Le Siège Viking",
+          description: "Debout sur l'île même où les Parisiens se réfugièrent lors du siège de 885-886, revivez les événements dramatiques à travers les yeux du moine Abbon. Avec seulement 200 soldats face à 10 000 Vikings, le comte Eudes monta une défense légendaire. Vivez l'héroïsme, la famine et la trahison politique qui mit fin à une dynastie et couronna un nouveau roi."
+        },
+        stop3: {
+          title: "Jardin des Tuileries — La Fuite de Varennes",
+          description: "Sur le site du palais des Tuileries disparu, découvrez la nuit du 20 juin 1791 — quand Louis XVI et Marie-Antoinette tentèrent leur évasion de Paris révolutionnaire. Une histoire digne d'un thriller : des déguisements, des rencontres manquées de peu avec la patrouille de Lafayette, un mauvais virage dans l'obscurité, et une course-poursuite dans la nuit qui s'acheva dans l'épicerie d'un village."
+        }
+      }
+    },
     stops: {
       our4Stops: "Nos 4 Arrêts Historiques",
+      our3Stops: "Nos 3 Arrêts Historiques",
       experienceHistory: "Vivez l'Histoire",
       ourRoute: "Notre Itinéraire à travers Paris"
-    }
+    },
+    discoverOtherTours: "Découvrez nos autres visites"
   },
 
   // Reviews
@@ -263,10 +314,13 @@ export const fr = {
     people: "personnes",
     leftBank: "Rive Gauche",
     rightBank: "Rive Droite",
+    generalHistory: "Histoire Générale",
     leftBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive gauche de Paris",
     rightBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive droite de Paris",
+    generalHistoryDesc: "Parcourez 2 000 ans d'histoire de Paris",
     leftBankTour: "Visite Rive Gauche",
     rightBankTour: "Visite Rive Droite",
+    generalHistoryTour: "Visite Histoire Générale",
     regularTour: "Visite Régulière",
     privateTour: "Visite Privée",
     regularTourDesc: "Rejoignez une visite avec jusqu'à 10 voyageurs",
@@ -395,6 +449,7 @@ export const fr = {
     home: "Accueil",
     leftBankTour: "Visite Rive Gauche",
     rightBankTour: "Visite Rive Droite",
+    generalHistoryTour: "Visite Histoire Générale",
     info: "Info",
     aboutMe: "À propos de moi et des visites",
     contact: "Contact",
@@ -447,6 +502,10 @@ export const fr = {
       title: "Visite Seconde Guerre mondiale Rive Droite - Vendôme, Concorde, Ritz | Paris History Tours",
       description: "Visite à pied WWII Rive Droite de 2h : Pont Alexandre III, Concorde, Vendôme & le Ritz. Rose Valland, Hemingway & Libération. Noté 4.9/5. Réservez."
     },
+    generalHistory: {
+      title: "Visite Histoire Générale de Paris - 2 000 Ans en 1h30 | Paris History Tours",
+      description: "Parcourez 2 000 ans d'histoire de Paris : Lutèce romaine, le siège viking de 885, la Révolution française. 3 arrêts, 1h30. Petit groupe avec un guide local."
+    },
     keyFigures: {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
       description: "Rencontrez Clément, chercheur WWII et guide personnel à Paris. 20+ livres de recherche, visiteurs de 25+ pays et une note de 4.9/5 sur Google Maps."
@@ -471,7 +530,9 @@ export const fr = {
     quickStop: "Arrêt rapide",
     leftBankTour: "Visite Rive Gauche",
     rightBankTour: "Visite Rive Droite",
-    routeInfo: "2,5km • 4 arrêts • 2 heures"
+    generalHistoryTour: "Visite Histoire Générale",
+    routeInfo: "2,5km • 4 arrêts • 2 heures",
+    routeInfoGeneralHistory: "2,5km • 3 arrêts • 1h30"
   },
 
   // JsonLd structured data
@@ -482,7 +543,8 @@ export const fr = {
     founderDescription: "Guide indépendant spécialisé dans l'histoire de la Seconde Guerre mondiale à Paris. Après 6 mois de recherche intensive à travers plus de 20 ouvrages historiques et mémoires, Clément a créé des visites à pied immersives qui font revivre le Paris en guerre.",
     offerCatalogName: "Visites guidées Seconde Guerre mondiale à Paris",
     leftBankDescription: "Parcourez le Paris en guerre : Boulevard Saint-Michel, Palais du Luxembourg, Sorbonne & Notre-Dame. 2 heures, 4 arrêts sur la Chute, la Résistance & la Libération.",
-    rightBankDescription: "Découvrez le Paris de la Seconde Guerre mondiale : Pont Alexandre III, Place de la Concorde, Place Vendôme & le Ritz. Vol d'art, Hemingway & Libération. 2 heures, 4 arrêts."
+    rightBankDescription: "Découvrez le Paris de la Seconde Guerre mondiale : Pont Alexandre III, Place de la Concorde, Place Vendôme & le Ritz. Vol d'art, Hemingway & Libération. 2 heures, 4 arrêts.",
+    generalHistoryDescription: "Parcourez 2 000 ans d'histoire de Paris : thermes romains de Cluny, siège viking de l'Île de la Cité, et Révolution française aux Tuileries. 1h30, 3 arrêts."
   },
 
   // Emails
@@ -505,6 +567,7 @@ export const fr = {
       privateTour: "Visite Privée",
       leftBankTour: "Visite Rive Gauche",
       rightBankTour: "Visite Rive Droite",
+      generalHistoryTour: "Visite Histoire Générale",
       confirmedMessage: "Votre réservation est confirmée ! Nous vous enverrons les détails du point de rendez-vous 24 heures avant la visite.",
       requestMessage: "Nous confirmerons la disponibilité et vous contacterons dans les 24 heures.",
       onSiteMessage: "Votre réservation est confirmée ! Vous réglerez le jour de la visite. Nous vous enverrons les détails du point de rendez-vous 24 heures avant.",
