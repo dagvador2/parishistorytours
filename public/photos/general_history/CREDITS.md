@@ -27,18 +27,20 @@ All images in this directory are sourced from [Wikimedia Commons](https://common
 ### Theme 2 — Medieval Paris
 
 **File:** `theme_medieval_paris.webp`
-**Original:** [Panorama Tour Saint-Jacques 2.JPG](https://commons.wikimedia.org/wiki/File:Panorama_Tour_Saint-Jacques_2.JPG)
-**Author:** Jean-Christophe Windland ([Paname-IV](https://commons.wikimedia.org/wiki/User:Paname-IV))
-**License:** [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-**Date:** 2013-08-17
+**Original:** [Paris, Hôtel de Cluny 01.JPG](https://commons.wikimedia.org/wiki/File:Paris,_H%C3%B4tel_de_Cluny_01.JPG)
+**Author:** [Parsifall](https://commons.wikimedia.org/w/index.php?title=User:Parsifall)
+**License:** [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
+**Date:** 2007-01-04
+**Description:** Exterior of the Hôtel de Cluny (built 1485-98), home of the Musée national du Moyen Âge, Paris
 
 ### Theme 3 — Revolution
 
 **File:** `theme_revolution_paris.webp`
-**Original:** [Grand bassin octogonal Jardin des Tuileries 003.jpg](https://commons.wikimedia.org/wiki/File:Grand_bassin_octogonal_Jardin_des_Tuileries_003.jpg)
-**Author:** [Moonik](https://commons.wikimedia.org/wiki/User:Moonik)
-**License:** [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)
-**Date:** 2011-11-21
+**Original:** [Nicolas Jean-Baptiste Raguenet - Le Palais des Tuileries, vu du quai d'Orsay - P279 - Musée Carnavalet.jpg](https://commons.wikimedia.org/wiki/File:Nicolas_Jean-Baptiste_Raguenet_-_Le_Palais_des_Tuileries,_vu_du_quai_d%27Orsay_-_P279_-_Mus%C3%A9e_Carnavalet.jpg)
+**Author:** [Nicolas-Jean-Baptiste Raguenet](https://en.wikipedia.org/wiki/Nicolas-Jean-Baptiste_Raguenet) (painting, 1757)
+**License:** Public domain (PD-old-100-expired)
+**Date:** 1757 (uploaded 2020-12-31)
+**Description:** Oil painting of the Palais des Tuileries viewed from the Quai d'Orsay, before its destruction in 1871. Collection of the Musée Carnavalet, Paris
 
 ---
 
