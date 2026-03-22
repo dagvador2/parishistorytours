@@ -19,12 +19,12 @@ const Wizard: React.FC = () => {
     const tourParam = params.get("tour");
     if (
       tourParam &&
-      ["left-bank", "right-bank"].includes(tourParam) &&
+      ["left-bank", "right-bank", "general-history"].includes(tourParam) &&
       !booking.tour
     ) {
       setBooking({
         ...booking,
-        tour: tourParam as "left-bank" | "right-bank",
+        tour: tourParam as "left-bank" | "right-bank" | "general-history",
       });
     }
   }, []);

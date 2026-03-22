@@ -121,7 +121,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
 
     setBooking({
       ...booking,
-      tour: selectedSlot.tour_type as "left-bank" | "right-bank",
+      tour: selectedSlot.tour_type as "left-bank" | "right-bank" | "general-history",
       tourType: "regular",
       sessionId: selectedSlot.id,
       date,

@@ -4,6 +4,7 @@ import { useTranslations } from '../i18n/utils';
 
 import pantheon     from "../images/pantheon_de_Paris.webp";
 import placeVendome from "../images/place_vendome_paris.webp";
+import ileDeLaCite  from "../images/ile_de_la_cite_paris.webp";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -20,17 +21,17 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 		{t('tours.subtitle')}
 	</p>
 
-	<div class="flex flex-col md:flex-row gap-8 justify-center items-center max-w-5xl mx-auto px-4">
+	<div class="flex flex-col md:flex-row gap-8 justify-center items-center max-w-6xl mx-auto px-4">
 
 		{/* Left Bank */}
 		<a href={`${langPrefix}/tours/left-bank`}
-		   class="group block w-full md:w-1/2 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+		   class="group block w-full md:w-1/3 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
 			<div class="relative">
 				<Picture
 					src={pantheon}
 					alt={t('tours.leftBank.title')}
 					widths={[375,480,640,768,1024]}
-					sizes="(max-width: 768px) 100vw, 50vw"
+					sizes="(max-width: 768px) 100vw, 33vw"
 					formats={["avif","webp"]}
 					loading="lazy"
 					decoding="async"
@@ -47,13 +48,13 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 
 		{/* Right Bank */}
 		<a href={`${langPrefix}/tours/right-bank`}
-		   class="group block w-full md:w-1/2 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+		   class="group block w-full md:w-1/3 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
 			<div class="relative">
 				<Picture
 					src={placeVendome}
 					alt={t('tours.rightBank.title')}
 					widths={[375,480,640,768,1024]}
-					sizes="(max-width: 768px) 100vw, 50vw"
+					sizes="(max-width: 768px) 100vw, 33vw"
 					formats={["avif","webp"]}
 					loading="lazy"
 					decoding="async"
@@ -63,6 +64,29 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 				<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
 					<span class="text-white text-3xl md:text-4xl font-bold tracking-wider drop-shadow-lg">
 						{t('booking.rightBank')}
+					</span>
+				</div>
+			</div>
+		</a>
+
+		{/* General History */}
+		<a href={`${langPrefix}/tours/general-history`}
+		   class="group block w-full md:w-1/3 max-w-lg rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+			<div class="relative">
+				<Picture
+					src={ileDeLaCite}
+					alt={t('tours.generalHistory.title')}
+					widths={[375,480,640,768,1024]}
+					sizes="(max-width: 768px) 100vw, 33vw"
+					formats={["avif","webp"]}
+					loading="lazy"
+					decoding="async"
+					quality={70}
+					class="w-full h-72 object-cover"
+				/>
+				<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+					<span class="text-white text-3xl md:text-4xl font-bold tracking-wider drop-shadow-lg text-center px-4">
+						{t('booking.generalHistory')}
 					</span>
 				</div>
 			</div>

@@ -78,6 +78,7 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
   const tourOptions: { id: Tour; label: string; desc: string; img: string }[] = [
     { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: "/photos/thumbnails/pantheon_thumb.webp" },
     { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: "/photos/thumbnails/vendome_thumb.webp" },
+    { id: "general-history", label: t.generalHistory, desc: t.generalHistoryDesc, img: "/photos/general_history/stop2_ile_cite.webp" },
   ];
 
   return (

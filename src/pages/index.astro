@@ -28,6 +28,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 			<Navbar variant="fixed" links={[
 				{ label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
 				{ label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
+				{ label: t('nav.generalHistory'), href: `${langPrefix}/tours/general-history` },
 				{ label: t('nav.home'), href: langPrefix },
 			]} />
 			<MobileMenu />
@@ -215,6 +216,17 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 						"touristType": ["History enthusiast", "Cultural traveler"],
 						"duration": "PT2H",
 						"url": `https://www.parishistorytours.com${langPrefix}/tours/right-bank`
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "TouristTrip",
+						"name": t('booking.generalHistoryTour'),
+						"description": t('jsonLd.generalHistoryDescription'),
+						"touristType": ["History enthusiast", "Cultural traveler", "First-time visitor"],
+						"duration": "PT1H30M",
+						"url": `https://www.parishistorytours.com${langPrefix}/tours/general-history`
 					}
 				}
 			]

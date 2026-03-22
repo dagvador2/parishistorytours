@@ -1,4 +1,4 @@
-export type Tour = "left-bank" | "right-bank";
+export type Tour = "left-bank" | "right-bank" | "general-history";
 export type TourType = "regular" | "private";
 export type PaymentMethod = "stripe" | "on_site";
 
