@@ -37,7 +37,10 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
 
   const handleDaySelect = (day: Date | undefined) => {
     if (day) {
-      setBooking({ ...booking, date: day.toISOString().split("T")[0] });
+      const y = day.getFullYear();
+      const m = String(day.getMonth() + 1).padStart(2, '0');
+      const dd = String(day.getDate()).padStart(2, '0');
+      setBooking({ ...booking, date: `${y}-${m}-${dd}` });
     }
   };
 

@@ -68,7 +68,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
     if (!selectedDay) return;
     const fetchSlots = async () => {
       try {
-        const dateStr = selectedDay.toISOString().split("T")[0];
+        const dateStr = `${selectedDay.getFullYear()}-${String(selectedDay.getMonth() + 1).padStart(2, '0')}-${String(selectedDay.getDate()).padStart(2, '0')}`;
         const res = await fetch(`/api/sessions/${dateStr}?participants=1`);
         if (!res.ok) return;
         const { slots: fetched } = await res.json();
@@ -113,11 +113,9 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
     setAttempted(true);
     if (!isValid || !selectedSlot) return;
 
-    const date = new Date(selectedSlot.start_time).toISOString().split("T")[0];
-    const time = new Date(selectedSlot.start_time)
-      .toTimeString()
-      .split(" ")[0]
-      .substring(0, 5);
+    const slotDate = new Date(selectedSlot.start_time);
+    const date = `${slotDate.getFullYear()}-${String(slotDate.getMonth() + 1).padStart(2, '0')}-${String(slotDate.getDate()).padStart(2, '0')}`;
+    const time = slotDate.toTimeString().split(" ")[0].substring(0, 5);
 
     setBooking({
       ...booking,
@@ -141,7 +139,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
   };
 
   const modifiers = {
-    available: Object.keys(availableDays).map((d) => new Date(d)),
+    available: Object.keys(availableDays).map((d) => new Date(d + "T00:00:00")),
   };
 
   const modifiersStyles = {

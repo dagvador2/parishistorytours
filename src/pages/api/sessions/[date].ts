@@ -14,9 +14,9 @@ export const GET: APIRoute = async ({ params, url }) => {
   }
 
   try {
-    const begin = new Date(date);
+    const begin = new Date(date + "T00:00:00");
     begin.setHours(0, 0, 0, 0);
-    const end = new Date(date);
+    const end = new Date(date + "T00:00:00");
     end.setHours(23, 59, 59, 999);
 
     let query = supabase

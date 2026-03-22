@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
           <p><strong>${t.tour}</strong> ${tourName}</p>
           <p><strong>${t.participants}</strong> ${bookingData.participants} ${bookingData.participants === 1 ? t.person : t.people}</p>
           <p><strong>${t.type}</strong> ${typeName}</p>
-          <p><strong>${t.date}</strong> ${new Date(bookingData.date).toLocaleDateString(dateLocale)}</p>
+          <p><strong>${t.date}</strong> ${new Date(bookingData.date + "T00:00:00").toLocaleDateString(dateLocale)}</p>
           <p><strong>${t.time}</strong> ${bookingData.time}</p>
           ${bookingData.price ? `<p><strong>${t.total}</strong> €${bookingData.price}</p>` : ''}
           ${paymentMethod === 'on_site' ? `<p style="color: #d97706; font-weight: bold;">${t.onSitePaymentNote}</p>` : ''}
@@ -108,7 +108,7 @@ export const POST: APIRoute = async ({ request }) => {
           <p><strong>Tour:</strong> ${bookingData.tour === 'left-bank' ? 'Left Bank Tour' : 'Right Bank Tour'}</p>
           <p><strong>Participants:</strong> ${bookingData.participants}</p>
           <p><strong>Type:</strong> ${bookingData.tourType}</p>
-          <p><strong>Date:</strong> ${new Date(bookingData.date).toLocaleDateString('en-GB')}</p>
+          <p><strong>Date:</strong> ${new Date(bookingData.date + "T00:00:00").toLocaleDateString('en-GB')}</p>
           <p><strong>Time:</strong> ${bookingData.time}</p>
           ${bookingData.price ? `<p><strong>Amount:</strong> €${bookingData.price}</p>` : ''}
           ${paymentMethod === 'on_site' ? '<p style="color: #d97706; font-weight: bold; font-size: 16px;">⚠️ PAYMENT ON SITE - Client will pay on the day of the tour</p>' : ''}

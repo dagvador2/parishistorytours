@@ -26,7 +26,7 @@ const RegularCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
   const participantsLabel = `${booking.participants} ${booking.participants === 1 ? t.person : t.people}`;
 
   const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString(locale, {
+    new Date(dateStr + "T00:00:00").toLocaleDateString(locale, {
       weekday: "long",
       year: "numeric",
       month: "long",
