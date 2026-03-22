@@ -483,7 +483,15 @@ export const en = {
       },
       {
         question: "Where do the tours start and end?",
-        answer: "Meeting points are communicated 24 hours before the tour. The Left Bank tour starts near Boulevard Saint-Michel and ends near Notre-Dame. The Right Bank tour starts at Pont Alexandre III and ends at Place Vendôme."
+        answer: "Meeting points are communicated 24 hours before the tour. The Left Bank tour starts near Boulevard Saint-Michel and ends near Notre-Dame. The Right Bank tour starts at Pont Alexandre III and ends at Place Vendôme. The General History tour starts at the Thermes de Cluny and ends at the Tuileries Garden."
+      },
+      {
+        question: "What period of history does the General History tour cover?",
+        answer: "The General History of Paris tour spans 2,000 years — from the Gallic settlement and Roman conquest of Lutetia (52 BC), through the Viking siege of 885-886, to the French Revolution and the royal escape attempt of 1791. It's 1.5 hours with 3 stops."
+      },
+      {
+        question: "How is the General History tour different from your WWII tours?",
+        answer: "While our WWII tours focus on 1940-1944 (the Fall, Resistance, and Liberation of Paris), the General History tour spans 2,000 years of Parisian history through three dramatic stories that shaped the city: Roman conquest, Viking siege, and the French Revolution."
       }
     ]
   },

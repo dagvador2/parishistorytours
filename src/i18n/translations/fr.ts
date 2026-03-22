@@ -483,7 +483,15 @@ export const fr = {
       },
       {
         question: "Où commencent et finissent les visites ?",
-        answer: "Les points de rendez-vous sont communiqués 24 heures avant la visite. La visite Rive Gauche commence près du Boulevard Saint-Michel et se termine près de Notre-Dame. La visite Rive Droite commence au Pont Alexandre III et se termine Place Vendôme."
+        answer: "Les points de rendez-vous sont communiqués 24 heures avant la visite. La visite Rive Gauche commence près du Boulevard Saint-Michel et se termine près de Notre-Dame. La visite Rive Droite commence au Pont Alexandre III et se termine Place Vendôme. La visite Histoire Générale commence aux Thermes de Cluny et se termine au Jardin des Tuileries."
+      },
+      {
+        question: "Quelle période couvre la visite Histoire Générale de Paris ?",
+        answer: "La visite Histoire Générale de Paris couvre 2 000 ans — de la colonie gauloise et la conquête romaine de Lutèce (52 av. J.-C.), au siège viking de 885-886, jusqu'à la Révolution française et la tentative d'évasion royale de 1791. Elle dure 1h30 avec 3 arrêts."
+      },
+      {
+        question: "Quelle est la différence entre la visite Histoire Générale et vos visites WWII ?",
+        answer: "Nos visites WWII se concentrent sur 1940-1944 (la Chute, la Résistance et la Libération de Paris), tandis que la visite Histoire Générale couvre 2 000 ans d'histoire parisienne à travers trois récits dramatiques qui ont façonné la ville : la conquête romaine, le siège viking et la Révolution française."
       }
     ]
   },
