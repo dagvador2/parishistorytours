@@ -8,6 +8,7 @@ Paris History Tours is a specialized WWII walking tour provider in Paris. The gu
 
 - [Left Bank WWII Tour](https://www.parishistorytours.com/tours/left-bank): 2-hour walking tour covering Boulevard Saint-Michel, Palais du Luxembourg, La Sorbonne, and Notre-Dame de Paris. Themes: Fall of Paris 1940, French Resistance networks (Agnes Humbert and the Musee de l'Homme network), and Liberation of Paris 1944.
 - [Right Bank WWII Tour](https://www.parishistorytours.com/tours/right-bank): 2-hour walking tour covering Pont Alexandre III, Ministry of Foreign Affairs, Place de la Concorde, and Place Vendome. Themes: Battle of France, Rose Valland's secret mission to track 20,000+ stolen artworks, and Hemingway at the Liberation.
+- [General History of Paris Tour](https://www.parishistorytours.com/tours/general-history): 1.5-hour walking tour spanning 2,000 years of Paris history. 3 stops: Roman Lutetia (Thermes de Cluny, battle of 52 BC), Viking Siege of 885 (Île de la Cité), French Revolution (Tuileries, Flight to Varennes 1791). Available in English and French. Small groups, max 10 people.
 
 ## About
 
@@ -24,9 +25,9 @@ Paris History Tours is a specialized WWII walking tour provider in Paris. The gu
 
 - Location: Paris, France
 - Languages: English, French
-- Duration: 2 hours per tour
+- Duration: 2 hours (WWII tours), 1.5 hours (General History tour)
 - Distance: 2.5 km walking per tour
-- Stops: 4 historic stops per tour
+- Stops: 4 historic stops (WWII tours), 3 historic stops (General History tour)
 - Group size: Up to 10 participants
 - Tour types: Regular (group) and Private
 - Rating: 4.9/5 on Google Maps (40+ reviews)
@@ -48,3 +49,5 @@ Paris History Tours is a specialized WWII walking tour provider in Paris. The gu
 - [French Homepage](https://www.parishistorytours.com/fr): Full site available in French
 - [French Left Bank Tour](https://www.parishistorytours.com/fr/tours/left-bank): Visite Rive Gauche Seconde Guerre mondiale
 - [French Right Bank Tour](https://www.parishistorytours.com/fr/tours/right-bank): Visite Rive Droite Seconde Guerre mondiale
+- [General History Tour](https://www.parishistorytours.com/tours/general-history): 2,000 years of Paris history in 1.5 hours
+- [French General History Tour](https://www.parishistorytours.com/fr/tours/general-history): Histoire Générale de Paris - 2 000 ans en 1h30
