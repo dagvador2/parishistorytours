@@ -14,16 +14,21 @@ export const GET: APIRoute = async ({ params, url }) => {
   }
 
   try {
-    const begin = new Date(date + "T00:00:00");
-    begin.setHours(0, 0, 0, 0);
-    const end = new Date(date + "T00:00:00");
-    end.setHours(23, 59, 59, 999);
+    // The client may send a UTC date that's 1 day behind the intended local date
+    // (e.g. clicking March 28 in CET sends "2026-03-27" because toISOString() is UTC).
+    // We query both the requested date AND the next day, then return whichever
+    // matches an availableDays key from /api/sessions (UTC-grouped dates).
+    const beginISO = `${date}T00:00:00.000Z`;
+    const nextDay = new Date(`${date}T12:00:00.000Z`);
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    const nextDateStr = nextDay.toISOString().split('T')[0];
+    const endISO = `${nextDateStr}T23:59:59.999Z`;
 
     let query = supabase
       .from('sessions')
       .select('id, start_time, available_spots, tour_type')
-      .gte('start_time', begin.toISOString())
-      .lte('start_time', end.toISOString());
+      .gte('start_time', beginISO)
+      .lte('start_time', endISO);
 
     if (tour) {
       query = query.eq('tour_type', tour);
@@ -38,7 +43,18 @@ export const GET: APIRoute = async ({ params, url }) => {
       });
     }
 
-    const slots = (data || [])
+    // Group results by UTC date (same logic as /api/sessions)
+    const byDate: Record<string, typeof data> = {};
+    (data || []).forEach((slot) => {
+      const d = new Date(slot.start_time).toISOString().split('T')[0];
+      if (!byDate[d]) byDate[d] = [];
+      byDate[d].push(slot);
+    });
+
+    // Prefer the requested date; fall back to next day (timezone compensation)
+    const matchedSlots = byDate[date] || byDate[nextDateStr] || [];
+
+    const slots = matchedSlots
       .filter((slot) => slot.available_spots >= participants)
       .map((slot) => ({
         id: slot.id,
