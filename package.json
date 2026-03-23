@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build && echo '=== STATIC FILES ===' && ls -la .vercel/output/static/_astro/BookingWizard* && echo '=== SERVER REF ===' && grep -r 'BookingWizard' .vercel/output/functions/ | grep -o 'BookingWizard[^\"]*\\.js' | sort -u",
+    "build": "rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
