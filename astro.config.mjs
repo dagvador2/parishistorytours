@@ -45,6 +45,16 @@ export default defineConfig({
   vite: {
     // @ts-ignore
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          // Force stable filenames so Vercel deploys updated content
+          // (Vercel has a bug where new content-hashed filenames are dropped)
+          chunkFileNames: '_astro/[name].js',
+          entryFileNames: '_astro/[name].js',
+        }
+      }
+    }
   },
 
   adapter: vercel({webAnalytics: {enabled: true}}),
