@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
 
-export const GET: APIRoute = async ({ params, url }) => {
+export const GET: APIRoute = async ({ params, url, request }) => {
   const date = params.date;
-  const tour = url.searchParams.get('tour'); // optional — omit to get all tours
+  const tour = url.searchParams.get('tour');
   const participants = parseInt(url.searchParams.get('participants') || '1');
 
   if (!date) {
@@ -14,15 +14,31 @@ export const GET: APIRoute = async ({ params, url }) => {
   }
 
   try {
-    // The client may send a UTC date that's 1 day behind the intended local date
-    // (e.g. clicking March 28 in CET sends "2026-03-27" because toISOString() is UTC).
-    // We query both the requested date AND the next day, then return whichever
-    // matches an availableDays key from /api/sessions (UTC-grouped dates).
-    const beginISO = `${date}T00:00:00.000Z`;
-    const nextDay = new Date(`${date}T12:00:00.000Z`);
-    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
-    const nextDateStr = nextDay.toISOString().split('T')[0];
-    const endISO = `${nextDateStr}T23:59:59.999Z`;
+    // The client sends toISOString().split("T")[0] of local midnight.
+    // For timezones east of UTC (e.g. CET/CEST), this is 1 day behind
+    // the actual calendar date the user clicked.
+    //
+    // We read the "tz" cookie (set by an inline script) which contains
+    // getTimezoneOffset() in minutes. Negative = east of UTC.
+    // If east of UTC, add 1 day to get the correct UTC session date.
+    const cookies = Object.fromEntries(
+      (request.headers.get('cookie') || '').split(';').map(c => {
+        const [k, ...v] = c.trim().split('=');
+        return [k, v.join('=')];
+      })
+    );
+    const tzOffset = parseInt(cookies['tz'] || '0');
+
+    let targetDate = date;
+    if (tzOffset < 0) {
+      // Client is east of UTC — sent date is 1 day behind the clicked date
+      const adjusted = new Date(`${date}T12:00:00.000Z`);
+      adjusted.setUTCDate(adjusted.getUTCDate() + 1);
+      targetDate = adjusted.toISOString().split('T')[0];
+    }
+
+    const beginISO = `${targetDate}T00:00:00.000Z`;
+    const endISO = `${targetDate}T23:59:59.999Z`;
 
     let query = supabase
       .from('sessions')
@@ -43,18 +59,7 @@ export const GET: APIRoute = async ({ params, url }) => {
       });
     }
 
-    // Group results by UTC date (same logic as /api/sessions)
-    const byDate: Record<string, typeof data> = {};
-    (data || []).forEach((slot) => {
-      const d = new Date(slot.start_time).toISOString().split('T')[0];
-      if (!byDate[d]) byDate[d] = [];
-      byDate[d].push(slot);
-    });
-
-    // Prefer the requested date; fall back to next day (timezone compensation)
-    const matchedSlots = byDate[date] || byDate[nextDateStr] || [];
-
-    const slots = matchedSlots
+    const slots = (data || [])
       .filter((slot) => slot.available_spots >= participants)
       .map((slot) => ({
         id: slot.id,

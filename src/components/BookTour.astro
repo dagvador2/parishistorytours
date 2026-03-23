@@ -16,6 +16,9 @@ const allTranslations = { en, fr };
 const bookingT = allTranslations[lang].booking;
 ---
 
+{/* Set timezone cookie so the API can correct UTC date offset */}
+<script is:inline>document.cookie="tz="+new Date().getTimezoneOffset()+";path=/;SameSite=Lax;max-age=86400";</script>
+
 {/* Section Book your tour */}
 <div id="book-tour" class="mb-16">
 	<BookingWizard client:idle translations={bookingT} lang={lang} defaultTour={resolvedTour} />
