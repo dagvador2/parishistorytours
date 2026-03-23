@@ -1,3 +1,4 @@
+// Timezone-safe date handling — see commit 8aaeb54
 import React, { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
