@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "echo '=== SRC FILES ===' && ls src/pages/api/ && cat src/pages/api/sessions/\\[date\\].ts | head -5 && echo '=== END ===' && rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
+    "build": "rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
-    "@astrojs/vercel": "^8.2.5",
+    "@astrojs/vercel": "^8.2.11",
     "@stripe/react-stripe-js": "^3.9.0",
     "@stripe/stripe-js": "^7.8.0",
     "@supabase/supabase-js": "^2.53.0",
