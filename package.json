@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
+    "build": "echo '=== SRC FILES ===' && ls src/pages/api/ && cat src/pages/api/sessions/\\[date\\].ts | head -5 && echo '=== END ===' && rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
