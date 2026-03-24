@@ -21,19 +21,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
 <BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={[{ srcset: "/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w", sizes: "33vw" }]}>
-	{isDefaultLang ? (
-		<Navbar variant="homepage" />
-	) : (
-		<>
-			<Navbar variant="fixed" links={[
-				{ label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
-				{ label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
-				{ label: t('nav.generalHistory'), href: `${langPrefix}/tours/general-history` },
-				{ label: t('nav.home'), href: langPrefix },
-			]} />
-			<MobileMenu />
-		</>
-	)}
+	<Navbar variant="homepage" />
 
 	<!-- Hero section -->
 	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
@@ -60,8 +48,8 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 		<div class="max-w-5xl mx-auto mt-8 mb-4 px-4">
 			<LocationCarousel
 				cardsPerView={3}
+				cardsPerViewMobile={1}
 				autoPlayMs={4000}
-				height="30rem"
 				cards={[
 					{
 						imgUrl: '/photos/left_bank/luxembourg_palace_paris.webp',
@@ -264,7 +252,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
 
 	initScrollBanner({
 		bannerIds: ['book-banner-desktop', 'book-banner-mobile'],
-		bookBtnIds: ['book-btn-desktop', 'book-btn-mobile', 'book-btn-mobile-bottom'],
+		bookBtnIds: ['book-btn-desktop', 'book-btn-mobile-bottom'],
 		bottomBarIds: ['book-cta-mobile'],
 		showAfterPx: 200,
 	});

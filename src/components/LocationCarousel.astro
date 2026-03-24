@@ -1,7 +1,8 @@
 ---
 /**
  * LocationCarousel — Infinite sliding carousel (zero-JS-framework).
- * Clone-based approach for seamless infinite scrolling, same as the old React version.
+ * Clone-based approach for seamless infinite scrolling.
+ * Responsive: 1 card on mobile, configurable cardsPerView on desktop.
  */
 interface Card {
   imgUrl: string;
@@ -16,6 +17,7 @@ interface Card {
 interface Props {
   cards: Card[];
   cardsPerView?: number;
+  cardsPerViewMobile?: number;
   autoPlayMs?: number;
   height?: string;
 }
@@ -23,10 +25,12 @@ interface Props {
 const {
   cards,
   cardsPerView = 3,
+  cardsPerViewMobile = 1,
   autoPlayMs = 4000,
   height = '30rem',
 } = Astro.props;
 
+// Server-side: render with desktop cardsPerView (max clones needed)
 const buffer = cardsPerView;
 const extended = [
   ...cards.slice(-buffer),
@@ -37,9 +41,10 @@ const pct = 100 / cardsPerView;
 ---
 
 <div
-  class="carousel-root relative w-full"
-  style={`height: ${height}; contain: layout style;`}
+  class="carousel-root relative w-full h-[24rem] md:h-[30rem]"
+  style="contain: layout style;"
   data-cards-per-view={cardsPerView}
+  data-cards-per-view-mobile={cardsPerViewMobile}
   data-auto-play-ms={autoPlayMs}
   data-total={cards.length}
 >
@@ -54,14 +59,14 @@ const pct = 100 / cardsPerView;
         const isFirstVisible = idx >= buffer && idx < buffer + cardsPerView;
         return (
         <div
-          class="px-1.5 first:pl-0 last:pr-0 h-full shrink-0"
+          class="carousel-card px-1.5 first:pl-0 last:pr-0 h-full shrink-0"
           style={`width: ${pct}%`}
         >
           <div class="card-wrap relative overflow-hidden rounded-2xl shadow-xl h-full group cursor-pointer ring-1 ring-black/5">
             <img
               src={card.imgUrl}
               srcset={card.srcset}
-              sizes={card.sizes || "33vw"}
+              sizes={card.sizes || "(max-width: 768px) 100vw, 33vw"}
               alt={card.title}
               width={640}
               height={427}
@@ -97,26 +102,24 @@ const pct = 100 / cardsPerView;
   </div>
 
   {/* Nav arrows */}
-  {cards.length > cardsPerView && (
-    <>
-      <button
-        class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
-        aria-label="Previous"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
-        aria-label="Next"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </>
-  )}
+  <>
+    <button
+      class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
+      aria-label="Previous"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <button
+      class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center bg-white/15 hover:bg-white/35 backdrop-blur-sm rounded-full text-white transition-opacity duration-200 opacity-0"
+      aria-label="Next"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </>
 
   {/* Dot indicators */}
   <div class="carousel-dots absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
@@ -133,20 +136,30 @@ const pct = 100 / cardsPerView;
 <script>
   document.querySelectorAll<HTMLDivElement>('.carousel-root').forEach(root => {
     const track = root.querySelector<HTMLDivElement>('.carousel-track')!;
+    const cardEls = root.querySelectorAll<HTMLDivElement>('.carousel-card');
     const prevBtn = root.querySelector<HTMLButtonElement>('.carousel-prev');
     const nextBtn = root.querySelector<HTMLButtonElement>('.carousel-next');
     const dots = root.querySelectorAll<HTMLButtonElement>('.carousel-dots button');
 
-    const cardsPerView = parseInt(root.dataset.cardsPerView || '3');
+    const desktopCPV = parseInt(root.dataset.cardsPerView || '3');
+    const mobileCPV = parseInt(root.dataset.cardsPerViewMobile || '1');
     const autoPlayMs = parseInt(root.dataset.autoPlayMs || '4000');
     const total = parseInt(root.dataset.total || '0');
     if (total === 0) return;
 
-    const pct = 100 / cardsPerView;
-    const buffer = cardsPerView;
+    // Buffer is always based on desktop (max) value — we have enough clones
+    const buffer = desktopCPV;
+    let cardsPerView = window.innerWidth < 768 ? mobileCPV : desktopCPV;
+    let pct = 100 / cardsPerView;
     let pos = 0;
     let locked = false;
     let timer: ReturnType<typeof setInterval> | null = null;
+
+    function applyLayout() {
+      pct = 100 / cardsPerView;
+      cardEls.forEach(el => { el.style.width = `${pct}%`; });
+      setOffset(false);
+    }
 
     function setOffset(animated: boolean) {
       track.style.transition = animated
@@ -190,6 +203,49 @@ const pct = 100 / cardsPerView;
       }
     }
 
+    // Responsive: switch cardsPerView on resize
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const newCPV = window.innerWidth < 768 ? mobileCPV : desktopCPV;
+        if (newCPV !== cardsPerView) {
+          cardsPerView = newCPV;
+          pct = 100 / cardsPerView;
+          // Reset to current logical position
+          const real = ((pos % total) + total) % total;
+          pos = real;
+          applyLayout();
+          updateDots();
+          startAutoPlay();
+        }
+      }, 150);
+    }, { passive: true });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let swiping = false;
+    const minSwipeDistance = 50;
+
+    root.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      swiping = true;
+    }, { passive: true });
+
+    root.addEventListener('touchend', (e) => {
+      if (!swiping) return;
+      swiping = false;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      // Only swipe if horizontal movement > vertical (avoid hijacking scroll)
+      if (Math.abs(dx) > minSwipeDistance && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) slide(pos + 1); else slide(pos - 1);
+        startAutoPlay();
+      }
+    }, { passive: true });
+
     // Arrows
     prevBtn?.addEventListener('click', () => { slide(pos - 1); startAutoPlay(); });
     nextBtn?.addEventListener('click', () => { slide(pos + 1); startAutoPlay(); });
@@ -209,6 +265,9 @@ const pct = 100 / cardsPerView;
       dot.addEventListener('click', () => { slide(i); startAutoPlay(); });
     });
 
+    // Initial layout (handles page load on mobile)
+    applyLayout();
+    updateDots();
     startAutoPlay();
   });
 </script>

@@ -52,14 +52,11 @@ const mobileBookLabel = priceLabel || bookLabel;
     </div>
   </nav>
 
-  <!-- Mobile scroll banner (TOP) -->
+  <!-- Mobile scroll banner (TOP) — logo + lang only, booking via bottom CTA -->
   <nav id="book-banner-mobile" class="md:hidden fixed top-0 left-0 w-full bg-gray-900/95 backdrop-blur-md border-b border-amber-900/30 z-[9998] shadow-[0_2px_20px_rgba(0,0,0,0.3)] transform -translate-y-full transition-transform duration-300">
     <div class="flex items-center justify-between py-3 px-4">
       <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
-      <div class="flex items-center gap-3">
-        <button id="book-btn-mobile" class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-colors duration-200 px-5 py-2 rounded-lg shadow-md text-sm">{bookLabel}</button>
-        <LanguageSwitcher dark />
-      </div>
+      <LanguageSwitcher dark />
     </div>
   </nav>
 
