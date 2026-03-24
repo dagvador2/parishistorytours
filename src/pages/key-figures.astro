@@ -5,6 +5,8 @@ import JsonLd from '../components/JsonLd.astro';
 import KeyFiguresStats from '../components/KeyFiguresStats.astro';
 import CountriesChart from '../components/CountriesChart.astro';
 import WorldMap from '../components/WorldMap.tsx';
+import Navbar from '../components/Navbar.astro';
+import MobileMenu from '../components/MobileMenu.astro';
 import { useTranslations } from '../i18n/utils';
 import { supabase } from '../lib/supabase';
 
@@ -108,6 +110,13 @@ countryMap.forEach((count, country) => {
 ---
 
 <BaseLayout title={t('meta.keyFigures.title')} description={t('meta.keyFigures.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
+  <Navbar variant="fixed" links={[
+    { label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
+    { label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
+    { label: t('nav.generalHistory'), href: `${langPrefix}/tours/general-history` },
+    { label: t('nav.home'), href: `${langPrefix}/` },
+  ]} />
+  <MobileMenu />
   <main class="min-h-screen bg-white">
     <Breadcrumbs items={[
       { label: t('nav.home'), href: `${langPrefix}/` },
@@ -140,14 +149,14 @@ countryMap.forEach((count, country) => {
     <!-- About the Guide Section — Improved layout with stat callouts -->
     <section class="py-20 bg-white">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-5 gap-12 items-start">
+        <div class="grid md:grid-cols-5 gap-12 items-stretch">
           <!-- Photo column (2/5) -->
           <div class="md:col-span-2">
-            <div class="relative">
+            <div class="relative h-full">
               <img
                 src="/photos/left_bank/Paris_WW2_guide.webp"
-                alt="Clement Daguet-Schott - WWII History Guide in Paris"
-                class="rounded-2xl shadow-2xl w-full aspect-[3/4] object-cover"
+                alt="Clement Daguet-Schott - History Guide in Paris"
+                class="rounded-2xl shadow-2xl w-full h-full object-cover object-[60%_top]"
                 loading="eager"
               />
               <!-- Floating badge -->
@@ -202,9 +211,9 @@ countryMap.forEach((count, country) => {
 
         <div class="grid md:grid-cols-2 gap-8 items-stretch">
           <!-- Research cards -->
-          <div class="space-y-6">
+          <div class="flex flex-col gap-6">
             <!-- 20+ Books card -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
               <div class="flex items-start gap-5">
                 <div class="flex-shrink-0 w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
                   <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
@@ -221,7 +230,7 @@ countryMap.forEach((count, country) => {
             </div>
 
             <!-- 6 Months card -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
               <div class="flex items-start gap-5">
                 <div class="flex-shrink-0 w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center">
                   <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
@@ -238,7 +247,7 @@ countryMap.forEach((count, country) => {
             </div>
 
             <!-- 3 Themes card (new) -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
               <div class="flex items-start gap-5">
                 <div class="flex-shrink-0 w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center">
                   <svg class="w-7 h-7 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
@@ -258,12 +267,12 @@ countryMap.forEach((count, country) => {
           </div>
 
           <!-- Photo -->
-          <div class="relative flex items-center">
-            <div class="relative w-full">
+          <div class="relative">
+            <div class="relative w-full h-full">
               <img
                 src="/photos/book_ww2_guide_paris.webp"
                 alt="Historical research books used for tour preparation"
-                class="rounded-2xl shadow-xl w-full h-full min-h-[400px] object-cover"
+                class="rounded-2xl shadow-xl w-full h-full object-cover object-center"
                 loading="lazy"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-2xl"></div>
@@ -289,8 +298,8 @@ countryMap.forEach((count, country) => {
         <!-- AI-readable statistics (React charts are not crawlable) -->
         <div class="sr-only">
           <p>{lang === 'fr'
-            ? 'Chiffres clés de Paris History Tours : plus de 300 participants venus de plus de 25 pays à travers plus de 60 visites guidées, couvrant plus de 150 kilomètres de parcours pédestres dans le Paris historique. Les visiteurs viennent des États-Unis, du Royaume-Uni, d\'Allemagne, de France, du Canada, d\'Australie, d\'Espagne et de nombreux autres pays. Fondé en 2024, Paris History Tours maintient une note de 4.9 sur 5 étoiles avec plus de 40 avis Google.'
-            : 'Paris History Tours key statistics: over 300 participants from 25+ countries across 60+ guided tours, covering more than 150 kilometers of walking tours through historic Paris. Visitors come from the United States, United Kingdom, Germany, France, Canada, Australia, Spain, and many more countries. Founded in 2024, Paris History Tours has maintained a 4.9 out of 5 star rating across 40+ Google reviews.'
+            ? 'Chiffres clés de Paris History Tours : plus de 300 participants venus de plus de 25 pays à travers plus de 60 visites guidées, couvrant plus de 150 kilomètres de parcours pédestres dans le Paris historique. Les visiteurs viennent des États-Unis, du Royaume-Uni, d\'Allemagne, de France, du Canada, d\'Australie, d\'Espagne et de nombreux autres pays. Fondé en 2024, Paris History Tours maintient une note de 4.9 sur 5 étoiles avec plus de 42 avis Google.'
+            : 'Paris History Tours key statistics: over 300 participants from 25+ countries across 60+ guided tours, covering more than 150 kilometers of walking tours through historic Paris. Visitors come from the United States, United Kingdom, Germany, France, Canada, Australia, Spain, and many more countries. Founded in 2024, Paris History Tours has maintained a 4.9 out of 5 star rating across 42+ Google reviews.'
           }</p>
         </div>
 
@@ -382,3 +391,8 @@ countryMap.forEach((count, country) => {
     "url": "https://www.parishistorytours.com/key-figures"
   }} />
 </BaseLayout>
+
+<script>
+  import { initMobileMenu } from '../scripts/mobile-menu';
+  initMobileMenu();
+</script>

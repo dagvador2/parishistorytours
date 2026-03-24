@@ -2,8 +2,8 @@ export const en = {
   // Navigation
   nav: {
     home: "Home",
-    leftBank: "Paris - Left Bank Tour",
-    rightBank: "Paris - Right Bank Tour",
+    leftBank: "Paris - WW2 Left Bank Tour",
+    rightBank: "Paris - WW2 Right Bank Tour",
     generalHistory: "Paris - General History Tour",
     presentation: "About",
     toursAvailable: "Tours Available",
@@ -32,46 +32,46 @@ export const en = {
   // Home page
   home: {
     title: "Discover Paris differently",
-    subtitle: "Immersive visits about WW2 History in Paris",
+    subtitle: "Immersive historical walking tours in Paris",
     welcome: {
       title: "Welcome",
-      intro: "I'm <strong>Clement Daguet-Schott</strong>, a World War II history researcher and independent tour guide based in Paris since 2024.<br/>After 6 months of dedicated research across 20+ historical books, memoirs, and primary sources, I created two immersive walking tours that bring wartime Paris to life — covering the Fall of France, the French Resistance, and the Liberation of Paris.",
-      description: "Whether you're a curious traveler, a history buff, or an educator, these 2-hour walking tours are designed to make history tangible. With a 4.9/5 rating from over 40 Google reviews and visitors from 25+ countries, the tours combine rigorous historical research with engaging storytelling at 4 iconic Parisian landmarks."
+      intro: "I'm <strong>Clement Daguet-Schott</strong>, a passionate history enthusiast and independent tour guide based in Paris since 2024.<br/>After months of dedicated research across 20+ historical books, memoirs, and primary sources, I created three immersive walking tours that bring the history of Paris to life — from the Fall of France and the French Resistance to 2,000 years of Parisian history.",
+      description: "Whether you're a curious traveler, a history buff, or an educator, these walking tours are designed to make history tangible. With a 4.9/5 rating from over 42 Google reviews and visitors from 25+ countries, the tours combine rigorous historical research with engaging storytelling across iconic Parisian landmarks."
     },
     gallery: {
       title: "Gallery",
       subtitle: "Discover the historical sites we visit",
       pantheon: {
-        title: "Panthéon",
-        description: "Memorial to the heroes of the French Resistance",
-        fullDescription: "Memorial to the heroes of the French Resistance. The Palais du Luxembourg served as the Luftwaffe headquarters during the 4-year Nazi occupation of Paris.",
-        cardSubtitle: "Left Bank Tour — Stop 2",
-        tag: "Left Bank Tour"
+        title: "Palais du Luxembourg",
+        description: "Headquarters of the Luftwaffe during the Nazi occupation",
+        fullDescription: "The Palais du Luxembourg served as the headquarters of the Luftwaffe (German Air Force) during the 4-year Nazi occupation of Paris. Today it houses the French Senate.",
+        cardSubtitle: "WW2 Left Bank Tour — Stop 2",
+        tag: "WW2 Left Bank Tour"
       },
       placeVendome: {
         title: "Place Vendôme",
         description: "Witness to the German occupation of Paris",
         fullDescription: "Witness to the German occupation of Paris. This is where Ernest Hemingway famously arrived to \"liberate\" the Ritz bar on August 25, 1944.",
-        cardSubtitle: "Right Bank Tour — Stop 4",
-        tag: "Right Bank Tour"
+        cardSubtitle: "WW2 Right Bank Tour — Stop 4",
+        tag: "WW2 Right Bank Tour"
       },
       notreDame: {
         title: "Notre-Dame de Paris",
         fullDescription: "Witness to the Liberation of Paris in August 1944. General de Gaulle led a victory march here despite active sniper fire along the route.",
-        cardSubtitle: "Left Bank Tour — Stop 4",
-        tag: "Left Bank Tour"
+        cardSubtitle: "WW2 Left Bank Tour — Stop 4",
+        tag: "WW2 Left Bank Tour"
       },
       pontAlexandre: {
         title: "Pont Alexandre III",
         fullDescription: "One of the bridges Hitler ordered to be destroyed before the Allied advance. It survived thanks to the German garrison's decision to disobey the demolition order.",
-        cardSubtitle: "Right Bank Tour — Stop 1",
-        tag: "Right Bank Tour"
+        cardSubtitle: "WW2 Right Bank Tour — Stop 1",
+        tag: "WW2 Right Bank Tour"
       },
       placeConcorde: {
         title: "Place de la Concorde",
         fullDescription: "Storage area for all the artwork stolen by the Nazis. The site of the first French flag raised over a public building during the Liberation, replacing the swastika.",
-        cardSubtitle: "Right Bank Tour — Stop 3",
-        tag: "Right Bank Tour"
+        cardSubtitle: "WW2 Right Bank Tour — Stop 3",
+        tag: "WW2 Right Bank Tour"
       },
       guide: {
         title: "Meet Clément",
@@ -121,7 +121,7 @@ export const en = {
       }
     },
     rightBank: {
-      title: "Right Bank Tour",
+      title: "WW2 Right Bank Tour",
       description: "Discover Paris under the light of the Second World War",
       introduction: "A Journey Through Wartime Paris",
       quote: "Whatever happens, the Flame of the French Resistance must not and will not be extinguished.",
@@ -157,7 +157,7 @@ export const en = {
       }
     },
     leftBank: {
-      title: "Left Bank Tour",
+      title: "WW2 Left Bank Tour",
       description: "Discover Paris under the light of the Second World War",
       introduction: "A Journey Through Wartime Paris",
       quote: "Paris, Paris outraged! Paris broken! Paris martyred! But Paris liberated!",
@@ -249,6 +249,8 @@ export const en = {
   booking: {
     title: "Book your Tour",
     subtitle: "Let's organize your visit step by step",
+    whatsappCta: "Or contact me directly on WhatsApp",
+    alsoBookOn: "Also book on",
     // Mode selector
     modeSelector: {
       joinTour: "Join a scheduled tour",
@@ -312,14 +314,14 @@ export const en = {
     select: "Select...",
     person: "person",
     people: "people",
-    leftBank: "Left Bank",
-    rightBank: "Right Bank",
+    leftBank: "WW2 Left Bank",
+    rightBank: "WW2 Right Bank",
     generalHistory: "General History",
     leftBankDesc: "Discover WW2 on the left side of Paris",
     rightBankDesc: "Discover WW2 on the right side of Paris",
     generalHistoryDesc: "Walk through 2,000 years of Paris history",
-    leftBankTour: "Left Bank Tour",
-    rightBankTour: "Right Bank Tour",
+    leftBankTour: "WW2 Left Bank Tour",
+    rightBankTour: "WW2 Right Bank Tour",
     generalHistoryTour: "General History Tour",
     regularTour: "Regular Tour",
     privateTour: "Private Tour",
@@ -410,7 +412,7 @@ export const en = {
     reviews: "Verified Reviews",
     countries: "Countries Represented",
     founded: "Year Founded",
-    description: "Travelers from the United States, United Kingdom, Germany, Canada, Australia, France, and 20+ other countries have chosen Paris History Tours for their WWII walking experience in Paris."
+    description: "Travelers from the United States, United Kingdom, Germany, Canada, Australia, France, and 20+ other countries have chosen Paris History Tours for their historical walking experience in Paris."
   },
 
   // Key Figures page
@@ -419,7 +421,7 @@ export const en = {
     subtitle: "Discover the journey behind Paris History Tours - from months of research to hundreds of participants from around the world.",
     guide: {
       title: "Meet Clement, Your Guide",
-      bio1: "Clement Daguet-Schott is a Paris-based World War II history researcher and independent walking tour guide. His passion for the period led him to spend 6 months conducting extensive research across 20+ books, including historical texts, personal memoirs, and academic sources, to build tours that are both historically rigorous and deeply engaging.",
+      bio1: "Clement Daguet-Schott is a Paris-based history enthusiast and independent walking tour guide. His passion for history led him to spend months conducting extensive research across 20+ books, including historical texts, personal memoirs, and academic sources, to build tours that are both historically rigorous and deeply engaging.",
       bio2: "Each tour stop is chosen not just for its historical significance but for the untold stories connected to it — from Rose Valland's secret mission to track Nazi art theft, to Ernest Hemingway's role in the Liberation, to the student resistance networks at the Sorbonne.",
       bio3: "Since founding Paris History Tours in 2024, Clement has guided hundreds of visitors from over 25 countries, maintaining a 4.9/5 rating on Google Maps. The tours are available in both English and French, as private experiences or small group sessions of up to 10 participants."
     },
@@ -444,11 +446,11 @@ export const en = {
 
   // Footer
   footer: {
-    description: "Discover the hidden stories of Paris during World War II through our expert-guided walking tours.",
+    description: "Discover the hidden stories of Paris through our expert-guided historical walking tours.",
     tours: "Tours",
     home: "Home",
-    leftBankTour: "Left Bank Tour",
-    rightBankTour: "Right Bank Tour",
+    leftBankTour: "WW2 Left Bank Tour",
+    rightBankTour: "WW2 Right Bank Tour",
     generalHistoryTour: "General History Tour",
     info: "Info",
     aboutMe: "About me & the tours",
@@ -516,7 +518,7 @@ export const en = {
     },
     keyFigures: {
       title: "About Paris History Tours - Our Guide & Journey",
-      description: "Meet Cl\u00e9ment, WWII researcher and personal guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google Maps rating."
+      description: "Meet Cl\u00e9ment, history enthusiast and personal guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google Maps rating."
     },
     blog: {
       title: "Blog - WWII Paris History | Paris History Tours",
@@ -536,8 +538,8 @@ export const en = {
     stop: "Stop",
     historicalTheme: "Historical theme",
     quickStop: "Quick stop",
-    leftBankTour: "Left Bank Tour",
-    rightBankTour: "Right Bank Tour",
+    leftBankTour: "WW2 Left Bank Tour",
+    rightBankTour: "WW2 Right Bank Tour",
     generalHistoryTour: "General History Tour",
     routeInfo: "2.5km • 4 stops • 2 hours",
     routeInfoGeneralHistory: "2.5km • 3 stops • 1.5 hours"
@@ -547,8 +549,8 @@ export const en = {
   jsonLd: {
     alternateName: "Paris History Tours - WWII Walking Tours",
     slogan: "Discover Paris through the eyes of World War II",
-    founderJobTitle: "WWII History Guide & Researcher",
-    founderDescription: "Independent history guide specializing in World War II Paris. After 6 months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring wartime Paris to life.",
+    founderJobTitle: "History Guide & Tour Creator",
+    founderDescription: "Independent history guide based in Paris. After months of dedicated research across 20+ historical texts and memoirs, Clement created immersive walking tours that bring the history of Paris to life.",
     offerCatalogName: "WWII Walking Tours in Paris",
     leftBankDescription: "Walk through wartime Paris: Boulevard Saint-Michel, Luxembourg Palace, Sorbonne & Notre-Dame. 2 hours, 4 stops covering the Fall, Resistance & Liberation.",
     rightBankDescription: "Discover WWII Paris: Pont Alexandre III, Place de la Concorde, Place Vendome & the Ritz. Art theft, Hemingway & Liberation stories. 2 hours, 4 stops.",
@@ -573,8 +575,8 @@ export const en = {
       people: "people",
       regularTour: "Regular Tour",
       privateTour: "Private Tour",
-      leftBankTour: "Left Bank Tour",
-      rightBankTour: "Right Bank Tour",
+      leftBankTour: "WW2 Left Bank Tour",
+      rightBankTour: "WW2 Right Bank Tour",
       generalHistoryTour: "General History Tour",
       confirmedMessage: "Your booking is confirmed! We will send you meeting point details 24 hours before the tour.",
       requestMessage: "We will confirm availability and contact you within 24 hours.",

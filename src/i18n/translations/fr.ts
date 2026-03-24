@@ -2,8 +2,8 @@ export const fr = {
   // Navigation
   nav: {
     home: "Accueil",
-    leftBank: "Paris - Visite Rive Gauche",
-    rightBank: "Paris - Visite Rive Droite",
+    leftBank: "Paris - Visite WW2 Rive Gauche",
+    rightBank: "Paris - Visite WW2 Rive Droite",
     generalHistory: "Paris - Histoire Générale",
     presentation: "Présentation",
     toursAvailable: "Visites Disponibles",
@@ -32,46 +32,46 @@ export const fr = {
   // Home page
   home: {
     title: "Découvrez Paris autrement",
-    subtitle: "Visites immersives sur l'Histoire de la Seconde Guerre mondiale à Paris",
+    subtitle: "Visites historiques immersives à pied dans Paris",
     welcome: {
       title: "Bienvenue",
-      intro: "Je suis <strong>Clément Daguet-Schott</strong>, chercheur en histoire de la Seconde Guerre mondiale et guide touristique indépendant à Paris depuis 2024.<br/>Après 6 mois de recherche intensive à travers plus de 20 ouvrages historiques, mémoires et sources primaires, j'ai créé deux visites à pied immersives qui font revivre le Paris en guerre — de la Chute de la France à la Résistance et la Libération de Paris.",
-      description: "Que vous soyez un voyageur curieux, un passionné d'histoire ou un éducateur, ces visites de 2 heures rendent l'histoire tangible. Avec une note de 4.9/5 sur plus de 40 avis Google et des visiteurs de plus de 25 pays, les visites allient recherche historique rigoureuse et narration captivante à travers 4 sites emblématiques de Paris."
+      intro: "Je suis <strong>Clément Daguet-Schott</strong>, passionné d'histoire et guide touristique indépendant à Paris depuis 2024.<br/>Après des mois de recherche intensive à travers plus de 20 ouvrages historiques, mémoires et sources primaires, j'ai créé trois visites à pied immersives qui font revivre l'histoire de Paris — de la Chute de la France et la Résistance à 2 000 ans d'histoire parisienne.",
+      description: "Que vous soyez un voyageur curieux, un passionné d'histoire ou un éducateur, ces visites rendent l'histoire tangible. Avec une note de 4.9/5 sur plus de 42 avis Google et des visiteurs de plus de 25 pays, les visites allient recherche historique rigoureuse et narration captivante à travers les sites emblématiques de Paris."
     },
     gallery: {
       title: "Galerie",
       subtitle: "Découvrez les sites historiques que nous visitons",
       pantheon: {
-        title: "Panthéon",
-        description: "Mémorial aux héros de la Résistance française",
-        fullDescription: "Mémorial aux héros de la Résistance française. Le Palais du Luxembourg a servi de quartier général de la Luftwaffe pendant les 4 années d'occupation nazie de Paris.",
-        cardSubtitle: "Visite Rive Gauche — Arrêt 2",
-        tag: "Visite Rive Gauche"
+        title: "Palais du Luxembourg",
+        description: "Quartier général de la Luftwaffe pendant l'occupation nazie",
+        fullDescription: "Le Palais du Luxembourg a servi de quartier général de la Luftwaffe (armée de l'air allemande) pendant les 4 années d'occupation nazie de Paris. Il abrite aujourd'hui le Sénat français.",
+        cardSubtitle: "Visite WW2 Rive Gauche — Arrêt 2",
+        tag: "Visite WW2 Rive Gauche"
       },
       placeVendome: {
         title: "Place Vendôme",
         description: "Témoin de l'occupation allemande de Paris",
         fullDescription: "Témoin de l'occupation allemande de Paris. C'est ici qu'Ernest Hemingway est arrivé pour \"libérer\" le bar du Ritz le 25 août 1944.",
-        cardSubtitle: "Visite Rive Droite — Arrêt 4",
-        tag: "Visite Rive Droite"
+        cardSubtitle: "Visite WW2 Rive Droite — Arrêt 4",
+        tag: "Visite WW2 Rive Droite"
       },
       notreDame: {
         title: "Notre-Dame de Paris",
         fullDescription: "Témoin de la Libération de Paris en août 1944. Le général de Gaulle y a mené une marche victorieuse malgré des tirs de snipers actifs le long du parcours.",
-        cardSubtitle: "Visite Rive Gauche — Arrêt 4",
-        tag: "Visite Rive Gauche"
+        cardSubtitle: "Visite WW2 Rive Gauche — Arrêt 4",
+        tag: "Visite WW2 Rive Gauche"
       },
       pontAlexandre: {
         title: "Pont Alexandre III",
         fullDescription: "Un des ponts qu'Hitler a ordonné de détruire avant l'avancée alliée. Il a survécu grâce à la décision de la garnison allemande de désobéir à l'ordre de démolition.",
-        cardSubtitle: "Visite Rive Droite — Arrêt 1",
-        tag: "Visite Rive Droite"
+        cardSubtitle: "Visite WW2 Rive Droite — Arrêt 1",
+        tag: "Visite WW2 Rive Droite"
       },
       placeConcorde: {
         title: "Place de la Concorde",
         fullDescription: "Zone de stockage de toutes les œuvres d'art volées par les Nazis. Le site du premier drapeau français hissé sur un bâtiment public lors de la Libération, remplaçant la croix gammée.",
-        cardSubtitle: "Visite Rive Droite — Arrêt 3",
-        tag: "Visite Rive Droite"
+        cardSubtitle: "Visite WW2 Rive Droite — Arrêt 3",
+        tag: "Visite WW2 Rive Droite"
       },
       guide: {
         title: "Rencontrez Clément",
@@ -121,7 +121,7 @@ export const fr = {
       }
     },
     rightBank: {
-      title: "Visite Rive Droite",
+      title: "Visite WW2 Rive Droite",
       description: "Découvrez Paris sous l'éclairage de la Seconde Guerre mondiale",
       introduction: "Un Voyage à travers le Paris en Guerre",
       quote: "Quoi qu'il arrive, la flamme de la résistance française ne doit pas s'éteindre et ne s'éteindra pas.",
@@ -157,7 +157,7 @@ export const fr = {
       }
     },
     leftBank: {
-      title: "Visite Rive Gauche",
+      title: "Visite WW2 Rive Gauche",
       description: "Découvrez Paris sous l'éclairage de la Seconde Guerre mondiale",
       introduction: "Un Voyage à travers le Paris en Guerre",
       quote: "Paris ! Paris outragé ! Paris brisé ! Paris martyrisé ! Mais Paris libéré !",
@@ -249,6 +249,8 @@ export const fr = {
   booking: {
     title: "Réservez votre Visite",
     subtitle: "Organisez votre visite étape par étape",
+    whatsappCta: "Ou contactez-moi directement sur WhatsApp",
+    alsoBookOn: "Également disponible sur",
     // Mode selector
     modeSelector: {
       joinTour: "Rejoindre une visite programmée",
@@ -312,14 +314,14 @@ export const fr = {
     select: "Sélectionner...",
     person: "personne",
     people: "personnes",
-    leftBank: "Rive Gauche",
-    rightBank: "Rive Droite",
+    leftBank: "WW2 Rive Gauche",
+    rightBank: "WW2 Rive Droite",
     generalHistory: "Histoire Générale",
     leftBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive gauche de Paris",
     rightBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive droite de Paris",
     generalHistoryDesc: "Parcourez 2 000 ans d'histoire de Paris",
-    leftBankTour: "Visite Rive Gauche",
-    rightBankTour: "Visite Rive Droite",
+    leftBankTour: "Visite WW2 Rive Gauche",
+    rightBankTour: "Visite WW2 Rive Droite",
     generalHistoryTour: "Visite Histoire Générale",
     regularTour: "Visite Régulière",
     privateTour: "Visite Privée",
@@ -410,7 +412,7 @@ export const fr = {
     reviews: "Avis vérifiés",
     countries: "Pays représentés",
     founded: "Année de création",
-    description: "Des voyageurs des États-Unis, du Royaume-Uni, d'Allemagne, du Canada, d'Australie, de France et de plus de 20 autres pays ont choisi Paris History Tours pour leur expérience de visite sur la Seconde Guerre mondiale à Paris."
+    description: "Des voyageurs des États-Unis, du Royaume-Uni, d'Allemagne, du Canada, d'Australie, de France et de plus de 20 autres pays ont choisi Paris History Tours pour leur expérience de visite historique à Paris."
   },
 
   // Key Figures page
@@ -419,7 +421,7 @@ export const fr = {
     subtitle: "Découvrez le parcours derrière Paris History Tours - des mois de recherche à des centaines de participants du monde entier.",
     guide: {
       title: "Rencontrez Clément, votre guide",
-      bio1: "Clément Daguet-Schott est un chercheur en histoire de la Seconde Guerre mondiale et guide de visites à pied indépendant basé à Paris. Sa passion pour cette période l'a conduit à passer 6 mois de recherche intensive à travers plus de 20 ouvrages, incluant textes historiques, mémoires personnels et sources académiques, pour construire des visites à la fois historiquement rigoureuses et profondément captivantes.",
+      bio1: "Clément Daguet-Schott est un passionné d'histoire et guide de visites à pied indépendant basé à Paris. Sa passion pour l'histoire l'a conduit à passer des mois de recherche intensive à travers plus de 20 ouvrages, incluant textes historiques, mémoires personnels et sources académiques, pour construire des visites à la fois historiquement rigoureuses et profondément captivantes.",
       bio2: "Chaque arrêt de la visite est choisi non seulement pour sa signification historique mais pour les histoires méconnues qui y sont liées — de la mission secrète de Rose Valland pour traquer les vols d'art nazis, au rôle d'Ernest Hemingway dans la Libération, en passant par les réseaux de résistance étudiants à la Sorbonne.",
       bio3: "Depuis la création de Paris History Tours en 2024, Clément a guidé des centaines de visiteurs de plus de 25 pays, maintenant une note de 4.9/5 sur Google Maps. Les visites sont disponibles en français et en anglais, en expérience privée ou en petits groupes jusqu'à 10 participants."
     },
@@ -444,11 +446,11 @@ export const fr = {
 
   // Footer
   footer: {
-    description: "Découvrez les histoires cachées de Paris pendant la Seconde Guerre mondiale à travers nos visites guidées à pied.",
+    description: "Découvrez les histoires cachées de Paris à travers nos visites guidées historiques à pied.",
     tours: "Visites",
     home: "Accueil",
-    leftBankTour: "Visite Rive Gauche",
-    rightBankTour: "Visite Rive Droite",
+    leftBankTour: "Visite WW2 Rive Gauche",
+    rightBankTour: "Visite WW2 Rive Droite",
     generalHistoryTour: "Visite Histoire Générale",
     info: "Info",
     aboutMe: "À propos de moi et des visites",
@@ -516,7 +518,7 @@ export const fr = {
     },
     keyFigures: {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
-      description: "Rencontrez Clément, chercheur WWII et guide personnel à Paris. 20+ livres de recherche, visiteurs de 25+ pays et une note de 4.9/5 sur Google Maps."
+      description: "Rencontrez Clément, passionné d'histoire et guide personnel à Paris. 20+ livres de recherche, visiteurs de 25+ pays et une note de 4.9/5 sur Google Maps."
     },
     blog: {
       title: "Blog - Histoire de Paris pendant la Seconde Guerre mondiale | Paris History Tours",
@@ -536,8 +538,8 @@ export const fr = {
     stop: "Arrêt",
     historicalTheme: "Thème historique",
     quickStop: "Arrêt rapide",
-    leftBankTour: "Visite Rive Gauche",
-    rightBankTour: "Visite Rive Droite",
+    leftBankTour: "Visite WW2 Rive Gauche",
+    rightBankTour: "Visite WW2 Rive Droite",
     generalHistoryTour: "Visite Histoire Générale",
     routeInfo: "2,5km • 4 arrêts • 2 heures",
     routeInfoGeneralHistory: "2,5km • 3 arrêts • 1h30"
@@ -547,8 +549,8 @@ export const fr = {
   jsonLd: {
     alternateName: "Paris History Tours - Visites guidées Seconde Guerre mondiale à Paris",
     slogan: "Découvrez Paris à travers les yeux de la Seconde Guerre mondiale",
-    founderJobTitle: "Guide & chercheur spécialisé Seconde Guerre mondiale",
-    founderDescription: "Guide indépendant spécialisé dans l'histoire de la Seconde Guerre mondiale à Paris. Après 6 mois de recherche intensive à travers plus de 20 ouvrages historiques et mémoires, Clément a créé des visites à pied immersives qui font revivre le Paris en guerre.",
+    founderJobTitle: "Guide historique & créateur de visites",
+    founderDescription: "Guide indépendant basé à Paris. Après des mois de recherche intensive à travers plus de 20 ouvrages historiques et mémoires, Clément a créé des visites à pied immersives qui font revivre l'histoire de Paris.",
     offerCatalogName: "Visites guidées Seconde Guerre mondiale à Paris",
     leftBankDescription: "Parcourez le Paris en guerre : Boulevard Saint-Michel, Palais du Luxembourg, Sorbonne & Notre-Dame. 2 heures, 4 arrêts sur la Chute, la Résistance & la Libération.",
     rightBankDescription: "Découvrez le Paris de la Seconde Guerre mondiale : Pont Alexandre III, Place de la Concorde, Place Vendôme & le Ritz. Vol d'art, Hemingway & Libération. 2 heures, 4 arrêts.",

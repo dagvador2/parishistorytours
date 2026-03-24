@@ -32,10 +32,21 @@ const mobileBookLabel = priceLabel || bookLabel;
     <div class="max-w-5xl mx-auto flex items-center justify-between py-3 px-6">
       <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
       <div class="flex items-center gap-6">
-        <a href={`${langPrefix}/tours/left-bank`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.leftBank')}</a>
+        <div class="relative group">
+          <button class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm flex items-center gap-1 cursor-pointer">
+            {t('nav.toursAvailable')}
+            <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+          </button>
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <div class="bg-gray-900 border border-gray-700 rounded-lg shadow-xl py-2 min-w-[220px]">
+              <a href={`${langPrefix}/tours/left-bank`} class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">{t('nav.leftBank')}</a>
+              <a href={`${langPrefix}/tours/right-bank`} class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">{t('nav.rightBank')}</a>
+              <a href={`${langPrefix}/tours/general-history`} class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">{t('nav.generalHistory')}</a>
+            </div>
+          </div>
+        </div>
+        <a href={`${langPrefix}/`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.home')}</a>
         <button id="book-btn-desktop" class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-all duration-200 px-6 py-2.5 rounded-lg shadow-lg shadow-amber-900/30 hover:shadow-amber-800/40 text-sm tracking-wide">{bookLabel}</button>
-        <a href={`${langPrefix}/tours/right-bank`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.rightBank')}</a>
-        <a href={`${langPrefix}/tours/general-history`} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{t('nav.generalHistory')}</a>
       </div>
       <LanguageSwitcher dark />
     </div>
@@ -81,9 +92,36 @@ const mobileBookLabel = priceLabel || bookLabel;
     <div class="max-w-5xl mx-auto flex items-center justify-between py-3 px-6">
       <span class="text-amber-100/90 font-semibold tracking-wide text-sm">Paris History Tours</span>
       <div class="flex items-center gap-6">
-        {links?.map(link => (
-          <a href={link.href} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{link.label}</a>
-        ))}
+        {links && links.length > 0 && (() => {
+          const tourLinks = links.filter(l => l.href.includes('/tours/'));
+          const otherLinks = links.filter(l => !l.href.includes('/tours/'));
+          return (
+            <>
+              {tourLinks.length > 1 ? (
+                <div class="relative group">
+                  <button class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm flex items-center gap-1 cursor-pointer">
+                    {t('nav.toursAvailable')}
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div class="bg-gray-900 border border-gray-700 rounded-lg shadow-xl py-2 min-w-[220px]">
+                      {tourLinks.map(link => (
+                        <a href={link.href} class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">{link.label}</a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                tourLinks.map(link => (
+                  <a href={link.href} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{link.label}</a>
+                ))
+              )}
+              {otherLinks.map(link => (
+                <a href={link.href} class="text-gray-300 font-medium hover:text-white transition-colors duration-200 text-sm">{link.label}</a>
+              ))}
+            </>
+          );
+        })()}
         <a href={bookTarget} class="bg-amber-600 text-white font-semibold hover:bg-amber-500 transition-all duration-200 px-6 py-2.5 rounded-lg shadow-lg shadow-amber-900/30 text-sm tracking-wide">{bookLabel}</a>
       </div>
       <LanguageSwitcher dark />
