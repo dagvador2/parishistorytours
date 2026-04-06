@@ -144,6 +144,14 @@ const Wizard: React.FC = () => {
             >
               <img src="/logos/Tripadvisor-Logo.png" alt="TripAdvisor" className="w-36 object-contain" />
             </a>
+            <a
+              href="https://tourist.com/p/24194"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="opacity-70 hover:opacity-100 transition-opacity"
+            >
+              <img src="/logos/tourist_logo.svg" alt="Tourist.com" className="w-36 object-contain" />
+            </a>
           </div>
         </div>
       )}
