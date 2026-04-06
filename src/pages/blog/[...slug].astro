@@ -24,6 +24,13 @@ const t = useTranslations(lang);
 const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 
+// Related posts: same language, exclude current, most recent first, max 3
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.data.lang === post.data.lang && p.id !== post.id)
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+
 const canonicalUrl = `https://www.parishistorytours.com${langPrefix}/blog/${post.id}`;
 const imageUrl = post.data.image ? `https://www.parishistorytours.com${post.data.image}` : undefined;
 ---
@@ -87,6 +94,58 @@ const imageUrl = post.data.image ? `https://www.parishistorytours.com${post.data
           {t('common.bookNow')}
         </a>
       </div>
+
+      <!-- Author bio -->
+      <div class="mt-10 flex items-center gap-5 p-6 bg-gray-50 rounded-xl border border-gray-100">
+        <img
+          src="/photos/left_bank/Paris_WW2_guide.webp"
+          alt="Clément Daguet-Schott"
+          width="80"
+          height="80"
+          class="w-20 h-20 rounded-full object-cover flex-shrink-0"
+          loading="lazy"
+        />
+        <div>
+          <p class="font-semibold text-gray-900">Clément Daguet-Schott</p>
+          <p class="text-sm text-gray-600 mt-1">
+            {lang === 'fr'
+              ? 'Passionné d\'histoire et guide indépendant à Paris. Plus de 20 ouvrages de recherche, des visiteurs de 25+ pays et une note de 4.9/5 sur Google.'
+              : 'History enthusiast and independent tour guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google rating.'}
+          </p>
+          <a href={`${langPrefix}/key-figures`} class="text-sm text-blue-600 hover:text-blue-800 mt-1 inline-block">
+            {lang === 'fr' ? 'En savoir plus →' : 'Learn more →'}
+          </a>
+        </div>
+      </div>
+
+      <!-- Related posts -->
+      {relatedPosts.length > 0 && (
+        <div class="mt-12">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">
+            {lang === 'fr' ? 'Articles similaires' : 'Related Articles'}
+          </h2>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedPosts.map((related) => (
+              <a href={`${langPrefix}/blog/${related.id}`} class="group block rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition">
+                {related.data.image && (
+                  <img
+                    src={related.data.image}
+                    alt={related.data.imageAlt || related.data.title}
+                    class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                )}
+                <div class="p-4">
+                  <p class="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">
+                    {related.data.title}
+                  </p>
+                  <p class="text-sm text-gray-500 mt-2 line-clamp-2">{related.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   </main>
 

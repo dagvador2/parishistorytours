@@ -494,6 +494,34 @@ export const en = {
       {
         question: "How is the General History tour different from your WWII tours?",
         answer: "While our WWII tours focus on 1940-1944 (the Fall, Resistance, and Liberation of Paris), the General History tour spans 2,000 years of Parisian history through three dramatic stories that shaped the city: Roman conquest, Viking siege, and the French Revolution."
+      },
+      {
+        question: "What is your cancellation policy?",
+        answer: "You can cancel or reschedule your tour free of charge up to 24 hours before the scheduled start time. Cancellations made less than 24 hours in advance are non-refundable. Contact us via WhatsApp or email to make changes."
+      },
+      {
+        question: "What should I wear or bring on the tour?",
+        answer: "Wear comfortable walking shoes — we cover about 2.5 km on foot. Bring water, sunscreen in summer, or an umbrella if rain is forecast. No special equipment is needed. The tour is entirely outdoors."
+      },
+      {
+        question: "Is the tour accessible for people with reduced mobility?",
+        answer: "The tours follow paved, flat streets and sidewalks in central Paris. However, some sections may have cobblestones or curbs. If you have specific mobility needs, contact us in advance and we'll adapt the route where possible."
+      },
+      {
+        question: "What happens if it rains on the day of my tour?",
+        answer: "Tours run rain or shine — Paris history doesn't stop for the weather! In case of severe weather (storms, extreme heat warnings), we'll contact you to reschedule at no extra cost."
+      },
+      {
+        question: "What payment methods do you accept?",
+        answer: "We accept credit and debit cards (Visa, Mastercard, American Express) through our secure online booking. Cash payment is also possible on-site if arranged in advance."
+      },
+      {
+        question: "How many people are in a group tour?",
+        answer: "Group tours have a maximum of 10 participants to ensure a personal, engaging experience. Most groups are between 4 and 8 people. Private tours are also available for your group exclusively."
+      },
+      {
+        question: "How far in advance should I book?",
+        answer: "We recommend booking at least 3–5 days ahead, especially during peak season (April–October). Last-minute bookings are sometimes available — check our calendar or send us a WhatsApp message."
       }
     ]
   },

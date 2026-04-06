@@ -494,6 +494,34 @@ export const fr = {
       {
         question: "Quelle est la différence entre la visite Histoire Générale et vos visites WWII ?",
         answer: "Nos visites WWII se concentrent sur 1940-1944 (la Chute, la Résistance et la Libération de Paris), tandis que la visite Histoire Générale couvre 2 000 ans d'histoire parisienne à travers trois récits dramatiques qui ont façonné la ville : la conquête romaine, le siège viking et la Révolution française."
+      },
+      {
+        question: "Quelle est votre politique d'annulation ?",
+        answer: "Vous pouvez annuler ou reprogrammer votre visite gratuitement jusqu'à 24 heures avant l'heure prévue. Les annulations effectuées moins de 24 heures à l'avance ne sont pas remboursables. Contactez-nous par WhatsApp ou email pour toute modification."
+      },
+      {
+        question: "Comment dois-je m'habiller et que faut-il apporter ?",
+        answer: "Portez des chaussures de marche confortables — nous parcourons environ 2,5 km à pied. Prévoyez de l'eau, de la crème solaire en été ou un parapluie si la pluie est annoncée. Aucun équipement particulier n'est nécessaire. La visite se déroule entièrement en extérieur."
+      },
+      {
+        question: "La visite est-elle accessible aux personnes à mobilité réduite ?",
+        answer: "Les visites empruntent des rues pavées et plates dans le centre de Paris. Cependant, certaines sections peuvent comporter des pavés ou des bordures. Si vous avez des besoins spécifiques, contactez-nous à l'avance et nous adapterons le parcours dans la mesure du possible."
+      },
+      {
+        question: "Que se passe-t-il s'il pleut le jour de la visite ?",
+        answer: "Les visites ont lieu par tous les temps — l'histoire de Paris n'attend pas le beau temps ! En cas de conditions météorologiques extrêmes (tempêtes, alertes canicule), nous vous contacterons pour reprogrammer sans frais supplémentaires."
+      },
+      {
+        question: "Quels moyens de paiement acceptez-vous ?",
+        answer: "Nous acceptons les cartes de crédit et de débit (Visa, Mastercard, American Express) via notre réservation en ligne sécurisée. Le paiement en espèces est également possible sur place si convenu à l'avance."
+      },
+      {
+        question: "Combien de personnes participent à une visite de groupe ?",
+        answer: "Les visites de groupe comptent un maximum de 10 participants pour garantir une expérience personnelle et engageante. La plupart des groupes comptent entre 4 et 8 personnes. Des visites privées sont également disponibles exclusivement pour votre groupe."
+      },
+      {
+        question: "Combien de temps à l'avance dois-je réserver ?",
+        answer: "Nous recommandons de réserver au moins 3 à 5 jours à l'avance, surtout en haute saison (avril–octobre). Des réservations de dernière minute sont parfois possibles — consultez notre calendrier ou envoyez-nous un message WhatsApp."
       }
     ]
   },

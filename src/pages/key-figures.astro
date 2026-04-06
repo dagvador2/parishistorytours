@@ -199,6 +199,37 @@ countryMap.forEach((count, country) => {
       </div>
     </section>
 
+    <!-- Featured On Section — Trust signals -->
+    <section class="py-14 bg-slate-50 border-y border-slate-100">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-sm uppercase tracking-[0.15em] text-gray-500 font-medium mb-8">
+          {lang === 'fr' ? 'Également présent sur' : 'Also featured on'}
+        </p>
+        <div class="flex items-center justify-center gap-10 md:gap-16 flex-wrap">
+          <a href="https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/"
+             target="_blank" rel="noopener noreferrer"
+             class="opacity-50 hover:opacity-100 transition-opacity">
+            <img src="/logos/get your guide logo.webp" alt="GetYourGuide" width="160" height="53" class="h-10 md:h-12 w-auto object-contain" />
+          </a>
+          <a href="https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2"
+             target="_blank" rel="noopener noreferrer"
+             class="opacity-50 hover:opacity-100 transition-opacity">
+            <img src="/logos/Viator_Logo.png" alt="Viator" width="160" height="40" class="h-10 md:h-12 w-auto object-contain" />
+          </a>
+          <a href="https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"
+             target="_blank" rel="noopener noreferrer"
+             class="opacity-50 hover:opacity-100 transition-opacity">
+            <img src="/logos/Tripadvisor-Logo.png" alt="TripAdvisor" width="160" height="90" class="h-10 md:h-12 w-auto object-contain" />
+          </a>
+          <a href="https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8"
+             target="_blank" rel="noopener noreferrer"
+             class="opacity-50 hover:opacity-100 transition-opacity">
+            <img src="/logos/Google__logo.webp" alt="Google Maps — 4.9/5" width="160" height="53" class="h-10 md:h-12 w-auto object-contain" />
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Building the Tours Section — Enhanced cards -->
     <section class="py-20 bg-slate-50">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -388,7 +419,14 @@ countryMap.forEach((count, country) => {
     ],
     "knowsLanguage": ["en", "fr"],
     "image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
-    "url": "https://www.parishistorytours.com/key-figures"
+    "url": "https://www.parishistorytours.com/key-figures",
+    "sameAs": [
+      "https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8",
+      "https://www.instagram.com/parishistorytours/",
+      "https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/",
+      "https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2",
+      "https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"
+    ]
   }} />
 </BaseLayout>
 
