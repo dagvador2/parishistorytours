@@ -152,6 +152,14 @@ const Wizard: React.FC = () => {
             >
               <img src="/logos/tourist_logo.svg" alt="Tourist.com" className="w-36 object-contain" />
             </a>
+            <a
+              href="https://parisjetaime.com/activite/Paris-history-tours-p4833"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="opacity-70 hover:opacity-100 transition-opacity"
+            >
+              <img src="/logos/parisjetaime_logo.svg" alt="Paris je t'aime — Office du Tourisme" className="w-10 h-10 object-contain" />
+            </a>
           </div>
         </div>
       )}
