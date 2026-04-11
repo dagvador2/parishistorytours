@@ -5,8 +5,8 @@ publishDate: 2026-03-21
 author: "Clement Daguet-Schott"
 lang: en
 tags: ["French Resistance", "Agnes Humbert", "Musée de l'Homme", "WWII Paris", "Occupation of Paris"]
-image: "/photos/left_bank/luxembourg_palace_paris.webp"
-imageAlt: "Luxembourg Palace in Paris, Luftwaffe headquarters during the German occupation"
+image: "/photos/musee_de_lhomme_paris.webp"
+imageAlt: "The Musée de l'Homme at the Palais de Chaillot in Paris, birthplace of one of the first French Resistance networks"
 ---
 
 ## When Resistance Was Unthinkable

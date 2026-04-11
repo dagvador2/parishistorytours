@@ -5,8 +5,8 @@ publishDate: 2026-03-21
 author: "Clement Daguet-Schott"
 lang: fr
 tags: ["Résistance française", "Agnès Humbert", "Musée de l'Homme", "Paris Seconde Guerre mondiale", "Occupation de Paris"]
-image: "/photos/left_bank/luxembourg_palace_paris.webp"
-imageAlt: "Palais du Luxembourg à Paris, quartier général de la Luftwaffe pendant l'occupation allemande"
+image: "/photos/musee_de_lhomme_paris.webp"
+imageAlt: "Le Musée de l'Homme au Palais de Chaillot à Paris, berceau de l'un des premiers réseaux de la Résistance française"
 ---
 
 ## Quand résister était impensable

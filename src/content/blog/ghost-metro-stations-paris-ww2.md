@@ -5,8 +5,8 @@ publishDate: 2026-04-05
 author: "Clement Daguet-Schott"
 lang: en
 tags: ["Paris Metro", "Ghost Stations", "World War II", "Paris History", "French Occupation"]
-image: "/photos/resistance_ww2_paris.webp"
-imageAlt: "Paris during the Occupation — a city between shadow and resistance"
+image: "/photos/ghost_station_saint_martin_paris_metro.webp"
+imageAlt: "The abandoned Saint-Martin ghost station in the Paris Metro, sealed since World War II"
 ---
 
 ## The Day Paris Shut Its Doors

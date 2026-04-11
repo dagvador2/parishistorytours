@@ -5,8 +5,8 @@ publishDate: 2026-04-05
 author: "Clement Daguet-Schott"
 lang: fr
 tags: ["Métro Paris", "Stations fantômes", "Seconde Guerre mondiale", "Histoire de Paris", "Occupation"]
-image: "/photos/resistance_ww2_paris.webp"
-imageAlt: "Paris sous l'Occupation — une ville entre ombre et résistance"
+image: "/photos/ghost_station_saint_martin_paris_metro.webp"
+imageAlt: "La station fantôme Saint-Martin dans le métro parisien, fermée depuis la Seconde Guerre mondiale"
 ---
 
 ## Le jour où Paris a fermé ses portes
