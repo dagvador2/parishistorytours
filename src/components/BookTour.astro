@@ -6,9 +6,10 @@ import { fr } from '../i18n/translations/fr';
 interface Props {
   defaultTour?: 'left-bank' | 'right-bank';
   tourFilter?: string; // legacy prop alias
+  hideChrome?: boolean;
 }
 
-const { defaultTour, tourFilter } = Astro.props;
+const { defaultTour, tourFilter, hideChrome = false } = Astro.props;
 const resolvedTour = defaultTour || tourFilter;
 
 const lang = Astro.locals.lang;
@@ -18,5 +19,5 @@ const bookingT = allTranslations[lang].booking;
 
 {/* Section Book your tour */}
 <div id="book-tour" class="mb-16">
-	<BookingWizard client:idle translations={bookingT} lang={lang} defaultTour={resolvedTour} />
+	<BookingWizard client:idle translations={bookingT} lang={lang} defaultTour={resolvedTour} hideChrome={hideChrome} />
 </div>

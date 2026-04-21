@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
-/* Self-hosted Montserrat (variable font: 400-500) */
+/* Self-hosted Playfair Display + Inter (variable fonts, all subsets — browser picks via unicode-range) */
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/inter";
+
+/* Self-hosted Montserrat (variable font: 400-500) — retained for legacy components */
 @font-face {
   font-family: 'Montserrat';
   font-style: normal;
@@ -19,8 +23,26 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-/* Color variables required by the aurora-background component */
+/* "Quiet" design tokens — editorial ink-on-paper palette. Use sparingly.
+   --rouge is the single accent; --gold and --teal are rare secondaries. */
 :root {
+  --ink:        #1a1a1a;
+  --ink-2:      #4a4a4a;
+  --paper:      #fafaf7;
+  --paper-2:    #f0efea;
+  --paper-3:    #ffffff;
+  --rouge:      #8a3b2e;
+  --rouge-dark: #5c2418;
+  --gold:       #8a7a4a;
+  --gold-dark:  #5c5230;
+  --teal:       #3a4a48;
+  --teal-dark:  #242f2d;
+  --border:     rgba(26, 26, 26, 0.1);
+
+  --font-display: 'Playfair Display Variable', Georgia, serif;
+  --font-sans:    'Inter Variable', system-ui, -apple-system, sans-serif;
+
+  /* Retained aurora palette for legacy AuroraBackground (key-figures page) */
   --white: #fff;
   --black: #000;
   --transparent: transparent;
@@ -31,8 +53,46 @@
   --violet-200: #ddd6fe;
 }
 
+/* Expose Quiet tokens to Tailwind v4 utilities (text-ink, bg-paper, font-display, etc.) */
 @theme {
   --animate-aurora: aurora 60s linear infinite;
+
+  --color-ink:        #1a1a1a;
+  --color-ink-2:      #4a4a4a;
+  --color-paper:      #fafaf7;
+  --color-paper-2:    #f0efea;
+  --color-paper-3:    #ffffff;
+  --color-rouge:      #8a3b2e;
+  --color-rouge-dark: #5c2418;
+  --color-gold:       #8a7a4a;
+  --color-gold-dark:  #5c5230;
+  --color-teal:       #3a4a48;
+  --color-teal-dark:  #242f2d;
+
+  --font-display: 'Playfair Display Variable', Georgia, serif;
+  --font-sans:    'Inter Variable', system-ui, -apple-system, sans-serif;
+}
+
+/* Quiet base styles — scoped to [data-theme="quiet"] so legacy pages render unchanged
+   until they opt in. The homepage + tour pages will set this on <body>. */
+[data-theme="quiet"] {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="quiet"] h1,
+[data-theme="quiet"] h2,
+[data-theme="quiet"] h3,
+[data-theme="quiet"] h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
 @keyframes aurora {

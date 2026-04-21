@@ -1,0 +1,313 @@
+---
+import { Picture } from 'astro:assets';
+import { useTranslations } from '../../i18n/utils';
+import leftBankImg from '../../images/notre-dame-de-paris.webp';
+import rightBankImg from '../../images/place_vendome_paris_day.webp';
+import generalImg from '../../images/luxembourg_palace_paris.webp';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const langPrefix = lang === 'en' ? '' : '/fr';
+
+const cards = [
+  {
+    href: `${langPrefix}/tours/left-bank`,
+    img: leftBankImg,
+    alt: t('quiet.home.hero.mediaMainAlt'),
+    badge: t('quiet.home.tours.leftBankBadge'),
+    numeral: t('quiet.home.tours.leftBankNumeral'),
+    era: t('quiet.home.tours.leftBankEra'),
+    title: t('quiet.home.tours.leftBankTitle'),
+    desc: t('quiet.home.tours.leftBankDesc'),
+    specs: [
+      { value: t('quiet.home.tours.leftBankStopsValue'),    label: t('quiet.home.tours.leftBankStopsLabel') },
+      { value: t('quiet.home.tours.leftBankDurationValue'), label: t('quiet.home.tours.leftBankDurationLabel') },
+      { value: t('quiet.home.tours.leftBankWalkValue'),     label: t('quiet.home.tours.leftBankWalkLabel') },
+    ],
+  },
+  {
+    href: `${langPrefix}/tours/right-bank`,
+    img: rightBankImg,
+    alt: t('quiet.home.hero.mediaSideBAlt'),
+    badge: t('quiet.home.tours.rightBankBadge'),
+    numeral: t('quiet.home.tours.rightBankNumeral'),
+    era: t('quiet.home.tours.rightBankEra'),
+    title: t('quiet.home.tours.rightBankTitle'),
+    desc: t('quiet.home.tours.rightBankDesc'),
+    specs: [
+      { value: t('quiet.home.tours.rightBankStopsValue'),    label: t('quiet.home.tours.rightBankStopsLabel') },
+      { value: t('quiet.home.tours.rightBankDurationValue'), label: t('quiet.home.tours.rightBankDurationLabel') },
+      { value: t('quiet.home.tours.rightBankWalkValue'),     label: t('quiet.home.tours.rightBankWalkLabel') },
+    ],
+  },
+  {
+    href: `${langPrefix}/tours/general-history`,
+    img: generalImg,
+    alt: 'Palais du Luxembourg',
+    badge: t('quiet.home.tours.generalBadge'),
+    numeral: t('quiet.home.tours.generalNumeral'),
+    era: t('quiet.home.tours.generalEra'),
+    title: t('quiet.home.tours.generalTitle'),
+    desc: t('quiet.home.tours.generalDesc'),
+    specs: [
+      { value: t('quiet.home.tours.generalStopsValue'),    label: t('quiet.home.tours.generalStopsLabel') },
+      { value: t('quiet.home.tours.generalDurationValue'), label: t('quiet.home.tours.generalDurationLabel') },
+      { value: t('quiet.home.tours.generalWalkValue'),     label: t('quiet.home.tours.generalWalkLabel') },
+    ],
+  },
+];
+const reserveCta = t('quiet.home.tours.reserveCta');
+---
+
+<section id="tours" class="qtours">
+  <div class="qtours__inner">
+    <header class="qtours__header">
+      <p class="qtours__kicker">{t('quiet.home.tours.kicker')}</p>
+      <h2 class="qtours__title">{t('quiet.home.tours.title')}</h2>
+      <p class="qtours__subtitle">{t('quiet.home.tours.subtitle')}</p>
+    </header>
+
+    <div class="qtours__grid">
+      {cards.map((card) => (
+        <article class="qtours__card">
+          <a href={card.href} class="qtours__img">
+            <span class="qtours__badge">{card.badge}</span>
+            <span class="qtours__numeral" aria-hidden="true">{card.numeral}</span>
+            <Picture
+              src={card.img}
+              alt={card.alt}
+              widths={[480, 720, 960]}
+              sizes="(max-width:900px) 100vw, 33vw"
+              formats={["avif", "webp"]}
+              quality={80}
+              loading="lazy"
+            />
+          </a>
+          <div class="qtours__body">
+            <div class="qtours__era">{card.era}</div>
+            <h3 class="qtours__card-title">
+              <a href={card.href}>{card.title}</a>
+            </h3>
+            <p class="qtours__desc">{card.desc}</p>
+            <div class="qtours__specs">
+              {card.specs.map((s) => (
+                <div>
+                  <b>{s.value}</b>
+                  <span>{s.label}</span>
+                </div>
+              ))}
+            </div>
+            <a href="#book" class="qtours__cta">{reserveCta} <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .qtours {
+    background: var(--paper);
+    padding: 96px 32px;
+  }
+  .qtours__inner { max-width: 1280px; margin: 0 auto; }
+  .qtours__header {
+    max-width: 720px;
+    margin: 0 auto 56px;
+    text-align: center;
+  }
+  .qtours__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 16px;
+  }
+  .qtours__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 4.4vw, 52px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 20px;
+    line-height: 1.05;
+  }
+  .qtours__subtitle {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  .qtours__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .qtours__card {
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+  .qtours__card:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -12px rgba(0,0,0,.15);
+  }
+
+  .qtours__img {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .qtours__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+  .qtours__card:hover .qtours__img img { transform: scale(1.03); }
+  .qtours__img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,26,26,0.25), rgba(26,26,26,0) 40%);
+    pointer-events: none;
+  }
+  .qtours__badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    background: transparent;
+    color: var(--paper-3);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    padding: 5px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    backdrop-filter: blur(2px);
+  }
+  .qtours__numeral {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    border-radius: 50%;
+  }
+
+  .qtours__body {
+    padding: 24px 24px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .qtours__era {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 12px;
+  }
+  .qtours__card-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 26px;
+    color: var(--ink);
+    margin: 0 0 14px;
+    line-height: 1.2;
+  }
+  .qtours__card-title a { color: inherit; text-decoration: none; }
+  .qtours__card-title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .qtours__desc {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 20px;
+    flex: 1;
+  }
+
+  .qtours__specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-sans);
+    letter-spacing: 0.06em;
+  }
+  .qtours__specs > div { display: flex; flex-direction: column; gap: 2px; }
+  .qtours__specs b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .qtours__specs span {
+    font-size: 10px;
+    color: var(--ink-2);
+    text-transform: uppercase;
+  }
+
+  .qtours__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -24px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    background: transparent;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .qtours__cta:hover { background: var(--ink); color: var(--paper-3); }
+
+  @media (max-width: 900px) {
+    .qtours { padding: 72px 0; }
+    .qtours__header { padding: 0 20px; }
+    .qtours__grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 85%;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 20px 16px;
+      scroll-padding: 0 20px;
+    }
+    .qtours__grid::-webkit-scrollbar { display: none; }
+    .qtours__card { scroll-snap-align: start; }
+  }
+</style>

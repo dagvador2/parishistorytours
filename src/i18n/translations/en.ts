@@ -613,5 +613,234 @@ export const en = {
       regards: "Best regards,",
       amountPaid: "Amount Paid:"
     }
+  },
+
+  // "Quiet" redesign — copy scoped to the new homepage + tour detail template
+  quiet: {
+    topBar: {
+      notice: "Tours in English & French · Private groups available"
+    },
+    nav: {
+      brand: "Paris History Tours",
+      tagline: "Walking Tours · Est. 2024",
+      tours: "Tours",
+      route: "Route",
+      compare: "Compare",
+      about: "About",
+      faq: "FAQ",
+      bookTour: "Book a Tour",
+      menuLabel: "Menu"
+    },
+    mobileBooking: {
+      priceFrom: "From €45",
+      meta: "Small group · 2h walk",
+      cta: "Book a Tour"
+    },
+    footer: {
+      description: "Discover the hidden stories of Paris through expert-guided historical walking tours.",
+      toursHeading: "Tours",
+      infoHeading: "Info",
+      contactHeading: "Contact",
+      leftBank: "Left Bank · WW2",
+      rightBank: "Right Bank · WW2",
+      generalHistory: "General History",
+      compare: "Compare",
+      aboutLink: "About Clement",
+      faqLink: "FAQ",
+      blog: "Blog",
+      whatsapp: "WhatsApp",
+      email: "Email",
+      maps: "Google Maps",
+      instagram: "Instagram",
+      copyright: "Paris History Tours · All Rights Reserved",
+      alsoOn: "Also on GetYourGuide · Viator · TripAdvisor · Paris je t'aime"
+    },
+    home: {
+      hero: {
+        posterTag: "Paris · 52 BC — 1944",
+        headlinePart1: "The stories",
+        headlineAccent: "Paris",
+        headlinePart2: "keeps in the streets, from Lutetia to the",
+        headlinePart3: "Liberation",
+        lede: "Private walking tours through two thousand years of Parisian history — Roman Lutetia, Viking sieges, revolutionary nights, and a specialist focus on the Fall, the Resistance, and the Liberation of 1940–44. Led by an independent historian who has spent years in the archives so every story reaches you in full.",
+        browseCta: "Browse Tours",
+        seeRouteCta: "See the Route",
+        mediaMainAlt: "Notre-Dame de Paris",
+        mediaMainLabel: "Notre-Dame",
+        mediaMainCaption: "Site of De Gaulle's victory Te Deum · August 26, 1944",
+        mediaSideAAlt: "Pont Alexandre III",
+        mediaSideALabel: "Pont Alexandre III",
+        mediaSideACaption: "Saved from demolition, 1944",
+        mediaSideBAlt: "Place Vendôme",
+        mediaSideBLabel: "Place Vendôme",
+        mediaSideBCaption: "The Ritz, liberated",
+        statToursValue: "3",
+        statToursLabel: "Distinct Tours",
+        statYearsValue: "2000",
+        statYearsLabel: "Years Covered",
+        statCountriesValue: "25+",
+        statCountriesLabel: "Countries",
+        statRatingValue: "4.9",
+        statRatingLabel: "Google ★",
+        statGroupValue: "10",
+        statGroupLabel: "Max Group"
+      },
+      tours: {
+        kicker: "Three Journeys",
+        title: "Choose your tour",
+        subtitle: "Each tour is a self-contained story — the Fall, the Resistance, the Liberation — walked in real places where it happened.",
+        leftBankBadge: "WW2",
+        leftBankNumeral: "I",
+        leftBankEra: "1940 — 1944 · Left Bank",
+        leftBankTitle: "Left Bank Tour",
+        leftBankDesc: "From Boulevard Saint-Michel to Notre-Dame — the Sorbonne student resistance, the Luxembourg Luftwaffe, and the sniper-fire Te Deum of the Liberation.",
+        leftBankStopsValue: "4",
+        leftBankStopsLabel: "Stops",
+        leftBankDurationValue: "2h",
+        leftBankDurationLabel: "Duration",
+        leftBankWalkValue: "2.5km",
+        leftBankWalkLabel: "Walk",
+        rightBankBadge: "WW2",
+        rightBankNumeral: "II",
+        rightBankEra: "1940 — 1944 · Right Bank",
+        rightBankTitle: "Right Bank Tour",
+        rightBankDesc: "Pont Alexandre III to Place Vendôme — the bridges Hitler ordered razed, the Concorde plundered with looted art, and Hemingway \"liberating\" the Ritz bar.",
+        rightBankStopsValue: "4",
+        rightBankStopsLabel: "Stops",
+        rightBankDurationValue: "2h",
+        rightBankDurationLabel: "Duration",
+        rightBankWalkValue: "2.5km",
+        rightBankWalkLabel: "Walk",
+        generalBadge: "2000 YRS",
+        generalNumeral: "III",
+        generalEra: "52 BC — 1791 · General",
+        generalTitle: "General History",
+        generalDesc: "Two thousand years in an afternoon — the Roman conquest of Lutetia, the Viking siege of 885, and the royal escape attempt of 1791 that ended a monarchy.",
+        generalStopsValue: "3",
+        generalStopsLabel: "Stops",
+        generalDurationValue: "1.5h",
+        generalDurationLabel: "Duration",
+        generalWalkValue: "2km",
+        generalWalkLabel: "Walk",
+        reserveCta: "Reserve a Spot"
+      },
+      route: {
+        kicker: "The route",
+        title: "See where we walk.",
+        tabLeftBank: "Left Bank",
+        tabRightBank: "Right Bank",
+        tabGeneral: "General"
+      },
+      compare: {
+        kicker: "Compare",
+        title: "One guide, three walks.",
+        axisFocus: "Focus",
+        axisRoute: "Route",
+        axisDuration: "Duration",
+        axisStops: "Stops",
+        axisBestFor: "Best for",
+        leftBankFocus: "WWII · Left Bank",
+        leftBankRoute: "Panthéon → Notre-Dame",
+        leftBankDuration: "2 hours",
+        leftBankStops: "4 stops · 2.5 km",
+        leftBankBestFor: "First-time WWII visitors",
+        rightBankFocus: "WWII · Right Bank",
+        rightBankRoute: "Alexandre III → Vendôme",
+        rightBankDuration: "2 hours",
+        rightBankStops: "4 stops · 2.5 km",
+        rightBankBestFor: "Return visitors · art theft · Liberation",
+        generalFocus: "2,000 years of Paris",
+        generalRoute: "Cluny → Cité → Tuileries",
+        generalDuration: "1.5 hours",
+        generalStops: "3 stops · 2 km",
+        generalBestFor: "Families · first-timers · non-WWII"
+      },
+      reviews: {
+        kicker: "Reviews",
+        title: "What guests say."
+      },
+      about: {
+        kicker: "The Guide",
+        title: "Clément Daguet-Schott.",
+        p1: "I'm a Paris-born historian who spends most days walking the same streets I grew up on — and most evenings reading about them. History, to me, is something you do on foot, with the buildings as witnesses.",
+        p2: "My tours are small (ten people maximum) and deliberately slow. I'd rather tell you two stories properly than rush through twenty. Most walks run two hours; private groups can book the route that suits them.",
+        p3: "I guide in English and in French. All of the research comes from primary sources — archives, memoirs, newspapers of the day — cross-checked against the scholarship.",
+        credLabel: "Credentials",
+        cred1: "History · Sciences Po",
+        cred2: "Guiding since 2024",
+        cred3: "On TripAdvisor, GetYourGuide, Paris je t'aime"
+      },
+      booking: {
+        kicker: "Booking",
+        title: "How to book.",
+        description: "Reserve through a major partner or write directly. Same guide, same route, same small group either way.",
+        partnerLabel: "Also book on",
+        whatsappLabel: "WhatsApp",
+        emailLabel: "Email",
+        directHeading: "Or book directly",
+        directDescription: "Pick a date, a party size, pay in one step. Bookings confirm within 24 hours."
+      },
+      faq: {
+        kicker: "Questions",
+        title: "Things you might wonder."
+      }
+    },
+    tour: {
+      heroKickerLeftBank: "Left Bank · WWII",
+      heroKickerRightBank: "Right Bank · WWII",
+      heroKickerGeneral: "Two thousand years · General",
+      didYouKnow: {
+        kicker: "Did you know"
+      },
+      themes: {
+        kickerWW2: "Three threads, one walk",
+        titleWW2: "The Fall · The Resistance · The Liberation",
+        kickerGeneral: "Three eras, one walk",
+        titleGeneral: "The Romans · The Middle Ages · The Revolution",
+        actFallWW2: "Act I · June 1940",
+        actResistanceWW2: "Act II · 1940 — 1944",
+        actLiberationWW2: "Act III · August 1944",
+        actRomanGeneral: "Act I · 52 BC — 5th century",
+        actMedievalGeneral: "Act II · 9th — 13th century",
+        actRevolutionGeneral: "Act III · 1789 — 1791"
+      },
+      stops: {
+        kicker: "On the ground",
+        introStepLabel: "Introduction",
+        subtitle: "Walked in sequence — each stop sets up the next."
+      },
+      route: {
+        kicker: "The walk",
+        titleWW2: "See where we walk.",
+        titleGeneral: "See where we walk.",
+        subtitleWW2: "Four stops, two hours, one neighbourhood — all on foot.",
+        subtitleGeneral: "Three stops, an afternoon, two thousand years — all on foot."
+      },
+      gallery: {
+        kicker: "On the ground",
+        title: "From the tour."
+      },
+      booking: {
+        kicker: "Book this walk",
+        fromLabel: "From",
+        perPerson: "/ person",
+        durationLabel: "Duration",
+        durationValueWW2: "2 hours",
+        durationValueGeneral: "1 h 30",
+        groupLabel: "Group",
+        groupValue: "Max 10",
+        languageLabel: "Languages",
+        languageValue: "English · French",
+        primaryCta: "Message me on WhatsApp",
+        secondaryCta: "Book on this site",
+        partnerLabel: "Also book on",
+        directHeading: "Or book directly",
+        directDescription: "Pick a date, a party size, pay in one step. Bookings confirm within 24 hours."
+      },
+      other: {
+        kicker: "More walks",
+        title: "Discover the other tours."
+      }
+    }
   }
 };

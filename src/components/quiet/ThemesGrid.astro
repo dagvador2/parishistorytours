@@ -1,0 +1,163 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import type { TopicImage } from '../../data/tours';
+
+interface Props {
+  themeKeys: readonly string[];
+  topics: TopicImage[];
+  isGeneral: boolean;
+}
+
+const { themeKeys, topics, isGeneral } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const kicker = isGeneral ? t('quiet.tour.themes.kickerGeneral') : t('quiet.tour.themes.kickerWW2');
+const title = isGeneral ? t('quiet.tour.themes.titleGeneral') : t('quiet.tour.themes.titleWW2');
+
+// Map theme key to act label translation key
+const actKeyMap: Record<string, string> = {
+  fall: 'quiet.tour.themes.actFallWW2',
+  resistance: 'quiet.tour.themes.actResistanceWW2',
+  liberation: 'quiet.tour.themes.actLiberationWW2',
+  roman: 'quiet.tour.themes.actRomanGeneral',
+  medieval: 'quiet.tour.themes.actMedievalGeneral',
+  revolution: 'quiet.tour.themes.actRevolutionGeneral',
+};
+---
+
+<section class="qthemes">
+  <div class="qthemes__inner">
+    <header class="qthemes__header">
+      <p class="qthemes__kicker">{kicker}</p>
+      <h2 class="qthemes__title">{title}</h2>
+    </header>
+
+    <div class="qthemes__grid">
+      {themeKeys.map((theme, i) => {
+        const topic = topics[i];
+        const actLabel = actKeyMap[theme] ? t(actKeyMap[theme]) : '';
+        return (
+          <article class="qthemes__card">
+            {topic && (
+              <div class="qthemes__img">
+                <img
+                  src={topic.src}
+                  alt={topic.alt}
+                  loading="lazy"
+                  decoding="async"
+                  style={topic.objectPosition ? `object-position: ${topic.objectPosition}` : undefined}
+                />
+              </div>
+            )}
+            <div class="qthemes__body">
+              <p class="qthemes__act">{actLabel}</p>
+              <h3 class="qthemes__cardtitle">{t(`tours.themes.${theme}.title`)}</h3>
+              <p class="qthemes__desc">{t(`tours.themes.${theme}.description`)}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .qthemes { background: var(--paper); padding: 96px 32px; }
+  .qthemes__inner { max-width: 1280px; margin: 0 auto; }
+  .qthemes__header { margin-bottom: 56px; max-width: 780px; }
+  .qthemes__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 16px;
+  }
+  .qthemes__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 4.2vw, 52px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .qthemes__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .qthemes__card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+  }
+  .qthemes__img {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .qthemes__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+  .qthemes__card:hover .qthemes__img img { transform: scale(1.03); }
+
+  .qthemes__body {
+    padding: 28px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .qthemes__act {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .qthemes__cardtitle {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 28px;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .qthemes__desc {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .qthemes { padding: 64px 0; }
+    .qthemes__header { padding: 0 24px; }
+    .qthemes__grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 85%;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 24px 16px;
+      scroll-padding: 0 24px;
+    }
+    .qthemes__grid::-webkit-scrollbar { display: none; }
+    .qthemes__card { scroll-snap-align: start; }
+  }
+</style>

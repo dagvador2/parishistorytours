@@ -1,0 +1,232 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import type { TourConfig } from '../../data/tours';
+
+interface Props {
+  tour: TourConfig;
+  isGeneral: boolean;
+}
+
+const { tour, isGeneral } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const tp = tour.translationPrefix;
+
+// Step label per stop:
+//  - WW2 tours have 4 stops: stop 1 is "Introduction", stops 2–4 align with themeKeys[0..2]
+//  - General-history has 3 stops, each aligned with themeKeys[0..2]
+function stopStepLabel(i: number): string {
+  if (isGeneral) {
+    const key = tour.themeKeys[i];
+    return key ? t(`tours.themes.${key}.title`) : '';
+  }
+  if (i === 0) return t('quiet.tour.stops.introStepLabel');
+  const key = tour.themeKeys[i - 1];
+  return key ? t(`tours.themes.${key}.title`) : '';
+}
+
+// Title for the section: reuse the existing "Our 4 historic stops" / "Our 3 historic stops" key
+const sectionTitle = t(`tours.stops.our${tour.stopCount}Stops`);
+
+const stops = Array.from({ length: tour.stopCount }, (_, i) => {
+  const n = i + 1;
+  return {
+    n,
+    nLabel: String(n).padStart(2, '0'),
+    stepLabel: stopStepLabel(i),
+    title: t(`tours.${tp}.stops.stop${n}.title`),
+    description: t(`tours.${tp}.stops.stop${n}.description`),
+    img: tour.stops[i],
+  };
+});
+---
+
+<section id="stops" class="qstops">
+  <div class="qstops__inner">
+    <header class="qstops__header">
+      <p class="qstops__kicker">{t('quiet.tour.stops.kicker')}</p>
+      <h2 class="qstops__title">{sectionTitle}</h2>
+      <p class="qstops__subtitle">{t('quiet.tour.stops.subtitle')}</p>
+    </header>
+
+    <ol class="qstops__list">
+      {stops.map((stop, i) => (
+        <li class={`qstops__row ${i % 2 === 1 ? 'is-reversed' : ''}`}>
+          <div class="qstops__text">
+            <span class="qstops__numeral" aria-hidden="true">{stop.nLabel}</span>
+            <p class="qstops__step">
+              <span class="qstops__step-rule" aria-hidden="true"></span>
+              <span class="qstops__step-label">{stop.stepLabel}</span>
+            </p>
+            <h3 class="qstops__stop-title">{stop.title}</h3>
+            <p class="qstops__stop-desc">{stop.description}</p>
+          </div>
+          <div class="qstops__figure">
+            {stop.img && (
+              <img
+                src={stop.img.src}
+                alt={stop.img.alt}
+                loading="lazy"
+                decoding="async"
+                style={stop.img.objectPosition ? `object-position: ${stop.img.objectPosition}` : undefined}
+              />
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .qstops {
+    background: var(--paper);
+    padding: 96px 32px;
+    border-top: 1px solid var(--border);
+  }
+  .qstops__inner { max-width: 1280px; margin: 0 auto; }
+  .qstops__header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 80px;
+  }
+  .qstops__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 16px;
+  }
+  .qstops__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 20px;
+    line-height: 1.05;
+  }
+  .qstops__subtitle {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  .qstops__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 96px;
+  }
+  .qstops__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .qstops__row.is-reversed .qstops__text { order: 2; }
+  .qstops__row.is-reversed .qstops__figure { order: 1; }
+
+  .qstops__text { display: flex; flex-direction: column; }
+  .qstops__numeral {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 96px;
+    line-height: 1;
+    color: var(--border);
+    margin-bottom: 8px;
+  }
+  .qstops__step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 20px;
+  }
+  .qstops__step-rule {
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--ink);
+  }
+  .qstops__step-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .qstops__stop-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 4vw, 52px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 24px;
+    line-height: 1.1;
+  }
+  .qstops__stop-desc {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  .qstops__figure {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--paper-2);
+    border: 1px solid var(--border);
+  }
+  .qstops__figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 500ms ease;
+  }
+  .qstops__row:hover .qstops__figure img { transform: scale(1.03); }
+
+  @media (max-width: 900px) {
+    .qstops { padding: 72px 0; }
+    .qstops__header { margin: 0 24px 40px; }
+    .qstops__list {
+      grid-auto-flow: column;
+      grid-auto-columns: 85%;
+      display: grid;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 24px 16px;
+      scroll-padding: 0 24px;
+    }
+    .qstops__list::-webkit-scrollbar { display: none; }
+    .qstops__row {
+      scroll-snap-align: start;
+      grid-template-columns: 1fr;
+      gap: 0;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .qstops__row.is-reversed .qstops__text,
+    .qstops__row.is-reversed .qstops__figure { order: unset; }
+    .qstops__figure { aspect-ratio: 4 / 3; order: -1; border: 0; }
+    .qstops__text { padding: 24px; }
+    .qstops__numeral { font-size: 56px; margin-bottom: 4px; }
+    .qstops__stop-title { font-size: 26px; margin-bottom: 16px; }
+    .qstops__stop-desc { font-size: 14px; }
+  }
+</style>

@@ -1,15 +1,21 @@
 ---
-import { Picture } from "astro:assets";
-
+import { Picture } from 'astro:assets';
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import BookTour from "../../components/BookTour.astro";
-import TourMap from "../../components/TourMap.tsx";
 import JsonLd from "../../components/JsonLd.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import FAQ from "../../components/FAQ.astro";
-import Navbar from "../../components/Navbar.astro";
 import { useTranslations } from '../../i18n/utils';
 import { tours } from '../../data/tours';
+
+import TopBar from "../../components/quiet/TopBar.astro";
+import Nav from "../../components/quiet/Nav.astro";
+import MobileBookingBar from "../../components/quiet/MobileBookingBar.astro";
+import TourHero from "../../components/quiet/TourHero.astro";
+import DidYouKnowStrip from "../../components/quiet/DidYouKnowStrip.astro";
+import ThemesGrid from "../../components/quiet/ThemesGrid.astro";
+import StopsSection from "../../components/quiet/StopsSection.astro";
+import RouteDetail from "../../components/quiet/RouteDetail.astro";
+import GalleryGrid from "../../components/quiet/GalleryGrid.astro";
+import BookingCard from "../../components/quiet/BookingCard.astro";
+import FAQ from "../../components/quiet/FAQ.astro";
 
 import pantheon from "../../images/pantheon_de_Paris.webp";
 import vendome from "../../images/place_vendome_paris.webp";
@@ -37,396 +43,104 @@ const tourConfig = tours[tourSlug];
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
-// Create language-aware navigation links
 const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
-
-// Translation key helpers
-const tp = tourConfig.translationPrefix; // 'leftBank', 'rightBank', or 'generalHistory'
-
+const tp = tourConfig.translationPrefix;
 const heroImage = heroImages[tourConfig.heroImageKey];
+const isGeneral = tourSlug === 'general-history';
 
-const themeKeys = tourConfig.themeKeys;
+// Hero kicker per tour (short editorial label above the title)
+const kickerKey = tourSlug === 'left-bank'  ? 'quiet.tour.heroKickerLeftBank'
+                : tourSlug === 'right-bank' ? 'quiet.tour.heroKickerRightBank'
+                :                              'quiet.tour.heroKickerGeneral';
+const heroKicker = t(kickerKey);
+const heroTitle = t(`tours.${tp}.title`);
+const heroSubtitle = t(`tours.${tp}.description`);
 
-// Dynamic hero badges per tour
-const isGeneralHistory = tourSlug === 'general-history';
-const heroDuration = isGeneralHistory ? t('common.durationGeneralHistory') : t('common.duration');
-const heroDistance = isGeneralHistory ? t('common.distanceGeneralHistory') : t('common.distance');
-const heroStops = isGeneralHistory ? t('common.stopsGeneralHistory') : t('common.stops');
-
-// Dynamic theme section title
-const themeSectionTitle = isGeneralHistory
-  ? t('tours.themes.titleGeneralHistory')
-  : t('tours.themes.title');
-
-// Dynamic stops section title
-const stopsSectionTitle = t(`tours.stops.our${tourConfig.stopCount}Stops`);
-
-// JSON-LD duration
-const jsonLdDuration = isGeneralHistory ? 'PT1H30M' : 'PT2H';
-const jsonLdTourName = isGeneralHistory
-  ? t(`tours.${tp}.title`) + " - Paris Walking Tour"
-  : t(`tours.${tp}.title`) + " - Paris WWII Walking Tour";
-const jsonLdTouristType = isGeneralHistory
+// JSON-LD helpers (unchanged from legacy template)
+const jsonLdDuration = isGeneral ? 'PT1H30M' : 'PT2H';
+const jsonLdTourName = isGeneral
+  ? heroTitle + " - Paris Walking Tour"
+  : heroTitle + " - Paris WWII Walking Tour";
+const jsonLdTouristType = isGeneral
   ? ["History enthusiast", "Cultural traveler", "First-time visitor"]
   : ["History enthusiast", "Cultural traveler"];
-const jsonLdGuideJobTitle = isGeneralHistory
+const jsonLdGuideJobTitle = isGeneral
   ? "History Guide & Researcher"
   : "WWII History Guide & Researcher";
-
-const galleryAutoPlayAttr = tourConfig.galleryAutoPlayMs
-  ? `data-autoplay="${tourConfig.galleryAutoPlayMs}"`
-  : '';
 ---
 
-<BaseLayout title={t(`meta.${tp}.title`)} description={t(`meta.${tp}.description`)} ogImage={tourConfig.ogImage}>
-  <Navbar variant="tour" />
+<BaseLayout
+  title={t(`meta.${tp}.title`)}
+  description={t(`meta.${tp}.description`)}
+  ogImage={tourConfig.ogImage}
+  theme="quiet"
+>
+  <TopBar />
+  <Nav context="tour" />
 
-  <Breadcrumbs items={[
-    { label: t('nav.home'), href: `${langPrefix}/` },
-    { label: t('tours.title'), href: `${langPrefix}/#tours` },
-    { label: t(`booking.${tourConfig.breadcrumbKey}`) }
-  ]} />
+  <main>
+    <TourHero
+      image={heroImage}
+      alt={tourConfig.heroAlt}
+      kicker={heroKicker}
+      title={heroTitle}
+      subtitle={heroSubtitle}
+    />
 
-  <!-- Hero Section -->
-  <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700">
-    <div class="absolute inset-0 bg-black/40"></div>
-    <div class="absolute inset-0">
-      <Picture
-        src={heroImage}
-        alt={tourConfig.heroAlt}
-        widths={[640,768,1024,1440]}
-        sizes="100vw"
-        formats={["avif","webp"]}
-        loading="eager"
-        decoding="async"
-        quality={75}
-        class="w-full h-full object-cover"
-      />
-    </div>
-    <div class="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
-      <h1 class="text-5xl md:text-7xl font-bold mb-6">{t(`tours.${tp}.title`)}</h1>
-      <p class="text-xl md:text-2xl mb-8 opacity-90">
-        {t(`tours.${tp}.description`)}
-      </p>
-      <div class="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-4 md:gap-8 text-lg md:text-xl">
-        <div class="flex items-center justify-center gap-3">
-          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-          </svg>
-          <span class="font-medium">{heroDuration}</span>
-        </div>
-        <div class="flex items-center justify-center gap-3">
-          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-          </svg>
-          <span class="font-medium">{heroDistance}</span>
-        </div>
-        <div class="flex items-center justify-center gap-3">
-          <svg class="w-7 h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span class="font-medium">{heroStops}</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    <DidYouKnowStrip tp={tp} />
 
-  <!-- Introduction Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-4xl mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
-        {t(`tours.${tp}.introduction`)}
-      </h2>
-      <div class="text-center">
-        <blockquote class="text-2xl md:text-3xl font-medium text-gray-700 italic mb-6">
-          "{t(`tours.${tp}.quote`)}"
-        </blockquote>
-        <cite class="text-lg text-gray-600">
-          — {t(`tours.${tp}.quoteAuthor`)}
-        </cite>
-        <p class="mt-6 text-gray-700">
-          {t(`tours.${tp}.summary`)}
-        </p>
-      </div>
-    </div>
-  </section>
+    <ThemesGrid themeKeys={tourConfig.themeKeys} topics={tourConfig.topics} isGeneral={isGeneral} />
 
-  <!-- Did You Know? Historical Context -->
-  <section class="py-12 bg-amber-50 border-l-4 border-amber-400">
-    <div class="max-w-4xl mx-auto px-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">{t(`tours.${tp}.didYouKnow.title`)}</h2>
-      <div class="space-y-4">
-        {(t(`tours.${tp}.didYouKnow.facts`) as string[]).map((fact: string) => (
-          <div class="flex items-start gap-3">
-            <span class="text-amber-500 font-bold text-xl mt-0.5 flex-shrink-0">*</span>
-            <p class="text-gray-700 leading-relaxed">{fact}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+    <StopsSection tour={tourConfig} isGeneral={isGeneral} />
 
-  <!-- Three Topics Section -->
-  <section class="py-16 bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-800">
-        {themeSectionTitle}
-      </h2>
+    <RouteDetail tour={tourConfig} isGeneral={isGeneral} />
 
-      <!-- Desktop Version -->
-      <div class="hidden md:grid md:grid-cols-3 gap-8">
-        {themeKeys.map((theme, i) => (
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-            <div class="h-48 relative">
-              <img
-                src={tourConfig.topics[i].src}
-                alt={tourConfig.topics[i].alt}
-                loading="lazy"
-                decoding="async"
-                fetchpriority="low"
-                width="640"
-                height="384"
-                class="w-full h-full object-cover"
-                style={tourConfig.topics[i].objectPosition ? `object-position: ${tourConfig.topics[i].objectPosition}` : undefined}
-              />
-              <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <h3 class="text-2xl font-bold text-white">{t(`tours.themes.${theme}.title`)}</h3>
-              </div>
-            </div>
-            <div class="p-6">
-              <p class="text-gray-700 leading-relaxed">
-                {t(`tours.themes.${theme}.description`)}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+    <GalleryGrid images={tourConfig.galleryDesktop} />
 
-      <!-- Mobile Version with Swipe Carousel -->
-      <div class="md:hidden">
-        <div class="relative max-w-sm mx-auto">
-          <div class="overflow-hidden rounded-xl">
-            <div class="flex transition-transform duration-300 ease-in-out" id="topics-carousel">
-              {themeKeys.map((theme, i) => (
-                <div class="min-w-full">
-                  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="h-48 relative">
-                      <img
-                        src={tourConfig.topics[i].src}
-                        alt={tourConfig.topics[i].alt}
-                        loading="lazy"
-                        decoding="async"
-                        width="640"
-                        height="384"
-                        class="w-full h-full object-cover"
-                        style={tourConfig.topics[i].objectPosition ? `object-position: ${tourConfig.topics[i].objectPosition}` : undefined}
-                      />
-                      <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <h3 class="text-2xl font-bold text-white">{t(`tours.themes.${theme}.title`)}</h3>
-                      </div>
-                    </div>
-                    <div class="p-6">
-                      <p class="text-gray-700 leading-relaxed">
-                        {t(`tours.themes.${theme}.description`)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+    <BookingCard tour={tourConfig} isGeneral={isGeneral} />
 
-          <!-- Indicators -->
-          <div class="flex justify-center mt-4 space-x-2" id="topics-indicators">
-            {themeKeys.map((_, i) => (
-              <button
-                class={`w-3 h-3 rounded-full ${i === 0 ? 'bg-gray-800' : 'bg-gray-300'} transition-all duration-200`}
-                data-index={i.toString()}
-              ></button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tour Stops Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-        {stopsSectionTitle}
-      </h2>
-
-      <!-- Desktop Version - Grid normale -->
-      <div class="hidden md:block">
-        {tourConfig.stops.map((stop, i) => {
-          const stopNum = i + 1;
-          const isEven = stopNum % 2 === 0;
-          return (
-            <div class="grid md:grid-cols-2 gap-8 items-center mb-16">
-              <div class={isEven ? 'md:order-2' : undefined}>
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="w-12 h-12 bg-gray-600 text-white rounded-full flex items-center justify-center text-xl font-bold">{stopNum}</div>
-                  <h3 class="text-2xl font-bold text-gray-800">{t(`tours.${tp}.stops.stop${stopNum}.title`)}</h3>
-                </div>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                  {t(`tours.${tp}.stops.stop${stopNum}.description`)}
-                </p>
-              </div>
-              <div class={isEven ? 'md:order-1 relative' : 'relative'}>
-                <img
-                  src={stop.src}
-                  alt={stop.alt}
-                  loading="lazy"
-                  decoding="async"
-                  width="800"
-                  height="426"
-                  class="rounded-lg shadow-lg w-full h-64 object-cover"
-                  style={stop.objectPosition ? `object-position: ${stop.objectPosition};` : undefined}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <!-- Mobile Version - Full-width Carousel -->
-      <div class="md:hidden relative">
-        <div class="overflow-hidden rounded-xl">
-          <div class="flex transition-transform duration-300 ease-in-out" id="stops-carousel">
-            {tourConfig.stops.map((stop, i) => {
-              const stopNum = i + 1;
-              return (
-                <div class="min-w-full">
-                  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <img
-                      src={stop.src}
-                      alt={stop.alt}
+    <!-- Other tours — hairline-bordered cross-promo with images -->
+    <section class="qother">
+      <div class="qother__inner">
+        <header class="qother__header">
+          <p class="qother__kicker">{t('quiet.tour.other.kicker')}</p>
+          <h2 class="qother__title">{t('quiet.tour.other.title')}</h2>
+        </header>
+        <div class={`qother__grid qother__grid--${tourConfig.crossLinks.length}`}>
+          {tourConfig.crossLinks.map((link) => {
+            const img = heroImages[link.slug];
+            return (
+              <a href={`${langPrefix}/tours/${link.slug}`} class="qother__card">
+                {img && (
+                  <div class="qother__img">
+                    <Picture
+                      src={img}
+                      alt={t(`booking.${link.bookingKey}`)}
+                      widths={[480, 720, 960]}
+                      sizes="(max-width: 760px) 100vw, 40vw"
+                      formats={["avif", "webp"]}
+                      quality={80}
                       loading="lazy"
-                      decoding="async"
-                      width="640"
-                      height="384"
-                      class="w-full h-56 object-cover"
-                      style="object-position: center top;"
                     />
-                    <div class="p-6">
-                      <div class="flex items-center gap-3 mb-4">
-                        <div class="w-8 h-8 bg-gray-600 text-white rounded-full flex items-center justify-center text-sm font-bold">{stopNum}</div>
-                        <h3 class="text-xl font-bold text-gray-800">{t(`tours.${tp}.stops.stop${stopNum}.title`)}</h3>
-                      </div>
-                      <p class="text-sm text-gray-700 leading-relaxed">
-                        {t(`tours.${tp}.stops.stop${stopNum}.description`)}
-                      </p>
-                    </div>
                   </div>
+                )}
+                <div class="qother__body">
+                  <p>{lang === 'fr' ? link.descriptionFr : link.descriptionEn}</p>
+                  <span class="qother__link">{t(`booking.${link.bookingKey}`)} <span aria-hidden="true">→</span></span>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        <div class="flex justify-center mt-6 space-x-2" id="stops-indicators">
-          {Array.from({ length: tourConfig.stopCount }, (_, i) => (
-            <button
-              class={`w-3 h-3 rounded-full ${i === 0 ? 'bg-gray-800' : 'bg-gray-300'} transition-all duration-200`}
-              data-index={i.toString()}
-            ></button>
-          ))}
+              </a>
+            );
+          })}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Tour Route Section -->
-  <section class="py-16 bg-white">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800">
-        {t('tours.stops.ourRoute')}
-      </h2>
-      <TourMap tour={tourConfig.slug} client:visible />
-    </div>
-  </section>
+    <FAQ />
+  </main>
 
-  <!-- Gallery Section -->
-  <section class="py-16 bg-gray-50">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-        {t('tours.stops.experienceHistory')}
-      </h2>
+  <MobileBookingBar href="#book" />
 
-      <!-- Desktop Version - Grid normale -->
-      <div class="hidden md:grid md:grid-cols-4 gap-4">
-        {tourConfig.galleryDesktop.map((img) => (
-          <img
-            src={img.src}
-            alt={img.alt}
-            loading="lazy"
-            decoding="async"
-            width="400"
-            height="300"
-            class="rounded-lg shadow-md w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-          />
-        ))}
-      </div>
-
-      <!-- Mobile Version - Scroll Snap -->
-      <div class="md:hidden">
-        <div class="-mx-4 px-4">
-          <div
-            class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide overscroll-x-contain"
-            style="scroll-behavior:smooth;"
-          >
-            {tourConfig.galleryMobile.map(({ src, alt }) => (
-              <div class="snap-center shrink-0 w-64 rounded-lg overflow-hidden shadow-md bg-white">
-                <img
-                  src={src}
-                  alt={alt}
-                  loading="lazy"
-                  decoding="async"
-                  fetchpriority="low"
-                  width="480"
-                  height="360"
-                  class="w-full aspect-video object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <!-- Booking Section -->
-      <div class="mt-16 max-w-4x1 mx-auto">
-        <BookTour tourFilter={tourConfig.slug} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Discover our other tours -->
-  <section class="py-12 bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h2 class="text-2xl font-bold text-gray-800 mb-8">
-        {t('tours.discoverOtherTours')}
-      </h2>
-      <div class={`grid gap-6 ${tourConfig.crossLinks.length > 1 ? 'md:grid-cols-2' : 'max-w-md mx-auto'}`}>
-        {tourConfig.crossLinks.map((link) => (
-          <div class="bg-white rounded-lg shadow p-6">
-            <p class="text-gray-600 mb-4">
-              {lang === 'fr' ? link.descriptionFr : link.descriptionEn}
-            </p>
-            <a href={`${langPrefix}/tours/${link.slug}`}
-               class="inline-block bg-gray-800 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition font-medium">
-              {t(`booking.${link.bookingKey}`)} &rarr;
-            </a>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <FAQ />
-
-  <!-- JSON-LD TouristTrip -->
   <JsonLd data={{
     "@context": "https://schema.org",
     "@type": "TouristTrip",
@@ -484,46 +198,96 @@ const galleryAutoPlayAttr = tourConfig.galleryAutoPlayMs
   }} />
 </BaseLayout>
 
-<style>
-  /* Masquer scrollbar (mobile / webkit) */
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-  /* Meilleure inertie iOS */
-  .scrollbar-hide { -webkit-overflow-scrolling: touch; }
-</style>
-
-<script define:vars={{ tourSlug: tourConfig.slug, galleryAutoPlayMs: tourConfig.galleryAutoPlayMs, stopCount: tourConfig.stopCount, themeCount: tourConfig.themeKeys.length }}>
-  // Pass tour-specific data to the client-side script via define:vars
-  window.__tourSlug = tourSlug;
-  window.__galleryAutoPlayMs = galleryAutoPlayMs;
-  window.__stopCount = stopCount;
-  window.__themeCount = themeCount;
-</script>
-
 <script>
-  import { initCarousel } from '../../scripts/carousel';
-  import { initScrollBanner } from '../../scripts/scroll-banner';
-
-  // Topics carousel (mobile)
-  initCarousel({ carouselId: 'topics-carousel', indicatorsId: 'topics-indicators', totalItems: (window as any).__themeCount });
-
-  // Gallery carousel
-  const autoPlayMs = (window as any).__galleryAutoPlayMs;
-  const galleryOpts: any = { carouselId: 'gallery-carousel', indicatorsId: 'gallery-indicators', totalItems: 8, prevBtnId: 'prev-gallery', nextBtnId: 'next-gallery' };
-  if (autoPlayMs) {
-    galleryOpts.autoPlayMs = autoPlayMs;
-  }
-  initCarousel(galleryOpts);
-
-  // Stops carousel (mobile)
-  initCarousel({ carouselId: 'stops-carousel', indicatorsId: 'stops-indicators', totalItems: (window as any).__stopCount });
-
-  // Scroll banner
-  initScrollBanner({
-    bannerIds: ['book-banner'],
-    bookBtnIds: ['book-btn-tour-page', 'book-btn-mobile-bottom-tour'],
-    bottomBarIds: ['book-cta-mobile-tour'],
-    showAfterPx: 200,
-    bookingSectionSelector: 'div[id*="book-tour"], [id="book-tour"]',
-  });
+  import { initQuietNav } from '../../scripts/quiet-nav';
+  initQuietNav();
 </script>
+
+<style>
+  .qother {
+    background: var(--paper-2);
+    padding: 72px 32px;
+    border-top: 1px solid var(--border);
+  }
+  .qother__inner { max-width: 1100px; margin: 0 auto; }
+  .qother__header { max-width: 640px; margin: 0 0 40px; }
+  .qother__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 16px;
+  }
+  .qother__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.2vw, 40px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .qother__grid {
+    display: grid;
+    gap: 24px;
+  }
+  .qother__grid--2 { grid-template-columns: 1fr 1fr; }
+  .qother__grid--1 { grid-template-columns: 1fr; max-width: 560px; }
+
+  .qother__card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 160ms ease;
+    overflow: hidden;
+  }
+  .qother__card:hover { border-color: var(--ink); }
+  .qother__img {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .qother__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+  .qother__card:hover .qother__img img { transform: scale(1.03); }
+  .qother__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 28px 26px;
+    flex: 1;
+  }
+  .qother__card p {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .qother__link {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .qother__card:hover .qother__link span { display: inline-block; transform: translateX(4px); transition: transform 160ms ease; }
+
+  @media (max-width: 760px) {
+    .qother { padding: 48px 20px; }
+    .qother__grid--2 { grid-template-columns: 1fr; }
+  }
+</style>

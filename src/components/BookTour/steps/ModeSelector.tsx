@@ -55,21 +55,22 @@ const ModeSelector: React.FC<Props> = ({ onSelectRegular, onSelectPrivate }) => 
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl mx-auto">
+    <div className="bg-transparent p-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
         {cards.map((card) => (
           <button
             key={card.key}
             onClick={card.onClick}
-            className="group p-6 border-2 border-gray-200 rounded-xl text-left transition-all duration-200 hover:border-gray-800 hover:shadow-lg hover:bg-gray-50/50 focus:outline-none focus:border-gray-800"
+            className="group p-8 border border-[var(--border)] bg-[var(--paper-3)] rounded-sm text-left transition-colors duration-200 hover:border-[var(--ink)] focus:outline-none focus:border-[var(--ink)]"
+            style={{ borderRadius: 2 }}
           >
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4 text-gray-600 group-hover:bg-gray-800 group-hover:text-white transition-colors">
+            <div className="w-10 h-10 border border-[var(--border)] flex items-center justify-center mb-5 text-[var(--ink-2)] group-hover:border-[var(--ink)] group-hover:text-[var(--ink)] transition-colors" style={{ borderRadius: 2 }}>
               {card.icon}
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">{card.title}</h3>
-            <p className="text-sm text-gray-500 mb-4 leading-relaxed">{card.description}</p>
+            <h3 className="text-xl mb-2 text-[var(--ink)]" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>{card.title}</h3>
+            <p className="text-sm text-[var(--ink-2)] mb-5 leading-relaxed" style={{ fontFamily: 'var(--font-sans)' }}>{card.description}</p>
             {card.price && (
-              <span className="inline-block text-sm font-semibold text-gray-700 bg-gray-100 px-3 py-1 rounded-full">
+              <span className="inline-block text-xs text-[var(--ink)] border-t border-[var(--border)] pt-3 tracking-wider uppercase" style={{ fontFamily: 'var(--font-sans)', letterSpacing: '0.1em', fontWeight: 500 }}>
                 {card.price}
               </span>
             )}

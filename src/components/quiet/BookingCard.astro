@@ -1,0 +1,274 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import BookTour from '../BookTour.astro';
+import type { TourConfig } from '../../data/tours';
+
+interface Props {
+  tour: TourConfig;
+  isGeneral: boolean;
+}
+
+const { tour, isGeneral } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const links = tour.bookingLinks;
+const duration = isGeneral ? t('quiet.tour.booking.durationValueGeneral') : t('quiet.tour.booking.durationValueWW2');
+const price = isGeneral ? '45 €' : '49 €';
+
+// Partner row — filter out missing URLs
+const partnerItems = [
+  links.getyourguide && { name: 'GetYourGuide', src: '/logos/get%20your%20guide%20logo.webp', href: links.getyourguide, width: 140 },
+  links.viator       && { name: 'Viator',       src: '/logos/Viator_Logo.png',                href: links.viator,       width: 110 },
+  links.tripadvisor  && { name: 'TripAdvisor',  src: '/logos/Tripadvisor-Logo.png',           href: links.tripadvisor,  width: 130 },
+  links.tourist      && { name: 'Tourist.com',  src: '/logos/tourist_logo.svg',               href: links.tourist,      width: 105 },
+  links.parisjetaime && { name: "Paris je t'aime", src: '/logos/parisjetaime_logo.svg',       href: links.parisjetaime, width: 44 },
+].filter(Boolean) as Array<{ name: string; src: string; href: string; width: number }>;
+---
+
+<section id="book" class="qbc">
+  <div class="qbc__inner">
+    <header class="qbc__header">
+      <p class="qbc__kicker">{t('quiet.tour.booking.kicker')}</p>
+      <h2 class="qbc__title">{t(`tours.${tour.translationPrefix}.title`)}</h2>
+    </header>
+
+    <div class="qbc__card">
+      <dl class="qbc__facts">
+        <div>
+          <dt>{t('quiet.tour.booking.fromLabel')}</dt>
+          <dd><b>{price}</b><span>{t('quiet.tour.booking.perPerson')}</span></dd>
+        </div>
+        <div>
+          <dt>{t('quiet.tour.booking.durationLabel')}</dt>
+          <dd><b>{duration}</b></dd>
+        </div>
+        <div>
+          <dt>{t('quiet.tour.booking.groupLabel')}</dt>
+          <dd><b>{t('quiet.tour.booking.groupValue')}</b></dd>
+        </div>
+        <div>
+          <dt>{t('quiet.tour.booking.languageLabel')}</dt>
+          <dd><b>{t('quiet.tour.booking.languageValue')}</b></dd>
+        </div>
+      </dl>
+
+      <div class="qbc__ctas">
+        <a href={links.whatsapp} class="qbc__primary" target="_blank" rel="noopener">{t('quiet.tour.booking.primaryCta')} <span aria-hidden="true">→</span></a>
+        <a href="#book-tour" class="qbc__secondary">{t('quiet.tour.booking.secondaryCta')}</a>
+      </div>
+    </div>
+
+    <div class="qbc__direct">
+      <div class="qbc__direct-head">
+        <p class="qbc__direct-heading">{t('quiet.tour.booking.directHeading')}</p>
+        <p class="qbc__direct-desc">{t('quiet.tour.booking.directDescription')}</p>
+      </div>
+      <div class="qbc__wizard">
+        <BookTour tourFilter={tour.slug} hideChrome={true} />
+      </div>
+    </div>
+
+    {partnerItems.length > 0 && (
+      <div class="qbc__partners">
+        <span class="qbc__partners-label">{t('quiet.tour.booking.partnerLabel')}</span>
+        <div class="qbc__partner-row">
+          {partnerItems.map((p) => (
+            <a href={p.href} class="qbc__partner" target="_blank" rel="noopener" aria-label={p.name} style={`--logo-w:${p.width}px`}>
+              <img src={p.src} alt={p.name} loading="lazy" decoding="async" />
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .qbc {
+    background: var(--paper);
+    padding: 96px 32px;
+    border-top: 1px solid var(--border);
+  }
+  .qbc__inner { max-width: 1100px; margin: 0 auto; }
+  .qbc__header { max-width: 720px; margin: 0 0 48px; }
+  .qbc__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 16px;
+  }
+  .qbc__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 4.2vw, 48px);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .qbc__card {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .qbc__facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin: 0;
+  }
+  .qbc__facts > div { display: flex; flex-direction: column; gap: 6px; }
+  .qbc__facts dt {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qbc__facts dd {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .qbc__facts b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .qbc__facts span {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  .qbc__ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .qbc__primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    background: var(--ink);
+    color: var(--paper-3);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+  .qbc__primary:hover { background: var(--rouge); border-color: var(--rouge); }
+  .qbc__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .qbc__secondary:hover { background: var(--ink); color: var(--paper-3); }
+
+  .qbc__direct {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .qbc__direct-head { margin-bottom: 24px; }
+  .qbc__direct-heading {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .qbc__direct-desc {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 560px;
+  }
+  .qbc__wizard { margin-top: 8px; }
+  .qbc__wizard :global(#book-tour) { margin-bottom: 0; }
+  .qbc__wizard :global(#book-tour > div) { max-width: none; padding: 0; }
+  .qbc__wizard :global(.min-h-\[400px\]) { min-height: 0; }
+
+  .qbc__partners {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 24px;
+    text-align: center;
+  }
+  .qbc__partners-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qbc__partner-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 48px;
+  }
+  .qbc__partner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: var(--logo-w, 120px);
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: opacity 160ms ease, filter 160ms ease;
+  }
+  .qbc__partner:hover { opacity: 1; filter: grayscale(0); }
+  .qbc__partner img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    .qbc { padding: 64px 20px; }
+    .qbc__card { grid-template-columns: 1fr; gap: 32px; padding: 32px 0; }
+    .qbc__facts { grid-template-columns: 1fr 1fr; }
+    .qbc__partner-row { gap: 28px; }
+  }
+</style>

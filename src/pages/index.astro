@@ -1,18 +1,22 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Welcome from "../components/Welcome.astro";
-import ToursAvailable from "../components/ToursAvailable.astro";
-import Reviews from "../components/Reviews.astro";
-import BookTour from "../components/BookTour.astro";
 import "../styles/global.css";
 import { useTranslations } from '../i18n/utils';
 
 import JsonLd from "../components/JsonLd.astro";
-import FAQ from "../components/FAQ.astro";
-import LocationCarousel from "../components/LocationCarousel.astro";
-import AuroraBackground from "../components/AuroraBackground.astro";
-import Navbar from "../components/Navbar.astro";
-import MobileMenu from "../components/MobileMenu.astro";
+
+// Quiet chrome + sections
+import TopBar from "../components/quiet/TopBar.astro";
+import Nav from "../components/quiet/Nav.astro";
+import MobileBookingBar from "../components/quiet/MobileBookingBar.astro";
+import HeroHome from "../components/quiet/HeroHome.astro";
+import TourGrid from "../components/quiet/TourGrid.astro";
+import RouteSection from "../components/quiet/RouteSection.astro";
+import CompareSection from "../components/quiet/CompareSection.astro";
+import Reviews from "../components/quiet/Reviews.astro";
+import AboutSection from "../components/quiet/AboutSection.astro";
+import BookingSection from "../components/quiet/BookingSection.astro";
+import FAQ from "../components/quiet/FAQ.astro";
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -20,240 +24,128 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 ---
 
-<BaseLayout title={t('meta.home.title')} description={t('meta.home.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp" preloadImages={[{ srcset: "/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w", sizes: "33vw" }]}>
-	<Navbar variant="homepage" />
+<BaseLayout
+  title={t('meta.home.title')}
+  description={t('meta.home.description')}
+  ogImage="/photos/left_bank/Paris_WW2_guide.webp"
+  theme="quiet"
+>
+  <TopBar />
+  <Nav context="home" />
 
-	<!-- Hero section -->
-	<section id="about" class="relative max-w-full text-lg leading-8 min-h-screen" style="font-family: 'Montserrat', Inter, system-ui, sans-serif;">
-		{/* Aurora background — rendered as a fixed visual layer behind all content */}
-		<div class="absolute inset-0 z-0 pointer-events-none">
-			<AuroraBackground class="min-h-full" />
-		</div>
+  <main>
+    <HeroHome />
+    <TourGrid />
+    <RouteSection />
+    <CompareSection />
+    <Reviews />
+    <AboutSection />
+    <BookingSection />
+    <FAQ />
+  </main>
 
-		{/* Page content — rendered server-side as normal Astro HTML */}
-		<div class:list={["relative z-10 py-8 md:py-24 px-2", isDefaultLang ? "md:pt-20" : "md:pt-40"]}>
-		{/* Titre principal et sous-titre */}
-		<div class="max-w-4xl mx-auto flex flex-col items-center justify-center mb-0">
-			<h1 class="text-4xl md:text-6xl font-bold text-center text-gray-800 m-0 p-0 mb-4">
-				{t('home.title')}
-			</h1>
-			{/* Séparateur fin entre les titres */}
-			<div class="w-16 h-px bg-gray-400 mb-4"></div>
-			<h2 class="text-xl md:text-2xl font-medium text-center text-gray-600 m-0 p-0">
-				{t('home.subtitle')}
-			</h2>
-		</div>
+  <MobileBookingBar />
 
-		{/* Hero gallery — Full-width location carousel */}
-		<div class="max-w-5xl mx-auto mt-8 mb-4 px-4">
-			<LocationCarousel
-				cardsPerView={3}
-				cardsPerViewMobile={1}
-				autoPlayMs={4000}
-				cards={[
-					{
-						imgUrl: '/photos/left_bank/luxembourg_palace_paris.webp',
-						srcset: '/photos/mobile/luxembourg_palace_paris-375.webp 375w, /photos/mobile/luxembourg_palace_paris-640.webp 640w, /photos/left_bank/luxembourg_palace_paris.webp 1800w',
-						title: t('home.gallery.pantheon.title'),
-						subtitle: t('home.gallery.pantheon.cardSubtitle'),
-						description: t('home.gallery.pantheon.fullDescription'),
-						tag: t('home.gallery.pantheon.tag'),
-					},
-					{
-						imgUrl: '/photos/right_bank/place_vendome_paris_day.webp',
-						srcset: '/photos/mobile/place_vendome_paris_day-375.webp 375w, /photos/mobile/place_vendome_paris_day-640.webp 640w, /photos/right_bank/place_vendome_paris_day.webp 1920w',
-						title: t('home.gallery.placeVendome.title'),
-						subtitle: t('home.gallery.placeVendome.cardSubtitle'),
-						description: t('home.gallery.placeVendome.fullDescription'),
-						tag: t('home.gallery.placeVendome.tag'),
-					},
-					{
-						imgUrl: '/photos/left_bank/notre-dame-de-paris.webp',
-						srcset: '/photos/mobile/notre-dame-de-paris-375.webp 375w, /photos/mobile/notre-dame-de-paris-640.webp 640w, /photos/left_bank/notre-dame-de-paris.webp 1200w',
-						title: t('home.gallery.notreDame.title'),
-						subtitle: t('home.gallery.notreDame.cardSubtitle'),
-						description: t('home.gallery.notreDame.fullDescription'),
-						tag: t('home.gallery.notreDame.tag'),
-					},
-					{
-						imgUrl: '/photos/right_bank/bridge_alexander_third_paris.webp',
-						srcset: '/photos/mobile/bridge_alexander_third_paris-375.webp 375w, /photos/mobile/bridge_alexander_third_paris-640.webp 640w, /photos/right_bank/bridge_alexander_third_paris.webp 1280w',
-						title: t('home.gallery.pontAlexandre.title'),
-						subtitle: t('home.gallery.pontAlexandre.cardSubtitle'),
-						description: t('home.gallery.pontAlexandre.fullDescription'),
-						tag: t('home.gallery.pontAlexandre.tag'),
-					},
-					{
-						imgUrl: '/photos/right_bank/place_concorde_paris.webp',
-						srcset: '/photos/mobile/place_concorde_paris-375.webp 375w, /photos/mobile/place_concorde_paris-640.webp 640w, /photos/right_bank/place_concorde_paris.webp 1920w',
-						title: t('home.gallery.placeConcorde.title'),
-						subtitle: t('home.gallery.placeConcorde.cardSubtitle'),
-						description: t('home.gallery.placeConcorde.fullDescription'),
-						tag: t('home.gallery.placeConcorde.tag'),
-					},
-				]}
-			/>
-		</div>
-		
-		{/* Séparateur ligne */}
-		<div class="flex justify-center mb-8">
-			<div class="w-32 h-1 bg-gray-400 rounded-full"></div>
-		</div>
-
-		<Welcome />
-		<ToursAvailable />
-		<Reviews />
-
-		<!-- Social Proof / Trust Signals -->
-		<section class="py-12 bg-white/60 backdrop-blur-sm rounded-2xl mx-4 my-8">
-			<div class="max-w-4xl mx-auto px-4 text-center">
-				<h2 class="text-2xl font-bold text-gray-800 mb-6">{t('socialProof.title')}</h2>
-				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-					<div class="text-center">
-						<div class="text-3xl font-bold text-gray-800">4.9/5</div>
-						<div class="text-sm text-gray-600 mt-1">{t('socialProof.googleRating')}</div>
-					</div>
-					<div class="text-center">
-						<div class="text-3xl font-bold text-gray-800">42+</div>
-						<div class="text-sm text-gray-600 mt-1">{t('socialProof.reviews')}</div>
-					</div>
-					<div class="text-center">
-						<div class="text-3xl font-bold text-gray-800">25+</div>
-						<div class="text-sm text-gray-600 mt-1">{t('socialProof.countries')}</div>
-					</div>
-					<div class="text-center">
-						<div class="text-3xl font-bold text-gray-800">2024</div>
-						<div class="text-sm text-gray-600 mt-1">{t('socialProof.founded')}</div>
-					</div>
-				</div>
-				<p class="mt-8 text-gray-600 text-lg">{t('socialProof.description')}</p>
-			</div>
-		</section>
-
-		<BookTour />
-		<FAQ />
-		</div>
-	</section>
-
-	<JsonLd data={{
-		"@context": "https://schema.org",
-		"@type": ["LocalBusiness", "TravelAgency"],
-		"name": "Paris History Tours",
-		"alternateName": t('jsonLd.alternateName'),
-		"description": t('meta.home.description'),
-		"url": "https://www.parishistorytours.com",
-		"telephone": "+33620622480",
-		"email": "clemdaguetschott@gmail.com",
-		"foundingDate": "2024",
-		"slogan": t('jsonLd.slogan'),
-		"knowsLanguage": ["en", "fr"],
-		"currenciesAccepted": "EUR",
-		"paymentAccepted": "Credit Card, Stripe",
-		"address": {
-			"@type": "PostalAddress",
-			"addressLocality": "Paris",
-			"addressRegion": "Ile-de-France",
-			"addressCountry": "FR"
-		},
-		"geo": {
-			"@type": "GeoCoordinates",
-			"latitude": 48.8566,
-			"longitude": 2.3522
-		},
-		"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
-		"priceRange": "$$",
-		"aggregateRating": {
-			"@type": "AggregateRating",
-			"ratingValue": "4.9",
-			"bestRating": "5",
-			"ratingCount": "42"
-		},
-		"founder": {
-			"@type": "Person",
-			"name": "Clement Daguet-Schott",
-			"givenName": "Clement",
-			"familyName": "Daguet-Schott",
-			"jobTitle": t('jsonLd.founderJobTitle'),
-			"description": t('jsonLd.founderDescription'),
-			"knowsAbout": ["World War II history", "Paris during WWII", "French Resistance", "Liberation of Paris 1944", "Nazi occupation of France"],
-			"knowsLanguage": ["en", "fr"],
-			"image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
-			"url": "https://www.parishistorytours.com/key-figures"
-		},
-		"hasOfferCatalog": {
-			"@type": "OfferCatalog",
-			"name": t('jsonLd.offerCatalogName'),
-			"itemListElement": [
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "TouristTrip",
-						"name": t('booking.leftBankTour'),
-						"description": t('jsonLd.leftBankDescription'),
-						"touristType": ["History enthusiast", "Cultural traveler"],
-						"duration": "PT2H",
-						"url": `https://www.parishistorytours.com${langPrefix}/tours/left-bank`
-					}
-				},
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "TouristTrip",
-						"name": t('booking.rightBankTour'),
-						"description": t('jsonLd.rightBankDescription'),
-						"touristType": ["History enthusiast", "Cultural traveler"],
-						"duration": "PT2H",
-						"url": `https://www.parishistorytours.com${langPrefix}/tours/right-bank`
-					}
-				},
-				{
-					"@type": "Offer",
-					"itemOffered": {
-						"@type": "TouristTrip",
-						"name": t('booking.generalHistoryTour'),
-						"description": t('jsonLd.generalHistoryDescription'),
-						"touristType": ["History enthusiast", "Cultural traveler", "First-time visitor"],
-						"duration": "PT1H30M",
-						"url": `https://www.parishistorytours.com${langPrefix}/tours/general-history`
-					}
-				}
-			]
-		},
-		"areaServed": {
-			"@type": "City",
-			"name": "Paris",
-			"containedInPlace": {
-				"@type": "Country",
-				"name": "France"
-			}
-		},
-		"sameAs": [
-			"https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8",
-			"https://www.instagram.com/parishistorytour/",
-			"https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/",
-			"https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2",
-			"https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"
-		]
-	}} />
+  <JsonLd data={{
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "TravelAgency"],
+    "name": "Paris History Tours",
+    "alternateName": t('jsonLd.alternateName'),
+    "description": t('meta.home.description'),
+    "url": "https://www.parishistorytours.com",
+    "telephone": "+33620622480",
+    "email": "clemdaguetschott@gmail.com",
+    "foundingDate": "2024",
+    "slogan": t('jsonLd.slogan'),
+    "knowsLanguage": ["en", "fr"],
+    "currenciesAccepted": "EUR",
+    "paymentAccepted": "Credit Card, Stripe",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Paris",
+      "addressRegion": "Ile-de-France",
+      "addressCountry": "FR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 48.8566,
+      "longitude": 2.3522
+    },
+    "image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+    "priceRange": "$$",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "bestRating": "5",
+      "ratingCount": "42"
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "Clement Daguet-Schott",
+      "givenName": "Clement",
+      "familyName": "Daguet-Schott",
+      "jobTitle": t('jsonLd.founderJobTitle'),
+      "description": t('jsonLd.founderDescription'),
+      "knowsAbout": ["World War II history", "Paris during WWII", "French Resistance", "Liberation of Paris 1944", "Nazi occupation of France"],
+      "knowsLanguage": ["en", "fr"],
+      "image": "https://www.parishistorytours.com/photos/left_bank/Paris_WW2_guide.webp",
+      "url": "https://www.parishistorytours.com/key-figures"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": t('jsonLd.offerCatalogName'),
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "TouristTrip",
+            "name": t('booking.leftBankTour'),
+            "description": t('jsonLd.leftBankDescription'),
+            "touristType": ["History enthusiast", "Cultural traveler"],
+            "duration": "PT2H",
+            "url": `https://www.parishistorytours.com${langPrefix}/tours/left-bank`
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "TouristTrip",
+            "name": t('booking.rightBankTour'),
+            "description": t('jsonLd.rightBankDescription'),
+            "touristType": ["History enthusiast", "Cultural traveler"],
+            "duration": "PT2H",
+            "url": `https://www.parishistorytours.com${langPrefix}/tours/right-bank`
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "TouristTrip",
+            "name": t('booking.generalHistoryTour'),
+            "description": t('jsonLd.generalHistoryDescription'),
+            "touristType": ["History enthusiast", "Cultural traveler", "First-time visitor"],
+            "duration": "PT1H30M",
+            "url": `https://www.parishistorytours.com${langPrefix}/tours/general-history`
+          }
+        }
+      ]
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Paris",
+      "containedInPlace": { "@type": "Country", "name": "France" }
+    },
+    "sameAs": [
+      "https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8",
+      "https://www.instagram.com/parishistorytour/",
+      "https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/",
+      "https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2",
+      "https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"
+    ]
+  }} />
 </BaseLayout>
 
 <script>
-	import { initReviewCarousel } from '../scripts/review-carousel';
-	import { initBookingUI } from '../scripts/booking-ui';
-	import { initMobileMenu } from '../scripts/mobile-menu';
-
-	initReviewCarousel(4);
-	initBookingUI();
-	initMobileMenu();
-</script>
-
-<script>
-	import { initScrollBanner } from '../scripts/scroll-banner';
-
-	initScrollBanner({
-		bannerIds: ['book-banner-desktop', 'book-banner-mobile'],
-		bookBtnIds: ['book-btn-desktop', 'book-btn-mobile-bottom'],
-		bottomBarIds: ['book-cta-mobile'],
-		showAfterPx: 200,
-	});
+  import { initQuietNav } from '../scripts/quiet-nav';
+  initQuietNav();
 </script>

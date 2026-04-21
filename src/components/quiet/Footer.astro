@@ -1,0 +1,175 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
+const year = new Date().getFullYear();
+---
+
+<footer class="quiet-footer">
+  <div class="quiet-footer__inner">
+    <div class="quiet-footer__grid">
+      <div class="quiet-footer__brand">
+        <a href={`${langPrefix}/`} class="quiet-footer__brand-lockup">
+          <span class="quiet-footer__mark" aria-hidden="true">P</span>
+          <span class="quiet-footer__brand-text">
+            <span class="quiet-footer__brand-name">{t('quiet.nav.brand')}</span>
+            <span class="quiet-footer__brand-sub">{t('quiet.nav.tagline')}</span>
+          </span>
+        </a>
+        <p class="quiet-footer__desc">{t('quiet.footer.description')}</p>
+      </div>
+
+      <div class="quiet-footer__col">
+        <h4>{t('quiet.footer.toursHeading')}</h4>
+        <ul>
+          <li><a href={`${langPrefix}/tours/left-bank`}>{t('quiet.footer.leftBank')}</a></li>
+          <li><a href={`${langPrefix}/tours/right-bank`}>{t('quiet.footer.rightBank')}</a></li>
+          <li><a href={`${langPrefix}/tours/general-history`}>{t('quiet.footer.generalHistory')}</a></li>
+          <li><a href={`${langPrefix}/#compare`}>{t('quiet.footer.compare')}</a></li>
+        </ul>
+      </div>
+
+      <div class="quiet-footer__col">
+        <h4>{t('quiet.footer.infoHeading')}</h4>
+        <ul>
+          <li><a href={`${langPrefix}/key-figures`}>{t('quiet.footer.aboutLink')}</a></li>
+          <li><a href={`${langPrefix}/#faq`}>{t('quiet.footer.faqLink')}</a></li>
+          <li><a href={`${langPrefix}/blog`}>{t('quiet.footer.blog')}</a></li>
+        </ul>
+      </div>
+
+      <div class="quiet-footer__col">
+        <h4>{t('quiet.footer.contactHeading')}</h4>
+        <ul>
+          <li><a href="https://wa.me/+33620622480" rel="noopener">{t('quiet.footer.whatsapp')}</a></li>
+          <li><a href="mailto:clemdaguetschott@gmail.com">{t('quiet.footer.email')}</a></li>
+          <li><a href="https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8" rel="noopener">{t('quiet.footer.maps')}</a></li>
+          <li><a href="https://www.instagram.com/parishistorytour/" rel="noopener">{t('quiet.footer.instagram')}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiet-footer__bottom">
+      <div>© {year} {t('quiet.footer.copyright')}</div>
+      <div>{t('quiet.footer.alsoOn')}</div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .quiet-footer {
+    background: var(--paper-3);
+    color: var(--ink-2);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-sans);
+  }
+  .quiet-footer__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 72px 32px 40px;
+  }
+  .quiet-footer__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .quiet-footer__brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .quiet-footer__mark {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .quiet-footer__brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .quiet-footer__brand-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+  }
+  .quiet-footer__brand-sub {
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .quiet-footer__desc {
+    margin: 20px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 320px;
+  }
+
+  .quiet-footer__col h4 {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+  }
+  .quiet-footer__col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .quiet-footer__col li {
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  .quiet-footer__col a {
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 120ms ease;
+  }
+  .quiet-footer__col a:hover { color: var(--ink); }
+
+  .quiet-footer__bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--ink-2);
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 900px) {
+    .quiet-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 32px;
+    }
+  }
+  @media (max-width: 600px) {
+    .quiet-footer__inner { padding: 56px 20px 32px; }
+    .quiet-footer__grid { grid-template-columns: 1fr; gap: 32px; }
+    .quiet-footer__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    /* Give room for the mobile sticky booking bar */
+    .quiet-footer { padding-bottom: 96px; }
+  }
+</style>

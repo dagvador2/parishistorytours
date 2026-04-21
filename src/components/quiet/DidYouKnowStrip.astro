@@ -1,0 +1,101 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  /** Translation prefix: "leftBank" | "rightBank" | "generalHistory" */
+  tp: string;
+}
+
+const { tp } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const facts = (t(`tours.${tp}.didYouKnow.facts`) as unknown as string[]) || [];
+---
+
+<section class="qdyk">
+  <div class="qdyk__inner">
+    <p class="qdyk__kicker">{t('quiet.tour.didYouKnow.kicker')}</p>
+    <div class="qdyk__grid">
+      {facts.map((fact, i) => (
+        <article class="qdyk__card">
+          <span class="qdyk__index">{String(i + 1).padStart(2, '0')}</span>
+          <p>{fact}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .qdyk {
+    background: var(--paper-2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 32px;
+  }
+  .qdyk__inner { max-width: 1280px; margin: 0 auto; }
+  .qdyk__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 32px;
+  }
+  .qdyk__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+  }
+  .qdyk__card {
+    padding: 8px 28px 8px 0;
+    border-right: 1px solid var(--border);
+  }
+  .qdyk__card:last-child { border-right: 0; padding-right: 0; }
+  .qdyk__card:first-child { padding-left: 0; }
+  .qdyk__card:not(:first-child) { padding-left: 28px; }
+  .qdyk__index {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--rouge);
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .qdyk__card p {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .qdyk { padding: 48px 0; }
+    .qdyk__kicker { padding: 0 24px; }
+    .qdyk__grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 78%;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 24px 16px;
+      scroll-padding: 0 24px;
+    }
+    .qdyk__grid::-webkit-scrollbar { display: none; }
+    .qdyk__card {
+      scroll-snap-align: start;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 24px !important;
+    }
+  }
+</style>

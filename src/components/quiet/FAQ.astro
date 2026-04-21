@@ -1,0 +1,135 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import JsonLd from '../JsonLd.astro';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const faqItems = t('faq.items') as { question: string; answer: string }[];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItems.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": { "@type": "Answer", "text": item.answer }
+  }))
+};
+---
+
+<section id="faq" class="qfaq">
+  <div class="qfaq__inner">
+    <header class="qfaq__header">
+      <p class="qfaq__kicker">{t('quiet.home.faq.kicker')}</p>
+      <h2 class="qfaq__title">{t('quiet.home.faq.title')}</h2>
+    </header>
+
+    <div class="qfaq__list">
+      {faqItems.map((item) => (
+        <details class="qfaq__row">
+          <summary class="qfaq__summary">
+            <span>{item.question}</span>
+            <span class="qfaq__icon" aria-hidden="true"></span>
+          </summary>
+          <p class="qfaq__answer">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<JsonLd data={faqSchema} />
+
+<style>
+  .qfaq {
+    background: var(--paper);
+    padding: 96px 32px;
+  }
+  .qfaq__inner { max-width: 880px; margin: 0 auto; }
+  .qfaq__header { margin-bottom: 56px; }
+  .qfaq__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .qfaq__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 48px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .qfaq__row {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+  }
+  .qfaq__row:last-child { border-bottom: 1px solid var(--border); }
+  .qfaq__summary {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .qfaq__summary::-webkit-details-marker { display: none; }
+  .qfaq__summary::marker { content: ""; }
+
+  .qfaq__icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    margin-top: 6px;
+    transition: transform 240ms ease;
+  }
+  .qfaq__icon::before,
+  .qfaq__icon::after {
+    content: "";
+    position: absolute;
+    background: var(--ink);
+  }
+  .qfaq__icon::before {
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    transform: translateY(-50%);
+  }
+  .qfaq__icon::after {
+    left: 50%; top: 0; bottom: 0;
+    width: 1px;
+    transform: translateX(-50%);
+    transition: transform 240ms ease, opacity 240ms ease;
+  }
+  .qfaq__row[open] .qfaq__icon::after {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  .qfaq__answer {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    margin: 16px 0 0;
+    max-width: 720px;
+  }
+
+  @media (max-width: 760px) {
+    .qfaq { padding: 64px 24px; }
+    .qfaq__title { font-size: 34px; }
+    .qfaq__summary { font-size: 17px; }
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+import { Picture } from 'astro:assets';
+import { useTranslations } from '../../i18n/utils';
+import guidePhoto from '../../images/guide-photo.webp';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const credentials = [
+  t('quiet.home.about.cred1'),
+  t('quiet.home.about.cred2'),
+  t('quiet.home.about.cred3'),
+];
+---
+
+<section id="about" class="qabout">
+  <div class="qabout__inner">
+    <div class="qabout__photo">
+      <Picture
+        src={guidePhoto}
+        alt="Clément Daguet-Schott, founder and guide of Paris History Tours"
+        widths={[480, 720, 960, 1200]}
+        sizes="(max-width: 900px) 100vw, 42vw"
+        formats={["avif", "webp"]}
+        quality={82}
+        loading="lazy"
+        class="qabout__img"
+      />
+    </div>
+    <div class="qabout__text">
+      <p class="qabout__kicker">{t('quiet.home.about.kicker')}</p>
+      <h2 class="qabout__title">{t('quiet.home.about.title')}</h2>
+      <div class="qabout__body">
+        <p>{t('quiet.home.about.p1')}</p>
+        <p>{t('quiet.home.about.p2')}</p>
+        <p>{t('quiet.home.about.p3')}</p>
+      </div>
+      <div class="qabout__creds">
+        <p class="qabout__creds-label">{t('quiet.home.about.credLabel')}</p>
+        <ul>
+          {credentials.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .qabout {
+    background: var(--paper);
+    padding: 96px 32px;
+  }
+  .qabout__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .qabout__photo {
+    aspect-ratio: 5 / 6;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .qabout__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .qabout__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .qabout__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 40px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 32px;
+    line-height: 1.1;
+  }
+  .qabout__body p {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--ink);
+    margin: 0 0 20px;
+    max-width: 520px;
+  }
+  .qabout__body p:last-child { margin-bottom: 0; }
+
+  .qabout__creds {
+    margin-top: 40px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+  }
+  .qabout__creds-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .qabout__creds ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .qabout__creds li {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .qabout { padding: 64px 24px; }
+    .qabout__inner { grid-template-columns: 1fr; gap: 40px; }
+    .qabout__title { font-size: 32px; }
+    .qabout__photo { aspect-ratio: 3 / 2; max-width: 480px; }
+  }
+</style>

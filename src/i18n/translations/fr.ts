@@ -613,5 +613,234 @@ export const fr = {
       regards: "Cordialement,",
       amountPaid: "Montant payé :"
     }
+  },
+
+  // Refonte « Quiet » — copy pour la nouvelle page d'accueil et les pages de tour
+  quiet: {
+    topBar: {
+      notice: "Visites en anglais & français · Groupes privés disponibles"
+    },
+    nav: {
+      brand: "Paris History Tours",
+      tagline: "Visites à pied · Depuis 2024",
+      tours: "Visites",
+      route: "Parcours",
+      compare: "Comparer",
+      about: "À propos",
+      faq: "FAQ",
+      bookTour: "Réserver",
+      menuLabel: "Menu"
+    },
+    mobileBooking: {
+      priceFrom: "À partir de 45 €",
+      meta: "Petit groupe · Visite de 2 h",
+      cta: "Réserver"
+    },
+    footer: {
+      description: "Découvrez l'histoire cachée de Paris à travers des visites guidées par un historien.",
+      toursHeading: "Visites",
+      infoHeading: "Infos",
+      contactHeading: "Contact",
+      leftBank: "Rive Gauche · WW2",
+      rightBank: "Rive Droite · WW2",
+      generalHistory: "Histoire générale",
+      compare: "Comparer",
+      aboutLink: "À propos de Clément",
+      faqLink: "FAQ",
+      blog: "Blog",
+      whatsapp: "WhatsApp",
+      email: "Email",
+      maps: "Google Maps",
+      instagram: "Instagram",
+      copyright: "Paris History Tours · Tous droits réservés",
+      alsoOn: "Également sur GetYourGuide · Viator · TripAdvisor · Paris je t'aime"
+    },
+    home: {
+      hero: {
+        posterTag: "Paris · 52 av. J.-C. — 1944",
+        headlinePart1: "Les histoires que",
+        headlineAccent: "Paris",
+        headlinePart2: "garde dans ses rues, de Lutèce à la",
+        headlinePart3: "Libération",
+        lede: "Visites privées à pied à travers deux mille ans d'histoire parisienne — Lutèce romaine, sièges vikings, nuits révolutionnaires, et un intérêt particulier pour la Chute, la Résistance et la Libération de 1940-44. Guidées par un historien indépendant qui a passé des années en archives pour que chaque récit vous parvienne en entier.",
+        browseCta: "Voir les visites",
+        seeRouteCta: "Voir le parcours",
+        mediaMainAlt: "Notre-Dame de Paris",
+        mediaMainLabel: "Notre-Dame",
+        mediaMainCaption: "Lieu du Te Deum de victoire du général de Gaulle · 26 août 1944",
+        mediaSideAAlt: "Pont Alexandre III",
+        mediaSideALabel: "Pont Alexandre III",
+        mediaSideACaption: "Sauvé de la destruction, 1944",
+        mediaSideBAlt: "Place Vendôme",
+        mediaSideBLabel: "Place Vendôme",
+        mediaSideBCaption: "Le Ritz, libéré",
+        statToursValue: "3",
+        statToursLabel: "Visites distinctes",
+        statYearsValue: "2000",
+        statYearsLabel: "Ans d'histoire",
+        statCountriesValue: "25+",
+        statCountriesLabel: "Pays",
+        statRatingValue: "4,9",
+        statRatingLabel: "Google ★",
+        statGroupValue: "10",
+        statGroupLabel: "Groupe max."
+      },
+      tours: {
+        kicker: "Trois parcours",
+        title: "Choisissez votre visite",
+        subtitle: "Chaque visite est un récit complet — la Chute, la Résistance, la Libération — dans les rues mêmes où tout s'est joué.",
+        leftBankBadge: "WW2",
+        leftBankNumeral: "I",
+        leftBankEra: "1940 — 1944 · Rive Gauche",
+        leftBankTitle: "Visite Rive Gauche",
+        leftBankDesc: "Du Boulevard Saint-Michel à Notre-Dame — la Résistance étudiante à la Sorbonne, la Luftwaffe au Luxembourg et le Te Deum sous les tirs de snipers de la Libération.",
+        leftBankStopsValue: "4",
+        leftBankStopsLabel: "Arrêts",
+        leftBankDurationValue: "2 h",
+        leftBankDurationLabel: "Durée",
+        leftBankWalkValue: "2,5 km",
+        leftBankWalkLabel: "Marche",
+        rightBankBadge: "WW2",
+        rightBankNumeral: "II",
+        rightBankEra: "1940 — 1944 · Rive Droite",
+        rightBankTitle: "Visite Rive Droite",
+        rightBankDesc: "Du Pont Alexandre III à la Place Vendôme — les ponts qu'Hitler ordonna de détruire, la Concorde pillée d'œuvres volées et Hemingway « libérant » le bar du Ritz.",
+        rightBankStopsValue: "4",
+        rightBankStopsLabel: "Arrêts",
+        rightBankDurationValue: "2 h",
+        rightBankDurationLabel: "Durée",
+        rightBankWalkValue: "2,5 km",
+        rightBankWalkLabel: "Marche",
+        generalBadge: "2000 ANS",
+        generalNumeral: "III",
+        generalEra: "52 av. J.-C. — 1791 · Général",
+        generalTitle: "Histoire générale",
+        generalDesc: "Deux mille ans en un après-midi — la conquête romaine de Lutèce, le siège viking de 885 et la fuite royale de 1791 qui mit fin à la monarchie.",
+        generalStopsValue: "3",
+        generalStopsLabel: "Arrêts",
+        generalDurationValue: "1 h 30",
+        generalDurationLabel: "Durée",
+        generalWalkValue: "2 km",
+        generalWalkLabel: "Marche",
+        reserveCta: "Réserver ma place"
+      },
+      route: {
+        kicker: "Le parcours",
+        title: "Voyez où l'on marche.",
+        tabLeftBank: "Rive Gauche",
+        tabRightBank: "Rive Droite",
+        tabGeneral: "Histoire générale"
+      },
+      compare: {
+        kicker: "Comparer",
+        title: "Un guide, trois parcours.",
+        axisFocus: "Thème",
+        axisRoute: "Parcours",
+        axisDuration: "Durée",
+        axisStops: "Arrêts",
+        axisBestFor: "Pour qui",
+        leftBankFocus: "Seconde Guerre · Rive Gauche",
+        leftBankRoute: "Panthéon → Notre-Dame",
+        leftBankDuration: "2 heures",
+        leftBankStops: "4 arrêts · 2,5 km",
+        leftBankBestFor: "Première visite WWII",
+        rightBankFocus: "Seconde Guerre · Rive Droite",
+        rightBankRoute: "Alexandre III → Vendôme",
+        rightBankDuration: "2 heures",
+        rightBankStops: "4 arrêts · 2,5 km",
+        rightBankBestFor: "Retour · vol d'art · Libération",
+        generalFocus: "2 000 ans de Paris",
+        generalRoute: "Cluny → Cité → Tuileries",
+        generalDuration: "1 h 30",
+        generalStops: "3 arrêts · 2 km",
+        generalBestFor: "Familles · primo-visiteurs · hors WWII"
+      },
+      reviews: {
+        kicker: "Avis",
+        title: "Ce que disent les visiteurs."
+      },
+      about: {
+        kicker: "Le guide",
+        title: "Clément Daguet-Schott.",
+        p1: "Historien parisien, je passe l'essentiel de mes journées à arpenter les rues où j'ai grandi — et mes soirées à les relire. Pour moi, l'histoire se fait à pied, avec les bâtiments comme témoins.",
+        p2: "Mes visites sont petites (dix personnes maximum) et volontairement lentes. Je préfère bien raconter deux histoires que d'en bâcler vingt. La plupart durent deux heures ; les groupes privés choisissent le parcours qui leur convient.",
+        p3: "Je guide en français et en anglais. Les recherches s'appuient toutes sur des sources primaires — archives, mémoires, presse d'époque — croisées avec l'historiographie récente.",
+        credLabel: "Parcours",
+        cred1: "Histoire · Sciences Po",
+        cred2: "Guide depuis 2024",
+        cred3: "Sur TripAdvisor, GetYourGuide, Paris je t'aime"
+      },
+      booking: {
+        kicker: "Réservation",
+        title: "Comment réserver.",
+        description: "Réservez via un partenaire ou écrivez-moi directement. Même guide, même parcours, même petit groupe dans tous les cas.",
+        partnerLabel: "Aussi disponible sur",
+        whatsappLabel: "WhatsApp",
+        emailLabel: "Email",
+        directHeading: "Ou réservez directement",
+        directDescription: "Choisissez une date, un nombre de personnes, payez en une étape. Confirmation sous 24 heures."
+      },
+      faq: {
+        kicker: "Questions",
+        title: "Ce que vous vous demandez peut-être."
+      }
+    },
+    tour: {
+      heroKickerLeftBank: "Rive Gauche · WWII",
+      heroKickerRightBank: "Rive Droite · WWII",
+      heroKickerGeneral: "Deux mille ans · Général",
+      didYouKnow: {
+        kicker: "Le saviez-vous"
+      },
+      themes: {
+        kickerWW2: "Trois fils, une marche",
+        titleWW2: "La Chute · La Résistance · La Libération",
+        kickerGeneral: "Trois époques, une marche",
+        titleGeneral: "Les Romains · Le Moyen Âge · La Révolution",
+        actFallWW2: "Acte I · Juin 1940",
+        actResistanceWW2: "Acte II · 1940 — 1944",
+        actLiberationWW2: "Acte III · Août 1944",
+        actRomanGeneral: "Acte I · 52 av. J.-C. — Ve siècle",
+        actMedievalGeneral: "Acte II · IXe — XIIIe siècle",
+        actRevolutionGeneral: "Acte III · 1789 — 1791"
+      },
+      stops: {
+        kicker: "Sur le terrain",
+        introStepLabel: "Introduction",
+        subtitle: "Parcourus dans l'ordre — chaque arrêt prépare le suivant."
+      },
+      route: {
+        kicker: "Le parcours",
+        titleWW2: "Voyez où l'on marche.",
+        titleGeneral: "Voyez où l'on marche.",
+        subtitleWW2: "Quatre arrêts, deux heures, un quartier — à pied.",
+        subtitleGeneral: "Trois arrêts, un après-midi, deux mille ans — à pied."
+      },
+      gallery: {
+        kicker: "Sur le terrain",
+        title: "Depuis la visite."
+      },
+      booking: {
+        kicker: "Réserver cette visite",
+        fromLabel: "À partir de",
+        perPerson: "/ personne",
+        durationLabel: "Durée",
+        durationValueWW2: "2 heures",
+        durationValueGeneral: "1 h 30",
+        groupLabel: "Groupe",
+        groupValue: "10 max.",
+        languageLabel: "Langues",
+        languageValue: "Français · Anglais",
+        primaryCta: "M'écrire sur WhatsApp",
+        secondaryCta: "Réserver sur ce site",
+        partnerLabel: "Aussi disponible sur",
+        directHeading: "Ou réservez directement",
+        directDescription: "Choisissez une date, un nombre de personnes, payez en une étape. Confirmation sous 24 heures."
+      },
+      other: {
+        kicker: "Autres parcours",
+        title: "Découvrez les autres visites."
+      }
+    }
   }
 };

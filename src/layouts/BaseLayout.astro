@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
+import QuietFooter from "../components/quiet/Footer.astro";
 import { useTranslations } from '../i18n/utils';
 
 const lang = Astro.locals.lang;
@@ -13,7 +14,10 @@ const {
   ogType = "website",
   noindex = false,
   preloadImages = [] as Array<string | { srcset: string; sizes: string }>,
+  theme = 'legacy' as 'legacy' | 'quiet',
 } = Astro.props;
+
+const isQuiet = theme === 'quiet';
 
 const origin = Astro.url.origin;
 const pathname = Astro.url.pathname;
@@ -107,12 +111,12 @@ const canonicalUrl = lang === 'fr' ? `${origin}${frPath}` : `${origin}${enPath}`
     )}
   </head>
 
-  <body class="font-sans text-gray-900 antialiased">
+  <body class={isQuiet ? "antialiased" : "font-sans text-gray-900 antialiased"} data-theme={isQuiet ? "quiet" : undefined}>
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K6M2KKL7"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
     <slot />
-    <Footer />
+    {isQuiet ? <QuietFooter /> : <Footer />}
   </body>
 </html>

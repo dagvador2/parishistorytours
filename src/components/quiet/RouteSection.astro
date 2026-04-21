@@ -1,0 +1,258 @@
+---
+import { useTranslations } from '../../i18n/utils';
+import TourMap from '../TourMap.tsx';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+// Provisional stop times per tour — will be lifted into tours.ts during Step 5.
+const leftBankTimes  = ['0:00', '0:35', '1:10', '1:45'];
+const rightBankTimes = ['0:00', '0:30', '1:05', '1:40'];
+const generalTimes   = ['0:00', '0:35', '1:10'];
+
+const tours = [
+  {
+    key: 'left-bank' as const,
+    label: t('quiet.home.route.tabLeftBank'),
+    stops: [1, 2, 3, 4].map((n) => ({
+      n,
+      title: t(`tours.leftBank.stops.stop${n}.title`),
+      blurb: t(`tours.leftBank.stops.stop${n}.description`),
+      time: leftBankTimes[n - 1],
+    })),
+  },
+  {
+    key: 'right-bank' as const,
+    label: t('quiet.home.route.tabRightBank'),
+    stops: [1, 2, 3, 4].map((n) => ({
+      n,
+      title: t(`tours.rightBank.stops.stop${n}.title`),
+      blurb: t(`tours.rightBank.stops.stop${n}.description`),
+      time: rightBankTimes[n - 1],
+    })),
+  },
+  {
+    key: 'general-history' as const,
+    label: t('quiet.home.route.tabGeneral'),
+    stops: [1, 2, 3].map((n) => ({
+      n,
+      title: t(`tours.generalHistory.stops.stop${n}.title`),
+      blurb: t(`tours.generalHistory.stops.stop${n}.description`),
+      time: generalTimes[n - 1],
+    })),
+  },
+];
+---
+
+<section id="route" class="qroute">
+  <div class="qroute__inner">
+    <header class="qroute__header">
+      <p class="qroute__kicker">{t('quiet.home.route.kicker')}</p>
+      <h2 class="qroute__title">{t('quiet.home.route.title')}</h2>
+    </header>
+
+    <div class="qroute__tabs" role="tablist">
+      {tours.map((tour, i) => (
+        <button
+          type="button"
+          role="tab"
+          class:list={["qroute__tab", { 'is-active': i === 0 }]}
+          data-tour={tour.key}
+          aria-selected={i === 0 ? 'true' : 'false'}
+        >{tour.label}</button>
+      ))}
+    </div>
+
+    <div class="qroute__body">
+      <div class="qroute__stops">
+        {tours.map((tour, i) => (
+          <ol class:list={["qroute__stop-list", { 'is-active': i === 0 }]} data-tour-stops={tour.key}>
+            {tour.stops.map((stop) => (
+              <li class="qroute__stop">
+                <span class="qroute__stop-num" aria-hidden="true">{stop.n}</span>
+                <div class="qroute__stop-body">
+                  <h3>{stop.title}</h3>
+                  <p>{stop.blurb.length > 140 ? stop.blurb.slice(0, 137).trimEnd() + '…' : stop.blurb}</p>
+                  <span class="qroute__stop-time">{stop.time}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ))}
+      </div>
+
+      <div class="qroute__map">
+        {tours.map((tour, i) => (
+          <div class:list={["qroute__map-pane", { 'is-active': i === 0 }]} data-tour-map={tour.key}>
+            <TourMap tour={tour.key} client:visible />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector('section#route');
+  if (section) {
+    const tabs = Array.from(section.querySelectorAll<HTMLButtonElement>('.qroute__tab'));
+    const stopLists = Array.from(section.querySelectorAll<HTMLElement>('[data-tour-stops]'));
+    const mapPanes = Array.from(section.querySelectorAll<HTMLElement>('[data-tour-map]'));
+
+    function setActive(tourKey: string) {
+      tabs.forEach((t) => {
+        const isActive = t.dataset.tour === tourKey;
+        t.classList.toggle('is-active', isActive);
+        t.setAttribute('aria-selected', String(isActive));
+      });
+      stopLists.forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.tourStops === tourKey);
+      });
+      mapPanes.forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.tourMap === tourKey);
+      });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.tour;
+        if (key) setActive(key);
+      });
+    });
+  }
+</script>
+
+<style>
+  .qroute {
+    background: var(--paper-2);
+    padding: 96px 32px;
+  }
+  .qroute__inner { max-width: 1280px; margin: 0 auto; }
+  .qroute__header { margin-bottom: 40px; }
+  .qroute__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .qroute__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 48px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .qroute__tabs {
+    display: inline-flex;
+    gap: 6px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--paper-3);
+    margin-bottom: 40px;
+  }
+  .qroute__tab {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .qroute__tab:hover { color: var(--ink); }
+  .qroute__tab.is-active {
+    background: var(--ink);
+    color: var(--paper-3);
+  }
+
+  .qroute__body {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .qroute__stop-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+  }
+  .qroute__stop-list.is-active { display: flex; flex-direction: column; gap: 20px; }
+  .qroute__stop {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 20px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+  }
+  .qroute__stop:first-child { border-top: none; padding-top: 4px; }
+  .qroute__stop-num {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .qroute__stop-body h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--ink);
+    margin: 0 0 6px;
+    line-height: 1.25;
+  }
+  .qroute__stop-body p {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0 0 8px;
+  }
+  .qroute__stop-time {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+  }
+
+  .qroute__map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .qroute__map-pane {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+  .qroute__map-pane.is-active { opacity: 1; pointer-events: auto; }
+  /* TourMap renders its own container; ensure it fills this box */
+  .qroute__map-pane > * { width: 100% !important; height: 100% !important; }
+
+  @media (max-width: 900px) {
+    .qroute { padding: 64px 20px; }
+    .qroute__title { font-size: 34px; }
+    .qroute__body { grid-template-columns: 1fr; gap: 40px; }
+    .qroute__map { aspect-ratio: 1 / 1; order: -1; }
+  }
+</style>

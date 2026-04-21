@@ -13,6 +13,7 @@ export interface StopImage {
 export interface GalleryImage {
   src: string;
   alt: string;
+  caption?: string;
 }
 
 export interface CrossLink {
@@ -20,6 +21,16 @@ export interface CrossLink {
   bookingKey: string;
   descriptionEn: string;
   descriptionFr: string;
+}
+
+export interface BookingLinks {
+  getyourguide?: string;
+  viator?: string;
+  tripadvisor?: string;
+  parisjetaime?: string;
+  tourist?: string;
+  whatsapp: string;
+  email: string;
 }
 
 export interface TourConfig {
@@ -38,6 +49,7 @@ export interface TourConfig {
   crossLinks: CrossLink[];
   locationName: string;
   galleryAutoPlayMs?: number;
+  bookingLinks: BookingLinks;
 }
 
 export const tours: Record<string, TourConfig> = {
@@ -97,6 +109,15 @@ export const tours: Record<string, TourConfig> = {
     ],
     locationName: 'Left Bank, Paris, France',
     galleryAutoPlayMs: 6000,
+    bookingLinks: {
+      getyourguide: 'https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/',
+      viator: 'https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2',
+      tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
+      parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
+      tourist: 'https://tourist.com/p/24194',
+      whatsapp: 'https://wa.me/+33620622480',
+      email: 'mailto:clemdaguetschott@gmail.com',
+    },
   },
   'right-bank': {
     slug: 'right-bank',
@@ -153,6 +174,15 @@ export const tours: Record<string, TourConfig> = {
       },
     ],
     locationName: 'Right Bank, Paris, France',
+    bookingLinks: {
+      getyourguide: 'https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/',
+      viator: 'https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2',
+      tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
+      parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
+      tourist: 'https://tourist.com/p/24194',
+      whatsapp: 'https://wa.me/+33620622480',
+      email: 'mailto:clemdaguetschott@gmail.com',
+    },
   },
   'general-history': {
     slug: 'general-history',
@@ -209,5 +239,12 @@ export const tours: Record<string, TourConfig> = {
     ],
     locationName: 'Central Paris, France',
     galleryAutoPlayMs: 6000,
+    bookingLinks: {
+      tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
+      parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
+      tourist: 'https://tourist.com/p/24194',
+      whatsapp: 'https://wa.me/+33620622480',
+      email: 'mailto:clemdaguetschott@gmail.com',
+    },
   },
 };

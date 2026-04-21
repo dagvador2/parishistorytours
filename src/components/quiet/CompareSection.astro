@@ -1,0 +1,228 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const langPrefix = lang === 'en' ? '' : '/fr';
+
+const tours = [
+  {
+    title: t('quiet.home.tours.leftBankTitle'),
+    href: `${langPrefix}/tours/left-bank`,
+    focus: t('quiet.home.compare.leftBankFocus'),
+    route: t('quiet.home.compare.leftBankRoute'),
+    duration: t('quiet.home.compare.leftBankDuration'),
+    stops: t('quiet.home.compare.leftBankStops'),
+    bestFor: t('quiet.home.compare.leftBankBestFor'),
+  },
+  {
+    title: t('quiet.home.tours.rightBankTitle'),
+    href: `${langPrefix}/tours/right-bank`,
+    focus: t('quiet.home.compare.rightBankFocus'),
+    route: t('quiet.home.compare.rightBankRoute'),
+    duration: t('quiet.home.compare.rightBankDuration'),
+    stops: t('quiet.home.compare.rightBankStops'),
+    bestFor: t('quiet.home.compare.rightBankBestFor'),
+  },
+  {
+    title: t('quiet.home.tours.generalTitle'),
+    href: `${langPrefix}/tours/general-history`,
+    focus: t('quiet.home.compare.generalFocus'),
+    route: t('quiet.home.compare.generalRoute'),
+    duration: t('quiet.home.compare.generalDuration'),
+    stops: t('quiet.home.compare.generalStops'),
+    bestFor: t('quiet.home.compare.generalBestFor'),
+  },
+];
+
+const axes: { key: keyof (typeof tours)[number]; label: string }[] = [
+  { key: 'focus',    label: t('quiet.home.compare.axisFocus') },
+  { key: 'route',    label: t('quiet.home.compare.axisRoute') },
+  { key: 'duration', label: t('quiet.home.compare.axisDuration') },
+  { key: 'stops',    label: t('quiet.home.compare.axisStops') },
+  { key: 'bestFor',  label: t('quiet.home.compare.axisBestFor') },
+];
+---
+
+<section id="compare" class="qcompare">
+  <div class="qcompare__inner">
+    <header class="qcompare__header">
+      <p class="qcompare__kicker">{t('quiet.home.compare.kicker')}</p>
+      <h2 class="qcompare__title">{t('quiet.home.compare.title')}</h2>
+    </header>
+
+    <!-- Desktop: axis-per-row matrix -->
+    <div class="qcompare__table" role="table">
+      <div class="qcompare__row qcompare__row--head" role="row">
+        <div class="qcompare__cell qcompare__cell--axis" role="columnheader"></div>
+        {tours.map((tour) => (
+          <a href={tour.href} class="qcompare__cell qcompare__cell--title" role="columnheader">{tour.title}</a>
+        ))}
+      </div>
+
+      {axes.map((axis) => (
+        <div class="qcompare__row" role="row">
+          <div class="qcompare__cell qcompare__cell--axis" role="rowheader">{axis.label}</div>
+          {tours.map((tour) => (
+            <div class="qcompare__cell" role="cell">{tour[axis.key]}</div>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <!-- Mobile: one swipable card per tour -->
+    <div class="qcompare__carousel" aria-hidden="false">
+      {tours.map((tour) => (
+        <article class="qcompare__tcard">
+          <a href={tour.href} class="qcompare__tcard-title">{tour.title}</a>
+          <dl class="qcompare__tcard-list">
+            {axes.map((axis) => (
+              <div>
+                <dt>{axis.label}</dt>
+                <dd>{tour[axis.key]}</dd>
+              </div>
+            ))}
+          </dl>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .qcompare {
+    background: var(--paper-2);
+    padding: 96px 32px;
+  }
+  .qcompare__inner { max-width: 1280px; margin: 0 auto; }
+  .qcompare__header { margin-bottom: 56px; }
+  .qcompare__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .qcompare__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 48px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .qcompare__table {
+    display: grid;
+    gap: 0;
+  }
+  .qcompare__row {
+    display: grid;
+    grid-template-columns: 180px repeat(3, 1fr);
+    gap: 32px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+  }
+  .qcompare__row--head {
+    border-top: none;
+    padding-bottom: 20px;
+  }
+  .qcompare__row:last-child { border-bottom: 1px solid var(--border); }
+  .qcompare__cell {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .qcompare__cell--axis {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qcompare__cell--title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .qcompare__cell--title:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* Mobile swipable per-tour cards — hidden above 760px */
+  .qcompare__carousel { display: none; }
+
+  @media (max-width: 900px) {
+    .qcompare { padding: 64px 0; }
+    .qcompare__header { padding: 0 20px; }
+    .qcompare__title { font-size: 36px; }
+  }
+
+  @media (max-width: 760px) {
+    .qcompare__table { display: none; }
+    .qcompare__carousel {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 86%;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 20px 16px;
+      scroll-padding: 0 20px;
+    }
+    .qcompare__carousel::-webkit-scrollbar { display: none; }
+    .qcompare__tcard {
+      scroll-snap-align: start;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .qcompare__tcard-title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 24px;
+      color: var(--ink);
+      text-decoration: none;
+      line-height: 1.2;
+    }
+    .qcompare__tcard-list {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .qcompare__tcard-list > div {
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .qcompare__tcard-list > div:last-child { border-bottom: 1px solid var(--border); }
+    .qcompare__tcard-list dt {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+    .qcompare__tcard-list dd {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+  }
+</style>

@@ -1,0 +1,386 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  /**
+   * "home" uses in-page anchors (#tours, #route…).
+   * "tour" (or other) prefixes them with the localized root so they jump back to the homepage.
+   */
+  context?: 'home' | 'tour';
+}
+
+const { context = 'home' } = Astro.props;
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
+const homeRoot = `${langPrefix}/`;
+
+const anchor = (hash: string) => context === 'home' ? `#${hash}` : `${homeRoot}#${hash}`;
+
+const links = [
+  { key: 'tours',   href: anchor('tours'),   label: t('quiet.nav.tours') },
+  { key: 'route',   href: anchor('route'),   label: t('quiet.nav.route') },
+  { key: 'compare', href: anchor('compare'), label: t('quiet.nav.compare') },
+  { key: 'about',   href: anchor('about'),   label: t('quiet.nav.about') },
+  { key: 'faq',     href: anchor('faq'),     label: t('quiet.nav.faq') },
+];
+
+const bookHref = context === 'home' ? '#book' : `${homeRoot}#book`;
+---
+
+<nav class="quiet-nav" data-quiet-nav>
+  <div class="quiet-nav__inner">
+    <a href={homeRoot} class="quiet-nav__brand">
+      <span class="quiet-nav__mark" aria-hidden="true">P</span>
+      <span class="quiet-nav__brand-text">
+        <span class="quiet-nav__brand-name">{t('quiet.nav.brand')}</span>
+        <span class="quiet-nav__brand-sub">{t('quiet.nav.tagline')}</span>
+      </span>
+    </a>
+
+    <div class="quiet-nav__links">
+      {links.map((l) => (
+        <a href={l.href} data-nav-link={l.key} class="quiet-nav__link">{l.label}</a>
+      ))}
+    </div>
+
+    <div class="quiet-nav__right">
+      <a href={bookHref} class="quiet-nav__book">{t('quiet.nav.bookTour')}</a>
+      <button class="quiet-nav__burger" id="quietNavBurger" aria-label={t('quiet.nav.menuLabel')} aria-expanded="false" aria-controls="quietDrawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="quiet-drawer" id="quietDrawer" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="quiet-drawer__scrim" data-drawer-dismiss></div>
+  <aside class="quiet-drawer__panel">
+    <header class="quiet-drawer__head">
+      <a href={homeRoot} class="quiet-drawer__brand" data-drawer-dismiss>
+        <span class="quiet-drawer__mark" aria-hidden="true">P</span>
+        <span class="quiet-drawer__brand-text">
+          <span class="quiet-drawer__brand-name">{t('quiet.nav.brand')}</span>
+          <span class="quiet-drawer__brand-sub">{t('quiet.nav.tagline')}</span>
+        </span>
+      </a>
+      <button class="quiet-drawer__close" id="quietDrawerClose" aria-label="Close menu">×</button>
+    </header>
+    <nav class="quiet-drawer__nav">
+      {links.map((l) => (
+        <a href={l.href} class="quiet-drawer__link" data-drawer-dismiss>{l.label}</a>
+      ))}
+      <a href={bookHref} class="quiet-drawer__link quiet-drawer__link--cta" data-drawer-dismiss>{t('quiet.nav.bookTour')}</a>
+    </nav>
+    <div class="quiet-drawer__foot">
+      <a href="https://wa.me/+33620622480" class="quiet-drawer__foot-item" rel="noopener">+33 6 20 62 24 80</a>
+    </div>
+  </aside>
+</div>
+
+<style>
+  .quiet-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper-3);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-sans);
+  }
+  .quiet-nav__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 70px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .quiet-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .quiet-nav__mark {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .quiet-nav__brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .quiet-nav__brand-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+  }
+  .quiet-nav__brand-sub {
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+
+  .quiet-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .quiet-nav__link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+  .quiet-nav__link:hover { color: var(--ink); }
+  .quiet-nav__link.is-active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .quiet-nav__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .quiet-nav__book {
+    background: var(--ink);
+    color: var(--paper-3);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 10px 18px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .quiet-nav__book:hover {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .quiet-nav__burger {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    color: var(--ink);
+  }
+  .quiet-nav__burger span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: currentColor;
+  }
+
+  @media (max-width: 900px) {
+    .quiet-nav__links { display: none; }
+    .quiet-nav__brand-sub { display: none; }
+  }
+
+  @media (max-width: 760px) {
+    .quiet-nav__inner { padding: 0 16px; }
+    .quiet-nav__book { display: none; }
+    .quiet-nav__burger { display: flex; }
+  }
+
+  /* --- Mobile drawer --- */
+  .quiet-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    visibility: hidden;
+    pointer-events: none;
+    font-family: var(--font-sans);
+  }
+  .quiet-drawer.is-open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .quiet-drawer__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.35);
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+  .quiet-drawer.is-open .quiet-drawer__scrim { opacity: 1; }
+  .quiet-drawer__panel {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: min(92%, 400px);
+    background: var(--paper-3);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: -4px 0 24px -8px rgba(0, 0, 0, 0.12);
+  }
+  .quiet-drawer.is-open .quiet-drawer__panel { transform: translateX(0); }
+
+  .quiet-drawer__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quiet-drawer__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .quiet-drawer__mark {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .quiet-drawer__brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .quiet-drawer__brand-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .quiet-drawer__brand-sub {
+    font-size: 10px;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+  .quiet-drawer__close {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: var(--font-display);
+  }
+  .quiet-drawer__close:hover { border-color: var(--ink); }
+
+  .quiet-drawer__nav {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+    flex: 1;
+  }
+  .quiet-drawer__link {
+    display: block;
+    padding: 16px 20px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 120ms ease;
+  }
+  .quiet-drawer__link:hover { background: var(--paper-2); }
+  .quiet-drawer__link--cta {
+    margin-top: 8px;
+    background: var(--ink);
+    color: var(--paper-3);
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 18px 20px;
+    border-bottom: none;
+    letter-spacing: 0.02em;
+  }
+  .quiet-drawer__link--cta:hover { background: var(--rouge); color: var(--paper-3); }
+
+  .quiet-drawer__foot {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .quiet-drawer__foot-item {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .quiet-drawer__foot-item:hover { color: var(--ink); }
+
+  @media (min-width: 761px) {
+    .quiet-drawer { display: none; }
+  }
+</style>
+
+<script>
+  const burger = document.getElementById('quietNavBurger');
+  const drawer = document.getElementById('quietDrawer');
+  const closeBtn = document.getElementById('quietDrawerClose');
+
+  if (burger && drawer) {
+    function open() {
+      drawer!.classList.add('is-open');
+      drawer!.setAttribute('aria-hidden', 'false');
+      burger!.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      drawer!.classList.remove('is-open');
+      drawer!.setAttribute('aria-hidden', 'true');
+      burger!.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    burger.addEventListener('click', () => {
+      if (drawer.classList.contains('is-open')) close();
+      else open();
+    });
+    closeBtn?.addEventListener('click', close);
+    // Scrim and link clicks all carry data-drawer-dismiss
+    drawer.addEventListener('click', (e) => {
+      const el = e.target as HTMLElement;
+      if (el.closest('[data-drawer-dismiss]')) close();
+    });
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) close();
+    });
+  }
+</script>

@@ -87,38 +87,49 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      // Quiet: desaturated light style for an editorial paper feel
+      style: 'mapbox://styles/mapbox/light-v11',
       center: centerCoords,
       zoom: 14,
       attributionControl: false
     });
 
     map.current.on('load', async () => {
-      // Ajouter les markers pour chaque stop principal (numérotés)
+      // Quiet numbered markers: 28px circle, cream fill, 1px ink border, Playfair numeral.
+      // Inline styles keep this independent of the page's Tailwind layer.
       stops.forEach((stop, index) => {
         const el = document.createElement('div');
-        el.className = 'custom-marker';
+        el.className = 'quiet-marker';
         el.innerHTML = `
-          <div class="w-10 h-10 bg-gray-600 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
-            ${index + 1}
-          </div>
+          <div style="
+            width:28px;height:28px;
+            display:grid;place-items:center;
+            background:#fafaf7;
+            color:#1a1a1a;
+            border:1px solid #1a1a1a;
+            border-radius:50%;
+            font-family:'Playfair Display Variable', Georgia, serif;
+            font-weight:500;
+            font-size:13px;
+            line-height:1;
+            box-shadow:0 1px 2px rgba(0,0,0,0.06);
+          ">${index + 1}</div>
         `;
 
         new mapboxgl.Marker(el)
           .setLngLat(stop.coords as [number, number])
           .setPopup(
-            new mapboxgl.Popup({ offset: 25 }).setHTML(`
-              <div class="p-3 text-center">
-                <h3 class="font-bold text-gray-800 text-lg">${stop.name}</h3>
-                <p class="text-sm text-gray-600 mb-2">Stop ${index + 1}</p>
-                <p class="text-sm font-medium text-gray-600">${stop.theme || 'Historical theme'}</p>
+            new mapboxgl.Popup({ offset: 18, className: 'quiet-popup' }).setHTML(`
+              <div style="padding:4px 2px;font-family:'Inter Variable',system-ui,sans-serif;">
+                <div style="font-family:'Playfair Display Variable',Georgia,serif;font-weight:500;font-size:15px;color:#1a1a1a;margin-bottom:4px;">${stop.name}</div>
+                <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#4a4a4a;">Stop ${index + 1}${stop.theme ? ' · ' + stop.theme : ''}</div>
               </div>
             `)
           )
           .addTo(map.current!);
       });
 
-      // Ajouter les petits points pour les arrêts rapides
+      // Waypoints: small teal dots, no border.
       const waypoints = tour === 'left-bank'
         ? leftBankWaypoints
         : tour === 'right-bank'
@@ -127,18 +138,22 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
 
       waypoints.forEach((waypoint) => {
         const el = document.createElement('div');
-        el.className = 'waypoint-marker';
+        el.className = 'quiet-waypoint';
         el.innerHTML = `
-          <div class="w-4 h-4 bg-gray-500 border-2 border-white rounded-full shadow-md"></div>
+          <div style="
+            width:8px;height:8px;
+            background:#3a4a48;
+            border-radius:50%;
+            opacity:0.75;
+          "></div>
         `;
 
         new mapboxgl.Marker(el)
           .setLngLat(waypoint.coords as [number, number])
           .setPopup(
-            new mapboxgl.Popup({ offset: 15 }).setHTML(`
-              <div class="p-2 text-center">
-                <h3 class="font-bold text-gray-800 text-sm">${waypoint.name}</h3>
-                <p class="text-xs text-gray-600">Quick stop</p>
+            new mapboxgl.Popup({ offset: 10, className: 'quiet-popup' }).setHTML(`
+              <div style="padding:4px 2px;font-family:'Inter Variable',system-ui,sans-serif;">
+                <div style="font-family:'Playfair Display Variable',Georgia,serif;font-weight:500;font-size:14px;color:#1a1a1a;">${waypoint.name}</div>
               </div>
             `)
           )
@@ -236,26 +251,10 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
             'line-cap': 'round'
           },
           'paint': {
-            'line-color': '#374151',
-            'line-width': 4,
-            'line-opacity': 0.8
-          }
-        });
-
-        // Ajouter une ligne en pointillés pour montrer le sens
-        map.current!.addLayer({
-          'id': 'walking-route-dashed',
-          'type': 'line',
-          'source': 'walking-route',
-          'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-          },
-          'paint': {
-            'line-color': '#ffffff',
+            // Quiet teal (--teal)
+            'line-color': '#3a4a48',
             'line-width': 2,
-            'line-dasharray': [2, 2],
-            'line-opacity': 0.8
+            'line-opacity': 0.95
           }
         });
 
@@ -293,9 +292,10 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
           'line-cap': 'round'
         },
         'paint': {
-          'line-color': '#374151',
-          'line-width': 4,
-          'line-opacity': 0.6
+          'line-color': '#3a4a48',
+          'line-width': 2,
+          'line-opacity': 0.7,
+          'line-dasharray': [2, 3]
         }
       });
     }
@@ -310,27 +310,58 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
   };
 
   const tourLabel = tour === 'left-bank'
-    ? 'Left Bank Tour'
+    ? 'Left Bank'
     : tour === 'right-bank'
-      ? 'Right Bank Tour'
-      : 'General History Tour';
+      ? 'Right Bank'
+      : 'General History';
 
   const defaultRouteInfo = tour === 'general-history'
-    ? '2.5km • 3 stops • 1.5 hours'
-    : '2.5km • 4 stops • 2 hours';
+    ? '2.5 km · 3 stops · 1 h 30'
+    : '2.5 km · 4 stops · 2 h';
 
   return (
-    <div className="relative">
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div
         ref={mapContainer}
-        className="w-full h-96 rounded-lg shadow-lg"
-        style={{ minHeight: '400px' }}
+        style={{ width: '100%', height: '100%', minHeight: '360px' }}
       />
-      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg">
-        <h4 className="font-semibold text-gray-800">
+      <div
+        style={{
+          position: 'absolute',
+          top: 16,
+          left: 16,
+          background: 'rgba(250, 250, 247, 0.94)',
+          border: '1px solid rgba(26, 26, 26, 0.1)',
+          padding: '10px 14px',
+          backdropFilter: 'blur(4px)',
+          fontFamily: "'Inter Variable', system-ui, sans-serif",
+          lineHeight: 1.3,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 500,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: '#4a4a4a',
+            marginBottom: 4,
+          }}
+        >
           {tourLabel}
-        </h4>
-        <p className="text-sm text-gray-600 route-info">{defaultRouteInfo}</p>
+        </div>
+        <div
+          className="route-info"
+          style={{
+            fontFamily: "'Playfair Display Variable', Georgia, serif",
+            fontSize: 14,
+            fontWeight: 500,
+            color: '#1a1a1a',
+            letterSpacing: '0.01em',
+          }}
+        >
+          {defaultRouteInfo}
+        </div>
       </div>
     </div>
   );

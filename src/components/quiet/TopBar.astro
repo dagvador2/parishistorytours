@@ -1,0 +1,82 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const isDefaultLang = lang === 'en';
+const langPrefix = isDefaultLang ? '' : '/fr';
+const pathname = Astro.url.pathname;
+const basePath = pathname.startsWith('/fr') ? (pathname.replace(/^\/fr/, '') || '/') : pathname;
+const enUrl = basePath;
+const frUrl = basePath === '/' ? '/fr' : `/fr${basePath}`;
+---
+
+<div class="quiet-topbar">
+  <div class="quiet-topbar__inner">
+    <span class="quiet-topbar__notice">{t('quiet.topBar.notice')}</span>
+    <div class="quiet-topbar__right">
+      <a href="https://wa.me/+33620622480" class="quiet-topbar__link" rel="noopener">+33 6 20 62 24 80</a>
+      <span class="quiet-topbar__sep" aria-hidden="true">·</span>
+      <div class="quiet-topbar__lang">
+        <a href={enUrl} class:list={["quiet-topbar__lang-item", { 'is-active': lang === 'en' }]}>EN</a>
+        <span class="quiet-topbar__sep" aria-hidden="true">/</span>
+        <a href={frUrl} class:list={["quiet-topbar__lang-item", { 'is-active': lang === 'fr' }]}>FR</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quiet-topbar {
+    background: var(--ink);
+    color: var(--paper-3);
+    font-family: var(--font-sans);
+  }
+  .quiet-topbar__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 36px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .quiet-topbar__notice {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .quiet-topbar__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .quiet-topbar__link {
+    color: var(--paper-3);
+    text-decoration: none;
+  }
+  .quiet-topbar__link:hover { color: #fff; }
+  .quiet-topbar__sep { color: rgba(255, 255, 255, 0.4); }
+  .quiet-topbar__lang {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .quiet-topbar__lang-item {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .quiet-topbar__lang-item.is-active,
+  .quiet-topbar__lang-item:hover { color: var(--paper-3); }
+
+  @media (max-width: 760px) {
+    .quiet-topbar__inner { padding: 0 16px; }
+    .quiet-topbar__notice {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 55%;
+    }
+  }
+</style>
