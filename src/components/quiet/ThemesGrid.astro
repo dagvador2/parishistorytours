@@ -5,15 +5,22 @@ import type { TopicImage } from '../../data/tours';
 interface Props {
   themeKeys: readonly string[];
   topics: TopicImage[];
-  isGeneral: boolean;
+  /** "ww2" (Left/Right Bank), "general" (General History), or "foodWine" (Nourritour) */
+  variant: 'ww2' | 'general' | 'foodWine';
 }
 
-const { themeKeys, topics, isGeneral } = Astro.props;
+const { themeKeys, topics, variant } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
-const kicker = isGeneral ? t('quiet.tour.themes.kickerGeneral') : t('quiet.tour.themes.kickerWW2');
-const title = isGeneral ? t('quiet.tour.themes.titleGeneral') : t('quiet.tour.themes.titleWW2');
+const kicker =
+  variant === 'general'  ? t('quiet.tour.themes.kickerGeneral')  :
+  variant === 'foodWine' ? t('quiet.tour.themes.kickerFoodWine') :
+                           t('quiet.tour.themes.kickerWW2');
+const title =
+  variant === 'general'  ? t('quiet.tour.themes.titleGeneral')  :
+  variant === 'foodWine' ? t('quiet.tour.themes.titleFoodWine') :
+                           t('quiet.tour.themes.titleWW2');
 
 // Map theme key to act label translation key
 const actKeyMap: Record<string, string> = {
@@ -23,6 +30,9 @@ const actKeyMap: Record<string, string> = {
   roman: 'quiet.tour.themes.actRomanGeneral',
   medieval: 'quiet.tour.themes.actMedievalGeneral',
   revolution: 'quiet.tour.themes.actRevolutionGeneral',
+  story: 'quiet.tour.themes.actStoryFoodWine',
+  terroir: 'quiet.tour.themes.actTerroirFoodWine',
+  pairing: 'quiet.tour.themes.actPairingFoodWine',
 };
 ---
 

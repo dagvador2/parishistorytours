@@ -118,6 +118,18 @@ export const fr = {
       revolution: {
         title: "La Révolution Française",
         description: "Revivez la nuit du 20 juin 1791, quand Louis XVI et Marie-Antoinette tentèrent leur audacieuse évasion de Paris — une comédie d'erreurs aux conséquences dramatiques qui scella le destin de la monarchie française."
+      },
+      story: {
+        title: "L'histoire",
+        description: "Les passages couverts, une rue née d'un dépotoir, et le premier fast-food français — l'histoire de comment Paris a mangé, des arcades du XIXe aux artisans encore debout aujourd'hui."
+      },
+      terroir: {
+        title: "Le terroir",
+        description: "Quatre artisans, quatre fenêtres sur le terroir français. Fromage, charcuterie, madeleines, vin — chaque boutique est un chapitre de la manière dont la France a construit sa table autour de la terre qui la nourrit."
+      },
+      pairing: {
+        title: "L'accord",
+        description: "Cinq planches dans une cave de la rue de Maubeuge. Regarder · Sentir · Goûter, un mot-clé par accord, et la chimie paysanne devenue art de vivre — pourquoi un Sancerre va avec un Crottin, pourquoi un Bordeaux appelle un pain de campagne."
       }
     },
     rightBank: {
@@ -224,8 +236,45 @@ export const fr = {
         }
       }
     },
+    foodWine: {
+      title: "Nourritour — Visite gourmande",
+      description: "Une visite à pied du Paris gourmand, avec un soupçon d'histoire",
+      introduction: "À travers le 9e, la fourchette en main",
+      quote: "Pour connaître Paris, il faut le goûter — un artisan à la fois.",
+      quoteAuthor: "Clément & Amélie",
+      summary: "Le Nourritour se fait en deux mouvements, sur trois heures. D'abord une heure et demie à arpenter les passages couverts et la rue des Martyrs, en passant chez quatre artisans — madeleines, fromage, charcuterie, vin — pour faire les courses. Puis une heure et demie chez un caviste, autour de cinq planches progressives qui nous font traverser la France : Loire, Bourgogne, Beaujolais, Bordeaux, Sauternes. Guidé à deux — un historien de cœur, une sommelière de formation.",
+      didYouKnow: {
+        title: "Le saviez-vous ?",
+        facts: [
+          "Paris comptait plus de 150 passages couverts au XIXe siècle — des rues vitrées, éclairées au gaz, chauffées : les premiers centres commerciaux du monde. Il en reste une vingtaine aujourd'hui.",
+          "Le premier fast-food français est né en 1851 dans le Passage Jouffroy — plats froids debout, vin au verre, menu du jour à l'ardoise. Il a fallu attendre 130 ans et McDonald's pour que la France redécouvre l'idée.",
+          "La rue Cadet doit son nom à Jacques et Jean Cadet, deux maîtres jardiniers qui ont transformé une décharge médiévale en l'un des champs de fraises les plus rentables de Paris.",
+          "Charles-Louis Cadet de Gassicourt — pharmacien personnel de Napoléon, fils présumé illégitime de Louis XV — publie en 1809 la toute première carte gastronomique de France, remplaçant les clochers par des jambons et des fromages.",
+          "Au XVIIIe siècle, Montmartre était couverte aux trois quarts de vignes. Un dicton du XVIIe disait : « C'est du vin de Montmartre, qui en boit pinte en pisse quarte. »"
+        ]
+      },
+      stops: {
+        stop1: {
+          title: "Maison Madlen — Madeleines",
+          description: "Premier arrêt, rue Cadet. Une pâtisserie construite autour d'un seul petit gâteau en coquille. L'histoire du nom (une servante, pas une sainte), l'histoire de la rue (des champs de fraises, pas des aristocrates), et la toute première carte gastronomique de France — publiée ici même en 1809, qui a remplacé les clochers par des jambons et des fromages."
+        },
+        stop2: {
+          title: "Fromagerie Chataigner — Fromage",
+          description: "Fromager de troisième génération, rue des Martyrs. Plus de 1 200 fromages français, 46 protégés par une AOP, chacun lié à une région, un troupeau, une cave. On raconte les monastères — vrais laboratoires d'affinage médiévaux — le terroir, les rituels d'affinage. Puis on choisit les fromages qui répondront aux vins du soir."
+        },
+        stop3: {
+          title: "Charcuterie Maison Thielen — Charcuterie",
+          description: "De « chair cuite ». Des jambons gaulois qui nourrissaient les légions romaines, une charte de 1475 donnant aux charcutiers le monopole du porc cuit, des spécialités régionales nées du besoin de conservation hivernale. Ici on choisit les charcuteries — rosette de Lyon, jambon persillé de Bourgogne, chorizo ibérique — qui tiendront les planches."
+        },
+        stop4: {
+          title: "Les Flaconneurs — Dégustation",
+          description: "La cave, rue de Maubeuge, où tout se rassemble. Cinq planches progressives — Fraîcheur, Onctuosité, Fraîcheur Rouge, Puissance, Gourmandise — un mot-clé par vin, les trois gestes (regarder, sentir, goûter), et un quiz qui traverse l'heure. Au dernier verre, vous aurez vos propres mots pour dire ce que vous buvez."
+        }
+      }
+    },
     stops: {
       our4Stops: "Nos 4 Arrêts Historiques",
+      our4TastyStops: "Nos 4 Arrêts Gourmands",
       our3Stops: "Nos 3 Arrêts Historiques",
       experienceHistory: "Vivez l'Histoire",
       ourRoute: "Notre Itinéraire à travers Paris"
@@ -320,9 +369,11 @@ export const fr = {
     leftBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive gauche de Paris",
     rightBankDesc: "Découvrez la Seconde Guerre mondiale sur la rive droite de Paris",
     generalHistoryDesc: "Parcourez 2 000 ans d'histoire de Paris",
+    foodWineDesc: "Une visite gourmande à pied dans le 9e arrondissement",
     leftBankTour: "Visite WW2 Rive Gauche",
     rightBankTour: "Visite WW2 Rive Droite",
     generalHistoryTour: "Visite Histoire Générale",
+    foodWineTour: "Nourritour · Food & Wine",
     regularTour: "Visite Régulière",
     privateTour: "Visite Privée",
     regularTourDesc: "Rejoignez une visite avec jusqu'à 10 voyageurs",
@@ -544,6 +595,10 @@ export const fr = {
       title: "Visite Histoire Générale de Paris - 2 000 Ans en 1h30 | Paris History Tours",
       description: "Parcourez 2 000 ans d'histoire de Paris : Lutèce romaine, le siège viking de 885, la Révolution française. 3 arrêts, 1h30. Petit groupe avec un guide local."
     },
+    foodWine: {
+      title: "Nourritour — Visite food & wine à Paris | Paris History Tours",
+      description: "Visite à pied food & wine de 3 heures dans le 9e — passages couverts, rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin) et cinq planches de dégustation. Guidé à deux."
+    },
     keyFigures: {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
       description: "Rencontrez Clément, passionné d'histoire et guide personnel à Paris. 20+ livres de recherche, visiteurs de 25+ pays et une note de 4.9/5 sur Google Maps."
@@ -632,9 +687,15 @@ export const fr = {
       menuLabel: "Menu"
     },
     mobileBooking: {
-      priceFrom: "À partir de 45 €",
+      priceFrom: "À partir de 49 €",
       meta: "Petit groupe · Visite de 2 h",
-      cta: "Réserver"
+      cta: "Réserver",
+      priceWW2: "À partir de 49 €",
+      metaWW2: "Petit groupe · Visite de 2 h",
+      priceGeneral: "À partir de 45 €",
+      metaGeneral: "Petit groupe · Visite de 1 h 30",
+      priceFoodWine: "À partir de 95 €",
+      metaFoodWine: "Petit groupe · Dégustation de 3 h"
     },
     footer: {
       description: "Découvrez l'histoire cachée de Paris à travers des visites guidées par un historien.",
@@ -644,6 +705,7 @@ export const fr = {
       leftBank: "Rive Gauche · WW2",
       rightBank: "Rive Droite · WW2",
       generalHistory: "Histoire générale",
+      foodWine: "Nourritour · Food & Wine",
       compare: "Comparer",
       aboutLink: "À propos de Clément",
       faqLink: "FAQ",
@@ -674,7 +736,7 @@ export const fr = {
         mediaSideBAlt: "Place Vendôme",
         mediaSideBLabel: "Place Vendôme",
         mediaSideBCaption: "Le Ritz, libéré",
-        statToursValue: "3",
+        statToursValue: "4",
         statToursLabel: "Visites distinctes",
         statYearsValue: "2000",
         statYearsLabel: "Ans d'histoire",
@@ -686,9 +748,9 @@ export const fr = {
         statGroupLabel: "Groupe max."
       },
       tours: {
-        kicker: "Trois parcours",
+        kicker: "Quatre parcours",
         title: "Choisissez votre visite",
-        subtitle: "Chaque visite est un récit complet — la Chute, la Résistance, la Libération — dans les rues mêmes où tout s'est joué.",
+        subtitle: "Trois visites d'histoire et une visite gourmande — chacune un récit complet, dans les rues mêmes où tout s'est joué.",
         leftBankBadge: "WW2",
         leftBankNumeral: "I",
         leftBankEra: "1940 — 1944 · Rive Gauche",
@@ -722,6 +784,17 @@ export const fr = {
         generalDurationLabel: "Durée",
         generalWalkValue: "2 km",
         generalWalkLabel: "Marche",
+        foodWineBadge: "FOOD & WINE",
+        foodWineNumeral: "IV",
+        foodWineEra: "9e arrondissement · Paris",
+        foodWineTitle: "Nourritour",
+        foodWineDesc: "Trois heures, deux guides, une fourchette. Les passages couverts et la rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin), et cinq planches qui traversent la France de la Loire au Sauternes.",
+        foodWineStopsValue: "4",
+        foodWineStopsLabel: "Artisans",
+        foodWineDurationValue: "3 h",
+        foodWineDurationLabel: "Durée",
+        foodWineWalkValue: "~1 km",
+        foodWineWalkLabel: "Marche",
         reserveCta: "Réserver ma place"
       },
       route: {
@@ -729,7 +802,33 @@ export const fr = {
         title: "Voyez où l'on marche.",
         tabLeftBank: "Rive Gauche",
         tabRightBank: "Rive Droite",
-        tabGeneral: "Histoire générale"
+        tabGeneral: "Histoire générale",
+        tabFoodWine: "Nourritour",
+        blurbs: {
+          leftBank: {
+            s1: "Le Paris d'avant-guerre — on plante le décor.",
+            s2: "QG de la Luftwaffe pendant l'Occupation.",
+            s3: "L'insurrection étudiante de la Sorbonne, août 1944.",
+            s4: "Le Te Deum de De Gaulle, sous les tirs de snipers."
+          },
+          rightBank: {
+            s1: "Le pont qu'Hitler voulait détruire.",
+            s2: "Comment Paris a failli tomber en 35 jours.",
+            s3: "Rose Valland et les 20 000 œuvres volées.",
+            s4: "Hemingway « libère » le bar du Ritz."
+          },
+          generalHistory: {
+            s1: "Lutèce romaine, 2 000 ans debout.",
+            s2: "Le siège viking de 885.",
+            s3: "La fuite de Louis XVI à Varennes, 1791."
+          },
+          foodWine: {
+            s1: "Les madeleines et la première carte gastronomique.",
+            s2: "1 200 fromages français, 46 AOP.",
+            s3: "Charcuterie depuis 1475 — une région par planche.",
+            s4: "Cinq planches de vins, de la Loire au Sauternes."
+          }
+        }
       },
       compare: {
         kicker: "Comparer",
@@ -789,6 +888,7 @@ export const fr = {
       heroKickerLeftBank: "Rive Gauche · WWII",
       heroKickerRightBank: "Rive Droite · WWII",
       heroKickerGeneral: "Deux mille ans · Général",
+      heroKickerFoodWine: "Nourritour · Food & Wine",
       didYouKnow: {
         kicker: "Le saviez-vous"
       },
@@ -797,24 +897,35 @@ export const fr = {
         titleWW2: "La Chute · La Résistance · La Libération",
         kickerGeneral: "Trois époques, une marche",
         titleGeneral: "Les Romains · Le Moyen Âge · La Révolution",
+        kickerFoodWine: "Trois mouvements, une visite",
+        titleFoodWine: "L'histoire · Le terroir · L'accord",
         actFallWW2: "Acte I · Juin 1940",
         actResistanceWW2: "Acte II · 1940 — 1944",
         actLiberationWW2: "Acte III · Août 1944",
         actRomanGeneral: "Acte I · 52 av. J.-C. — Ve siècle",
         actMedievalGeneral: "Acte II · IXe — XIIIe siècle",
-        actRevolutionGeneral: "Acte III · 1789 — 1791"
+        actRevolutionGeneral: "Acte III · 1789 — 1791",
+        actStoryFoodWine: "Acte I · Les passages et la rue",
+        actTerroirFoodWine: "Acte II · Quatre artisans",
+        actPairingFoodWine: "Acte III · Cinq planches"
       },
       stops: {
         kicker: "Sur le terrain",
         introStepLabel: "Introduction",
-        subtitle: "Parcourus dans l'ordre — chaque arrêt prépare le suivant."
+        subtitle: "Parcourus dans l'ordre — chaque arrêt prépare le suivant.",
+        foodWineStep1: "Madeleines",
+        foodWineStep2: "Fromage",
+        foodWineStep3: "Charcuterie",
+        foodWineStep4: "Dégustation"
       },
       route: {
         kicker: "Le parcours",
         titleWW2: "Voyez où l'on marche.",
         titleGeneral: "Voyez où l'on marche.",
+        titleFoodWine: "Voyez où l'on marche, mange et boit.",
         subtitleWW2: "Quatre arrêts, deux heures, un quartier — à pied.",
-        subtitleGeneral: "Trois arrêts, un après-midi, deux mille ans — à pied."
+        subtitleGeneral: "Trois arrêts, un après-midi, deux mille ans — à pied.",
+        subtitleFoodWine: "Quatre artisans dans le 9e, pour finir chez un caviste de la rue de Maubeuge."
       },
       gallery: {
         kicker: "Sur le terrain",
@@ -827,6 +938,7 @@ export const fr = {
         durationLabel: "Durée",
         durationValueWW2: "2 heures",
         durationValueGeneral: "1 h 30",
+        durationValueFoodWine: "3 heures",
         groupLabel: "Groupe",
         groupValue: "10 max.",
         languageLabel: "Langues",
@@ -840,6 +952,113 @@ export const fr = {
       other: {
         kicker: "Autres parcours",
         title: "Découvrez les autres visites."
+      },
+      coGuide: {
+        kicker: "Vos guides",
+        title: "Guidé à deux.",
+        subtitle: "C'est la seule visite Paris History Tours qu'on guide à deux. Pour la bouffe il faut un conteur ; pour le vin il faut une sommelière. Il nous faut les deux.",
+        clement: {
+          role: "Conteur des rues",
+          bio: "Parisien d'adoption, six ans dans la ville. Sur le Nourritour, le conteur prend la première heure — les passages couverts, la rue des Martyrs, l'histoire des quatre artisans et la manière dont Paris a appris à manger."
+        },
+        amelie: {
+          role: "Sommelière de cave",
+          bio: "Amélie Leynier — parisienne d'adoption, fille de vignerons bordelais. Elle a grandi dans les chais du Médoc avant que Paris ne la retienne. Sur le Nourritour, elle guide l'heure de dégustation — cinq planches, un mot-clé par vin, une chimie paysanne devenue art de vivre."
+        }
+      },
+      foodWine: {
+        shopsKicker: "Les artisans",
+        shopsTitle: "Quatre boutiques, un après-midi.",
+        shopsSubtitle: "Chaque arrêt est un artisan qui travaille — pas une salle de dégustation. On achète ce qu'on va goûter ensemble, pour que la visite soutienne la rue qui la nourrit.",
+        shops: {
+          madlen: {
+            name: "Maison Madlen",
+            address: "Rue Cadet · Paris 9",
+            blurb: "Une minuscule pâtisserie construite autour d'un seul gâteau en coquille. On y prend les madeleines pour le dernier accord."
+          },
+          chataigner: {
+            name: "Fromagerie Chataigner",
+            address: "Rue des Martyrs · Paris 9",
+            blurb: "Fromager de troisième génération. Plus de mille fromages français y passent ; on choisit ceux qui répondront à chaque vin."
+          },
+          thielen: {
+            name: "Charcuterie Maison Thielen",
+            address: "Rue des Martyrs · Paris 9",
+            blurb: "Une institution parisienne de la charcuterie artisanale. Rosettes, jambon persillé, Ibérique — un accord régional par planche."
+          },
+          flaconneurs: {
+            name: "Les Flaconneurs",
+            address: "Rue de Maubeuge · Paris 9",
+            blurb: "Notre cave de dégustation. Cinq planches — Loire, Bourgogne, Beaujolais, Bordeaux, Sauternes — construites avec les courses du matin."
+          },
+          visit: "Voir sur Instagram"
+        }
+      }
+    },
+    blog: {
+      kicker: "Lectures",
+      heading: "Histoires tirées des archives.",
+      subheading: "Articles sur la Chute, la Résistance et la Libération de Paris — puisés dans les mémoires, les archives et les rues elles-mêmes.",
+      empty: "Articles à venir prochainement.",
+      readCta: "Lire",
+      articleKicker: "Depuis le blog",
+      byLabel: "Par",
+      relatedKicker: "Lire aussi",
+      relatedHeading: "Articles liés",
+      authorKicker: "À propos de l'auteur",
+      authorBio: "Passionné d'histoire et guide indépendant à Paris. Plus de 20 ouvrages de recherche, des visiteurs de 25+ pays et une note de 4,9/5 sur Google.",
+      authorLink: "En savoir plus sur Clément",
+      ctaKicker: "Voir les rues",
+      ctaHeading: "Parcourez ces histoires en vrai.",
+      ctaDescription: "Rejoignez une visite privée à pied dans le Paris de la Chute, de la Résistance et de la Libération.",
+      ctaPrimary: "Réserver une visite",
+      ctaSecondary: "Voir les visites",
+      backToBlog: "Tous les articles"
+    },
+    about: {
+      hero: {
+        kicker: "À propos",
+        title: "Le guide, la recherche, le parcours.",
+        subtitle: "Paris History Tours est un atelier à une personne — recherche lente, petits groupes, et une longue obsession pour les histoires que Paris garde dans ses rues."
+      },
+      guide: {
+        kicker: "Le guide",
+        title: "Rencontrez Clément.",
+        badgeValue: "4,9 / 5",
+        badgeLabel: "Google Maps",
+        statBooksValue: "20+",
+        statBooksLabel: "Livres consultés",
+        statCountriesValue: "25+",
+        statCountriesLabel: "Pays représentés",
+        statRatingValue: "4,9",
+        statRatingLabel: "Note moyenne"
+      },
+      featured: {
+        label: "Également présent sur"
+      },
+      building: {
+        kicker: "En coulisses",
+        title: "Comment se construisent les visites.",
+        subtitle: "La recherche, l'itinéraire, la logique derrière chaque arrêt.",
+        booksTitle: "20+ livres",
+        booksDesc: "Textes historiques, mémoires, sources académiques — recoupés avec les archives primaires pour la précision et la profondeur.",
+        monthsTitle: "6 mois",
+        monthsDesc: "Recherche dédiée, planification d'itinéraire et écriture narrative pour transformer le travail d'archives en récit marchable.",
+        themesTitle: "3 thèmes historiques",
+        themesDesc: "La Chute de Paris, la Résistance et la Libération — trois fils entrelacés dans chaque visite WWII pour une lecture complète."
+      },
+      stats: {
+        kicker: "En chiffres",
+        title: "La visite, dans le monde.",
+        subtitle: "Qui participe aux marches et d'où ils viennent — actualisé depuis le registre de réservation.",
+        topCountries: "Top 5 des pays représentés"
+      },
+      cta: {
+        kicker: "Marchez avec moi",
+        title: "Prêt à voir Paris autrement ?",
+        subtitle: "Rejoignez les centaines de visiteurs qui ont redécouvert Paris à travers les récits de son vingtième siècle.",
+        primary: "Réserver une visite",
+        secondary: "Voir les visites"
       }
     }
   }

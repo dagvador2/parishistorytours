@@ -4,20 +4,25 @@ import type { TourConfig } from '../../data/tours';
 
 interface Props {
   tour: TourConfig;
-  isGeneral: boolean;
+  /** "ww2" (Left/Right Bank), "general" (General History), or "foodWine" */
+  variant: 'ww2' | 'general' | 'foodWine';
 }
 
-const { tour, isGeneral } = Astro.props;
+const { tour, variant } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 const tp = tour.translationPrefix;
 
 // Step label per stop:
-//  - WW2 tours have 4 stops: stop 1 is "Introduction", stops 2–4 align with themeKeys[0..2]
-//  - General-history has 3 stops, each aligned with themeKeys[0..2]
+//  - WW2 tours (4 stops): stop 1 "Introduction", stops 2-4 = themeKeys[0..2] titles
+//  - General-history (3 stops): each stop = themeKeys[0..2] title
+//  - Food-wine (4 stops): custom per-stop labels (Madeleines / Cheese / Charcuterie / Tasting)
 function stopStepLabel(i: number): string {
-  if (isGeneral) {
+  if (variant === 'foodWine') {
+    return t(`quiet.tour.stops.foodWineStep${i + 1}`);
+  }
+  if (variant === 'general') {
     const key = tour.themeKeys[i];
     return key ? t(`tours.themes.${key}.title`) : '';
   }
@@ -26,11 +31,16 @@ function stopStepLabel(i: number): string {
   return key ? t(`tours.themes.${key}.title`) : '';
 }
 
-// Title for the section: reuse the existing "Our 4 historic stops" / "Our 3 historic stops" key
-const sectionTitle = t(`tours.stops.our${tour.stopCount}Stops`);
+// Section title: food-wine uses "tasty stops", others use "historic stops"
+const sectionTitle = variant === 'foodWine'
+  ? t('tours.stops.our4TastyStops')
+  : t(`tours.stops.our${tour.stopCount}Stops`);
 
 const stops = Array.from({ length: tour.stopCount }, (_, i) => {
   const n = i + 1;
+  // For food-wine, each of the 4 stops maps directly to a partner shop
+  // (Madlen, Chataigner, Thielen, Flaconneurs).
+  const partner = variant === 'foodWine' && tour.partnerShops ? tour.partnerShops[i] : null;
   return {
     n,
     nLabel: String(n).padStart(2, '0'),
@@ -38,8 +48,12 @@ const stops = Array.from({ length: tour.stopCount }, (_, i) => {
     title: t(`tours.${tp}.stops.stop${n}.title`),
     description: t(`tours.${tp}.stops.stop${n}.description`),
     img: tour.stops[i],
+    partner,
+    partnerName: partner ? t(`quiet.tour.foodWine.shops.${partner.key}.name`) : null,
+    partnerAddress: partner ? t(`quiet.tour.foodWine.shops.${partner.key}.address`) : null,
   };
 });
+const visitCta = variant === 'foodWine' ? t('quiet.tour.foodWine.shops.visit') : '';
 ---
 
 <section id="stops" class="qstops">
@@ -61,6 +75,17 @@ const stops = Array.from({ length: tour.stopCount }, (_, i) => {
             </p>
             <h3 class="qstops__stop-title">{stop.title}</h3>
             <p class="qstops__stop-desc">{stop.description}</p>
+            {stop.partner && (
+              <div class="qstops__shop">
+                <div class="qstops__shop-meta">
+                  <span class="qstops__shop-name">{stop.partnerName}</span>
+                  <span class="qstops__shop-address">{stop.partnerAddress}</span>
+                </div>
+                <a href={stop.partner.url} class="qstops__shop-cta" target="_blank" rel="noopener">
+                  {visitCta} <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            )}
           </div>
           <div class="qstops__figure">
             {stop.img && (
@@ -179,6 +204,57 @@ const stops = Array.from({ length: tour.stopCount }, (_, i) => {
     color: var(--ink-2);
     margin: 0;
     max-width: 56ch;
+  }
+
+  .qstops__shop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    max-width: 56ch;
+    flex-wrap: wrap;
+  }
+  .qstops__shop-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .qstops__shop-name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .qstops__shop-address {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qstops__shop-cta {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  }
+  .qstops__shop-cta:hover {
+    background: var(--ink);
+    color: var(--paper-3);
+    border-color: var(--ink);
   }
 
   .qstops__figure {

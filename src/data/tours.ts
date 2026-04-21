@@ -33,10 +33,28 @@ export interface BookingLinks {
   email: string;
 }
 
+export interface CoGuide {
+  /** Stable id used to look up bio/role in translations under quiet.tour.coGuide.${id}.* */
+  id: string;
+  /** Public path to the guide portrait (in public/photos/...) */
+  photo: string;
+}
+
+export interface PartnerShop {
+  /** Translation key suffix: quiet.tour.foodWine.shops.${key}.name etc. */
+  key: string;
+  /** Public-facing URL (often an Instagram profile) */
+  url: string;
+  /** Public path to a photo of the shop or its product */
+  photo: string;
+  /** Alt text for the photo */
+  photoAlt: string;
+}
+
 export interface TourConfig {
   slug: string;
   translationPrefix: string;
-  heroImageKey: 'left-bank' | 'right-bank' | 'general-history';
+  heroImageKey: 'left-bank' | 'right-bank' | 'general-history' | 'food-wine';
   heroAlt: string;
   ogImage: string;
   breadcrumbKey: string;
@@ -50,6 +68,15 @@ export interface TourConfig {
   locationName: string;
   galleryAutoPlayMs?: number;
   bookingLinks: BookingLinks;
+  /** Optional: one or more co-guides to feature in a dedicated section. */
+  coGuides?: CoGuide[];
+  /** Optional: partner shops highlighted on the tour (food-wine). */
+  partnerShops?: PartnerShop[];
+  /** Optional: credit the photographer for the tour's imagery. */
+  photoCredit?: {
+    handle: string;
+    url: string;
+  };
 }
 
 export const tours: Record<string, TourConfig> = {
@@ -246,5 +273,102 @@ export const tours: Record<string, TourConfig> = {
       whatsapp: 'https://wa.me/+33620622480',
       email: 'mailto:clemdaguetschott@gmail.com',
     },
+  },
+  'food-wine': {
+    slug: 'food-wine',
+    translationPrefix: 'foodWine',
+    heroImageKey: 'food-wine',
+    heroAlt: 'Nourritour — table de dégustation fromages, charcuteries et vins',
+    ogImage: '/photos/food_and_wine/nourritour-salle-degustation-table-fromages-charcuterie.webp',
+    breadcrumbKey: 'foodWine',
+    themeKeys: ['story', 'terroir', 'pairing'],
+    stopCount: 4,
+    // Topics = 3 theme images, one per theme
+    topics: [
+      { src: '/photos/food_and_wine/nourritour-guide-explique-groupe-sebastien-gaudard.webp', alt: 'Guide racontant l\'histoire des passages et de la gastronomie parisienne' },
+      { src: '/photos/food_and_wine/nourritour-fromages-tomme-chevre-fromagerie.webp',       alt: 'Fromages de terroir français — tomme et chèvre' },
+      { src: '/photos/food_and_wine/nourritour-coupe-bulles-flaconneurs-servie.webp',        alt: 'Verre de vin servi pour la dégustation' },
+    ],
+    // 4 artisan stops: Madlen → Chataigner → Thielen → Flaconneurs.
+    // (Passage Verdeau is the meeting point — rendered as a 5th pin on the map only.)
+    stops: [
+      { src: '/photos/food_and_wine/nourritour-madeleines-glacees-assorties-patisserie.webp', alt: 'Maison Madlen — madeleines glacées assorties' },
+      { src: '/photos/food_and_wine/nourritour-fromages-tomme-chevre-fromagerie.webp',        alt: 'Fromagerie Chataigner — fromages affinés de la rue des Martyrs' },
+      { src: '/photos/food_and_wine/nourritour-saucissons-artisanaux-la-tablee.webp',         alt: 'Charcuterie Maison Thielen — saucissons artisanaux' },
+      { src: '/photos/food_and_wine/nourritour-service-bulles-degustation-flaconneurs.webp',  alt: 'Les Flaconneurs — dégustation guidée de vins' },
+    ],
+    galleryDesktop: [
+      { src: '/photos/food_and_wine/nourritour-salle-degustation-table-fromages-charcuterie.webp', alt: 'La table de dégustation installée' },
+      { src: '/photos/food_and_wine/nourritour-guide-baguettes-discussion-groupe.webp',            alt: 'Échange avec le groupe, baguettes en main' },
+      { src: '/photos/food_and_wine/nourritour-participants-degustation-attentifs.webp',           alt: 'Participants attentifs pendant la dégustation' },
+      { src: '/photos/food_and_wine/nourritour-charcuterie-iberique-lomo-degustation.webp',        alt: 'Planche de charcuterie ibérique — lomo' },
+      { src: '/photos/food_and_wine/nourritour-guide-indique-boutique-rue-martyrs.webp',           alt: 'Sur la rue des Martyrs, entre deux artisans' },
+      { src: '/photos/food_and_wine/nourritour-groupe-participants-devant-altermundi.webp',        alt: 'Le groupe au fil du parcours' },
+      { src: '/photos/food_and_wine/nourritour-coupe-bulles-flaconneurs-servie.webp',              alt: 'Un verre servi au caviste' },
+      { src: '/photos/food_and_wine/nourritour-guide-montre-boutique-rue-martyrs.webp',            alt: 'Le guide raconte une boutique' },
+    ],
+    galleryMobile: [
+      { src: '/photos/food_and_wine/nourritour-salle-degustation-table-fromages-charcuterie.webp', alt: 'La table de dégustation installée' },
+      { src: '/photos/food_and_wine/nourritour-guide-baguettes-discussion-groupe.webp',            alt: 'Échange avec le groupe, baguettes en main' },
+      { src: '/photos/food_and_wine/nourritour-participants-degustation-attentifs.webp',           alt: 'Participants attentifs pendant la dégustation' },
+      { src: '/photos/food_and_wine/nourritour-charcuterie-iberique-lomo-degustation.webp',        alt: 'Planche de charcuterie ibérique — lomo' },
+      { src: '/photos/food_and_wine/nourritour-guide-indique-boutique-rue-martyrs.webp',           alt: 'Sur la rue des Martyrs, entre deux artisans' },
+      { src: '/photos/food_and_wine/nourritour-coupe-bulles-flaconneurs-servie.webp',              alt: 'Un verre servi au caviste' },
+    ],
+    crossLinks: [
+      {
+        slug: 'left-bank',
+        bookingKey: 'leftBankTour',
+        descriptionEn: 'Prefer history? Dive into WWII Paris with the Left Bank tour — Pantheon, Sorbonne, Notre-Dame, and the Resistance.',
+        descriptionFr: 'Plutôt histoire ? Plongez dans le Paris de la Seconde Guerre Rive Gauche — Panthéon, Sorbonne, Notre-Dame et la Résistance.',
+      },
+      {
+        slug: 'general-history',
+        bookingKey: 'generalHistoryTour',
+        descriptionEn: 'For a broader sweep: 2,000 years of Paris history — Roman Lutetia, Viking siege, the Revolution.',
+        descriptionFr: 'Pour un panorama plus large : 2 000 ans d\'histoire parisienne — Lutèce romaine, siège viking, Révolution.',
+      },
+    ],
+    locationName: '9th Arrondissement, Paris, France',
+    bookingLinks: {
+      // No GetYourGuide/Viator listing yet — WhatsApp + direct booking only for now
+      tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
+      whatsapp: 'https://wa.me/+33620622480',
+      email: 'mailto:clemdaguetschott@gmail.com',
+    },
+    coGuides: [
+      { id: 'clement', photo: '/photos/food_and_wine/nourritour-guide-baguettes-sourire-rue.webp' },
+      { id: 'amelie',  photo: '/photos/food_and_wine/nourritour-sommeliere-carte-france-vins.webp' },
+    ],
+    photoCredit: {
+      handle: '@florian.c_photographie',
+      url: 'https://www.instagram.com/florian.c_photographie/',
+    },
+    partnerShops: [
+      {
+        key: 'madlen',
+        url: 'https://www.instagram.com/maisonmadlen/',
+        photo: '/photos/food_and_wine/nourritour-madlen-devanture-madeleines-modernes-paris.webp',
+        photoAlt: 'Maison Madlen — devanture rue Cadet',
+      },
+      {
+        key: 'chataigner',
+        url: 'https://www.instagram.com/fromageriechataigner/',
+        photo: '/photos/food_and_wine/nourritour-fromagerie-chataigner-devanture-paris.webp',
+        photoAlt: 'Fromagerie Chataigner — devanture rue des Martyrs',
+      },
+      {
+        key: 'thielen',
+        url: 'https://www.instagram.com/maisonthielen/',
+        photo: '/photos/food_and_wine/nourritour-maison-thielen-charcutier-traiteur-devanture.webp',
+        photoAlt: 'Charcuterie Maison Thielen — devanture rue des Martyrs',
+      },
+      {
+        key: 'flaconneurs',
+        url: 'https://www.instagram.com/lesflaconneurs/',
+        photo: '/photos/food_and_wine/nourritour-les-flaconneurs-marchand-vins-devanture.webp',
+        photoAlt: 'Les Flaconneurs — devanture rue de Maubeuge',
+      },
+    ],
   },
 };

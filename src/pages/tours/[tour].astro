@@ -16,15 +16,18 @@ import RouteDetail from "../../components/quiet/RouteDetail.astro";
 import GalleryGrid from "../../components/quiet/GalleryGrid.astro";
 import BookingCard from "../../components/quiet/BookingCard.astro";
 import FAQ from "../../components/quiet/FAQ.astro";
+import CoGuideSection from "../../components/quiet/CoGuideSection.astro";
 
 import pantheon from "../../images/pantheon_de_Paris.webp";
 import vendome from "../../images/place_vendome_paris.webp";
 import ileDeLaCite from "../../images/ile_de_la_cite_paris.webp";
+import foodWineHero from "../../images/food_wine_degustation.webp";
 
 const heroImages: Record<string, ImageMetadata> = {
   'left-bank': pantheon,
   'right-bank': vendome,
   'general-history': ileDeLaCite,
+  'food-wine': foodWineHero,
 };
 
 export const prerender = true;
@@ -34,6 +37,7 @@ export function getStaticPaths() {
     { params: { tour: 'left-bank' } },
     { params: { tour: 'right-bank' } },
     { params: { tour: 'general-history' } },
+    { params: { tour: 'food-wine' } },
   ];
 }
 
@@ -47,27 +51,41 @@ const isDefaultLang = lang === 'en';
 const langPrefix = isDefaultLang ? '' : '/fr';
 const tp = tourConfig.translationPrefix;
 const heroImage = heroImages[tourConfig.heroImageKey];
-const isGeneral = tourSlug === 'general-history';
+
+type TourVariant = 'ww2' | 'general' | 'foodWine';
+const variant: TourVariant = tourSlug === 'general-history'
+  ? 'general'
+  : tourSlug === 'food-wine'
+    ? 'foodWine'
+    : 'ww2';
 
 // Hero kicker per tour (short editorial label above the title)
-const kickerKey = tourSlug === 'left-bank'  ? 'quiet.tour.heroKickerLeftBank'
-                : tourSlug === 'right-bank' ? 'quiet.tour.heroKickerRightBank'
-                :                              'quiet.tour.heroKickerGeneral';
+const kickerKey =
+  tourSlug === 'left-bank'       ? 'quiet.tour.heroKickerLeftBank' :
+  tourSlug === 'right-bank'      ? 'quiet.tour.heroKickerRightBank' :
+  tourSlug === 'general-history' ? 'quiet.tour.heroKickerGeneral' :
+                                   'quiet.tour.heroKickerFoodWine';
 const heroKicker = t(kickerKey);
 const heroTitle = t(`tours.${tp}.title`);
 const heroSubtitle = t(`tours.${tp}.description`);
 
-// JSON-LD helpers (unchanged from legacy template)
-const jsonLdDuration = isGeneral ? 'PT1H30M' : 'PT2H';
-const jsonLdTourName = isGeneral
-  ? heroTitle + " - Paris Walking Tour"
-  : heroTitle + " - Paris WWII Walking Tour";
-const jsonLdTouristType = isGeneral
-  ? ["History enthusiast", "Cultural traveler", "First-time visitor"]
-  : ["History enthusiast", "Cultural traveler"];
-const jsonLdGuideJobTitle = isGeneral
-  ? "History Guide & Researcher"
-  : "WWII History Guide & Researcher";
+// JSON-LD helpers
+const jsonLdDuration =
+  variant === 'general'  ? 'PT1H30M' :
+  variant === 'foodWine' ? 'PT3H' :
+                           'PT2H';
+const jsonLdTourName =
+  variant === 'general'  ? heroTitle + " - Paris Walking Tour"
+  : variant === 'foodWine' ? heroTitle + " - Paris Food & Wine Walking Tour"
+                           : heroTitle + " - Paris WWII Walking Tour";
+const jsonLdTouristType =
+  variant === 'general'  ? ["History enthusiast", "Cultural traveler", "First-time visitor"]
+  : variant === 'foodWine' ? ["Food lover", "Wine enthusiast", "Cultural traveler"]
+                           : ["History enthusiast", "Cultural traveler"];
+const jsonLdGuideJobTitle =
+  variant === 'general'  ? "History Guide & Researcher"
+  : variant === 'foodWine' ? "Food & Wine Guide — Paris"
+                           : "WWII History Guide & Researcher";
 ---
 
 <BaseLayout
@@ -86,19 +104,24 @@ const jsonLdGuideJobTitle = isGeneral
       kicker={heroKicker}
       title={heroTitle}
       subtitle={heroSubtitle}
+      objectPosition={variant === 'foodWine' ? 'center 75%' : undefined}
     />
+
+    {tourConfig.coGuides && tourConfig.coGuides.length > 0 && (
+      <CoGuideSection coGuides={tourConfig.coGuides} />
+    )}
 
     <DidYouKnowStrip tp={tp} />
 
-    <ThemesGrid themeKeys={tourConfig.themeKeys} topics={tourConfig.topics} isGeneral={isGeneral} />
+    <ThemesGrid themeKeys={tourConfig.themeKeys} topics={tourConfig.topics} variant={variant} />
 
-    <StopsSection tour={tourConfig} isGeneral={isGeneral} />
+    <StopsSection tour={tourConfig} variant={variant} />
 
-    <RouteDetail tour={tourConfig} isGeneral={isGeneral} />
+    <RouteDetail tour={tourConfig} variant={variant} />
 
-    <GalleryGrid images={tourConfig.galleryDesktop} />
+    <GalleryGrid images={tourConfig.galleryDesktop} photoCredit={tourConfig.photoCredit} />
 
-    <BookingCard tour={tourConfig} isGeneral={isGeneral} />
+    <BookingCard tour={tourConfig} variant={variant} />
 
     <!-- Other tours — hairline-bordered cross-promo with images -->
     <section class="qother">
@@ -139,7 +162,7 @@ const jsonLdGuideJobTitle = isGeneral
     <FAQ />
   </main>
 
-  <MobileBookingBar href="#book" />
+  <MobileBookingBar href="#book" variant={variant} />
 
   <JsonLd data={{
     "@context": "https://schema.org",

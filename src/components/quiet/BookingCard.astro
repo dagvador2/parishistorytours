@@ -5,16 +5,22 @@ import type { TourConfig } from '../../data/tours';
 
 interface Props {
   tour: TourConfig;
-  isGeneral: boolean;
+  variant: 'ww2' | 'general' | 'foodWine';
 }
 
-const { tour, isGeneral } = Astro.props;
+const { tour, variant } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
 const links = tour.bookingLinks;
-const duration = isGeneral ? t('quiet.tour.booking.durationValueGeneral') : t('quiet.tour.booking.durationValueWW2');
-const price = isGeneral ? '45 €' : '49 €';
+const duration =
+  variant === 'general'  ? t('quiet.tour.booking.durationValueGeneral')  :
+  variant === 'foodWine' ? t('quiet.tour.booking.durationValueFoodWine') :
+                           t('quiet.tour.booking.durationValueWW2');
+const price =
+  variant === 'general'  ? '45 €' :
+  variant === 'foodWine' ? '95 €' :
+                           '49 €';
 
 // Partner row — filter out missing URLs
 const partnerItems = [

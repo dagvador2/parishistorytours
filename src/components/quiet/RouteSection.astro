@@ -5,10 +5,11 @@ import TourMap from '../TourMap.tsx';
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
-// Provisional stop times per tour — will be lifted into tours.ts during Step 5.
+// Provisional stop times per tour — will move into tours.ts later.
 const leftBankTimes  = ['0:00', '0:35', '1:10', '1:45'];
 const rightBankTimes = ['0:00', '0:30', '1:05', '1:40'];
 const generalTimes   = ['0:00', '0:35', '1:10'];
+const foodWineTimes  = ['0:00', '0:30', '0:50', '1:10'];
 
 const tours = [
   {
@@ -17,7 +18,7 @@ const tours = [
     stops: [1, 2, 3, 4].map((n) => ({
       n,
       title: t(`tours.leftBank.stops.stop${n}.title`),
-      blurb: t(`tours.leftBank.stops.stop${n}.description`),
+      blurb: t(`quiet.home.route.blurbs.leftBank.s${n}`),
       time: leftBankTimes[n - 1],
     })),
   },
@@ -27,7 +28,7 @@ const tours = [
     stops: [1, 2, 3, 4].map((n) => ({
       n,
       title: t(`tours.rightBank.stops.stop${n}.title`),
-      blurb: t(`tours.rightBank.stops.stop${n}.description`),
+      blurb: t(`quiet.home.route.blurbs.rightBank.s${n}`),
       time: rightBankTimes[n - 1],
     })),
   },
@@ -37,8 +38,18 @@ const tours = [
     stops: [1, 2, 3].map((n) => ({
       n,
       title: t(`tours.generalHistory.stops.stop${n}.title`),
-      blurb: t(`tours.generalHistory.stops.stop${n}.description`),
+      blurb: t(`quiet.home.route.blurbs.generalHistory.s${n}`),
       time: generalTimes[n - 1],
+    })),
+  },
+  {
+    key: 'food-wine' as const,
+    label: t('quiet.home.route.tabFoodWine'),
+    stops: [1, 2, 3, 4].map((n) => ({
+      n,
+      title: t(`tours.foodWine.stops.stop${n}.title`),
+      blurb: t(`quiet.home.route.blurbs.foodWine.s${n}`),
+      time: foodWineTimes[n - 1],
     })),
   },
 ];
@@ -72,7 +83,7 @@ const tours = [
                 <span class="qroute__stop-num" aria-hidden="true">{stop.n}</span>
                 <div class="qroute__stop-body">
                   <h3>{stop.title}</h3>
-                  <p>{stop.blurb.length > 140 ? stop.blurb.slice(0, 137).trimEnd() + '…' : stop.blurb}</p>
+                  <p>{stop.blurb}</p>
                   <span class="qroute__stop-time">{stop.time}</span>
                 </div>
               </li>

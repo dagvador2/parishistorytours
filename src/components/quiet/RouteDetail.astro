@@ -5,15 +5,23 @@ import type { TourConfig } from '../../data/tours';
 
 interface Props {
   tour: TourConfig;
-  isGeneral: boolean;
+  /** "ww2", "general", or "foodWine" */
+  variant: 'ww2' | 'general' | 'foodWine';
 }
 
-const { tour, isGeneral } = Astro.props;
+const { tour, variant } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 
-const title = isGeneral ? t('quiet.tour.route.titleGeneral') : t('quiet.tour.route.titleWW2');
-const subtitle = isGeneral ? t('quiet.tour.route.subtitleGeneral') : t('quiet.tour.route.subtitleWW2');
+const title =
+  variant === 'general'  ? t('quiet.tour.route.titleGeneral')  :
+  variant === 'foodWine' ? t('quiet.tour.route.titleFoodWine') :
+                           t('quiet.tour.route.titleWW2');
+const subtitle =
+  variant === 'general'  ? t('quiet.tour.route.subtitleGeneral')  :
+  variant === 'foodWine' ? t('quiet.tour.route.subtitleFoodWine') :
+                           t('quiet.tour.route.subtitleWW2');
+
 ---
 
 <section id="route" class="qrd">

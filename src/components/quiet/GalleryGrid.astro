@@ -4,11 +4,13 @@ import type { GalleryImage } from '../../data/tours';
 
 interface Props {
   images: GalleryImage[];
+  photoCredit?: { handle: string; url: string };
 }
 
-const { images } = Astro.props;
+const { images, photoCredit } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
+const creditLabel = lang === 'fr' ? 'Photographies' : 'Photography';
 ---
 
 <section class="qgal">
@@ -28,6 +30,12 @@ const t = useTranslations(lang);
         </figure>
       ))}
     </div>
+
+    {photoCredit && (
+      <p class="qgal__credit">
+        {creditLabel} · <a href={photoCredit.url} target="_blank" rel="noopener">{photoCredit.handle}</a>
+      </p>
+    )}
   </div>
 </section>
 
@@ -82,6 +90,25 @@ const t = useTranslations(lang);
     color: var(--ink-2);
     letter-spacing: 0.02em;
   }
+
+  .qgal__credit {
+    margin: 32px 0 0;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-align: center;
+  }
+  .qgal__credit a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+    transition: border-color 120ms ease;
+  }
+  .qgal__credit a:hover { border-bottom-color: var(--ink); }
 
   @media (max-width: 900px) {
     .qgal { padding: 64px 0; }

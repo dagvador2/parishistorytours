@@ -118,6 +118,18 @@ export const en = {
       revolution: {
         title: "The French Revolution",
         description: "Relive the night of June 20, 1791, when Louis XVI and Marie Antoinette attempted their daring escape from Paris — a comedy of errors with dramatic consequences that sealed the fate of the French monarchy."
+      },
+      story: {
+        title: "The Story",
+        description: "Covered passages, a rue that was once a dumping ground, and the first French fast-food stall — the history of how Paris ate, from the arcades of the 19th century to the shops still standing today."
+      },
+      terroir: {
+        title: "The Terroir",
+        description: "Four artisans, four windows onto French terroir. Cheese, charcuterie, madeleines, wine — each shop is a chapter in how the French built their food around the land that produces it."
+      },
+      pairing: {
+        title: "The Pairing",
+        description: "Five flights at a wine cellar on rue de Maubeuge. Look · Smell · Taste, one keyword per pairing, and a rural chemistry of survival turned art — why a Sancerre goes with a Crottin, why a Bordeaux needs a crusty bread."
       }
     },
     rightBank: {
@@ -224,8 +236,45 @@ export const en = {
         }
       }
     },
+    foodWine: {
+      title: "Nourritour — Food & Wine Tour",
+      description: "A walking food-and-wine tour of Paris, with a pinch of history",
+      introduction: "Through the 9th, fork in hand",
+      quote: "To know Paris, you have to taste it — one artisan at a time.",
+      quoteAuthor: "Clément & Amélie",
+      summary: "Nourritour is a three-hour tour in two movements. First, about an hour and a half walking the covered passages and the rue des Martyrs, stopping at four artisans — madeleines, cheese, charcuterie, wine — to buy what we'll taste together. Then an hour and a half at a wine cellar, tasting five pairings that walk us across France: Loire, Burgundy, Beaujolais, Bordeaux, Sauternes. Guided in pairs — one historian-at-heart, one sommelier-at-heart.",
+      didYouKnow: {
+        title: "Did you know?",
+        facts: [
+          "Paris had more than 150 covered passages in the 19th century — glass-roofed, gas-lit, heated arcades, the world's first shopping malls. About twenty remain today.",
+          "The first French fast-food opened in Passage Jouffroy in 1851 — stand-up meals, cold plates, wine by the glass, a daily menu chalked outside. It took 130 years and McDonald's to bring the concept back.",
+          "Rue Cadet is named after two master gardeners, Jacques and Jean Cadet, who turned a medieval rubbish dump into one of Paris's most lucrative strawberry fields, feeding the city for centuries.",
+          "Charles-Louis Cadet de Gassicourt — Napoleon's personal pharmacist and a rumored illegitimate son of Louis XV — published France's very first gastronomic map in 1809, replacing church spires with hams, truffles, and cheeses.",
+          "At the 9th century, Montmartre was three-quarters covered in vines. A 17th-century saying went: \"C'est du vin de Montmartre, qui en boit pinte en pisse quarte\" — a wine of famously diuretic virtues."
+        ]
+      },
+      stops: {
+        stop1: {
+          title: "Maison Madlen — Madeleines",
+          description: "Our first stop, on the rue Cadet. A pastry shop built around one small, shell-shaped cake with an outsized literary reputation. The story of the name (a servant, not a saint), the story of the street (strawberry fields, not aristocrats), and the first gastronomic map of France — published here, in 1809, replacing church spires with hams and cheeses."
+        },
+        stop2: {
+          title: "Fromagerie Chataigner — Cheese",
+          description: "A third-generation cheesemonger on the rue des Martyrs. Over 1,200 French cheeses, 46 protected by AOP, each tied to a region, a herd, a cave. We talk about monasteries — the real laboratories of medieval affinage — about terroir, about the rituals of ripening. Then we pick the cheeses that will match tonight's wines."
+        },
+        stop3: {
+          title: "Charcuterie Maison Thielen — Cured Meats",
+          description: "From \"chair cuite\" — cooked flesh. Gaulish hams that fed Roman legions, a 1475 charter giving charcutiers the monopoly on cooked pork, regional specialties built around winter preservation. Here we pick the cured meats — a rosette de Lyon, a jambon persillé de Bourgogne, a chorizo ibérique — that will anchor the tasting boards."
+        },
+        stop4: {
+          title: "Les Flaconneurs — Wine Tasting",
+          description: "The cellar on rue de Maubeuge where everything comes together. Five flights in progression — Fraîcheur, Onctuosité, Fraîcheur Rouge, Puissance, Gourmandise — one keyword per wine, the three gestures (look, smell, taste), and a quiz running through the hour. By the last glass, you'll hold your own words for what you're drinking."
+        }
+      }
+    },
     stops: {
       our4Stops: "Our 4 Historic Stops",
+      our4TastyStops: "Our 4 Tasty Stops",
       our3Stops: "Our 3 Historic Stops",
       experienceHistory: "Experience the History",
       ourRoute: "Our Route Through Paris"
@@ -320,9 +369,11 @@ export const en = {
     leftBankDesc: "Discover WW2 on the left side of Paris",
     rightBankDesc: "Discover WW2 on the right side of Paris",
     generalHistoryDesc: "Walk through 2,000 years of Paris history",
+    foodWineDesc: "A food & wine walking tour through the 9th arrondissement",
     leftBankTour: "WW2 Left Bank Tour",
     rightBankTour: "WW2 Right Bank Tour",
     generalHistoryTour: "General History Tour",
+    foodWineTour: "Nourritour · Food & Wine",
     regularTour: "Regular Tour",
     privateTour: "Private Tour",
     regularTourDesc: "Join a tour with up to 10 travelers",
@@ -544,6 +595,10 @@ export const en = {
       title: "General History of Paris Tour - 2,000 Years in 1.5 Hours | Paris History Tours",
       description: "Walk through 2,000 years of Paris history: Roman Lutetia, the Viking siege of 885, and the French Revolution. 3 stops, 1.5 hours. Small group with a local guide."
     },
+    foodWine: {
+      title: "Nourritour — Food & Wine Walking Tour in Paris | Paris History Tours",
+      description: "A 3-hour food and wine walking tour through the 9th — covered passages, rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine) and five tasting flights. Guided by two."
+    },
     keyFigures: {
       title: "About Paris History Tours - Our Guide & Journey",
       description: "Meet Cl\u00e9ment, history enthusiast and personal guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google Maps rating."
@@ -632,9 +687,15 @@ export const en = {
       menuLabel: "Menu"
     },
     mobileBooking: {
-      priceFrom: "From €45",
+      priceFrom: "From €49",
       meta: "Small group · 2h walk",
-      cta: "Book a Tour"
+      cta: "Book a Tour",
+      priceWW2: "From €49",
+      metaWW2: "Small group · 2h walk",
+      priceGeneral: "From €45",
+      metaGeneral: "Small group · 1h30 walk",
+      priceFoodWine: "From €95",
+      metaFoodWine: "Small group · 3h tasting"
     },
     footer: {
       description: "Discover the hidden stories of Paris through expert-guided historical walking tours.",
@@ -644,6 +705,7 @@ export const en = {
       leftBank: "Left Bank · WW2",
       rightBank: "Right Bank · WW2",
       generalHistory: "General History",
+      foodWine: "Nourritour · Food & Wine",
       compare: "Compare",
       aboutLink: "About Clement",
       faqLink: "FAQ",
@@ -674,7 +736,7 @@ export const en = {
         mediaSideBAlt: "Place Vendôme",
         mediaSideBLabel: "Place Vendôme",
         mediaSideBCaption: "The Ritz, liberated",
-        statToursValue: "3",
+        statToursValue: "4",
         statToursLabel: "Distinct Tours",
         statYearsValue: "2000",
         statYearsLabel: "Years Covered",
@@ -686,9 +748,9 @@ export const en = {
         statGroupLabel: "Max Group"
       },
       tours: {
-        kicker: "Three Journeys",
+        kicker: "Four Journeys",
         title: "Choose your tour",
-        subtitle: "Each tour is a self-contained story — the Fall, the Resistance, the Liberation — walked in real places where it happened.",
+        subtitle: "Three history walks and a food-and-wine tour — each a self-contained story, walked in real places where they happened.",
         leftBankBadge: "WW2",
         leftBankNumeral: "I",
         leftBankEra: "1940 — 1944 · Left Bank",
@@ -722,6 +784,17 @@ export const en = {
         generalDurationLabel: "Duration",
         generalWalkValue: "2km",
         generalWalkLabel: "Walk",
+        foodWineBadge: "FOOD & WINE",
+        foodWineNumeral: "IV",
+        foodWineEra: "9th arrondissement · Paris",
+        foodWineTitle: "Nourritour",
+        foodWineDesc: "Three hours, two guides, one fork. Covered passages and the rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine), and a five-flight tasting that walks you across France from the Loire to Sauternes.",
+        foodWineStopsValue: "4",
+        foodWineStopsLabel: "Artisans",
+        foodWineDurationValue: "3h",
+        foodWineDurationLabel: "Duration",
+        foodWineWalkValue: "~1km",
+        foodWineWalkLabel: "Walk",
         reserveCta: "Reserve a Spot"
       },
       route: {
@@ -729,7 +802,33 @@ export const en = {
         title: "See where we walk.",
         tabLeftBank: "Left Bank",
         tabRightBank: "Right Bank",
-        tabGeneral: "General"
+        tabGeneral: "General",
+        tabFoodWine: "Nourritour",
+        blurbs: {
+          leftBank: {
+            s1: "Pre-war Paris — setting the scene.",
+            s2: "Luftwaffe HQ during the Occupation.",
+            s3: "The Sorbonne's student uprising, August 1944.",
+            s4: "De Gaulle's victory Te Deum, under sniper fire."
+          },
+          rightBank: {
+            s1: "The bridge Hitler ordered destroyed.",
+            s2: "How Paris nearly fell in 35 days.",
+            s3: "Rose Valland tracking 20,000 stolen artworks.",
+            s4: "Hemingway \"liberates\" the Ritz bar."
+          },
+          generalHistory: {
+            s1: "Roman Lutetia, still standing after 2,000 years.",
+            s2: "The Viking siege of 885.",
+            s3: "Louis XVI's flight to Varennes, 1791."
+          },
+          foodWine: {
+            s1: "Madeleines and the first gastronomic map of France.",
+            s2: "1,200 French cheeses, 46 protected by AOP.",
+            s3: "Charcuterie since 1475 — one region per flight.",
+            s4: "Five wine flights, from the Loire to Sauternes."
+          }
+        }
       },
       compare: {
         kicker: "Compare",
@@ -789,6 +888,7 @@ export const en = {
       heroKickerLeftBank: "Left Bank · WWII",
       heroKickerRightBank: "Right Bank · WWII",
       heroKickerGeneral: "Two thousand years · General",
+      heroKickerFoodWine: "Nourritour · Food & Wine",
       didYouKnow: {
         kicker: "Did you know"
       },
@@ -797,24 +897,35 @@ export const en = {
         titleWW2: "The Fall · The Resistance · The Liberation",
         kickerGeneral: "Three eras, one walk",
         titleGeneral: "The Romans · The Middle Ages · The Revolution",
+        kickerFoodWine: "Three movements, one tour",
+        titleFoodWine: "The Story · The Terroir · The Pairing",
         actFallWW2: "Act I · June 1940",
         actResistanceWW2: "Act II · 1940 — 1944",
         actLiberationWW2: "Act III · August 1944",
         actRomanGeneral: "Act I · 52 BC — 5th century",
         actMedievalGeneral: "Act II · 9th — 13th century",
-        actRevolutionGeneral: "Act III · 1789 — 1791"
+        actRevolutionGeneral: "Act III · 1789 — 1791",
+        actStoryFoodWine: "Act I · The Arcades & the Street",
+        actTerroirFoodWine: "Act II · Four Artisans",
+        actPairingFoodWine: "Act III · Five Flights"
       },
       stops: {
         kicker: "On the ground",
         introStepLabel: "Introduction",
-        subtitle: "Walked in sequence — each stop sets up the next."
+        subtitle: "Walked in sequence — each stop sets up the next.",
+        foodWineStep1: "Madeleines",
+        foodWineStep2: "Cheese",
+        foodWineStep3: "Charcuterie",
+        foodWineStep4: "Tasting"
       },
       route: {
         kicker: "The walk",
         titleWW2: "See where we walk.",
         titleGeneral: "See where we walk.",
+        titleFoodWine: "See where we walk, eat, and drink.",
         subtitleWW2: "Four stops, two hours, one neighbourhood — all on foot.",
-        subtitleGeneral: "Three stops, an afternoon, two thousand years — all on foot."
+        subtitleGeneral: "Three stops, an afternoon, two thousand years — all on foot.",
+        subtitleFoodWine: "Four artisans across the 9th, ending at a wine cellar on rue de Maubeuge."
       },
       gallery: {
         kicker: "On the ground",
@@ -827,6 +938,7 @@ export const en = {
         durationLabel: "Duration",
         durationValueWW2: "2 hours",
         durationValueGeneral: "1 h 30",
+        durationValueFoodWine: "3 hours",
         groupLabel: "Group",
         groupValue: "Max 10",
         languageLabel: "Languages",
@@ -840,6 +952,113 @@ export const en = {
       other: {
         kicker: "More walks",
         title: "Discover the other tours."
+      },
+      coGuide: {
+        kicker: "Your guides",
+        title: "Guided by two.",
+        subtitle: "This is the only Paris History Tour we lead together. Food needs a storyteller; wine needs a sommelier. It takes us both.",
+        clement: {
+          role: "Historian of the streets",
+          bio: "Parisian by choice, six years in. For the Nourritour, the storyteller takes the first hour — the covered passages, the rue des Martyrs, the history of four artisans and how Paris learned to eat."
+        },
+        amelie: {
+          role: "Sommelière of the cellar",
+          bio: "Amélie Leynier — Parisian by adoption, daughter of Bordeaux winemakers. She grew up in the cellars of the Médoc before Paris caught her. On the Nourritour, she leads the tasting hour — five flights, one keyword per wine, a rural chemistry turned art."
+        }
+      },
+      foodWine: {
+        shopsKicker: "The artisans",
+        shopsTitle: "Four shops, one afternoon.",
+        shopsSubtitle: "Each stop is a working artisan — not a tasting room. You buy what you'll taste together, so the tour supports the street that feeds it.",
+        shops: {
+          madlen: {
+            name: "Maison Madlen",
+            address: "Rue Cadet · Paris 9",
+            blurb: "A tiny pastry shop built around a single shell-shaped cake. We pick up madeleines for the last wine pairing."
+          },
+          chataigner: {
+            name: "Fromagerie Chataigner",
+            address: "Rue des Martyrs · Paris 9",
+            blurb: "Third-generation cheesemonger. Over a thousand French cheeses pass through; we pick the ones that answer each wine."
+          },
+          thielen: {
+            name: "Charcuterie Maison Thielen",
+            address: "Rue des Martyrs · Paris 9",
+            blurb: "A Parisian institution for cured meats. Rosettes, jambon persillé, Ibérico — one regional match per flight."
+          },
+          flaconneurs: {
+            name: "Les Flaconneurs",
+            address: "Rue de Maubeuge · Paris 9",
+            blurb: "Our tasting cellar. Five flights — Loire, Burgundy, Beaujolais, Bordeaux, Sauternes — with boards built from the morning's shopping."
+          },
+          visit: "Visit on Instagram"
+        }
+      }
+    },
+    blog: {
+      kicker: "Writing",
+      heading: "Stories from the archives.",
+      subheading: "Articles on the Fall, the Resistance, and the Liberation of Paris — drawn from memoirs, archives, and the streets themselves.",
+      empty: "Articles coming soon.",
+      readCta: "Read",
+      articleKicker: "From the blog",
+      byLabel: "By",
+      relatedKicker: "Keep reading",
+      relatedHeading: "Related articles",
+      authorKicker: "About the author",
+      authorBio: "History enthusiast and independent tour guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google rating.",
+      authorLink: "More about Clément",
+      ctaKicker: "See the streets",
+      ctaHeading: "Walk these stories in person.",
+      ctaDescription: "Join a private walking tour through the Paris of the Fall, the Resistance, and the Liberation.",
+      ctaPrimary: "Book a Tour",
+      ctaSecondary: "Browse Tours",
+      backToBlog: "All articles"
+    },
+    about: {
+      hero: {
+        kicker: "About",
+        title: "The guide, the research, the journey.",
+        subtitle: "Paris History Tours is a one-person studio — slow research, small groups, and a long obsession with the stories Paris keeps in its streets."
+      },
+      guide: {
+        kicker: "The guide",
+        title: "Meet Clément.",
+        badgeValue: "4.9 / 5",
+        badgeLabel: "Google Maps",
+        statBooksValue: "20+",
+        statBooksLabel: "Books researched",
+        statCountriesValue: "25+",
+        statCountriesLabel: "Countries represented",
+        statRatingValue: "4.9",
+        statRatingLabel: "Average rating"
+      },
+      featured: {
+        label: "Also featured on"
+      },
+      building: {
+        kicker: "Behind the tours",
+        title: "How the tours are built.",
+        subtitle: "The research, the route, the reasoning behind every stop.",
+        booksTitle: "20+ Books",
+        booksDesc: "Historical texts, memoirs, and academic sources — cross-checked against primary archives for accuracy and depth.",
+        monthsTitle: "6 Months",
+        monthsDesc: "Dedicated research, route planning, and story crafting to turn archival work into a walkable narrative.",
+        themesTitle: "3 Historical Themes",
+        themesDesc: "The Fall of Paris, the Resistance, and the Liberation — three interwoven threads in every WWII tour for a complete understanding."
+      },
+      stats: {
+        kicker: "In numbers",
+        title: "The tour, in the world.",
+        subtitle: "Who joins the walks and where they come from — updated from the live booking ledger.",
+        topCountries: "Top 5 countries represented"
+      },
+      cta: {
+        kicker: "Walk with me",
+        title: "Ready to see Paris differently?",
+        subtitle: "Join the hundreds of visitors who have rediscovered Paris through the stories of its twentieth century.",
+        primary: "Book a Tour",
+        secondary: "See the tours"
       }
     }
   }

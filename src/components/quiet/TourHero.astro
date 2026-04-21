@@ -8,9 +8,11 @@ interface Props {
   kicker: string;
   title: string;
   subtitle: string;
+  /** object-position override (e.g. "center 70%" to push the subject down) */
+  objectPosition?: string;
 }
 
-const { image, alt, kicker, title, subtitle } = Astro.props;
+const { image, alt, kicker, title, subtitle, objectPosition } = Astro.props;
 ---
 
 <section class="qtourhero">
@@ -23,6 +25,7 @@ const { image, alt, kicker, title, subtitle } = Astro.props;
     loading="eager"
     quality={82}
     class="qtourhero__img"
+    style={objectPosition ? `object-position: ${objectPosition}` : undefined}
   />
   <div class="qtourhero__scrim"></div>
   <div class="qtourhero__content">

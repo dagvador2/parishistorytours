@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 interface TourMapProps {
-  tour: 'left-bank' | 'right-bank' | 'general-history';
+  tour: 'left-bank' | 'right-bank' | 'general-history' | 'food-wine';
 }
 
 const TourMap: React.FC<TourMapProps> = ({ tour }) => {
@@ -59,11 +59,29 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     { name: "Pont Neuf", coords: [2.3415, 48.8568] as [number, number] },
   ];
 
+  // Nourritour — Food & Wine: 5 stops (Passage Verdeau + 4 artisans)
+  // Coordinates (user-provided, lat/lng from Google Maps):
+  //   Passage Verdeau — 48.873060, 2.342241  (start)
+  //   Madlen          — 48.8754,   2.3456   (6 rue Cadet — estimated; confirm)
+  //   Chataigner      — 48.877081, 2.339308
+  //   Thielen         — 48.878177, 2.339600
+  //   Flaconneurs     — 48.876205, 2.340546
+  const foodWineStops: Stop[] = [
+    { name: "Passage Verdeau",            coords: [2.342241, 48.873060], theme: "Départ" },
+    { name: "Maison Madlen",              coords: [2.345600, 48.875400], theme: "Madeleines" },
+    { name: "Fromagerie Chataigner",      coords: [2.339308, 48.877081], theme: "Fromage" },
+    { name: "Charcuterie Maison Thielen", coords: [2.339600, 48.878177], theme: "Charcuterie" },
+    { name: "Les Flaconneurs",            coords: [2.340546, 48.876205], theme: "Dégustation" },
+  ];
+  const foodWineWaypoints: { name: string; coords: [number, number] }[] = [];
+
   const stops = tour === 'left-bank'
     ? leftBankStops
     : tour === 'right-bank'
       ? rightBankStops
-      : generalHistoryStops;
+      : tour === 'food-wine'
+        ? foodWineStops
+        : generalHistoryStops;
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -83,7 +101,9 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
       ? [2.3444, 48.8500] // Centre pour Left Bank
       : tour === 'right-bank'
         ? [2.3215, 48.8655] // Centre pour Right Bank
-        : [2.3380, 48.8560]; // Centre pour General History
+        : tour === 'food-wine'
+          ? [2.3425, 48.8790] // Centre pour Nourritour (9ème)
+          : [2.3380, 48.8560]; // Centre pour General History
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -134,7 +154,9 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
         ? leftBankWaypoints
         : tour === 'right-bank'
           ? rightBankWaypoints
-          : generalHistoryWaypoints;
+          : tour === 'food-wine'
+            ? foodWineWaypoints
+            : generalHistoryWaypoints;
 
       waypoints.forEach((waypoint) => {
         const el = document.createElement('div');
@@ -210,6 +232,13 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
         allPoints.push(rightBankWaypoints[1].coords as [number, number]);
         allPoints.push(rightBankWaypoints[2].coords as [number, number]);
         allPoints.push(rightBankStops[3].coords);
+      } else if (tour === 'food-wine') {
+        // Nourritour: Verdeau → Madlen → Chataigner → Thielen → Flaconneurs
+        allPoints.push(foodWineStops[0].coords); // Passage Verdeau
+        allPoints.push(foodWineStops[1].coords); // Madlen
+        allPoints.push(foodWineStops[2].coords); // Chataigner
+        allPoints.push(foodWineStops[3].coords); // Thielen
+        allPoints.push(foodWineStops[4].coords); // Flaconneurs
       } else {
         // General History route
         allPoints.push(generalHistoryStops[0].coords); // Thermes de Cluny
@@ -294,8 +323,7 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
         'paint': {
           'line-color': '#3a4a48',
           'line-width': 2,
-          'line-opacity': 0.7,
-          'line-dasharray': [2, 3]
+          'line-opacity': 0.75
         }
       });
     }
@@ -313,11 +341,15 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
     ? 'Left Bank'
     : tour === 'right-bank'
       ? 'Right Bank'
-      : 'General History';
+      : tour === 'food-wine'
+        ? 'Nourritour'
+        : 'General History';
 
   const defaultRouteInfo = tour === 'general-history'
     ? '2.5 km · 3 stops · 1 h 30'
-    : '2.5 km · 4 stops · 2 h';
+    : tour === 'food-wine'
+      ? '~1 km · 5 stops · 3 h'
+      : '2.5 km · 4 stops · 2 h';
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>

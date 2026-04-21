@@ -1,19 +1,36 @@
 ---
 import { useTranslations } from '../../i18n/utils';
 
+type Variant = 'default' | 'ww2' | 'general' | 'foodWine';
+
 interface Props {
   href?: string;
+  /** When rendered on a tour page, match the bar to that tour's price/duration.
+   *  Homepage (default) keeps the lowest "from" price as an entry-point signal. */
+  variant?: Variant;
 }
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
-const { href = '#book' } = Astro.props;
+const { href = '#book', variant = 'default' } = Astro.props;
+
+const priceKey =
+  variant === 'ww2'      ? 'quiet.mobileBooking.priceWW2'
+  : variant === 'general'  ? 'quiet.mobileBooking.priceGeneral'
+  : variant === 'foodWine' ? 'quiet.mobileBooking.priceFoodWine'
+                           : 'quiet.mobileBooking.priceFrom';
+
+const metaKey =
+  variant === 'ww2'      ? 'quiet.mobileBooking.metaWW2'
+  : variant === 'general'  ? 'quiet.mobileBooking.metaGeneral'
+  : variant === 'foodWine' ? 'quiet.mobileBooking.metaFoodWine'
+                           : 'quiet.mobileBooking.meta';
 ---
 
 <div class="quiet-mbb">
   <div class="quiet-mbb__price">
-    <b>{t('quiet.mobileBooking.priceFrom')}</b>
-    <span>{t('quiet.mobileBooking.meta')}</span>
+    <b>{t(priceKey)}</b>
+    <span>{t(metaKey)}</span>
   </div>
   <a href={href} class="quiet-mbb__cta">{t('quiet.mobileBooking.cta')}</a>
 </div>

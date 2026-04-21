@@ -4,6 +4,7 @@ import { useTranslations } from '../../i18n/utils';
 import leftBankImg from '../../images/notre-dame-de-paris.webp';
 import rightBankImg from '../../images/place_vendome_paris_day.webp';
 import generalImg from '../../images/luxembourg_palace_paris.webp';
+import foodWineImg from '../../images/food_wine_degustation.webp';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -53,6 +54,21 @@ const cards = [
       { value: t('quiet.home.tours.generalStopsValue'),    label: t('quiet.home.tours.generalStopsLabel') },
       { value: t('quiet.home.tours.generalDurationValue'), label: t('quiet.home.tours.generalDurationLabel') },
       { value: t('quiet.home.tours.generalWalkValue'),     label: t('quiet.home.tours.generalWalkLabel') },
+    ],
+  },
+  {
+    href: `${langPrefix}/tours/food-wine`,
+    img: foodWineImg,
+    alt: 'Nourritour — Food & Wine',
+    badge: t('quiet.home.tours.foodWineBadge'),
+    numeral: t('quiet.home.tours.foodWineNumeral'),
+    era: t('quiet.home.tours.foodWineEra'),
+    title: t('quiet.home.tours.foodWineTitle'),
+    desc: t('quiet.home.tours.foodWineDesc'),
+    specs: [
+      { value: t('quiet.home.tours.foodWineStopsValue'),    label: t('quiet.home.tours.foodWineStopsLabel') },
+      { value: t('quiet.home.tours.foodWineDurationValue'), label: t('quiet.home.tours.foodWineDurationLabel') },
+      { value: t('quiet.home.tours.foodWineWalkValue'),     label: t('quiet.home.tours.foodWineWalkLabel') },
     ],
   },
 ];
@@ -144,8 +160,11 @@ const reserveCta = t('quiet.home.tours.reserveCta');
 
   .qtours__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 1200px) {
+    .qtours__grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
   }
   .qtours__card {
     background: var(--paper-3);
