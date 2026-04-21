@@ -1,14 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import JsonLd from '../components/JsonLd.astro';
-import KeyFiguresStats from '../components/KeyFiguresStats.astro';
-import CountriesChart from '../components/CountriesChart.astro';
-import WorldMap from '../components/WorldMap.tsx';
-import Navbar from '../components/Navbar.astro';
-import MobileMenu from '../components/MobileMenu.astro';
 import { useTranslations } from '../i18n/utils';
 import { supabase } from '../lib/supabase';
+
+import TopBar from '../components/quiet/TopBar.astro';
+import Nav from '../components/quiet/Nav.astro';
+import MobileBookingBar from '../components/quiet/MobileBookingBar.astro';
+import AboutHero from '../components/quiet/AboutHero.astro';
+import GuideBio from '../components/quiet/GuideBio.astro';
+import FeaturedOn from '../components/quiet/FeaturedOn.astro';
+import BuildingTours from '../components/quiet/BuildingTours.astro';
+import AboutStats from '../components/quiet/AboutStats.astro';
+import AboutCTA from '../components/quiet/AboutCTA.astro';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -46,10 +50,10 @@ const distanceKm = Math.round(sessionsCount * 2.5);
 const uniqueCountries = countryMap.size;
 
 const stats = [
-  { id: 'participants', label: lang === 'fr' ? 'Participants' : 'Total Participants', value: totalParticipants, color: 'blue' as const },
-  { id: 'sessions', label: lang === 'fr' ? 'Visites guidées' : 'Tours Conducted', value: sessionsCount, color: 'green' as const },
-  { id: 'kilometers', label: lang === 'fr' ? 'Kilomètres parcourus' : 'Kilometers Walked', value: distanceKm, color: 'purple' as const },
-  { id: 'countries', label: lang === 'fr' ? 'Pays représentés' : 'Countries Represented', value: uniqueCountries, color: 'orange' as const },
+  { label: lang === 'fr' ? 'Participants' : 'Participants', value: totalParticipants },
+  { label: lang === 'fr' ? 'Visites guidées' : 'Tours conducted', value: sessionsCount },
+  { label: lang === 'fr' ? 'Kilomètres parcourus' : 'Kilometres walked', value: distanceKm },
+  { label: lang === 'fr' ? 'Pays représentés' : 'Countries represented', value: uniqueCountries },
 ];
 
 // Country code mapping for flags
@@ -109,299 +113,33 @@ countryMap.forEach((count, country) => {
 });
 ---
 
-<BaseLayout title={t('meta.keyFigures.title')} description={t('meta.keyFigures.description')} ogImage="/photos/left_bank/Paris_WW2_guide.webp">
-  <Navbar variant="fixed" links={[
-    { label: t('nav.leftBank'), href: `${langPrefix}/tours/left-bank` },
-    { label: t('nav.rightBank'), href: `${langPrefix}/tours/right-bank` },
-    { label: t('nav.generalHistory'), href: `${langPrefix}/tours/general-history` },
-    { label: t('nav.home'), href: `${langPrefix}/` },
-  ]} />
-  <MobileMenu />
-  <main class="min-h-screen bg-white">
-    <Breadcrumbs items={[
-      { label: t('nav.home'), href: `${langPrefix}/` },
-      { label: t('keyFigures.title') }
-    ]} />
+<BaseLayout
+  title={t('meta.keyFigures.title')}
+  description={t('meta.keyFigures.description')}
+  ogImage="/photos/left_bank/Paris_WW2_guide.webp"
+  theme="quiet"
+>
+  <TopBar />
+  <Nav context="tour" />
 
-    <!-- Hero Section — Dark with photo background, matching tour pages -->
-    <section class="relative flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 py-24 md:py-32 overflow-hidden">
-      <div class="absolute inset-0 bg-black/50"></div>
-      <div class="absolute inset-0">
-        <img
-          src="/photos/left_bank/Paris_ww2_group_photo_4.webp"
-          alt=""
-          class="w-full h-full object-cover opacity-40"
-          loading="eager"
-          aria-hidden="true"
-        />
-      </div>
-      <div class="relative z-10 text-center text-white max-w-3xl mx-auto px-4">
-        <p class="text-sm md:text-base uppercase tracking-[0.2em] text-blue-300 mb-4 font-medium">Paris History Tours</p>
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-          {t('keyFigures.title')}
-        </h1>
-        <p class="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
-          {t('keyFigures.subtitle')}
-        </p>
-      </div>
-    </section>
-
-    <!-- About the Guide Section — Improved layout with stat callouts -->
-    <section class="py-20 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid md:grid-cols-5 gap-12 items-stretch">
-          <!-- Photo column (2/5) -->
-          <div class="md:col-span-2">
-            <div class="relative h-full">
-              <img
-                src="/photos/left_bank/Paris_WW2_guide.webp"
-                alt="Clement Daguet-Schott - History Guide in Paris"
-                class="rounded-2xl shadow-2xl w-full h-full object-cover object-[60%_top]"
-                loading="eager"
-              />
-              <!-- Floating badge -->
-              <div class="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-lg px-4 py-3 border border-gray-100">
-                <div class="flex items-center gap-2">
-                  <div class="flex text-yellow-400 text-sm">★★★★★</div>
-                  <span class="text-sm font-bold text-gray-900">4.9/5</span>
-                </div>
-                <p class="text-xs text-gray-500 mt-0.5">Google Maps</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bio column (3/5) -->
-          <div class="md:col-span-3">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{t('keyFigures.guide.title')}</h2>
-
-            <p class="text-gray-700 mb-6 leading-relaxed text-lg">{t('keyFigures.guide.bio1')}</p>
-
-            <!-- Inline highlight stats -->
-            <div class="grid grid-cols-3 gap-4 my-8 py-6 px-5 bg-slate-50 rounded-xl border border-slate-100">
-              <div class="text-center">
-                <div class="text-2xl md:text-3xl font-bold text-blue-600">20+</div>
-                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Livres consultés' : 'Books researched'}</div>
-              </div>
-              <div class="text-center border-x border-slate-200">
-                <div class="text-2xl md:text-3xl font-bold text-blue-600">25+</div>
-                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Pays représentés' : 'Countries represented'}</div>
-              </div>
-              <div class="text-center">
-                <div class="text-2xl md:text-3xl font-bold text-blue-600">4.9<span class="text-lg">/5</span></div>
-                <div class="text-xs md:text-sm text-gray-500 mt-1">{lang === 'fr' ? 'Note moyenne' : 'Average rating'}</div>
-              </div>
-            </div>
-
-            <p class="text-gray-700 mb-6 leading-relaxed">{t('keyFigures.guide.bio2')}</p>
-            <p class="text-gray-600 leading-relaxed">{t('keyFigures.guide.bio3')}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured On Section — Trust signals -->
-    <section class="py-14 bg-slate-50 border-y border-slate-100">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-sm uppercase tracking-[0.15em] text-gray-500 font-medium mb-8">
-          {lang === 'fr' ? 'Également présent sur' : 'Also featured on'}
-        </p>
-        <div class="flex items-center justify-center gap-10 md:gap-16 flex-wrap">
-          <a href="https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/get your guide logo.webp" alt="GetYourGuide" width="160" height="53" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-          <a href="https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/Viator_Logo.png" alt="Viator" width="160" height="40" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-          <a href="https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/Tripadvisor-Logo.png" alt="TripAdvisor" width="160" height="90" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-          <a href="https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/Google__logo.webp" alt="Google Maps — 4.9/5" width="160" height="53" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-          <a href="https://tourist.com/p/24194"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/tourist_logo.svg" alt="Tourist.com" width="153" height="52" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-          <a href="https://parisjetaime.com/activite/Paris-history-tours-p4833"
-             target="_blank" rel="noopener noreferrer"
-             class="opacity-50 hover:opacity-100 transition-opacity">
-            <img src="/logos/parisjetaime_logo.svg" alt="Paris je t'aime — Office du Tourisme" width="48" height="48" class="h-10 md:h-12 w-auto object-contain" />
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Building the Tours Section — Enhanced cards -->
-    <section class="py-20 bg-slate-50">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-14">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('keyFigures.building.title')}</h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            {t('keyFigures.building.subtitle')}
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-8 items-stretch">
-          <!-- Research cards -->
-          <div class="flex flex-col gap-6">
-            <!-- 20+ Books card -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
-              <div class="flex items-start gap-5">
-                <div class="flex-shrink-0 w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
-                  <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.books.title')}</h3>
-                  <p class="text-gray-600 leading-relaxed">
-                    {t('keyFigures.building.books.description')}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- 6 Months card -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
-              <div class="flex items-start gap-5">
-                <div class="flex-shrink-0 w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center">
-                  <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{t('keyFigures.building.months.title')}</h3>
-                  <p class="text-gray-600 leading-relaxed">
-                    {t('keyFigures.building.months.description')}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- 3 Themes card (new) -->
-            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow duration-300 flex-1 flex items-center">
-              <div class="flex items-start gap-5">
-                <div class="flex-shrink-0 w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center">
-                  <svg class="w-7 h-7 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-2xl font-bold text-gray-900 mb-2">{lang === 'fr' ? '3 Thèmes Historiques' : '3 Historical Themes'}</h3>
-                  <p class="text-gray-600 leading-relaxed">
-                    {lang === 'fr'
-                      ? 'La Chute de Paris, la Résistance et la Libération — trois fils narratifs entrelacés dans chaque visite pour une compréhension complète de la période.'
-                      : 'The Fall of Paris, the Resistance, and the Liberation — three interwoven narrative threads in every tour for a complete understanding of the period.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Photo -->
-          <div class="relative">
-            <div class="relative w-full h-full">
-              <img
-                src="/photos/book_ww2_guide_paris.webp"
-                alt="Historical research books used for tour preparation"
-                class="rounded-2xl shadow-xl w-full h-full object-cover object-center"
-                loading="lazy"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-2xl"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Delivering the Tour Section — Stats & visualizations -->
-    <section class="py-20 bg-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-14">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('keyFigures.delivering.title')}</h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            {t('keyFigures.delivering.subtitle')}
-          </p>
-        </div>
-
-        <!-- Stats Component -->
-        <KeyFiguresStats stats={stats} />
-
-        <!-- AI-readable statistics (React charts are not crawlable) -->
-        <div class="sr-only">
-          <p>{lang === 'fr'
-            ? 'Chiffres clés de Paris History Tours : plus de 300 participants venus de plus de 25 pays à travers plus de 60 visites guidées, couvrant plus de 150 kilomètres de parcours pédestres dans le Paris historique. Les visiteurs viennent des États-Unis, du Royaume-Uni, d\'Allemagne, de France, du Canada, d\'Australie, d\'Espagne et de nombreux autres pays. Fondé en 2024, Paris History Tours maintient une note de 4.9 sur 5 étoiles avec plus de 42 avis Google.'
-            : 'Paris History Tours key statistics: over 300 participants from 25+ countries across 60+ guided tours, covering more than 150 kilometers of walking tours through historic Paris. Visitors come from the United States, United Kingdom, Germany, France, Canada, Australia, Spain, and many more countries. Founded in 2024, Paris History Tours has maintained a 4.9 out of 5 star rating across 42+ Google reviews.'
-          }</p>
-        </div>
-
-        <!-- Countries & Map in 2-column layout on desktop -->
-        <div class="mt-16 grid md:grid-cols-2 gap-8">
-          <!-- Countries Chart -->
-          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
-            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">
-              {t('keyFigures.delivering.topCountries')}
-            </h3>
-            <CountriesChart countries={topCountries} />
-          </div>
-
-          <!-- World Map -->
-          <div>
-            <WorldMap client:visible countryData={worldMapData} maxValue={worldMapMax} />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section — Book your tour -->
-    <section class="py-20 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
-      <div class="absolute inset-0">
-        <img
-          src="/photos/right_bank/bridge_alexander_third_paris.webp"
-          alt=""
-          class="w-full h-full object-cover opacity-20"
-          loading="lazy"
-          aria-hidden="true"
-        />
-      </div>
-      <div class="relative z-10 max-w-3xl mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-          {lang === 'fr' ? 'Prêt à découvrir Paris autrement ?' : 'Ready to experience Paris differently?'}
-        </h2>
-        <p class="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
-          {lang === 'fr'
-            ? 'Rejoignez les centaines de visiteurs qui ont redécouvert Paris à travers les récits de la Seconde Guerre mondiale.'
-            : 'Join the hundreds of visitors who have rediscovered Paris through the stories of World War II.'}
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href={`${langPrefix}/#book`}
-            class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-blue-50 transition-colors duration-200 shadow-lg hover:shadow-xl text-lg"
-          >
-            {t('common.bookNow')}
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
-            </svg>
-          </a>
-          <a
-            href={`${langPrefix}/tours/left-bank`}
-            class="inline-flex items-center justify-center px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors duration-200 text-lg"
-          >
-            {t('common.learnMore')}
-          </a>
-        </div>
-      </div>
-    </section>
+  <main>
+    <AboutHero />
+    <GuideBio />
+    <FeaturedOn />
+    <BuildingTours />
+    <AboutStats
+      stats={stats}
+      topCountries={topCountries}
+      worldMapData={worldMapData}
+      worldMapMax={worldMapMax}
+    />
+    <AboutCTA
+      bookHref={`${langPrefix}/#book`}
+      toursHref={`${langPrefix}/#tours`}
+    />
   </main>
+
+  <MobileBookingBar href={`${langPrefix}/#book`} />
 
   <JsonLd data={{
     "@context": "https://schema.org",
@@ -441,6 +179,6 @@ countryMap.forEach((count, country) => {
 </BaseLayout>
 
 <script>
-  import { initMobileMenu } from '../scripts/mobile-menu';
-  initMobileMenu();
+  import { initQuietNav } from '../scripts/quiet-nav';
+  initQuietNav();
 </script>

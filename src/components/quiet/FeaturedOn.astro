@@ -1,0 +1,85 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const partners = [
+  { name: 'GetYourGuide', src: '/logos/get%20your%20guide%20logo.webp', href: 'https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/', width: 140 },
+  { name: 'Viator',       src: '/logos/Viator_Logo.png',                href: 'https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2',                 width: 110 },
+  { name: 'TripAdvisor',  src: '/logos/Tripadvisor-Logo.png',           href: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',       width: 130 },
+  { name: 'Google Maps',  src: '/logos/Google__logo.webp',              href: 'https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8',                                                                                 width: 130 },
+  { name: 'Tourist.com',  src: '/logos/tourist_logo.svg',               href: 'https://tourist.com/p/24194',                                                                                               width: 105 },
+  { name: "Paris je t'aime", src: '/logos/parisjetaime_logo.svg',       href: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',                                                              width: 44  },
+];
+---
+
+<section class="qfeatured">
+  <div class="qfeatured__inner">
+    <p class="qfeatured__label">{t('quiet.about.featured.label')}</p>
+    <div class="qfeatured__row">
+      {partners.map((p) => (
+        <a href={p.href} class="qfeatured__partner" target="_blank" rel="noopener" aria-label={p.name} style={`--logo-w:${p.width}px`}>
+          <img src={p.src} alt={p.name} loading="lazy" decoding="async" />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .qfeatured {
+    background: var(--paper-2);
+    padding: 56px 32px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .qfeatured__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  .qfeatured__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .qfeatured__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 48px;
+  }
+  .qfeatured__partner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: var(--logo-w, 120px);
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: opacity 160ms ease, filter 160ms ease;
+  }
+  .qfeatured__partner:hover { opacity: 1; filter: grayscale(0); }
+  .qfeatured__partner img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (max-width: 760px) {
+    .qfeatured { padding: 40px 20px; }
+    .qfeatured__row { gap: 28px; }
+  }
+</style>

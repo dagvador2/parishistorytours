@@ -1,0 +1,136 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  bookHref: string;
+  toursHref: string;
+}
+
+const { bookHref, toursHref } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+---
+
+<section class="qaboutcta">
+  <div class="qaboutcta__bg" aria-hidden="true">
+    <img src="/photos/right_bank/bridge_alexander_third_paris.webp" alt="" loading="lazy" />
+  </div>
+  <div class="qaboutcta__scrim" aria-hidden="true"></div>
+  <div class="qaboutcta__inner">
+    <p class="qaboutcta__kicker">{t('quiet.about.cta.kicker')}</p>
+    <h2 class="qaboutcta__title">{t('quiet.about.cta.title')}</h2>
+    <p class="qaboutcta__desc">{t('quiet.about.cta.subtitle')}</p>
+    <div class="qaboutcta__actions">
+      <a href={bookHref} class="qaboutcta__btn qaboutcta__btn--primary">{t('quiet.about.cta.primary')}</a>
+      <a href={toursHref} class="qaboutcta__btn qaboutcta__btn--ghost">{t('quiet.about.cta.secondary')} <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .qaboutcta {
+    position: relative;
+    background: var(--ink);
+    color: var(--paper-3);
+    padding: 112px 32px;
+    overflow: hidden;
+  }
+  .qaboutcta__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .qaboutcta__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.28;
+    display: block;
+  }
+  .qaboutcta__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(26,26,26,0.35), rgba(26,26,26,0.75));
+    z-index: 1;
+  }
+  .qaboutcta__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .qaboutcta__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 20px;
+  }
+  .qaboutcta__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(38px, 5.2vw, 56px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--paper-3);
+    margin: 0 0 20px;
+  }
+  .qaboutcta__desc {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 36px;
+    max-width: 52ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .qaboutcta__actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .qaboutcta__btn {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 14px 24px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+  }
+  .qaboutcta__btn--primary {
+    background: var(--paper-3);
+    color: var(--ink);
+    border-color: var(--paper-3);
+  }
+  .qaboutcta__btn--primary:hover {
+    background: transparent;
+    color: var(--paper-3);
+  }
+  .qaboutcta__btn--ghost {
+    background: transparent;
+    color: var(--paper-3);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .qaboutcta__btn--ghost:hover { border-color: var(--paper-3); }
+  .qaboutcta__btn--ghost span { transition: transform 160ms ease; }
+  .qaboutcta__btn--ghost:hover span { transform: translateX(4px); }
+
+  @media (max-width: 760px) {
+    .qaboutcta { padding: 72px 20px; }
+    .qaboutcta__title { font-size: 34px; }
+    .qaboutcta__desc { font-size: 15px; }
+    .qaboutcta__actions { flex-direction: column; align-items: stretch; }
+    .qaboutcta__btn { justify-content: center; }
+  }
+</style>

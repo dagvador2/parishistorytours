@@ -1,9 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import { getCollection } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
+
+import TopBar from '../../components/quiet/TopBar.astro';
+import Nav from '../../components/quiet/Nav.astro';
+import MobileBookingBar from '../../components/quiet/MobileBookingBar.astro';
+import BlogHeader from '../../components/quiet/BlogHeader.astro';
+import BlogList from '../../components/quiet/BlogList.astro';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -20,61 +25,17 @@ const sortedPosts = allPosts.sort((a, b) =>
 <BaseLayout
   title={t('meta.blog.title')}
   description={t('meta.blog.description')}
+  theme="quiet"
 >
-  <Breadcrumbs items={[
-    { label: t('nav.home'), href: `${langPrefix}/` },
-    { label: 'Blog' }
-  ]} />
+  <TopBar />
+  <Nav context="tour" />
 
-  <main class="min-h-screen bg-gray-50 py-12">
-    <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-center">
-        {t('meta.blog.heading')}
-      </h1>
-      <p class="text-xl text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-        {t('meta.blog.subheading')}
-      </p>
-
-      {sortedPosts.length === 0 ? (
-        <p class="text-center text-gray-500 text-lg">
-          {t('meta.blog.empty')}
-        </p>
-      ) : (
-        <div class="space-y-8">
-          {sortedPosts.map((post) => (
-            <article class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <a href={`${langPrefix}/blog/${post.id}`} class="block md:flex">
-                {post.data.image && (
-                  <div class="md:w-1/3 flex-shrink-0">
-                    <img
-                      src={post.data.image}
-                      alt={post.data.imageAlt || post.data.title}
-                      class="w-full h-48 md:h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                )}
-                <div class="p-6 flex flex-col justify-center">
-                  <div class="flex items-center gap-2 mb-2">
-                    <time class="text-sm text-gray-500" datetime={post.data.publishDate.toISOString()}>
-                      {post.data.publishDate.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                    </time>
-                  </div>
-                  <h2 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">{post.data.title}</h2>
-                  <p class="text-gray-600 line-clamp-3">{post.data.description}</p>
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    {post.data.tags.map((tag: string) => (
-                      <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              </a>
-            </article>
-          ))}
-        </div>
-      )}
-    </div>
+  <main>
+    <BlogHeader />
+    <BlogList posts={sortedPosts} langPrefix={langPrefix} />
   </main>
+
+  <MobileBookingBar href={`${langPrefix}/#book`} />
 
   <JsonLd data={{
     "@context": "https://schema.org",
@@ -95,3 +56,8 @@ const sortedPosts = allPosts.sort((a, b) =>
     }
   }} />
 </BaseLayout>
+
+<script>
+  import { initQuietNav } from '../../scripts/quiet-nav';
+  initQuietNav();
+</script>

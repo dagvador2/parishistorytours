@@ -1,0 +1,168 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  author: string;
+  publishDate: Date;
+  tags: string[];
+  image?: string;
+  imageAlt?: string;
+  blogHref: string;
+}
+
+const { title, description, author, publishDate, tags, image, imageAlt, blogHref } = Astro.props;
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const dateLocale = lang === 'fr' ? 'fr-FR' : 'en-US';
+const formattedDate = publishDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<section class="qarth">
+  <div class="qarth__inner">
+    <a href={blogHref} class="qarth__back">
+      <span aria-hidden="true">←</span>
+      <span>{t('quiet.blog.backToBlog')}</span>
+    </a>
+    <p class="qarth__kicker">{t('quiet.blog.articleKicker')}</p>
+    <h1 class="qarth__title">{title}</h1>
+    {description && <p class="qarth__lede">{description}</p>}
+    <div class="qarth__meta">
+      <span class="qarth__by">{t('quiet.blog.byLabel')} <b>{author}</b></span>
+      <span class="qarth__sep" aria-hidden="true">·</span>
+      <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+      {tags.length > 0 && (
+        <>
+          <span class="qarth__sep" aria-hidden="true">·</span>
+          <ul class="qarth__tags">
+            {tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </>
+      )}
+    </div>
+  </div>
+
+  {image && (
+    <figure class="qarth__cover">
+      <img src={image} alt={imageAlt || title} loading="eager" decoding="async" />
+    </figure>
+  )}
+</section>
+
+<style>
+  .qarth {
+    background: var(--paper);
+    padding: 64px 32px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .qarth__inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding-bottom: 48px;
+  }
+  .qarth__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-decoration: none;
+    margin-bottom: 40px;
+    transition: color 120ms ease;
+  }
+  .qarth__back:hover { color: var(--ink); }
+  .qarth__back span:first-child { transition: transform 160ms ease; }
+  .qarth__back:hover span:first-child { transform: translateX(-4px); }
+
+  .qarth__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 20px;
+  }
+  .qarth__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(36px, 5.2vw, 60px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0 0 24px;
+  }
+  .qarth__lede {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-2);
+    margin: 0 0 32px;
+    max-width: 56ch;
+    font-style: italic;
+  }
+  .qarth__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .qarth__by b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .qarth__sep { color: var(--border); }
+  .qarth__tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .qarth__tags li {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+
+  .qarth__cover {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+  }
+  .qarth__cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 760px) {
+    .qarth { padding: 40px 20px 0; }
+    .qarth__inner { padding-bottom: 32px; }
+    .qarth__back { margin-bottom: 28px; }
+    .qarth__title { font-size: 34px; }
+    .qarth__lede { font-size: 18px; }
+    .qarth__cover { padding: 0 20px 40px; }
+    .qarth__cover img { max-height: 360px; }
+  }
+</style>

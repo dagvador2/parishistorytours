@@ -956,7 +956,7 @@ export const fr = {
       coGuide: {
         kicker: "Vos guides",
         title: "Guidé à deux.",
-        subtitle: "C'est la seule visite Paris History Tours qu'on guide à deux. Pour la bouffe il faut un conteur ; pour le vin il faut une sommelière. Il nous faut les deux.",
+        subtitle: "C'est la seule visite Paris History Tours qu'on guide à deux. Pour la table il faut un conteur ; pour le vin il faut une sommelière. Il nous faut les deux.",
         clement: {
           role: "Conteur des rues",
           bio: "Parisien d'adoption, six ans dans la ville. Sur le Nourritour, le conteur prend la première heure — les passages couverts, la rue des Martyrs, l'histoire des quatre artisans et la manière dont Paris a appris à manger."

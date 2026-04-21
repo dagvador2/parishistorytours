@@ -1,0 +1,59 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+---
+
+<section class="qbloghdr">
+  <div class="qbloghdr__inner">
+    <p class="qbloghdr__kicker">{t('quiet.blog.kicker')}</p>
+    <h1 class="qbloghdr__title">{t('quiet.blog.heading')}</h1>
+    <p class="qbloghdr__subtitle">{t('quiet.blog.subheading')}</p>
+  </div>
+</section>
+
+<style>
+  .qbloghdr {
+    background: var(--paper);
+    padding: 96px 32px 64px;
+    border-bottom: 1px solid var(--border);
+  }
+  .qbloghdr__inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .qbloghdr__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 20px;
+  }
+  .qbloghdr__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(44px, 6vw, 72px);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 24px;
+    line-height: 1.05;
+    max-width: 16ch;
+  }
+  .qbloghdr__subtitle {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  @media (max-width: 760px) {
+    .qbloghdr { padding: 64px 20px 48px; }
+    .qbloghdr__title { font-size: 38px; }
+    .qbloghdr__subtitle { font-size: 15px; }
+  }
+</style>

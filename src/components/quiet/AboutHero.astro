@@ -1,0 +1,59 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+---
+
+<section class="qabouthero">
+  <div class="qabouthero__inner">
+    <p class="qabouthero__kicker">{t('quiet.about.hero.kicker')}</p>
+    <h1 class="qabouthero__title">{t('quiet.about.hero.title')}</h1>
+    <p class="qabouthero__subtitle">{t('quiet.about.hero.subtitle')}</p>
+  </div>
+</section>
+
+<style>
+  .qabouthero {
+    background: var(--paper);
+    padding: 96px 32px 80px;
+    border-bottom: 1px solid var(--border);
+  }
+  .qabouthero__inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .qabouthero__kicker {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin: 0 0 20px;
+  }
+  .qabouthero__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(44px, 6.2vw, 76px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0 0 24px;
+    max-width: 18ch;
+  }
+  .qabouthero__subtitle {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  @media (max-width: 760px) {
+    .qabouthero { padding: 64px 20px 48px; }
+    .qabouthero__title { font-size: 38px; }
+    .qabouthero__subtitle { font-size: 15px; }
+  }
+</style>
