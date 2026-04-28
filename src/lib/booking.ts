@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { sendBookingEmails } from './email';
 
 export interface BookingData {
   sessionId: string;
@@ -10,6 +11,7 @@ export interface BookingData {
   date: string;
   time: string;
   price: number;
+  locale?: 'en' | 'fr' | string;
 }
 
 /**
@@ -79,14 +81,34 @@ export async function finalizeBooking(bookingData: BookingData) {
       throw new Error(`Error creating booking: ${bookingError.message}`);
     }
 
-    // 4. Envoyer l'email de confirmation
+    // 4. Envoyer l'email de confirmation (appel direct, pas de fetch interne).
+    // Booking is already persisted: an email failure must not throw — Stripe would
+    // otherwise retry the webhook and double-decrement the session spots.
+    let emailResult: Awaited<ReturnType<typeof sendBookingEmails>>;
     try {
-      await sendConfirmationEmail(bookingData, booking.id);
+      emailResult = await sendBookingEmails({
+        email: bookingData.customerEmail,
+        name: bookingData.customerName,
+        bookingId: booking.id,
+        tourType: 'regular',
+        tour: bookingData.tour,
+        participants: bookingData.participants,
+        date: bookingData.date,
+        time: bookingData.time,
+        price: bookingData.price,
+        sessionId: bookingData.sessionId,
+        locale: bookingData.locale,
+      });
+      if (!emailResult.success) {
+        console.error('Confirmation email failed (booking saved):', emailResult.error, 'bookingId=', booking.id);
+      }
     } catch (emailError) {
-      console.error('Confirmation email failed (non-fatal):', emailError instanceof Error ? emailError.message : emailError);
+      const msg = emailError instanceof Error ? emailError.message : String(emailError);
+      console.error('Confirmation email threw (booking saved):', msg, 'bookingId=', booking.id);
+      emailResult = { success: false, error: msg };
     }
 
-    return { success: true, booking };
+    return { success: true, booking, emailResult };
 
   } catch (error) {
     console.error('Booking finalization error:', error instanceof Error ? error.message : error);
@@ -95,41 +117,6 @@ export async function finalizeBooking(bookingData: BookingData) {
       error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
-}
-
-// Fonction pour envoyer l'email de confirmation
-function sendConfirmationEmail(bookingData: BookingData, bookingId: string): Promise<void> {
-  return (async () => {
-    const payload = {
-      email: bookingData.customerEmail,
-      name: bookingData.customerName,
-      bookingId,
-      tourType: 'regular',
-      tour: bookingData.tour,
-      participants: bookingData.participants,
-      date: bookingData.date,
-      time: bookingData.time,
-      price: bookingData.price,
-      sessionId: bookingData.sessionId,
-    };
-
-    // Construire l'URL absolue pour la route d'email
-    const baseUrl = process.env.SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.parishistorytours.com');
-    const emailUrl = `${baseUrl}/api/send-booking-email`;
-
-    const response = await fetch(emailUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Email API returned ${response.status}`);
-    }
-  })();
 }
 
 /**

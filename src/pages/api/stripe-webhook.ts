@@ -43,10 +43,13 @@ export const POST: APIRoute = async ({ request }) => {
         date: metadata.date,
         time: metadata.time,
         price: parseFloat(metadata.price),
+        locale: metadata.locale,
       });
 
       if (!result.success) {
         console.error("Booking finalization failed:", result.error);
+      } else if (result.emailResult && !result.emailResult.success) {
+        console.error("Booking saved but confirmation email failed:", result.emailResult.error, "bookingId=", result.booking?.id);
       }
     } catch (error) {
       console.error("Error processing payment:", error instanceof Error ? error.message : error);

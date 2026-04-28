@@ -45,6 +45,7 @@ export const POST: APIRoute = async ({ request }) => {
         date,
         time,
         price: price.toString(),
+        locale: locale === 'fr' ? 'fr' : 'en',
       },
       locale: locale === 'fr' ? 'fr' : 'en',
       customer_email: email,
