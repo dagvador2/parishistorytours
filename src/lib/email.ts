@@ -75,7 +75,7 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
       <p>${t.regards}<br><strong>Clément - Paris History Tours</strong></p>
       <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
       <p style="font-size: 12px; color: #6b7280;">
-        Paris History Tours | Email: clemdaguetschott@gmail.com | WhatsApp: +33620622480
+        Paris History Tours | Email: clement@parishistorytours.com | WhatsApp: +33620622480
       </p>
     </div>
   `;
@@ -147,7 +147,7 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
 
   const adminEmailResult = await resend.emails.send({
     from: 'Paris History Tours <bookings@parishistorytours.com>',
-    to: 'clemdaguetschott@gmail.com',
+    to: 'clement@parishistorytours.com',
     subject: `${adminSubjectPrefix} Booking - ${bookingData.name}`,
     html: adminEmailHtml,
   });

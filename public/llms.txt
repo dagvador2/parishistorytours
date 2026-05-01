@@ -17,7 +17,7 @@ Paris History Tours is a specialized WWII walking tour provider in Paris. The gu
 ## Booking & Contact
 
 - [Book a Tour](https://www.parishistorytours.com/#book-tour): Online booking for regular and private tours via Stripe
-- Email: clemdaguetschott@gmail.com
+- Email: clement@parishistorytours.com
 - WhatsApp: +33 6 20 62 24 80
 - [Google Maps Reviews](https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8): 4.9/5 rating, 40+ reviews
 

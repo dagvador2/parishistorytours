@@ -143,7 +143,7 @@ export const tours: Record<string, TourConfig> = {
       parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
       tourist: 'https://tourist.com/p/24194',
       whatsapp: 'https://wa.me/+33620622480',
-      email: 'mailto:clemdaguetschott@gmail.com',
+      email: 'mailto:clement@parishistorytours.com',
     },
   },
   'right-bank': {
@@ -208,7 +208,7 @@ export const tours: Record<string, TourConfig> = {
       parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
       tourist: 'https://tourist.com/p/24194',
       whatsapp: 'https://wa.me/+33620622480',
-      email: 'mailto:clemdaguetschott@gmail.com',
+      email: 'mailto:clement@parishistorytours.com',
     },
   },
   'general-history': {
@@ -271,7 +271,7 @@ export const tours: Record<string, TourConfig> = {
       parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
       tourist: 'https://tourist.com/p/24194',
       whatsapp: 'https://wa.me/+33620622480',
-      email: 'mailto:clemdaguetschott@gmail.com',
+      email: 'mailto:clement@parishistorytours.com',
     },
   },
   'food-wine': {
@@ -334,7 +334,7 @@ export const tours: Record<string, TourConfig> = {
       // No GetYourGuide/Viator listing yet — WhatsApp + direct booking only for now
       tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
       whatsapp: 'https://wa.me/+33620622480',
-      email: 'mailto:clemdaguetschott@gmail.com',
+      email: 'mailto:clement@parishistorytours.com',
     },
     coGuides: [
       { id: 'clement', photo: '/photos/food_and_wine/nourritour-guide-baguettes-sourire-rue.webp' },
