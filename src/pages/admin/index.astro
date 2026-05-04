@@ -128,9 +128,11 @@ if (Astro.request.method === 'POST') {
         <label for="gen-tour">Tour</label>
         <select id="gen-tour" required>
           <option value="">Select tour...</option>
-          <option value="left-bank">Left Bank</option>
-          <option value="right-bank">Right Bank</option>
-          <option value="both">Both Tours</option>
+          <option value="left-bank">WW2 Left Bank</option>
+          <option value="right-bank">WW2 Right Bank</option>
+          <option value="general-history">General History</option>
+          <option value="food-wine">Nourritour (Food &amp; Wine)</option>
+          <option value="both-ww2">Both WW2 Tours (LB + RB)</option>
         </select>
 
         <label>Days of the week</label>
@@ -180,17 +182,32 @@ if (Astro.request.method === 'POST') {
         grid.style.display = 'grid';
         grid.innerHTML = '';
 
+        const tourLabels = {
+          'left-bank': 'Left Bank',
+          'right-bank': 'Right Bank',
+          'general-history': 'General History',
+          'food-wine': 'Nourritour',
+        };
+        const tourShort = {
+          'left-bank': 'LB',
+          'right-bank': 'RB',
+          'general-history': 'GH',
+          'food-wine': 'NT',
+        };
+
         sessions.forEach(function(s) {
           const date = new Date(s.start_time);
           const dateStr = date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
           const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
           const spotsClass = s.available_spots >= 5 ? 'spots-good' : s.available_spots > 0 ? 'spots-low' : 'spots-full';
+          const fullLabel = tourLabels[s.tour_type] || s.tour_type;
+          const shortLabel = tourShort[s.tour_type] || s.tour_type;
 
           const card = document.createElement('div');
           card.className = 'session-card';
           card.innerHTML =
             '<div class="info">' +
-              '<strong>' + (s.tour_type === 'left-bank' ? 'Left Bank' : 'Right Bank') + '</strong>' +
+              '<strong>' + fullLabel + '</strong>' +
               ' — ' + dateStr + ' at ' + timeStr +
             '</div>' +
             '<div class="spots ' + spotsClass + '">' + s.available_spots + '/' + s.max_spots + ' spots</div>';
@@ -200,7 +217,7 @@ if (Astro.request.method === 'POST') {
           if (s.available_spots > 0) {
             const opt = document.createElement('option');
             opt.value = s.id;
-            opt.textContent = (s.tour_type === 'left-bank' ? 'LB' : 'RB') + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
+            opt.textContent = shortLabel + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
             opt.dataset.tour = s.tour_type;
             sessionSelect.appendChild(opt);
           }
@@ -271,7 +288,7 @@ if (Astro.request.method === 'POST') {
         return;
       }
 
-      var tours = tourValue === 'both' ? ['left-bank', 'right-bank'] : [tourValue];
+      var tours = tourValue === 'both-ww2' ? ['left-bank', 'right-bank'] : [tourValue];
       var schedule = [];
       tours.forEach(function(tour) {
         checkedDays.forEach(function(day) {

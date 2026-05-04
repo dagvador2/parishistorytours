@@ -36,7 +36,13 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
   const dateLocale = locale === 'fr' ? 'fr-FR' : 'en-GB';
   const paymentMethod = bookingData.paymentMethod || null;
 
-  const tourName = bookingData.tour === 'left-bank' ? t.leftBankTour : t.rightBankTour;
+  const tourNamesByLang: Record<string, string> = {
+    'left-bank': t.leftBankTour,
+    'right-bank': t.rightBankTour,
+    'general-history': t.generalHistoryTour,
+    'food-wine': t.foodWineTour,
+  };
+  const tourName = tourNamesByLang[bookingData.tour] || bookingData.tour;
   const typeName = bookingData.tourType === 'regular' ? t.regularTour : t.privateTour;
 
   let subject: string;
@@ -120,7 +126,7 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
         <p><strong>Customer:</strong> ${bookingData.name}</p>
         <p><strong>Email:</strong> ${bookingData.email}</p>
         <p><strong>Phone:</strong> ${bookingData.phone || 'Not provided'}</p>
-        <p><strong>Tour:</strong> ${bookingData.tour === 'left-bank' ? 'Left Bank Tour' : 'Right Bank Tour'}</p>
+        <p><strong>Tour:</strong> ${tourName}</p>
         <p><strong>Participants:</strong> ${bookingData.participants}</p>
         <p><strong>Type:</strong> ${bookingData.tourType}</p>
         <p><strong>Date:</strong> ${new Date(bookingData.date + "T00:00:00").toLocaleDateString('en-GB')}</p>

@@ -661,6 +661,7 @@ export const fr = {
       leftBankTour: "Visite Rive Gauche",
       rightBankTour: "Visite Rive Droite",
       generalHistoryTour: "Visite Histoire Générale",
+      foodWineTour: "Nourritour · Food & Wine",
       confirmedMessage: "Votre réservation est confirmée ! Nous vous enverrons les détails du point de rendez-vous 24 heures avant la visite.",
       requestMessage: "Nous confirmerons la disponibilité et vous contacterons dans les 24 heures.",
       onSiteMessage: "Votre réservation est confirmée ! Vous réglerez le jour de la visite. Nous vous enverrons les détails du point de rendez-vous 24 heures avant.",

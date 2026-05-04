@@ -3,6 +3,9 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useBooking } from "../BookingContext";
 import { getTourName, getTourStops, tourInfo } from "../../../data/tour-info";
+import type { Tour } from "../types";
+
+const TOUR_SLUGS: Tour[] = ["left-bank", "right-bank", "general-history", "food-wine"];
 
 interface Slot {
   id: string;
@@ -21,7 +24,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [slots, setSlots] = useState<Slot[]>([]);
   const [availableDays, setAvailableDays] = useState<Record<string, number>>({});
-  const [pricePerPerson, setPricePerPerson] = useState<number>(0);
+  const [priceByTour, setPriceByTour] = useState<Record<string, number>>({});
   const [priceLoading, setPriceLoading] = useState(true);
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [participants, setParticipants] = useState(2);
@@ -30,23 +33,32 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
 
   const locale = lang === "fr" ? "fr-FR" : "en-US";
 
-  // Fetch price on mount (use left-bank as default; both tours same price)
+  // Fetch live Stripe price for each tour in parallel — keyed by tour slug.
   useEffect(() => {
-    const fetchPrice = async () => {
+    const fetchPrices = async () => {
       try {
-        const res = await fetch("/api/stripe-price?tour=left-bank");
-        if (res.ok) {
-          const data = await res.json();
-          setPricePerPerson(data.unit_amount / 100);
+        const entries = await Promise.all(
+          TOUR_SLUGS.map(async (slug) => {
+            const res = await fetch(`/api/stripe-price?tour=${slug}`);
+            if (!res.ok) return [slug, null] as const;
+            const data = await res.json();
+            return [slug, data.unit_amount / 100] as const;
+          })
+        );
+        const map: Record<string, number> = {};
+        for (const [slug, amount] of entries) {
+          if (amount != null) map[slug] = amount;
         }
-      } catch {
-        setPricePerPerson(50);
+        setPriceByTour(map);
       } finally {
         setPriceLoading(false);
       }
     };
-    fetchPrice();
+    fetchPrices();
   }, []);
+
+  const priceFor = (tourType: string): number => priceByTour[tourType] ?? 0;
+  const selectedPrice = selectedSlot ? priceFor(selectedSlot.tour_type) : 0;
 
   // Fetch all available days (no tour filter)
   useEffect(() => {
@@ -119,13 +131,13 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
 
     setBooking({
       ...booking,
-      tour: selectedSlot.tour_type as "left-bank" | "right-bank" | "general-history",
+      tour: selectedSlot.tour_type as "left-bank" | "right-bank" | "general-history" | "food-wine",
       tourType: "regular",
       sessionId: selectedSlot.id,
       date,
       time,
       participants,
-      price: pricePerPerson * participants,
+      price: selectedPrice * participants,
     });
     onNext();
   };
@@ -203,6 +215,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
                         : "text-gray-500";
 
                     const tourThumb = tourInfo[slot.tour_type]?.thumb;
+                    const slotPrice = priceFor(slot.tour_type);
 
                     return (
                       <button
@@ -240,10 +253,10 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
                             </div>
                             <div className={`text-sm mt-1 ${spotsClass}`}>
                               {slot.free} {t.calendar.spotsAvailable}
-                              {!priceLoading && (
+                              {!priceLoading && slotPrice > 0 && (
                                 <span className="text-gray-500 font-normal">
                                   {" "}
-                                  · €{pricePerPerson} {t.calendar.perPerson}
+                                  · €{slotPrice} {t.calendar.perPerson}
                                 </span>
                               )}
                             </div>
@@ -386,10 +399,10 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack }) => {
             </div>
             <div className="text-right">
               <div className="text-xl font-bold text-green-800">
-                {t.calendar.total} €{pricePerPerson * participants}
+                {t.calendar.total} €{selectedPrice * participants}
               </div>
               <div className="text-xs text-gray-500">
-                {participants} × €{pricePerPerson}
+                {participants} × €{selectedPrice}
               </div>
             </div>
           </div>

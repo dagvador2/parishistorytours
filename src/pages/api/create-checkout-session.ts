@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import Stripe from "stripe";
+import { fetchActivePrice, isTourSlug } from "../../lib/stripe-products";
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-07-30.basil",
@@ -11,27 +12,19 @@ export const POST: APIRoute = async ({ request }) => {
       await request.json();
     const langPrefix = locale === 'fr' ? '/fr' : '';
 
-    const productIdLeft = import.meta.env.STRIPE_PRODUCT_ID!;
-    const productIdRight = import.meta.env.STRIPE_PRODUCT_ID_RIGHT!;
-
-    // Récupérer le prix actif du produit
-    const prices = await stripe.prices.list({
-      product: tour === "left-bank" ? productIdLeft : productIdRight,
-      active: true,
-      limit: 1,
-    });
-
-    if (!prices.data.length) {
-      throw new Error("No active price found for product");
+    if (!isTourSlug(tour)) {
+      return new Response(
+        JSON.stringify({ error: `Invalid tour: ${tour}` }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    const activePrice = prices.data[0];
+    const activePrice = await fetchActivePrice(tour);
 
-    // Créer une session Stripe Checkout avec le prix du produit
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: activePrice.id, // Utiliser l'ID du prix actif
+          price: activePrice.id,
           quantity: participants,
         },
       ],

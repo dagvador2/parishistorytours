@@ -2,6 +2,7 @@
 import { useTranslations } from '../../i18n/utils';
 import BookTour from '../BookTour.astro';
 import type { TourConfig } from '../../data/tours';
+import { fetchActivePrice, isTourSlug } from '../../lib/stripe-products';
 
 interface Props {
   tour: TourConfig;
@@ -17,10 +18,24 @@ const duration =
   variant === 'general'  ? t('quiet.tour.booking.durationValueGeneral')  :
   variant === 'foodWine' ? t('quiet.tour.booking.durationValueFoodWine') :
                            t('quiet.tour.booking.durationValueWW2');
-const price =
+
+// Price comes from the live Stripe product for this tour.
+// Fallback values match what's currently configured in Stripe.
+const fallbackPrice =
   variant === 'general'  ? '45 €' :
   variant === 'foodWine' ? '95 €' :
                            '49 €';
+let price = fallbackPrice;
+if (isTourSlug(tour.slug)) {
+  try {
+    const stripePrice = await fetchActivePrice(tour.slug);
+    if (stripePrice.unit_amount != null) {
+      price = `${stripePrice.unit_amount / 100} €`;
+    }
+  } catch (err) {
+    console.warn(`[BookingCard] Stripe price lookup failed for ${tour.slug}, using fallback ${fallbackPrice}.`, err);
+  }
+}
 
 // Partner row — filter out missing URLs
 const partnerItems = [

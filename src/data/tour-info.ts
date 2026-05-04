@@ -24,6 +24,22 @@ export const tourInfo: Record<string, TourInfo> = {
     stopsFR: 'Pont Alexandre III · Concorde · Vendôme',
     thumb: '/photos/thumbnails/vendome_thumb.webp',
   },
+  'general-history': {
+    slug: 'general-history',
+    nameEN: 'General History Tour',
+    nameFR: 'Visite Histoire Générale',
+    stopsEN: 'Cluny · Île de la Cité · Tuileries',
+    stopsFR: 'Cluny · Île de la Cité · Tuileries',
+    thumb: '/photos/general_history/stop2_ile_cite.webp',
+  },
+  'food-wine': {
+    slug: 'food-wine',
+    nameEN: 'Nourritour · Food & Wine',
+    nameFR: 'Nourritour · Food & Wine',
+    stopsEN: 'Madlen · Chataigner · Thielen · Flaconneurs',
+    stopsFR: 'Madlen · Chataigner · Thielen · Flaconneurs',
+    thumb: '/photos/food_and_wine/nourritour-fromages-tomme-chevre-fromagerie.webp',
+  },
 };
 
 export const getTourName = (slug: string, lang: string): string => {

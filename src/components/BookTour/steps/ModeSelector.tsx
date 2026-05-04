@@ -6,24 +6,48 @@ interface Props {
   onSelectPrivate: () => void;
 }
 
+const TOUR_SLUGS = ["left-bank", "right-bank", "general-history", "food-wine"] as const;
+
 const ModeSelector: React.FC<Props> = ({ onSelectRegular, onSelectPrivate }) => {
-  const { t } = useBooking();
+  const { t, booking } = useBooking();
   const [pricePerPerson, setPricePerPerson] = useState<number | null>(null);
+  const [isMinPrice, setIsMinPrice] = useState(false);
 
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const res = await fetch("/api/stripe-price?tour=left-bank");
-        if (res.ok) {
-          const data = await res.json();
-          setPricePerPerson(data.unit_amount / 100);
+        // If a tour is pre-selected (we're embedded on a tour page),
+        // show that exact tour's price. Otherwise show the cheapest.
+        if (booking.tour) {
+          const res = await fetch(`/api/stripe-price?tour=${booking.tour}`);
+          if (res.ok) {
+            const data = await res.json();
+            setPricePerPerson(data.unit_amount / 100);
+            setIsMinPrice(false);
+          }
+          return;
         }
+        const results = await Promise.all(
+          TOUR_SLUGS.map(async (slug) => {
+            const res = await fetch(`/api/stripe-price?tour=${slug}`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            return data.unit_amount / 100 as number;
+          })
+        );
+        const amounts = results.filter((n): n is number => typeof n === "number");
+        if (amounts.length === 0) {
+          setPricePerPerson(null);
+          return;
+        }
+        setPricePerPerson(Math.min(...amounts));
+        setIsMinPrice(true);
       } catch {
         setPricePerPerson(null);
       }
     };
     fetchPrice();
-  }, []);
+  }, [booking.tour]);
 
   const cards = [
     {
@@ -36,7 +60,9 @@ const ModeSelector: React.FC<Props> = ({ onSelectRegular, onSelectPrivate }) => 
       title: t.modeSelector?.joinTour || "Join a scheduled tour",
       description: t.modeSelector?.joinDesc || "See upcoming dates & book your spot. Small group, max 10 people.",
       price: pricePerPerson
-        ? `${t.modeSelector?.from || "From"} €${pricePerPerson}/${t.person}`
+        ? isMinPrice
+          ? `${t.modeSelector?.from || "From"} €${pricePerPerson}/${t.person}`
+          : `€${pricePerPerson}/${t.person}`
         : null,
       onClick: onSelectRegular,
     },

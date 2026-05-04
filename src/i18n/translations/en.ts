@@ -661,6 +661,7 @@ export const en = {
       leftBankTour: "WW2 Left Bank Tour",
       rightBankTour: "WW2 Right Bank Tour",
       generalHistoryTour: "General History Tour",
+      foodWineTour: "Nourritour · Food & Wine",
       confirmedMessage: "Your booking is confirmed! We will send you meeting point details 24 hours before the tour.",
       requestMessage: "We will confirm availability and contact you within 24 hours.",
       onSiteMessage: "Your booking is confirmed! You will pay on the day of the tour. We will send you meeting point details 24 hours before.",
