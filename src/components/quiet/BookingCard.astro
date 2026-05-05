@@ -2,7 +2,6 @@
 import { useTranslations } from '../../i18n/utils';
 import BookTour from '../BookTour.astro';
 import type { TourConfig } from '../../data/tours';
-import { fetchActivePrice, isTourSlug } from '../../lib/stripe-products';
 
 interface Props {
   tour: TourConfig;
@@ -19,23 +18,13 @@ const duration =
   variant === 'foodWine' ? t('quiet.tour.booking.durationValueFoodWine') :
                            t('quiet.tour.booking.durationValueWW2');
 
-// Price comes from the live Stripe product for this tour.
-// Fallback values match what's currently configured in Stripe.
+// Initial price is a fallback that matches the current Stripe configuration.
+// The real price is fetched on the client at runtime so a Stripe change is
+// reflected immediately without redeploying.
 const fallbackPrice =
   variant === 'general'  ? '45 €' :
   variant === 'foodWine' ? '95 €' :
                            '49 €';
-let price = fallbackPrice;
-if (isTourSlug(tour.slug)) {
-  try {
-    const stripePrice = await fetchActivePrice(tour.slug);
-    if (stripePrice.unit_amount != null) {
-      price = `${stripePrice.unit_amount / 100} €`;
-    }
-  } catch (err) {
-    console.warn(`[BookingCard] Stripe price lookup failed for ${tour.slug}, using fallback ${fallbackPrice}.`, err);
-  }
-}
 
 // Partner row — filter out missing URLs
 const partnerItems = [
@@ -58,7 +47,7 @@ const partnerItems = [
       <dl class="qbc__facts">
         <div>
           <dt>{t('quiet.tour.booking.fromLabel')}</dt>
-          <dd><b>{price}</b><span>{t('quiet.tour.booking.perPerson')}</span></dd>
+          <dd><b data-stripe-price={tour.slug}>{fallbackPrice}</b><span>{t('quiet.tour.booking.perPerson')}</span></dd>
         </div>
         <div>
           <dt>{t('quiet.tour.booking.durationLabel')}</dt>
@@ -104,6 +93,25 @@ const partnerItems = [
     )}
   </div>
 </section>
+
+<script>
+  // Refresh the displayed price from the live Stripe product on every visit.
+  // This way a Stripe price change is visible immediately (no redeploy needed).
+  document.querySelectorAll<HTMLElement>('[data-stripe-price]').forEach(async (el) => {
+    const tour = el.dataset.stripePrice;
+    if (!tour) return;
+    try {
+      const res = await fetch(`/api/stripe-price?tour=${encodeURIComponent(tour)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (typeof data?.unit_amount === 'number') {
+        el.textContent = `${data.unit_amount / 100} €`;
+      }
+    } catch {
+      // Keep SSR fallback on network/Stripe error.
+    }
+  });
+</script>
 
 <style>
   .qbc {
