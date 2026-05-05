@@ -8,11 +8,13 @@ interface Props {
   /** When rendered on a tour page, match the bar to that tour's price/duration.
    *  Homepage (default) keeps the lowest "from" price as an entry-point signal. */
   variant?: Variant;
+  /** Tour slug — when provided, the price is refreshed live from Stripe on load. */
+  slug?: string;
 }
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
-const { href = '#book', variant = 'default' } = Astro.props;
+const { href = '#book', variant = 'default', slug } = Astro.props;
 
 const priceKey =
   variant === 'ww2'      ? 'quiet.mobileBooking.priceWW2'
@@ -29,7 +31,7 @@ const metaKey =
 
 <div class="quiet-mbb">
   <div class="quiet-mbb__price">
-    <b>{t(priceKey)}</b>
+    <b data-stripe-price={slug}>{t(priceKey)}</b>
     <span>{t(metaKey)}</span>
   </div>
   <a href={href} class="quiet-mbb__cta">{t('quiet.mobileBooking.cta')}</a>

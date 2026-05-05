@@ -95,8 +95,9 @@ const partnerItems = [
 </section>
 
 <script>
-  // Refresh the displayed price from the live Stripe product on every visit.
-  // This way a Stripe price change is visible immediately (no redeploy needed).
+  // Refresh any element marked [data-stripe-price="<tour-slug>"] with the live
+  // Stripe price for that tour. If the existing text already contains a number
+  // (e.g. "From €49"), only that number is swapped — surrounding labels stay.
   document.querySelectorAll<HTMLElement>('[data-stripe-price]').forEach(async (el) => {
     const tour = el.dataset.stripePrice;
     if (!tour) return;
@@ -104,9 +105,12 @@ const partnerItems = [
       const res = await fetch(`/api/stripe-price?tour=${encodeURIComponent(tour)}`);
       if (!res.ok) return;
       const data = await res.json();
-      if (typeof data?.unit_amount === 'number') {
-        el.textContent = `${data.unit_amount / 100} €`;
-      }
+      if (typeof data?.unit_amount !== 'number') return;
+      const amount = data.unit_amount / 100;
+      const original = el.textContent || '';
+      el.textContent = /\d/.test(original)
+        ? original.replace(/\d+(?:[.,]\d+)?/, String(amount))
+        : `${amount} €`;
     } catch {
       // Keep SSR fallback on network/Stripe error.
     }
