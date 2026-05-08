@@ -129,7 +129,7 @@ export const fr = {
       },
       pairing: {
         title: "L'accord",
-        description: "Cinq planches dans une cave de la rue de Maubeuge. Regarder · Sentir · Goûter, un mot-clé par accord, et la chimie paysanne devenue art de vivre — pourquoi un Sancerre va avec un Crottin, pourquoi un Bordeaux appelle un pain de campagne."
+        description: "Quatre planches dans une cave de la rue de Maubeuge. Regarder · Sentir · Goûter, un mot-clé par accord, et la chimie paysanne devenue art de vivre — pourquoi un Sancerre va avec un Crottin, pourquoi un Bordeaux appelle un pain de campagne."
       }
     },
     rightBank: {
@@ -242,7 +242,7 @@ export const fr = {
       introduction: "À travers le 9e, la fourchette en main",
       quote: "Pour connaître Paris, il faut le goûter — un artisan à la fois.",
       quoteAuthor: "Clément & Amélie",
-      summary: "Le Nourritour se fait en deux mouvements, sur trois heures. D'abord une heure et demie à arpenter les passages couverts et la rue des Martyrs, en passant chez quatre artisans — madeleines, fromage, charcuterie, vin — pour faire les courses. Puis une heure et demie chez un caviste, autour de cinq planches progressives qui nous font traverser la France : Loire, Bourgogne, Beaujolais, Bordeaux, Sauternes. Guidé à deux — un historien de cœur, une sommelière de formation.",
+      summary: "Le Nourritour se fait en deux mouvements, sur trois heures. D'abord une heure et demie à arpenter les passages couverts et la rue des Martyrs, en passant chez quatre artisans — madeleines, fromage, charcuterie, vin — pour faire les courses. Puis une heure et demie chez un caviste, autour de quatre planches progressives qui nous font traverser la France : Loire, Bourgogne, Bordeaux, Sauternes. Guidé à deux — un historien de cœur, une passionnée de vin.",
       didYouKnow: {
         title: "Le saviez-vous ?",
         facts: [
@@ -268,7 +268,7 @@ export const fr = {
         },
         stop4: {
           title: "Les Flaconneurs — Dégustation",
-          description: "La cave, rue de Maubeuge, où tout se rassemble. Cinq planches progressives — Fraîcheur, Onctuosité, Fraîcheur Rouge, Puissance, Gourmandise — un mot-clé par vin, les trois gestes (regarder, sentir, goûter), et un quiz qui traverse l'heure. Au dernier verre, vous aurez vos propres mots pour dire ce que vous buvez."
+          description: "La cave, rue de Maubeuge, où tout se rassemble. Quatre planches progressives — Fraîcheur, Onctuosité, Puissance, Gourmandise — un mot-clé par vin, les trois gestes (regarder, sentir, goûter), et un quiz qui traverse l'heure. Au dernier verre, vous aurez vos propres mots pour dire ce que vous buvez."
         }
       }
     },
@@ -597,7 +597,7 @@ export const fr = {
     },
     foodWine: {
       title: "Nourritour — Visite food & wine à Paris | Paris History Tours",
-      description: "Visite à pied food & wine de 3 heures dans le 9e — passages couverts, rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin) et cinq planches de dégustation. Guidé à deux."
+      description: "Visite à pied food & wine de 3 heures dans le 9e — passages couverts, rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin) et quatre planches de dégustation. Guidé à deux."
     },
     keyFigures: {
       title: "À propos de Paris History Tours - Notre Guide & Parcours",
@@ -789,7 +789,7 @@ export const fr = {
         foodWineNumeral: "IV",
         foodWineEra: "9e arrondissement · Paris",
         foodWineTitle: "Nourritour",
-        foodWineDesc: "Trois heures, deux guides, une fourchette. Les passages couverts et la rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin), et cinq planches qui traversent la France de la Loire au Sauternes.",
+        foodWineDesc: "Trois heures, deux guides, une fourchette. Les passages couverts et la rue des Martyrs, quatre artisans (madeleines, fromage, charcuterie, vin), et quatre planches qui traversent la France de la Loire au Sauternes.",
         foodWineStopsValue: "4",
         foodWineStopsLabel: "Artisans",
         foodWineDurationValue: "3 h",
@@ -827,7 +827,7 @@ export const fr = {
             s1: "Les madeleines et la première carte gastronomique.",
             s2: "1 200 fromages français, 46 AOP.",
             s3: "Charcuterie depuis 1475 — une région par planche.",
-            s4: "Cinq planches de vins, de la Loire au Sauternes."
+            s4: "Quatre planches de vins, de la Loire au Sauternes."
           }
         }
       },
@@ -908,7 +908,7 @@ export const fr = {
         actRevolutionGeneral: "Acte III · 1789 — 1791",
         actStoryFoodWine: "Acte I · Les passages et la rue",
         actTerroirFoodWine: "Acte II · Quatre artisans",
-        actPairingFoodWine: "Acte III · Cinq planches"
+        actPairingFoodWine: "Acte III · Quatre planches"
       },
       stops: {
         kicker: "Sur le terrain",
@@ -957,14 +957,14 @@ export const fr = {
       coGuide: {
         kicker: "Vos guides",
         title: "Guidé à deux.",
-        subtitle: "C'est la seule visite Paris History Tours qu'on guide à deux. Pour la table il faut un conteur ; pour le vin il faut une sommelière. Il nous faut les deux.",
+        subtitle: "C'est la seule visite Paris History Tours qu'on guide à deux. Pour la table il faut un conteur ; pour le vin il faut une passionnée. Il nous faut les deux.",
         clement: {
           role: "Conteur des rues",
           bio: "Parisien d'adoption, six ans dans la ville. Sur le Nourritour, le conteur prend la première heure — les passages couverts, la rue des Martyrs, l'histoire des quatre artisans et la manière dont Paris a appris à manger."
         },
         amelie: {
-          role: "Sommelière de cave",
-          bio: "Amélie Leynier — parisienne d'adoption, fille de vignerons bordelais. Elle a grandi dans les chais du Médoc avant que Paris ne la retienne. Sur le Nourritour, elle guide l'heure de dégustation — cinq planches, un mot-clé par vin, une chimie paysanne devenue art de vivre."
+          role: "Passionnée de vin",
+          bio: "Amélie Leynier — parisienne d'adoption, fille de vignerons bordelais. Elle a grandi dans les chais du Médoc avant que Paris ne la retienne. Sur le Nourritour, elle guide l'heure de dégustation — quatre planches, un mot-clé par vin, une chimie paysanne devenue art de vivre."
         }
       },
       foodWine: {
@@ -990,7 +990,7 @@ export const fr = {
           flaconneurs: {
             name: "Les Flaconneurs",
             address: "Rue de Maubeuge · Paris 9",
-            blurb: "Notre cave de dégustation. Cinq planches — Loire, Bourgogne, Beaujolais, Bordeaux, Sauternes — construites avec les courses du matin."
+            blurb: "Notre cave de dégustation. Quatre planches — Loire, Bourgogne, Bordeaux, Sauternes — construites avec les courses du matin."
           },
           visit: "Voir sur Instagram"
         }

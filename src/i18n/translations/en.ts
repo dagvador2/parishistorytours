@@ -129,7 +129,7 @@ export const en = {
       },
       pairing: {
         title: "The Pairing",
-        description: "Five flights at a wine cellar on rue de Maubeuge. Look · Smell · Taste, one keyword per pairing, and a rural chemistry of survival turned art — why a Sancerre goes with a Crottin, why a Bordeaux needs a crusty bread."
+        description: "Four flights at a wine cellar on rue de Maubeuge. Look · Smell · Taste, one keyword per pairing, and a rural chemistry of survival turned art — why a Sancerre goes with a Crottin, why a Bordeaux needs a crusty bread."
       }
     },
     rightBank: {
@@ -242,7 +242,7 @@ export const en = {
       introduction: "Through the 9th, fork in hand",
       quote: "To know Paris, you have to taste it — one artisan at a time.",
       quoteAuthor: "Clément & Amélie",
-      summary: "Nourritour is a three-hour tour in two movements. First, about an hour and a half walking the covered passages and the rue des Martyrs, stopping at four artisans — madeleines, cheese, charcuterie, wine — to buy what we'll taste together. Then an hour and a half at a wine cellar, tasting five pairings that walk us across France: Loire, Burgundy, Beaujolais, Bordeaux, Sauternes. Guided in pairs — one historian-at-heart, one sommelier-at-heart.",
+      summary: "Nourritour is a three-hour tour in two movements. First, about an hour and a half walking the covered passages and the rue des Martyrs, stopping at four artisans — madeleines, cheese, charcuterie, wine — to buy what we'll taste together. Then an hour and a half at a wine cellar, tasting four pairings that walk us across France: Loire, Burgundy, Bordeaux, Sauternes. Guided in pairs — one historian-at-heart, one wine-enthusiast-at-heart.",
       didYouKnow: {
         title: "Did you know?",
         facts: [
@@ -268,7 +268,7 @@ export const en = {
         },
         stop4: {
           title: "Les Flaconneurs — Wine Tasting",
-          description: "The cellar on rue de Maubeuge where everything comes together. Five flights in progression — Fraîcheur, Onctuosité, Fraîcheur Rouge, Puissance, Gourmandise — one keyword per wine, the three gestures (look, smell, taste), and a quiz running through the hour. By the last glass, you'll hold your own words for what you're drinking."
+          description: "The cellar on rue de Maubeuge where everything comes together. Four flights in progression — Fraîcheur, Onctuosité, Puissance, Gourmandise — one keyword per wine, the three gestures (look, smell, taste), and a quiz running through the hour. By the last glass, you'll hold your own words for what you're drinking."
         }
       }
     },
@@ -597,7 +597,7 @@ export const en = {
     },
     foodWine: {
       title: "Nourritour — Food & Wine Walking Tour in Paris | Paris History Tours",
-      description: "A 3-hour food and wine walking tour through the 9th — covered passages, rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine) and five tasting flights. Guided by two."
+      description: "A 3-hour food and wine walking tour through the 9th — covered passages, rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine) and four tasting flights. Guided by two."
     },
     keyFigures: {
       title: "About Paris History Tours - Our Guide & Journey",
@@ -789,7 +789,7 @@ export const en = {
         foodWineNumeral: "IV",
         foodWineEra: "9th arrondissement · Paris",
         foodWineTitle: "Nourritour",
-        foodWineDesc: "Three hours, two guides, one fork. Covered passages and the rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine), and a five-flight tasting that walks you across France from the Loire to Sauternes.",
+        foodWineDesc: "Three hours, two guides, one fork. Covered passages and the rue des Martyrs, four artisans (madeleines, cheese, charcuterie, wine), and a four-flight tasting that walks you across France from the Loire to Sauternes.",
         foodWineStopsValue: "4",
         foodWineStopsLabel: "Artisans",
         foodWineDurationValue: "3h",
@@ -827,7 +827,7 @@ export const en = {
             s1: "Madeleines and the first gastronomic map of France.",
             s2: "1,200 French cheeses, 46 protected by AOP.",
             s3: "Charcuterie since 1475 — one region per flight.",
-            s4: "Five wine flights, from the Loire to Sauternes."
+            s4: "Four wine flights, from the Loire to Sauternes."
           }
         }
       },
@@ -908,7 +908,7 @@ export const en = {
         actRevolutionGeneral: "Act III · 1789 — 1791",
         actStoryFoodWine: "Act I · The Arcades & the Street",
         actTerroirFoodWine: "Act II · Four Artisans",
-        actPairingFoodWine: "Act III · Five Flights"
+        actPairingFoodWine: "Act III · Four Flights"
       },
       stops: {
         kicker: "On the ground",
@@ -957,14 +957,14 @@ export const en = {
       coGuide: {
         kicker: "Your guides",
         title: "Guided by two.",
-        subtitle: "This is the only Paris History Tour we lead together. Food needs a storyteller; wine needs a sommelier. It takes us both.",
+        subtitle: "This is the only Paris History Tour we lead together. Food needs a storyteller; wine needs a wine enthusiast. It takes us both.",
         clement: {
           role: "Historian of the streets",
           bio: "Parisian by choice, six years in. For the Nourritour, the storyteller takes the first hour — the covered passages, the rue des Martyrs, the history of four artisans and how Paris learned to eat."
         },
         amelie: {
-          role: "Sommelière of the cellar",
-          bio: "Amélie Leynier — Parisian by adoption, daughter of Bordeaux winemakers. She grew up in the cellars of the Médoc before Paris caught her. On the Nourritour, she leads the tasting hour — five flights, one keyword per wine, a rural chemistry turned art."
+          role: "Wine enthusiast of the cellar",
+          bio: "Amélie Leynier — Parisian by adoption, daughter of Bordeaux winemakers. She grew up in the cellars of the Médoc before Paris caught her. On the Nourritour, she leads the tasting hour — four flights, one keyword per wine, a rural chemistry turned art."
         }
       },
       foodWine: {
@@ -990,7 +990,7 @@ export const en = {
           flaconneurs: {
             name: "Les Flaconneurs",
             address: "Rue de Maubeuge · Paris 9",
-            blurb: "Our tasting cellar. Five flights — Loire, Burgundy, Beaujolais, Bordeaux, Sauternes — with boards built from the morning's shopping."
+            blurb: "Our tasting cellar. Four flights — Loire, Burgundy, Bordeaux, Sauternes — with boards built from the morning's shopping."
           },
           visit: "Visit on Instagram"
         }
