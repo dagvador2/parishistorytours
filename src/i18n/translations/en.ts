@@ -716,7 +716,37 @@ export const en = {
       maps: "Google Maps",
       instagram: "Instagram",
       copyright: "Paris History Tours · All Rights Reserved",
-      alsoOn: "Also on GetYourGuide · Viator · TripAdvisor · Paris je t'aime"
+      alsoOn: "Also on GetYourGuide · Viator · TripAdvisor · Paris je t'aime",
+      partners: "Partners"
+    },
+    partners: {
+      hero: {
+        kicker: "Recommendations",
+        title: "Partners & guides we recommend in Paris",
+        subtitle: "When my visitors ask for experiences beyond a history walk — food, art, day trips, photo walks — these are the independent operators I send them to. Each one is someone I know, whose work I respect, and whose guests come back satisfied."
+      },
+      list: {
+        visit: "Visit site"
+      },
+      criteria: {
+        kicker: "How I choose",
+        title: "Why these names, and not others",
+        items: {
+          met: {
+            title: "I've actually met them",
+            body: "No anonymous affiliate links. Every operator on this page is someone I've met in person, talked craft with, or whose tours I've experienced. If a partner stops delivering, they come off the page."
+          },
+          quality: {
+            title: "Small-group, story-led",
+            body: "Like mine, these are private or small-group experiences built around a real story or a real craft — not coach tours, not 50-person walks, not generic tickets."
+          },
+          independent: {
+            title: "Independent operators",
+            body: "I only feature owner-led businesses and freelance guides. You're booking directly with the person who designs and runs the experience."
+          }
+        },
+        note: "Listing a partner here is editorial — these are recommendations, not paid placements. Paris History Tours receives no commission on bookings made through these links."
+      }
     },
     home: {
       hero: {

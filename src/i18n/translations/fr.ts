@@ -716,7 +716,37 @@ export const fr = {
       maps: "Google Maps",
       instagram: "Instagram",
       copyright: "Paris History Tours · Tous droits réservés",
-      alsoOn: "Également sur GetYourGuide · Viator · TripAdvisor · Paris je t'aime"
+      alsoOn: "Également sur GetYourGuide · Viator · TripAdvisor · Paris je t'aime",
+      partners: "Partenaires"
+    },
+    partners: {
+      hero: {
+        kicker: "Recommandations",
+        title: "Partenaires & guides que je recommande à Paris",
+        subtitle: "Quand mes visiteurs cherchent autre chose qu'une visite historique — gastronomie, art, excursions, balades photo — ce sont vers ces opérateurs indépendants que je les envoie. Des gens que je connais, dont je respecte le travail, et dont les voyageurs reviennent satisfaits."
+      },
+      list: {
+        visit: "Voir le site"
+      },
+      criteria: {
+        kicker: "Mes critères",
+        title: "Pourquoi ces noms, et pas d'autres",
+        items: {
+          met: {
+            title: "Je les ai rencontrés",
+            body: "Pas de liens d'affiliation anonymes. Chaque opérateur listé ici est quelqu'un que j'ai croisé, avec qui j'ai parlé métier, ou dont j'ai expérimenté les visites. Si un partenaire baisse en qualité, il sort de la page."
+          },
+          quality: {
+            title: "Petits groupes, vraies histoires",
+            body: "Comme les miennes, ces expériences sont privées ou en petit comité, construites autour d'une vraie histoire ou d'un vrai savoir-faire — pas de cars touristiques, pas de visites à 50 personnes, pas de billets génériques."
+          },
+          independent: {
+            title: "Opérateurs indépendants",
+            body: "Uniquement des entreprises tenues par leur fondateur et des guides freelances. Vous réservez directement avec la personne qui conçoit et anime l'expérience."
+          }
+        },
+        note: "Cette page relève d'un choix éditorial — ce sont des recommandations, pas du placement payé. Paris History Tours ne touche aucune commission sur les réservations effectuées via ces liens."
+      }
     },
     home: {
       hero: {

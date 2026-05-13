@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useTranslations } from '../i18n/utils';
+
+import TopBar from '../components/quiet/TopBar.astro';
+import Nav from '../components/quiet/Nav.astro';
+import MobileBookingBar from '../components/quiet/MobileBookingBar.astro';
+import PartnersHero from '../components/quiet/PartnersHero.astro';
+import PartnersList from '../components/quiet/PartnersList.astro';
+import PartnersCriteria from '../components/quiet/PartnersCriteria.astro';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const title = lang === 'fr'
+  ? 'Partenaires & recommandations — Paris History Tours'
+  : 'Partners & recommendations — Paris History Tours';
+
+const description = lang === 'fr'
+  ? 'Les tour-opérateurs, guides et créateurs d\'expériences indépendants à Paris que je recommande à mes propres clients.'
+  : 'The independent tour operators, guides and experience makers in Paris I recommend to my own visitors.';
+---
+
+<BaseLayout title={title} description={description} theme="quiet">
+  <TopBar />
+  <Nav />
+  <main>
+    <PartnersHero />
+    <PartnersList />
+    <PartnersCriteria />
+  </main>
+  <MobileBookingBar />
+</BaseLayout>

@@ -1,0 +1,180 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+// Add a new partner here. Keep logos in /public/logos/partners/.
+// Use a real editorial description — not a one-liner ad.
+const partners = [
+  {
+    name: 'Txango Tours',
+    // TODO: replace with the real logo file once received (PNG or SVG, transparent background).
+    // Drop it at /public/logos/partners/txango-tours.png (or .svg) and update the extension below.
+    logo: '/logos/partners/txango-tours.png.placeholder.svg',
+    href: lang === 'fr' ? 'https://txangotours.com/fr/' : 'https://txangotours.com/en/',
+    location: lang === 'fr' ? 'Paris & Versailles' : 'Paris & Versailles',
+    type: lang === 'fr' ? 'Visites en side-car vintage' : 'Vintage sidecar tours',
+    blurb: lang === 'fr'
+      ? "Visites privées de Paris en side-car vintage, par paires strictes — un passager dans le panier, l'autre derrière le pilote. Leurs conducteurs glissent des anecdotes historiques en chemin et couvrent en quelques heures des zones que mes visites à pied n'atteignent pas : tout l'ouest parisien, Montmartre vue d'en bas, et même Versailles. Je les recommande aux voyageurs déjà passés par une vraie visite historique qui veulent une perspective complètement différente sur la ville — et aux couples qui cherchent une première journée vraiment mémorable."
+      : "Private vintage-sidecar tours of Paris run in strict pairs — one guest in the sidecar bucket, the other riding pillion. Their drivers double as guides, dropping in historical context along the way, and in a couple of hours they cover ground my walking tours can't reach: the full west of the city, Montmartre from street level, even Versailles. I send this to repeat visitors who've already done a serious history walk and want a completely different angle on Paris — and to couples after a genuinely memorable first day.",
+  },
+];
+---
+
+<section class="qpartnerslist">
+  <div class="qpartnerslist__inner">
+    <ul class="qpartnerslist__grid">
+      {partners.map((p) => (
+        <li class="qpartner">
+          <a class="qpartner__link" href={p.href} target="_blank" rel="noopener">
+            <div class="qpartner__logo">
+              <img src={p.logo} alt={`${p.name} logo`} loading="lazy" decoding="async" />
+            </div>
+            <div class="qpartner__body">
+              <div class="qpartner__meta">
+                <span class="qpartner__type">{p.type}</span>
+                <span class="qpartner__dot" aria-hidden="true">·</span>
+                <span class="qpartner__location">{p.location}</span>
+              </div>
+              <h3 class="qpartner__name">{p.name}</h3>
+              <p class="qpartner__blurb">{p.blurb}</p>
+              <span class="qpartner__cta">
+                {t('quiet.partners.list.visit')}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .qpartnerslist {
+    background: var(--paper);
+    padding: 72px 32px 88px;
+  }
+  .qpartnerslist__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .qpartnerslist__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .qpartner {
+    background: var(--paper-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+  .qpartner:hover {
+    border-color: var(--ink-2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  }
+  .qpartner__link {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: stretch;
+    text-decoration: none;
+    color: inherit;
+  }
+  .qpartner__logo {
+    background: var(--paper-3);
+    border-right: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    padding: 32px;
+    min-height: 160px;
+  }
+  .qpartner__logo img {
+    max-width: 100%;
+    max-height: 64px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition: filter 160ms ease, opacity 160ms ease;
+  }
+  .qpartner:hover .qpartner__logo img {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  .qpartner__body {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .qpartner__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qpartner__dot { opacity: 0.5; }
+  .qpartner__name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin: 0;
+  }
+  .qpartner__blurb {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 64ch;
+  }
+  .qpartner__cta {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rouge);
+  }
+
+  @media (max-width: 720px) {
+    .qpartnerslist { padding: 48px 20px 64px; }
+    .qpartner__link {
+      grid-template-columns: 1fr;
+    }
+    .qpartner__logo {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      min-height: 140px;
+      padding: 24px;
+    }
+    .qpartner__body { padding: 22px 22px 24px; }
+    .qpartner__name { font-size: 22px; }
+    .qpartner__blurb { font-size: 14px; }
+  }
+</style>
