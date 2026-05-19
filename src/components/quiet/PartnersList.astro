@@ -9,9 +9,7 @@ const t = useTranslations(lang);
 const partners = [
   {
     name: 'Txango Tours',
-    // TODO: replace with the real logo file once received (PNG or SVG, transparent background).
-    // Drop it at /public/logos/partners/txango-tours.png (or .svg) and update the extension below.
-    logo: '/logos/partners/txango-tours.png.placeholder.svg',
+    logo: '/logos/partners/txango-tours.png',
     href: lang === 'fr' ? 'https://txangotours.com/fr/' : 'https://txangotours.com/en/',
     location: lang === 'fr' ? 'Paris & Versailles' : 'Paris & Versailles',
     type: lang === 'fr' ? 'Visites en side-car vintage' : 'Vintage sidecar tours',
@@ -101,7 +99,7 @@ const partners = [
   }
   .qpartner__logo img {
     max-width: 100%;
-    max-height: 64px;
+    max-height: 88px;
     width: auto;
     height: auto;
     object-fit: contain;
