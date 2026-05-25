@@ -29,6 +29,7 @@ export interface BookingLinks {
   tripadvisor?: string;
   parisjetaime?: string;
   tourist?: string;
+  airbnb?: string;
   whatsapp: string;
   email: string;
 }
@@ -142,6 +143,7 @@ export const tours: Record<string, TourConfig> = {
       tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
       parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
       tourist: 'https://tourist.com/p/24194',
+      airbnb: 'https://www.airbnb.fr/experiences/7090570',
       whatsapp: 'https://wa.me/+33620622480',
       email: 'mailto:clement@parishistorytours.com',
     },
@@ -207,6 +209,7 @@ export const tours: Record<string, TourConfig> = {
       tripadvisor: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
       parisjetaime: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
       tourist: 'https://tourist.com/p/24194',
+      airbnb: 'https://www.airbnb.fr/experiences/7090589',
       whatsapp: 'https://wa.me/+33620622480',
       email: 'mailto:clement@parishistorytours.com',
     },
