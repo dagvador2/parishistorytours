@@ -49,7 +49,8 @@ pnpm self-guided:generate --lang fr --section 09-liberation --force   # ignore t
 pnpm self-guided:photos                               # WebP conversion (skips up-to-date files)
 pnpm self-guided:previews --lang both                 # needs 01-intro.mp3
 pnpm self-guided:upload --dry-run                     # what would be pushed
-pnpm self-guided:upload                               # push; unchanged objects are skipped
+pnpm self-guided:upload --lang fr                     # push one language (+ photos); unchanged objects are skipped
+pnpm tsx scripts/self-guided/tools/presign.ts manifest/left-bank-ww2/fr.json --check   # signed URL for a private object
 ```
 
 ### Fixing a sentence

@@ -1,7 +1,7 @@
 /**
  * Upload the generated assets to the private R2 bucket.
  *
- *   pnpm self-guided:upload [--dry-run] [--force] [--only audio,manifest,pdf,photos,preview]
+ *   pnpm self-guided:upload [--dry-run] [--force] [--lang en|fr|both] [--only audio,manifest,pdf,photos,preview]
  *
  * Bucket layout (contract with the webapp):
  *   audio/left-bank-ww2/<lang>/<id>.mp3     manifest/left-bank-ww2/<lang>.json (+ .words.json)
@@ -19,7 +19,7 @@ import { fmtBytes, log } from "./lib/log.ts";
 import { manifestPath, wordsPath } from "./lib/manifest.ts";
 import { listPhotoNames, photoOutputPath } from "./lib/photos.ts";
 import { assertBucket, cacheControlFor, contentTypeFor, md5Hex, putFile, r2Client, r2ConfigFromEnv, remoteEtag } from "./lib/r2.ts";
-import { LANGS, PATHS, R2_KEYS, SECTIONS, pdfMasterPath } from "./lib/sections.ts";
+import { PATHS, R2_KEYS, SECTIONS, parseLangs, pdfMasterPath, type Lang } from "./lib/sections.ts";
 
 type Group = "audio" | "manifest" | "pdf" | "photos" | "preview";
 interface Item {
@@ -28,9 +28,9 @@ interface Item {
   file: string;
 }
 
-function plan(): Item[] {
+function plan(langs: Lang[]): Item[] {
   const items: Item[] = [];
-  for (const lang of LANGS) {
+  for (const lang of langs) {
     for (const s of SECTIONS) items.push({ group: "audio", key: R2_KEYS.audio(lang, s.id), file: resolve(PATHS.audioDir, lang, `${s.id}.mp3`) });
     items.push({ group: "manifest", key: R2_KEYS.manifest(lang), file: manifestPath(lang) });
     items.push({ group: "manifest", key: R2_KEYS.words(lang), file: wordsPath(lang) });
@@ -47,12 +47,13 @@ async function main() {
   const dryRun = args.has("dry-run");
   const force = args.has("force");
   const only = args.get("only")?.split(",").map((s) => s.trim() as Group);
+  const langs = parseLangs(args.get("lang"));
   const cfg = r2ConfigFromEnv();
   const client = r2Client(cfg);
-  log.step(`upload-r2: bucket ${cfg.bucket} @ ${cfg.accountId.slice(0, 6)}…${dryRun ? " | DRY RUN" : ""}${force ? " | FORCE" : ""}${only ? ` | only ${only.join(",")}` : ""}`);
+  log.step(`upload-r2: bucket ${cfg.bucket} @ ${cfg.accountId.slice(0, 6)}…${dryRun ? " | DRY RUN" : ""}${force ? " | FORCE" : ""}${only ? ` | only ${only.join(",")}` : ""} | langs ${langs.join(",")}`);
   await assertBucket(client, cfg.bucket);
 
-  const items = plan().filter((i) => !only || only.includes(i.group));
+  const items = plan(langs).filter((i) => !only || only.includes(i.group));
   let uploaded = 0;
   let skipped = 0;
   let missing = 0;
