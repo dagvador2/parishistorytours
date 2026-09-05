@@ -79,6 +79,13 @@ export default defineConfig({
   vite: {
     // @ts-ignore
     plugins: [tailwindcss()],
+    server: {
+      // Self-guided audioguide: its service worker lives at /self-guided-tour/sw.js but also
+      // controls /fr/self-guided-tour/ (production: same header in vercel.json).
+      headers: { "Service-Worker-Allowed": "/" },
+      // Phone testing through a tunnel (cloudflared / ngrok): Vite 6 blocks unknown hosts by default.
+      allowedHosts: [".trycloudflare.com", ".ngrok-free.app", ".ngrok.app"],
+    },
   },
 
   adapter: vercel({webAnalytics: {enabled: true}}),

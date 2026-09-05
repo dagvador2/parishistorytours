@@ -110,7 +110,8 @@ export default function MapView({ lang, phase, idx, completed, gpsDenied, user, 
     let disposed = false;
     let cleanup: (() => void) | undefined;
     (async () => {
-      const [mod, pm] = await Promise.all([import("maplibre-gl"), import("pmtiles"), import("maplibre-gl/dist/maplibre-gl.css")]);
+      // The stylesheet import must not block the map (Vite dev injects CSS through /@vite/client, absent offline).
+      const [mod, pm] = await Promise.all([import("maplibre-gl"), import("pmtiles"), import("maplibre-gl/dist/maplibre-gl.css").catch(() => undefined)]);
       if (disposed) return;
       const L: typeof maplibregl = mod;
       lib.current = L;

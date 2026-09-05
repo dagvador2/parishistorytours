@@ -25,9 +25,12 @@ const { lang, title } = Astro.props;
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="WWII Left Bank" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/self-guided-tour/icon-192.png" />
+    <link rel="manifest" href={lang === "fr" ? "/self-guided-tour/manifest.fr.webmanifest" : "/self-guided-tour/manifest.webmanifest"} />
     <script is:inline>
       // @ts-nocheck
+      // The offline precache lists the resources loaded before the service worker took control (default buffer: 250).
+      if (window.performance && performance.setResourceTimingBufferSize) performance.setResourceTimingBufferSize(2000);
       window.dataLayer = window.dataLayer || [];
       function gtag(){ dataLayer.push(arguments); }
       window.gtag = gtag;

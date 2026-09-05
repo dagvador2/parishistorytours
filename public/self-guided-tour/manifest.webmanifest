@@ -1,0 +1,17 @@
+{
+  "name": "WWII Left Bank · Self-guided tour",
+  "short_name": "Left Bank",
+  "description": "Paris History Tours — WWII & the French Resistance, Left Bank. Self-guided audio walk.",
+  "start_url": "/self-guided-tour/access",
+  "scope": "/self-guided-tour/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F3EC",
+  "theme_color": "#F7F3EC",
+  "lang": "en",
+  "icons": [
+    { "src": "/self-guided-tour/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/self-guided-tour/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/self-guided-tour/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -9,7 +9,7 @@ import { track } from "../../scripts/track";
 import CompleteSheet from "./CompleteSheet";
 import Header from "./Header";
 import MapView from "./MapView";
-import Menu, { type OfflineStatus } from "./Menu";
+import Menu from "./Menu";
 import NextStopCard from "./NextStopCard";
 import PlayerArrived from "./PlayerArrived";
 import PlayerExpanded from "./PlayerExpanded";
@@ -22,6 +22,7 @@ import { loadState, reducer, saveState, type TourState } from "./state";
 import { useAssets } from "./useAssets";
 import { useAudioEngine } from "./useAudioEngine";
 import { useMediaSession } from "./useMediaSession";
+import { useOffline } from "./useOffline";
 import { currentMedia } from "./sync";
 import { useGeolocation } from "./useGeolocation";
 
@@ -35,7 +36,6 @@ export default function App({ lang: urlLang }: Props) {
   const [state, dispatch] = useReducer(reducer, urlLang, (l) => loadState(l));
   const [menuOpen, setMenuOpen] = useState(false);
   const [recenterTick, setRecenterTick] = useState(0);
-  const [offline] = useState<OfflineStatus>({ state: "idle", done: 0, total: 0 });
   const t = strings(state.lang);
   const stop = STOPS[state.idx];
 
@@ -71,6 +71,9 @@ export default function App({ lang: urlLang }: Props) {
   const { assets, error, loading, reload } = useAssets(state.audioLang ?? state.lang);
   const section = assets?.sections[state.idx];
   const narrationNote = assets && assets.lang !== state.lang ? t.narrationFallback : null;
+
+  // Service worker + precache of the whole tour (audio, photos, PDF, basemap) for offline use.
+  const offline = useOffline(assets, urlLang === "fr" ? "/fr/self-guided-tour/" : "/self-guided-tour/");
 
   // Position + compass. When the visitor turned location off in the menu, the watch is released.
   const geo = useGeolocation(!state.gpsDenied);
