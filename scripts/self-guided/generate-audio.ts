@@ -224,13 +224,16 @@ async function main() {
   const sections = args.get("section") ? [sectionById(args.get("section")!)] : SECTIONS;
   const force = args.has("force");
   const dryRun = args.has("dry-run");
-  const cfg = fishConfigFromEnv();
   await assertFfmpeg();
-  log.step(`generate-audio: ${langs.join(",")} x ${sections.map((s) => s.id).join(",")} | model ${cfg.model}, voice ${cfg.voiceId.slice(0, 8)}…, T=${cfg.temperature} top_p=${cfg.topP}${force ? " | FORCE (ignore cache)" : ""}${dryRun ? " | DRY RUN" : ""}`);
+  log.step(`generate-audio: ${langs.join(",")} x ${sections.map((s) => s.id).join(",")}${force ? " | FORCE (ignore cache)" : ""}${dryRun ? " | DRY RUN" : ""}`);
 
   const t0 = Date.now();
   let totalBytes = 0;
+  let lastModel = "";
   for (const lang of langs) {
+    const cfg = fishConfigFromEnv(lang);
+    lastModel = cfg.model;
+    log.info(lang, `model ${cfg.model}, voice ${cfg.voiceId.slice(0, 8)}… (${process.env[`FISH_AUDIO_VOICE_ID_${lang.toUpperCase()}`] ? `FISH_AUDIO_VOICE_ID_${lang.toUpperCase()}` : "FISH_AUDIO_VOICE_ID"}), T=${cfg.temperature} top_p=${cfg.topP}`);
     const fresh: ManifestSection[] = [];
     const freshWords: Record<string, FishWord[]> = {};
     for (const section of sections) {
@@ -245,7 +248,7 @@ async function main() {
     const missing = SECTIONS.filter((s) => !manifest.sections.some((m) => m.id === s.id)).map((s) => s.id);
     log.step(`${lang}: manifest written with ${manifest.sections.length}/9 sections, total ${fmtDuration(manifest.totalDurationSec)}${missing.length ? ` (missing: ${missing.join(", ")})` : ""} -> ${resolve(PATHS.manifestDir, `${lang}.json`)}`);
   }
-  if (!dryRun) log.info("done", `${((Date.now() - t0) / 1000).toFixed(0)} s, ${fmtBytes(totalBytes)} of text synthesized or reused, list cost ${fmtCost(totalBytes, cfg.model)}`);
+  if (!dryRun) log.info("done", `${((Date.now() - t0) / 1000).toFixed(0)} s, ${fmtBytes(totalBytes)} of text synthesized or reused, list cost ${fmtCost(totalBytes, lastModel)}`);
 }
 
 main().catch((e) => {

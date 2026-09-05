@@ -32,3 +32,6 @@ photo-originals/
 # Self-guided tour pipeline — generated assets live on R2, only manifests are versioned
 scripts/self-guided/output/*
 !scripts/self-guided/output/manifest/
+
+# Personal voice recordings used to clone the narration voice (never committed)
+scripts/audio-source/voice-samples/

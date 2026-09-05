@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "product": "left-bank-ww2",
+  "lang": "fr",
+  "generatedAt": "2026-09-05T11:49:16.754Z",
+  "voice": {
+    "provider": "fish-audio",
+    "voiceId": "c1daa68c20e24ec9a918effa663093e8",
+    "model": "s2.1-pro-free"
+  },
+  "totalDurationSec": 56.4,
+  "sections": [
+    {
+      "id": "04-odeon",
+      "index": 3,
+      "audio": "audio/left-bank-ww2/fr/04-odeon.mp3",
+      "durationSec": 56.35,
+      "sourceHash": "7c66e1c5d80c",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Vous êtes maintenant devant le Théâtre de l'Odéon."
+        },
+        {
+          "t": 2.32,
+          "text": "Regardez sur le côté gauche du bâtiment."
+        },
+        {
+          "t": 4.4,
+          "text": "Vous devriez voir une petite plaque commémorative scellée dans la pierre."
+        },
+        {
+          "t": 8,
+          "text": "Cette plaque est dédiée à Jacques Guierre, un combattant des FFI — les Forces Françaises de l'Intérieur, la résistance intérieure —"
+        },
+        {
+          "t": 15.04,
+          "text": "tué sur cette place à l'âge de 20 ans, au matin du 25 août 1944."
+        },
+        {
+          "t": 20.27,
+          "text": "C'est une introduction parfaite à ce qui arrive ensuite."
+        },
+        {
+          "t": 23.15,
+          "text": "Les FFI ne menaient pas une bataille conventionnelle."
+        },
+        {
+          "t": 26.26,
+          "text": "Leur rôle pendant l'insurrection était de gêner les Allemands le plus possible —"
+        },
+        {
+          "t": 29.86,
+          "text": "et surtout, de récolter des renseignements et de les transmettre aux Alliés,"
+        },
+        {
+          "t": 33.7,
+          "text": "pour que les armées française et américaine puissent entrer dans Paris avec une idée de ce qui les attendait."
+        },
+        {
+          "t": 39.09,
+          "text": "Jacques Guierre avait à peine 20 ans."
+        },
+        {
+          "t": 41.33,
+          "text": "Il est mort sur cette place, ce matin-là."
+        },
+        {
+          "t": 43.49,
+          "text": "La plaque est la seule trace qu'il en reste."
+        },
+        {
+          "t": 45.89,
+          "text": "D'ici, continuez la Rue de l'Odéon, puis tournez dans la Rue Monsieur-le-Prince."
+        },
+        {
+          "t": 50.13,
+          "text": "Arrêtez-vous au croisement de la Rue Monsieur-le-Prince et de la Rue de Vaugirard."
+        },
+        {
+          "t": 54.13,
+          "text": "Lancez l'audio de l'arrêt 3 quand vous êtes là."
+        }
+      ],
+      "media": []
+    }
+  ]
+}

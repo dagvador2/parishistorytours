@@ -15,7 +15,7 @@
  * the audio does. Concurrency limit is announced in the
  * `ratelimit-limit-concurrency` header (5 on the starter tier).
  */
-import { requireEnv, optionalEnv } from "./env.ts";
+import { loadEnv, optionalEnv, requireEnv } from "./env.ts";
 import { log } from "./log.ts";
 import { pcmDurationSec } from "./wav.ts";
 
@@ -46,10 +46,17 @@ export interface FishSynthesis {
   requestMs: number;
 }
 
-export function fishConfigFromEnv(): FishConfig {
+/**
+ * One cloned voice per language: a clone trained on French takes reads English
+ * with a heavy French accent (heard on the 04-odeon dry run), so EN uses its
+ * own clone. FISH_AUDIO_VOICE_ID_<LANG> wins, FISH_AUDIO_VOICE_ID is the fallback.
+ */
+export function fishConfigFromEnv(lang?: string): FishConfig {
+  loadEnv();
+  const perLang = lang ? process.env[`FISH_AUDIO_VOICE_ID_${lang.toUpperCase()}`] : undefined;
   return {
     apiKey: requireEnv("FISH_AUDIO_API_KEY"),
-    voiceId: requireEnv("FISH_AUDIO_VOICE_ID"),
+    voiceId: perLang || requireEnv("FISH_AUDIO_VOICE_ID"),
     model: optionalEnv("FISH_AUDIO_MODEL", "s2.1-pro"),
     // Tighter sampling than the 0.7 default: measured on ai-audio-guide to cut
     // hallucinated words / language switches from 5 to 1 per 3 takes.
