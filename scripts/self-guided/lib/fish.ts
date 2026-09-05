@@ -133,8 +133,9 @@ export function letterStream(s: string): string {
   return s.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 }
 
+/** Lexical tokens only: French typography leaves dashes, colons and guillemets as standalone tokens. */
 export function countWords(s: string): number {
-  return s.split(/\s+/).filter(Boolean).length;
+  return s.split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
 }
 
 /**

@@ -27,11 +27,16 @@ test("checkAlignment accepts the real take and rejects drift", () => {
   const p = parseTimestampSse(sse);
   const ok = checkAlignment(text, p.words);
   assert.ok(ok.ok, ok.reason);
-  assert.equal(ok.textWords, 257);
+  assert.equal(ok.textWords, 255); // 257 tokens minus two standalone em dashes
   const truncated = checkAlignment(text, p.words.slice(0, 200));
   assert.equal(truncated.ok, false);
   assert.match(truncated.reason!, /word count drift/);
   assert.equal(checkAlignment(text, []).ok, false);
+});
+
+test("countWords ignores standalone punctuation tokens", async () => {
+  const { countWords } = await import("./fish.ts");
+  assert.equal(countWords("Reynaud — c'est vrai : « Tout est perdu. » Deux ? Trois."), 8);
 });
 
 test("letterStream is tolerant to tokenisation differences", () => {
