@@ -4,7 +4,7 @@
  * next-stop card, recenter FAB) are rendered by the parent as children.
  */
 import { useEffect, useRef } from "react";
-import type maplibregl from "maplibre-gl";
+import type * as maplibregl from "maplibre-gl";
 // MapLibre 6 resolves its worker relative to its own module URL, which breaks
 // once Vite pre-bundles the dependency. Let Vite bundle the worker itself.
 import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
@@ -112,8 +112,7 @@ export default function MapView({ lang, phase, idx, completed, gpsDenied, user, 
     (async () => {
       const [mod, pm] = await Promise.all([import("maplibre-gl"), import("pmtiles"), import("maplibre-gl/dist/maplibre-gl.css")]);
       if (disposed) return;
-      // Vite may expose maplibre as a namespace (named exports) or with a default export depending on the bundling step.
-      const L = ((mod as unknown as { default?: typeof maplibregl }).default ?? mod) as typeof maplibregl;
+      const L: typeof maplibregl = mod;
       lib.current = L;
       L.setWorkerUrl(maplibreWorkerUrl);
       // PMTiles protocol, registered once per page.
