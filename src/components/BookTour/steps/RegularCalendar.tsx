@@ -29,6 +29,14 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
   const [priceLoading, setPriceLoading] = useState(true);
   const [selectedSlot, setSelectedSlot] = useState<SessionSlot | null>(initialSlot);
   const [participants, setParticipants] = useState(2);
+  // Self-guided fallback offer (digital product) — price fetched live, label degrades without it.
+  const [selfGuidedPrice, setSelfGuidedPrice] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/self-guided/price")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => { if (p && typeof p.amountCents === "number") setSelfGuidedPrice(`€${(p.amountCents / 100).toFixed(p.amountCents % 100 ? 2 : 0)}`); })
+      .catch(() => {});
+  }, []);
   const [participantError, setParticipantError] = useState("");
   const [attempted, setAttempted] = useState(false);
   const firstRun = useRef(true);
@@ -426,6 +434,20 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
           {t.validation.chooseSession}
         </p>
       )}
+
+      {/* Self-guided fallback: the main capture point for visitors who find no date */}
+      <div className="mt-8 border border-[var(--border)] bg-[var(--paper-2)] px-4 py-3 text-center" style={r2}>
+        <div className="text-sm text-[var(--ink-2)]">{t.regularCalendar?.selfGuidedTitle || "No date works for you?"}</div>
+        <a
+          href={`${lang === "fr" ? "/fr" : ""}/self-guided-tour`}
+          className="text-sm font-medium text-[var(--rouge)] underline underline-offset-4"
+          onClick={() => track("self_guided_cta_click", { source: "calendar", tour: booking.tour || "" })}
+        >
+          {selfGuidedPrice
+            ? (t.regularCalendar?.selfGuidedCta || "Get the self-guided Left Bank version — {price}").replace("{price}", selfGuidedPrice)
+            : (t.regularCalendar?.selfGuidedCtaNoPrice || "Get the self-guided Left Bank version")}
+        </a>
+      </div>
 
       {/* Navigation */}
       <div className="mt-8 flex items-center gap-4 justify-center">

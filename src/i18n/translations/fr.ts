@@ -341,6 +341,9 @@ export const fr = {
       title: "Choisissez une date et une session",
     },
     regularCalendar: {
+      selfGuidedTitle: "Aucune date ne vous convient ?",
+      selfGuidedCta: "Prenez la version libre Rive Gauche — {price}",
+      selfGuidedCtaNoPrice: "Prenez la version libre Rive Gauche",
       title: "Choisissez une session",
       subtitle: "Sélectionnez une date pour voir les visites disponibles",
       highlightedDates: "Les dates surlignées ont des sessions disponibles.",
@@ -536,6 +539,14 @@ export const fr = {
 
   // FAQ
   faq: {
+    selfGuided: [
+      { question: "Comment fonctionne la visite libre ?", answer: "Après le paiement, vous recevez un email avec un lien personnel. Ouvrez-le sur votre téléphone : une carte montre le parcours et votre position, et la narration démarre quand vous arrivez à chaque étape. Les sous-titres et les photos du guide imprimé suivent l’audio. Le guide PDF est joint à l’email." },
+      { question: "Ai-je besoin d’internet pendant la balade ?", answer: "Non. Ouvrez la page une fois en wifi (à l’hôtel par exemple) et attendez « Prêt pour le hors ligne » : l’audio, les photos et la carte du Quartier latin sont alors stockés sur votre téléphone. Le GPS fonctionne sans données." },
+      { question: "Puis-je l’offrir ?", answer: "Oui. Indiquez l’email du destinataire au paiement : le lien d’accès lui est envoyé. Ou achetez avec votre email et transférez le lien." },
+      { question: "Combien de temps ai-je accès ?", answer: "La webapp est à vous sans limite de temps. Le téléchargement complet (PDF + fichiers audio) est disponible 30 jours après l’achat ; le PDF reste téléchargeable depuis l’application." },
+      { question: "Et si mon téléphone n’a pas de GPS, ou si je refuse la géolocalisation ?", answer: "La visite fonctionne quand même : touchez une étape sur la carte pour lancer sa narration, et suivez les indications de marche du PDF entre les étapes." },
+      { question: "Est-ce disponible en anglais ?", answer: "L’interface, le PDF et le prix incluent les deux langues. La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et apparaîtra automatiquement dans votre visite, sans frais." }
+    ],
     title: "Questions Fréquentes",
     items: [
       {
@@ -695,6 +706,14 @@ export const fr = {
   // tete, pas de suffixe de marque sur la home : Google affiche deja le nom du
   // site. Note et prix viennent de src/data/site.ts, jamais codes en dur ici.
   meta: {
+    selfGuided: {
+      title: "Visite libre WW2 Rive Gauche à Paris, audioguide — 14 €",
+      description: "Faites le tour WW2 Rive Gauche à votre rythme : 9 sections audio racontées par le guide, carte GPS, photos d’archives synchronisées, PDF de 38 pages, mode hors ligne. Un achat, français et anglais."
+    },
+    selfGuidedSuccess: {
+      title: "Paiement reçu — Visite libre",
+      description: "Votre accès à la visite libre est en préparation."
+    },
     home: {
       title: "Visites privées Seconde Guerre mondiale à Paris",
       description: `2 h à pied avec un guide personnel : Occupation, Résistance, Libération. Rive Gauche ou Rive Droite. Dès ${PRICE} € — noté ${RATING}/5 sur ${REVIEW_COUNT} avis Google.`
@@ -1224,5 +1243,69 @@ export const fr = {
         secondary: "Voir les visites"
       }
     }
-  }
+  },
+
+  // Visite libre (produit digital) — page produit, page succès, CTA calendrier
+  selfGuided: {
+    kicker: "Visite libre · Rive Gauche",
+    heroTitle: "Faites le tour à votre rythme",
+    heroSubtitle: "La balade WW2 Rive Gauche en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photos du guide imprimé synchronisées avec la narration.",
+    heroCta: "Prendre la visite libre",
+    facts: { walk: "2 km · environ 90 min", sections: "9 sections audio", langs: "Français et anglais inclus" },
+    honest: {
+      kicker: "Un plan B, dit simplement",
+      title: "Rien ne vaut la balade avec moi.",
+      body: "La visite guidée, c’est le vrai tour : les questions, les détours, les petites histoires humaines que je ne raconte qu’à pied. Mais si aucune date ne colle avec votre séjour, ou si vous préférez marcher à votre rythme, cette version couvre tout l’arc historique, de la chute de Paris en 1940 à la Libération d’août 1944, aux endroits exacts où ça s’est passé.",
+      link: "Voir les dates des visites guidées"
+    },
+    includes: {
+      kicker: "Ce que vous obtenez",
+      title: "Toute la balade, dans la poche",
+      items: [
+        { title: "9 sections racontées", body: "Environ 30 minutes de narration pour 2 km : une introduction, quatre arrêts principaux et quatre courts arrêts entre eux." },
+        { title: "Une carte qui vous guide", body: "Votre position, le parcours, la prochaine étape, sa distance. L’audio démarre quand vous y êtes." },
+        { title: "Des photos d’archives synchronisées", body: "Les photographies du guide imprimé apparaissent au bon moment de la narration, avec leurs légendes." },
+        { title: "Le guide PDF de 38 pages", body: "La version imprimée, avec les indications de marche et toutes les photos, à garder." },
+        { title: "Fonctionne hors ligne", body: "Ouvrez-le une fois en wifi ; toute la visite est ensuite disponible sans données. Un téléchargement complet (PDF + audio) est inclus pendant 30 jours." }
+      ]
+    },
+    voice: {
+      kicker: "Raconté de ma propre voix",
+      title: "Chaque mot est de moi.",
+      body: "J’ai écrit le script à partir des mêmes recherches que les visites guidées, et la narration est ma voix. Ni narrateur de studio, ni audioguide générique de la ville : le même guide, aux mêmes endroits, qui raconte la même histoire.",
+      note: "La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et sera ajoutée à tous les achats sans frais."
+    },
+    preview: {
+      kicker: "Écoutez et regardez avant d’acheter",
+      title: "Trente secondes de l’introduction",
+      audioNote: "Extrait en français.",
+      pdfTitle: "Les trois premières pages du guide",
+      pdfCta: "Ouvrir l’aperçu PDF",
+      audioUnavailable: "Extrait bientôt disponible."
+    },
+    buy: {
+      kicker: "Prendre la visite",
+      title: "Un achat, les deux langues, sans limite de temps",
+      earlyBird: "Prix de lancement",
+      earlyBirdDays: "encore {days} jours",
+      normalPrice: "puis {price}",
+      perPack: "en une fois, pour un voyageur ou tout le groupe",
+      email: "Votre email",
+      emailHint: "Le lien d’accès et le PDF y sont envoyés.",
+      language: "Langue préférée",
+      submit: "Payer {price} et accéder",
+      submitting: "Redirection vers le paiement…",
+      secure: "Paiement sécurisé par Stripe · Envoi immédiat par email",
+      error: "La page de paiement n’a pas pu s’ouvrir. Réessayez ou contactez-moi sur WhatsApp."
+    },
+    success: {
+      kicker: "Paiement reçu",
+      title: "Votre visite arrive",
+      body: "Nous préparons votre lien d’accès personnel et le guide PDF. Vérifiez votre boîte mail (et les spams) dans la minute.",
+      ready: "Votre accès est prêt.",
+      open: "Ouvrir la visite",
+      slow: "C’est plus long que d’habitude. L’email va arriver ; sinon, écrivez à hello@parishistorytours.com.",
+      home: "Retour au site"
+    }
+  },
 };

@@ -11,6 +11,10 @@ Paris History Tours is a specialized walking tour provider in Paris. The guide, 
 - [General History of Paris Tour](https://www.parishistorytours.com/tours/general-history): 1.5-hour walking tour spanning 2,000 years of Paris history. 3 stops: Roman Lutetia (Thermes de Cluny, battle of 52 BC), Viking Siege of 885 (Île de la Cité), French Revolution (Tuileries, Flight to Varennes 1791). Available in English and French. Small groups, max 10 people.
 - [Nourritour — Food & Wine Tour](https://www.parishistorytours.com/tours/food-wine): 3-hour food and wine walking tour through the 9th arrondissement. First half: the covered passages and rue des Martyrs, shopping at four artisans (madeleines, cheese, charcuterie, wine). Second half: a sit-down tasting at a wine shop around four progressive pairing boards travelling across France — Loire, Burgundy, Bordeaux, Sauternes. Co-guided by a historian and a wine enthusiast.
 
+## Self-guided audio tour (digital product)
+
+- [WWII Left Bank Self-Guided Audio Tour](https://www.parishistorytours.com/self-guided-tour): the Left Bank WWII walk as a self-guided mobile web app — 9 audio sections narrated in the guide's own voice, GPS map with the route and stops, archive photos synchronised with the narration, the 38-page PDF guide, offline mode. One purchase (€14, launch price €9) includes English and French, permanent access. Positioned as a complement to the in-person tours for travellers whose dates do not match. French page: https://www.parishistorytours.com/fr/self-guided-tour
+
 ## About
 
 - [About the Guide & Key Figures](https://www.parishistorytours.com/key-figures): Background on the guide Clement Daguet-Schott, research methodology (20+ books, 6 months), participant statistics, and countries represented.

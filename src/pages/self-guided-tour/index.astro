@@ -1,0 +1,309 @@
+---
+/**
+ * Product page of the self-guided tour (chantier C). SSR: the price depends
+ * on the early-bird window and the previews are presigned R2 URLs.
+ * /fr/self-guided-tour rewrites here with locals.lang = "fr".
+ */
+import { Picture } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JsonLd from "../../components/JsonLd.astro";
+import TopBar from "../../components/quiet/TopBar.astro";
+import Nav from "../../components/quiet/Nav.astro";
+import Reviews from "../../components/quiet/Reviews.astro";
+import FAQ from "../../components/quiet/FAQ.astro";
+import { useTranslations } from "../../i18n/utils";
+import { GOOGLE_REVIEWS } from "../../data/site";
+import { formatEUR } from "../../lib/price";
+import { waLink } from "../../lib/whatsapp";
+import { fetchPriceInfo, PRODUCT_SLUG } from "../../lib/self-guided/purchase";
+import { objectExists, sign } from "../../lib/self-guided/r2";
+import pantheon from "../../images/pantheon_de_Paris.webp";
+import guidePhoto from "../../images/guide-photo.webp";
+
+export const prerender = false;
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const prefix = lang === "fr" ? "/fr" : "";
+const sg = (k: string) => t(`selfGuided.${k}`) as string;
+
+// Price: live from Stripe, fallback to the public list prices if Stripe is not configured yet.
+const FALLBACK = { amountCents: 1400, normalAmountCents: 1400, earlyBird: false, daysLeft: 0 };
+let price = FALLBACK;
+let priceLive = false;
+try {
+  const p = await fetchPriceInfo();
+  price = { amountCents: p.amountCents, normalAmountCents: p.normalAmountCents, earlyBird: p.earlyBird, daysLeft: p.daysLeft };
+  priceLive = true;
+} catch (e) {
+  console.warn("[self-guided] price unavailable, using fallback:", e instanceof Error ? e.message : e);
+}
+const eur = (cents: number) => formatEUR(lang, (cents / 100).toFixed(cents % 100 === 0 ? 0 : 2));
+const priceLabel = eur(price.amountCents);
+
+// Previews on R2 (private): signed for 2 h; the page is CDN-cached for 1 h at most.
+let audioPreview: { url: string; lang: "en" | "fr" } | null = null;
+let pdfPreview: string | null = null;
+try {
+  const wanted = `preview/${PRODUCT_SLUG}/${lang}/intro-30s.mp3`;
+  const other = `preview/${PRODUCT_SLUG}/${lang === "fr" ? "en" : "fr"}/intro-30s.mp3`;
+  if (await objectExists(wanted)) audioPreview = { url: await sign(wanted), lang };
+  else if (await objectExists(other)) audioPreview = { url: await sign(other), lang: lang === "fr" ? "en" : "fr" };
+  const pdfKey = `preview/${PRODUCT_SLUG}/${lang}/pdf-preview.pdf`;
+  if (await objectExists(pdfKey)) pdfPreview = await sign(pdfKey);
+} catch (e) {
+  console.warn("[self-guided] previews unavailable:", e instanceof Error ? e.message : e);
+}
+
+const includes = t("selfGuided.includes.items") as { title: string; body: string }[];
+const waHref = waLink(lang === "fr" ? "Bonjour Clément, j’ai une question sur la visite libre Rive Gauche." : "Hi Clément, I have a question about the self-guided Left Bank tour.");
+
+const productJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: lang === "fr" ? "Visite libre WW2 Rive Gauche — audioguide" : "WWII Left Bank Self-Guided Audio Tour",
+  description: t("meta.selfGuided.description"),
+  image: `${Astro.url.origin}/photos/og-default.jpg`,
+  brand: { "@type": "Brand", name: "Paris History Tours" },
+  category: "Audio tour",
+  offers: {
+    "@type": "Offer",
+    url: `${Astro.url.origin}${prefix}/self-guided-tour/`,
+    price: (price.amountCents / 100).toFixed(2),
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: GOOGLE_REVIEWS.ratingValue,
+    bestRating: GOOGLE_REVIEWS.bestRating,
+    ratingCount: GOOGLE_REVIEWS.ratingCount,
+  },
+};
+---
+
+<BaseLayout title={t("meta.selfGuided.title")} description={t("meta.selfGuided.description")} theme="quiet">
+  <JsonLd data={productJsonLd} />
+  <TopBar />
+  <Nav context="tour" book="#buy" />
+
+  <main class="sgp">
+    <!-- Hero -->
+    <section class="sgp-hero">
+      <Picture src={pantheon} alt={lang === "fr" ? "Le Panthéon, Rive Gauche de Paris" : "The Panthéon, Left Bank of Paris"} widths={[640, 960, 1280, 1800]} sizes="100vw" formats={["avif", "webp"]} fallbackFormat="webp" loading="eager" quality={80} class="sgp-hero__img" />
+      <div class="sgp-hero__scrim"></div>
+      <div class="sgp-hero__content">
+        <p class="sgp-kicker sgp-kicker--light">{sg("kicker")}</p>
+        <h1 class="sgp-hero__title">{sg("heroTitle")}</h1>
+        <p class="sgp-hero__subtitle">{sg("heroSubtitle")}</p>
+        <ul class="sgp-hero__facts">
+          <li>{price.earlyBird ? `${priceLabel} · ${sg("buy.earlyBird")}` : priceLabel}</li>
+          <li>{sg("facts.walk")}</li>
+          <li>{sg("facts.sections")}</li>
+          <li>{sg("facts.langs")}</li>
+        </ul>
+        <a href="#buy" class="sgp-btn sgp-btn--primary">{sg("heroCta")}</a>
+      </div>
+    </section>
+
+    <!-- Honest positioning -->
+    <section class="sgp-section sgp-honest">
+      <div class="sgp-inner sgp-inner--narrow">
+        <p class="sgp-kicker">{sg("honest.kicker")}</p>
+        <h2 class="sgp-h2">{sg("honest.title")}</h2>
+        <p class="sgp-body">{sg("honest.body")}</p>
+        <a href={`${prefix}/tours/left-bank/#book`} class="sgp-link">{sg("honest.link")} →</a>
+      </div>
+    </section>
+
+    <!-- What you get -->
+    <section class="sgp-section sgp-section--paper2">
+      <div class="sgp-inner">
+        <p class="sgp-kicker">{sg("includes.kicker")}</p>
+        <h2 class="sgp-h2">{sg("includes.title")}</h2>
+        <ol class="sgp-grid">
+          {includes.map((item, i) => (
+            <li class="sgp-card">
+              <span class="sgp-card__n">{String(i + 1).padStart(2, "0")}</span>
+              <h3 class="sgp-card__title">{item.title}</h3>
+              <p class="sgp-card__body">{item.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Narrated in my own voice -->
+    <section class="sgp-section">
+      <div class="sgp-inner sgp-voice">
+        <div class="sgp-voice__photo">
+          <Picture src={guidePhoto} alt="Clément Daguet-Schott, Paris History Tours" widths={[480, 720, 960]} sizes="(max-width: 900px) 100vw, 40vw" formats={["avif", "webp"]} fallbackFormat="webp" quality={82} loading="lazy" class="sgp-voice__img" />
+        </div>
+        <div class="sgp-voice__text">
+          <p class="sgp-kicker">{sg("voice.kicker")}</p>
+          <h2 class="sgp-h2">{sg("voice.title")}</h2>
+          <p class="sgp-body">{sg("voice.body")}</p>
+          <p class="sgp-note">{sg("voice.note")}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Previews -->
+    <section class="sgp-section sgp-section--paper2">
+      <div class="sgp-inner sgp-previews">
+        <div>
+          <p class="sgp-kicker">{sg("preview.kicker")}</p>
+          <h2 class="sgp-h2">{sg("preview.title")}</h2>
+          {audioPreview ? (
+            <>
+              <audio controls preload="none" class="sgp-audio" src={audioPreview.url} data-track="self_guided_preview_play"></audio>
+              {audioPreview.lang !== lang && <p class="sgp-note">{sg("preview.audioNote")}</p>}
+            </>
+          ) : (
+            <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
+          )}
+        </div>
+        <div>
+          <h3 class="sgp-h3">{sg("preview.pdfTitle")}</h3>
+          {pdfPreview ? (
+            <a href={pdfPreview} target="_blank" rel="noopener" class="sgp-btn sgp-btn--ghost" data-track="self_guided_pdf_preview">{sg("preview.pdfCta")}</a>
+          ) : (
+            <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Buy -->
+    <section id="buy" class="sgp-section sgp-buy">
+      <div class="sgp-inner sgp-inner--narrow">
+        <p class="sgp-kicker">{sg("buy.kicker")}</p>
+        <h2 class="sgp-h2">{sg("buy.title")}</h2>
+        <div class="sgp-price">
+          <div class="sgp-price__amount">{priceLabel}</div>
+          {price.earlyBird && (
+            <div class="sgp-price__early">
+              <span class="sgp-badge">{sg("buy.earlyBird")} · {sg("buy.earlyBirdDays").replace("{days}", String(price.daysLeft))}</span>
+              <span class="sgp-price__normal">{sg("buy.normalPrice").replace("{price}", eur(price.normalAmountCents))}</span>
+            </div>
+          )}
+          <div class="sgp-price__per">{sg("buy.perPack")}</div>
+        </div>
+        <form class="sgp-form" id="sgp-form" novalidate>
+          <label class="sgp-field">
+            <span>{sg("buy.email")}</span>
+            <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="name@example.com" />
+            <small>{sg("buy.emailHint")}</small>
+          </label>
+          <fieldset class="sgp-field sgp-field--lang">
+            <legend>{sg("buy.language")}</legend>
+            <label><input type="radio" name="language" value="en" checked={lang === "en"} /> English</label>
+            <label><input type="radio" name="language" value="fr" checked={lang === "fr"} /> Français</label>
+          </fieldset>
+          <button type="submit" class="sgp-btn sgp-btn--primary sgp-btn--wide" data-label={sg("buy.submit").replace("{price}", priceLabel)} data-busy={sg("buy.submitting")}>
+            {sg("buy.submit").replace("{price}", priceLabel)}
+          </button>
+          <p class="sgp-form__error" id="sgp-error" hidden>{sg("buy.error")} <a href={waHref} rel="noopener">WhatsApp</a></p>
+          <p class="sgp-form__secure">{sg("buy.secure")}</p>
+        </form>
+        {!priceLive && <p class="sgp-note" data-price-fallback>Price shown is the list price.</p>}
+      </div>
+    </section>
+
+    <Reviews />
+    <FAQ itemsKey="faq.selfGuided" />
+  </main>
+</BaseLayout>
+
+<script>
+  import { track } from "../../scripts/track";
+  const form = document.getElementById("sgp-form") as HTMLFormElement | null;
+  const err = document.getElementById("sgp-error");
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button[type=submit]") as HTMLButtonElement;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+    const language = (form.elements.namedItem("language") as RadioNodeList).value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { (form.elements.namedItem("email") as HTMLInputElement).focus(); return; }
+    btn.disabled = true;
+    btn.textContent = btn.dataset.busy || "…";
+    if (err) err.hidden = true;
+    track("begin_checkout_self_guided", { language });
+    try {
+      const res = await fetch("/api/create-checkout-self-guided", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, language }) });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || "no url");
+      window.location.href = data.url;
+    } catch {
+      if (err) err.hidden = false;
+      btn.disabled = false;
+      btn.textContent = btn.dataset.label || "";
+    }
+  });
+</script>
+
+<style>
+  .sgp { background: var(--paper); color: var(--ink); }
+  .sgp-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .sgp-inner--narrow { max-width: 720px; }
+  .sgp-section { padding: 88px 0; }
+  .sgp-section--paper2 { background: var(--paper-2); }
+  .sgp-kicker { font-family: var(--font-sans); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--rouge); margin: 0 0 14px; }
+  .sgp-kicker--light { color: rgba(250,250,247,.85); }
+  .sgp-h2 { font-family: var(--font-display); font-weight: 500; font-size: clamp(28px, 4vw, 40px); line-height: 1.12; margin: 0 0 18px; }
+  .sgp-h3 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0 0 14px; }
+  .sgp-body { font-family: var(--font-sans); font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 20px; max-width: 60ch; }
+  .sgp-note { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: 12px 0 0; }
+  .sgp-link { font-family: var(--font-sans); font-size: 15px; color: var(--rouge); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .sgp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 26px; font-family: var(--font-sans); font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 2px; cursor: pointer; border: 1px solid var(--ink); transition: background .2s, color .2s, border-color .2s; }
+  .sgp-btn--primary { background: var(--ink); color: var(--paper-3); }
+  .sgp-btn--primary:hover { background: var(--rouge); border-color: var(--rouge); }
+  .sgp-btn--ghost { background: transparent; color: var(--ink); }
+  .sgp-btn--ghost:hover { border-color: var(--rouge); color: var(--rouge); }
+  .sgp-btn--wide { width: 100%; min-height: 54px; font-size: 16px; }
+  .sgp-btn[disabled] { opacity: .6; cursor: default; }
+
+  .sgp-hero { position: relative; min-height: min(84vh, 760px); display: flex; align-items: flex-end; color: var(--paper-3); }
+  .sgp-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .sgp-hero__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,26,26,.15) 0%, rgba(26,26,26,.72) 100%); }
+  .sgp-hero__content { position: relative; max-width: 1080px; margin: 0 auto; padding: 120px 24px 64px; width: 100%; }
+  .sgp-hero__title { font-family: var(--font-display); font-weight: 500; font-size: clamp(38px, 6vw, 64px); line-height: 1.05; margin: 0 0 18px; max-width: 14ch; }
+  .sgp-hero__subtitle { font-family: var(--font-sans); font-size: 18px; line-height: 1.55; max-width: 56ch; margin: 0 0 24px; color: rgba(250,250,247,.92); }
+  .sgp-hero__facts { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 0; margin: 0 0 28px; padding: 0; font-family: var(--font-sans); font-size: 14px; }
+  .sgp-hero__facts li { padding-right: 14px; margin-right: 14px; border-right: 1px solid rgba(250,250,247,.4); }
+  .sgp-hero__facts li:last-child { border: 0; }
+  .sgp-hero .sgp-btn--primary { background: var(--paper-3); color: var(--ink); border-color: var(--paper-3); }
+  .sgp-hero .sgp-btn--primary:hover { background: var(--rouge); color: var(--paper-3); border-color: var(--rouge); }
+
+  .sgp-grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .sgp-card { background: var(--paper-3); padding: 28px 24px; }
+  .sgp-card__n { font-family: var(--font-display); font-size: 13px; color: var(--rouge); letter-spacing: .1em; }
+  .sgp-card__title { font-family: var(--font-display); font-weight: 500; font-size: 20px; margin: 10px 0 8px; }
+  .sgp-card__body { font-family: var(--font-sans); font-size: 15px; line-height: 1.6; color: var(--ink-2); margin: 0; }
+
+  .sgp-voice { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: center; }
+  .sgp-voice__img { width: 100%; height: auto; display: block; }
+  @media (max-width: 900px) { .sgp-voice { grid-template-columns: 1fr; gap: 28px; } .sgp-voice__photo { max-width: 420px; } }
+
+  .sgp-previews { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; align-items: end; }
+  .sgp-audio { width: 100%; max-width: 480px; display: block; margin-top: 8px; }
+
+  .sgp-buy { background: var(--paper-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .sgp-price { margin: 8px 0 28px; }
+  .sgp-price__amount { font-family: var(--font-display); font-weight: 500; font-size: 52px; line-height: 1; }
+  .sgp-price__early { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 10px; font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); }
+  .sgp-badge { background: var(--rouge); color: var(--paper-3); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 9px; border-radius: 2px; }
+  .sgp-price__per { font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+  .sgp-form { display: flex; flex-direction: column; gap: 18px; max-width: 480px; }
+  .sgp-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-sans); font-size: 14px; color: var(--ink); border: 0; padding: 0; margin: 0; }
+  .sgp-field input[type=email] { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--ink); border-radius: 2px; background: var(--paper-3); }
+  .sgp-field small { color: var(--ink-2); font-size: 12px; }
+  .sgp-field--lang { flex-direction: row; flex-wrap: wrap; gap: 18px; align-items: center; }
+  .sgp-field--lang legend { padding: 0; margin-bottom: 6px; width: 100%; }
+  .sgp-field--lang label { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; }
+  .sgp-form__error { font-family: var(--font-sans); font-size: 14px; color: var(--rouge); margin: 0; }
+  .sgp-form__error a { color: var(--rouge); }
+  .sgp-form__secure { font-family: var(--font-sans); font-size: 12px; color: var(--ink-2); margin: 0; }
+  @media (max-width: 640px) { .sgp-section { padding: 64px 0; } .sgp-hero__content { padding-bottom: 40px; } }
+</style>

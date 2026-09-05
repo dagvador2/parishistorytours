@@ -1,0 +1,87 @@
+---
+/**
+ * After Stripe Checkout: "payment received, check your inbox", then polls
+ * /api/self-guided/check-purchase until the webhook has created the row and
+ * shows a direct link to the webapp.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TopBar from "../../components/quiet/TopBar.astro";
+import Nav from "../../components/quiet/Nav.astro";
+import { useTranslations } from "../../i18n/utils";
+
+export const prerender = false;
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+const prefix = lang === "fr" ? "/fr" : "";
+const sg = (k: string) => t(`selfGuided.success.${k}`) as string;
+const sessionId = Astro.url.searchParams.get("session_id") ?? "";
+---
+<BaseLayout title={t("meta.selfGuidedSuccess.title")} description={t("meta.selfGuidedSuccess.description")} noindex={true} theme="quiet">
+  <TopBar />
+  <Nav context="tour" />
+  <main>
+    <section class="sgs">
+      <div class="sgs__inner" data-session={sessionId} data-prefix={prefix}>
+        <p class="sgs__kicker">{sg("kicker")}</p>
+        <h1 class="sgs__title">{sg("title")}</h1>
+        <p class="sgs__body" id="sgs-body">{sg("body")}</p>
+        <div class="sgs__status" id="sgs-status" aria-live="polite">
+          <span class="sgs__spinner" aria-hidden="true"></span>
+        </div>
+        <p class="sgs__ready" id="sgs-ready" hidden>{sg("ready")}</p>
+        <a class="sgs__btn sgs__btn--primary" id="sgs-open" href="#" hidden>{sg("open")}</a>
+        <p class="sgs__slow" id="sgs-slow" hidden>{sg("slow")}</p>
+        <a class="sgs__btn sgs__btn--ghost" href={`${prefix}/`}>{sg("home")}</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  import { track } from "../../scripts/track";
+  const root = document.querySelector(".sgs__inner") as HTMLElement;
+  const sessionId = root.dataset.session || "";
+  const prefix = root.dataset.prefix || "";
+  const status = document.getElementById("sgs-status")!;
+  const ready = document.getElementById("sgs-ready")!;
+  const open = document.getElementById("sgs-open") as HTMLAnchorElement;
+  const slow = document.getElementById("sgs-slow")!;
+  track("purchase_confirmation", { path: location.pathname, product: "self-guided" });
+
+  // Poll every 2 s for 30 s max: the webhook usually lands within a couple of seconds.
+  let tries = 0;
+  const poll = async () => {
+    tries += 1;
+    try {
+      const res = await fetch(`/api/self-guided/check-purchase?session_id=${encodeURIComponent(sessionId)}`);
+      const data = await res.json();
+      if (data.ready && data.access_token) {
+        const p = data.language === "fr" ? "/fr" : prefix;
+        open.href = `${p}/self-guided-tour/access?token=${encodeURIComponent(data.access_token)}`;
+        status.hidden = true;
+        ready.hidden = false;
+        open.hidden = false;
+        return;
+      }
+    } catch { /* retry */ }
+    if (tries < 15) setTimeout(poll, 2000);
+    else { status.hidden = true; slow.hidden = false; }
+  };
+  if (sessionId) poll(); else { status.hidden = true; slow.hidden = false; }
+</script>
+
+<style>
+  .sgs { background: var(--paper); padding: 96px 24px 120px; min-height: 55vh; }
+  .sgs__inner { max-width: 640px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .sgs__kicker { font-family: var(--font-sans); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--rouge); margin: 0; }
+  .sgs__title { font-family: var(--font-display); font-weight: 500; font-size: clamp(32px, 5vw, 44px); color: var(--ink); margin: 0; }
+  .sgs__body, .sgs__slow, .sgs__ready { font-family: var(--font-sans); font-size: 16px; line-height: 1.65; color: var(--ink-2); margin: 0; max-width: 46ch; }
+  .sgs__ready { color: var(--ink); font-weight: 600; }
+  .sgs__spinner { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--border); border-top-color: var(--rouge); border-radius: 50%; animation: sgs-spin 1s linear infinite; }
+  @keyframes sgs-spin { to { transform: rotate(360deg); } }
+  .sgs__btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px; font-family: var(--font-sans); font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 2px; border: 1px solid var(--ink); }
+  .sgs__btn--primary { background: var(--ink); color: var(--paper-3); }
+  .sgs__btn--primary:hover { background: var(--rouge); border-color: var(--rouge); }
+  .sgs__btn--ghost { color: var(--ink); background: transparent; }
+</style>
