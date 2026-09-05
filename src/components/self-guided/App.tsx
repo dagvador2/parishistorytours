@@ -21,6 +21,8 @@ import { strings } from "./i18n";
 import { loadState, reducer, saveState, type TourState } from "./state";
 import { useAssets } from "./useAssets";
 import { useAudioEngine } from "./useAudioEngine";
+import { useMediaSession } from "./useMediaSession";
+import { currentMedia } from "./sync";
 import { useGeolocation } from "./useGeolocation";
 
 interface Props {
@@ -136,6 +138,16 @@ export default function App({ lang: urlLang }: Props) {
     // Only the source identity matters (signed URLs change on refresh but the key does not).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioSrc?.split("?")[0], state.idx]);
+
+  // Lock-screen controls. Handlers read the latest state through refs, they are registered once.
+  const handlersRef = useRef({ play: audio.play, pause: audio.pause, prev: () => {}, next: () => {}, back: () => audio.skip(-15), fwd: () => audio.skip(15), seekTo: audio.seek });
+  handlersRef.current.prev = () => onPrev();
+  handlersRef.current.next = () => dispatch({ type: "finish" });
+  const artwork = section ? currentMedia(section.media, state.elapsed) : null;
+  useMediaSession(state.phase === "playing", state.lang, stop, artwork ? { src: artwork.img, w: artwork.w, h: artwork.h } : null, {
+    play: () => handlersRef.current.play(), pause: () => handlersRef.current.pause(), prev: () => handlersRef.current.prev(), next: () => handlersRef.current.next(),
+    back: () => handlersRef.current.back(), fwd: () => handlersRef.current.fwd(), seekTo: (sec) => handlersRef.current.seekTo(sec),
+  });
 
   const onPlay = () => { wantsAutoplay.current = true; dispatch({ type: "play" }); };
   const onPrev = () => { wantsAutoplay.current = true; if (state.elapsed > 5 || state.idx === 0) audio.seek(0); dispatch({ type: "prev" }); };
