@@ -6,6 +6,7 @@
 import { useEffect, useReducer, useState } from "react";
 import type { Lang } from "../../data/self-guided/left-bank-ww2";
 import Header from "./Header";
+import MapView from "./MapView";
 import Progress from "./Progress";
 import { strings } from "./i18n";
 import { loadState, reducer, saveState, type TourState } from "./state";
@@ -18,6 +19,9 @@ interface Props {
 export default function App({ lang: urlLang }: Props) {
   const [state, dispatch] = useReducer(reducer, urlLang, (l) => loadState(l));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [recenterTick, setRecenterTick] = useState(0);
+  // Position comes from the geolocation hook (later commit); null until then.
+  const user = null;
   const t = strings(state.lang);
 
   // The URL prefix wins over the stored language when the visitor opens the other locale on purpose.
@@ -46,10 +50,30 @@ export default function App({ lang: urlLang }: Props) {
       ) : !assets ? (
         <div className="ag-center">{loading ? t.loading : ""}</div>
       ) : (
-        <div className="ag-center" style={{ background: "var(--ag-paper-2)" }}>
-          {/* map + player land in the next commits */}
-          {assets.lang !== assets.requested ? t.narrationFallback : `${assets.sections.length} sections · ${Math.round(assets.totalDurationSec / 60)} ${t.min}`}
-        </div>
+        <>
+          <MapView
+            lang={state.lang}
+            phase={state.phase}
+            idx={state.idx}
+            completed={state.completed}
+            gpsDenied={state.gpsDenied}
+            user={user}
+            recenterTick={recenterTick}
+            onPinTap={(i) => { setMenuOpen(false); dispatch({ type: "arrive", idx: i }); }}
+          >
+            {state.gpsDenied && (
+              <div className="ag-gps-banner" role="status">
+                <span className="ag-gps-banner__dot" />
+                <span className="ag-gps-banner__text">{t.gpsOff}</span>
+                <button type="button" className="ag-gps-banner__btn" onClick={() => dispatch({ type: "setGpsDenied", denied: false })}>{t.enable}</button>
+              </div>
+            )}
+            <button type="button" className="ag-fab" aria-label="Recenter" onClick={() => setRecenterTick((n) => n + 1)}>
+              <span className="ag-crosshair" />
+            </button>
+          </MapView>
+          {/* player lands in the next commits */}
+        </>
       )}
       {menuOpen && null}
     </div>
