@@ -17,6 +17,13 @@ interface ImportMetaEnv {
   readonly SUPABASE_SERVICE_ROLE_KEY: string;
   readonly PUBLIC_INSTAGRAM_URL: string;
   readonly PUBLIC_MAPBOX_TOKEN: string;
+  // Self-guided tour (private R2 bucket + temporary dev guard, see scripts/self-guided/README.md)
+  readonly R2_ACCOUNT_ID: string;
+  readonly R2_ACCESS_KEY_ID: string;
+  readonly R2_SECRET_ACCESS_KEY: string;
+  readonly R2_BUCKET_NAME: string;
+  readonly R2_JURISDICTION: string;
+  readonly SELF_GUIDED_DEV_MODE: string;
 }
 
 interface ImportMeta {
