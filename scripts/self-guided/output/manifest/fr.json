@@ -2,14 +2,805 @@
   "schemaVersion": 1,
   "product": "left-bank-ww2",
   "lang": "fr",
-  "generatedAt": "2026-09-05T11:49:16.754Z",
+  "generatedAt": "2026-09-05T12:04:39.143Z",
   "voice": {
     "provider": "fish-audio",
     "voiceId": "c1daa68c20e24ec9a918effa663093e8",
     "model": "s2.1-pro-free"
   },
-  "totalDurationSec": 56.4,
+  "totalDurationSec": 1812.9,
   "sections": [
+    {
+      "id": "01-intro",
+      "index": 0,
+      "audio": "audio/left-bank-ww2/fr/01-intro.mp3",
+      "durationSec": 89.02,
+      "sourceHash": "b7f2ed04b3ec",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Bienvenue sur le tour de la Seconde Guerre mondiale et de la Résistance française, sur la Rive Gauche de Paris."
+        },
+        {
+          "t": 6.8,
+          "text": "Je suis Clément, votre guide."
+        },
+        {
+          "t": 8.72,
+          "text": "Ce tour est la version autoguidée de celui que je fais habituellement en personne."
+        },
+        {
+          "t": 13.14,
+          "text": "Vous pouvez écouter à votre rythme, et le PDF qui accompagne cet audio vous dira exactement où aller entre chaque section."
+        },
+        {
+          "t": 20.5,
+          "text": "Voilà comment ça fonctionne."
+        },
+        {
+          "t": 21.86,
+          "text": "Quatre arrêts principaux le long du parcours, avec quelques courts interstops entre les deux."
+        },
+        {
+          "t": 26.81,
+          "text": "La marche complète fait environ deux kilomètres —"
+        },
+        {
+          "t": 29.21,
+          "text": "une trentaine de minutes de marche pure, mais comptez environ 90 minutes au total avec les temps d'écoute et les arrêts."
+        },
+        {
+          "t": 36.49,
+          "text": "On va commencer au 60 Boulevard Saint-Michel, dans le 5e arrondissement."
+        },
+        {
+          "t": 40.89,
+          "text": "Ensuite on traverse le Jardin du Luxembourg pour arriver au Palais du Luxembourg."
+        },
+        {
+          "t": 45.21,
+          "text": "De là, on va au Théâtre de l'Odéon, puis au croisement de la Rue Monsieur-le-Prince et de la Rue de Vaugirard, où on parlera de la Résistance."
+        },
+        {
+          "t": 53.07,
+          "text": "Ensuite trois courts arrêts autour de la Sorbonne, et enfin on termine à Notre-Dame, face à la Préfecture de Police,"
+        },
+        {
+          "t": 58.99,
+          "text": "où la Libération de Paris a vraiment commencé en août 1944."
+        },
+        {
+          "t": 63.67,
+          "text": "Une chose à savoir avant de commencer."
+        },
+        {
+          "t": 65.99,
+          "text": "Cette version autoguidée couvre l'arc historique complet, mais les petites histoires, les détails humains, les petites digressions que je partage en marchant —"
+        },
+        {
+          "t": 73.91,
+          "text": "ceux-là, je les garde pour le tour en personne."
+        },
+        {
+          "t": 76.6,
+          "text": "Si vous aimez celui-ci et que vous voulez l'expérience complète, venez marcher avec moi."
+        },
+        {
+          "t": 82.04,
+          "text": "Bien."
+        },
+        {
+          "t": 82.68,
+          "text": "On commence."
+        },
+        {
+          "t": 83.64,
+          "text": "Rendez-vous au 60 Boulevard Saint-Michel, et lancez l'audio de l'arrêt 1 quand vous êtes devant le bâtiment."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "02-context-of-war",
+      "index": 1,
+      "audio": "audio/left-bank-ww2/fr/02-context-of-war.mp3",
+      "durationSec": 204.01,
+      "sourceHash": "f2e04445bdc4",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Bienvenue au premier arrêt, au 60 Boulevard Saint-Michel."
+        },
+        {
+          "t": 4.32,
+          "text": "Avant de commencer, prenez un moment pour regarder la façade devant vous."
+        },
+        {
+          "t": 7.76,
+          "text": "Levez les yeux — jusqu'au dernier étage."
+        },
+        {
+          "t": 10.32,
+          "text": "Vous verrez des impacts de balles qui criblent la pierre."
+        },
+        {
+          "t": 13.09,
+          "text": "Le bâtiment avait été réquisitionné par l'armée allemande pendant l'Occupation,"
+        },
+        {
+          "t": 16.93,
+          "text": "et ces cicatrices datent des combats de la Libération de Paris, en août 1944."
+        },
+        {
+          "t": 22.21,
+          "text": "Elles sont réelles, jamais retouchées, et c'est un bel endroit pour commencer notre tour."
+        },
+        {
+          "t": 26.66,
+          "text": "À quelques centaines de mètres derrière vous se trouve le Panthéon, où Jean Moulin — la figure la plus importante de la Résistance française — est inhumé."
+        },
+        {
+          "t": 34.58,
+          "text": "Démarrer ici, entre les impacts de balles et Jean Moulin, ça avait du sens."
+        },
+        {
+          "t": 39.46,
+          "text": "Voici comment se déroule le tour."
+        },
+        {
+          "t": 41.34,
+          "text": "Quatre arrêts principaux, trois arrondissements, deux kilomètres."
+        },
+        {
+          "t": 44.78,
+          "text": "Ce premier arrêt est un rappel rapide sur la façon dont on en est arrivés à la guerre en 1939."
+        },
+        {
+          "t": 50.46,
+          "text": "Le prochain arrêt couvrira la chute de Paris."
+        },
+        {
+          "t": 52.83,
+          "text": "Ensuite on parlera du premier réseau de résistance parisien à travers les yeux d'une femme remarquable, Agnès Humbert."
+        },
+        {
+          "t": 59.15,
+          "text": "Et on terminera à Notre-Dame avec la Libération."
+        },
+        {
+          "t": 62.75,
+          "text": "Reprenons depuis le début."
+        },
+        {
+          "t": 64.59,
+          "text": "La Première Guerre mondiale se termine en 1918."
+        },
+        {
+          "t": 67.81,
+          "text": "Les Allemands signent l'armistice dans un wagon de chemin de fer, en forêt de Compiègne."
+        },
+        {
+          "t": 72.44,
+          "text": "L'année suivante, ils sont forcés de signer le Traité de Versailles — un traité qui met l'Allemagne à genoux."
+        },
+        {
+          "t": 78.04,
+          "text": "Le traité a frappé l'Allemagne sur trois fronts."
+        },
+        {
+          "t": 80.76,
+          "text": "Territorial : l'Allemagne perd 15 % de son territoire et toutes ses colonies."
+        },
+        {
+          "t": 85.68,
+          "text": "Financier : 132 milliards de marks-or de réparations —"
+        },
+        {
+          "t": 89.76,
+          "text": "l'équivalent de 47 kilotonnes d'or, ou trois fois le budget annuel actuel de l'État français."
+        },
+        {
+          "t": 94.88,
+          "text": "Et militaire : plus de blindés, plus d'aviation, une armée plafonnée à 100 000 hommes."
+        },
+        {
+          "t": 100.47,
+          "text": "Ces sanctions ont alimenté un profond désir de revanche en Allemagne."
+        },
+        {
+          "t": 103.83,
+          "text": "Le krach de 1929 a fait exploser la pauvreté et le chômage."
+        },
+        {
+          "t": 108.39,
+          "text": "Le fascisme s'est répandu."
+        },
+        {
+          "t": 110.06,
+          "text": "Et Hitler a pris le pouvoir en janvier 1933, exactement 10 ans après sa tentative de putsch manquée."
+        },
+        {
+          "t": 117.04,
+          "text": "Une fois au pouvoir, il commence à déchirer le Traité de Versailles clause après clause — il refuse de payer ce qui est dû et surtout, il reconstruit l'armée allemande."
+        },
+        {
+          "t": 126.24,
+          "text": "La France et le Royaume-Uni ont réagi par le pacifisme."
+        },
+        {
+          "t": 129.3,
+          "text": "La figure centrale, c'est le Premier ministre britannique Neville Chamberlain."
+        },
+        {
+          "t": 133.54,
+          "text": "Il voulait préserver la paix à presque n'importe quel prix."
+        },
+        {
+          "t": 136.58,
+          "text": "À chaque fois qu'Hitler enfreignait une clause du traité, les Français et les Britanniques disaient : on ne va pas entrer en guerre pour ça."
+        },
+        {
+          "t": 143.02,
+          "text": "La paix compte plus."
+        },
+        {
+          "t": 144.49,
+          "text": "Cette façon de penser a culminé avec les Accords de Munich, en septembre 1938."
+        },
+        {
+          "t": 150.03,
+          "text": "Hitler, Chamberlain, la France et l'Italie se serrent la main sur le sort d'une région de Tchécoslovaquie appelée les Sudètes —"
+        },
+        {
+          "t": 157.31,
+          "text": "une partie du pays où vivait une grande population germanophone."
+        },
+        {
+          "t": 160.59,
+          "text": "On donne à Hitler le feu vert pour la prendre."
+        },
+        {
+          "t": 163.11,
+          "text": "Chamberlain rentre chez lui en brandissant l'accord, fier de ce qu'il appelle « la paix pour notre temps »."
+        },
+        {
+          "t": 168.63,
+          "text": "Six mois plus tard, Hitler enfreint le traité et envahit le reste de la Tchécoslovaquie par la force."
+        },
+        {
+          "t": 174.63,
+          "text": "Enfin, les Français et les Britanniques ont changé d'avis."
+        },
+        {
+          "t": 178.7,
+          "text": "Ils ont décidé que la Pologne serait la ligne rouge qu'Hitler ne pourrait pas franchir."
+        },
+        {
+          "t": 182.94,
+          "text": "Et quand Hitler envahit la Pologne quand même, le 1er septembre 1939,"
+        },
+        {
+          "t": 187.66,
+          "text": "la France et le Royaume-Uni déclarent la guerre deux jours plus tard, le 3 septembre."
+        },
+        {
+          "t": 192.28,
+          "text": "C'est là qu'on reprend au prochain arrêt."
+        },
+        {
+          "t": 194.04,
+          "text": "D'ici, remontez le Boulevard Saint-Michel vers le nord et entrez dans le Jardin du Luxembourg."
+        },
+        {
+          "t": 198.76,
+          "text": "Traversez le jardin jusqu'au Palais du Luxembourg."
+        },
+        {
+          "t": 201.16,
+          "text": "Lancez l'audio de l'arrêt 2 quand vous êtes face au palais."
+        }
+      ],
+      "media": [
+        {
+          "t": 67.81,
+          "img": "photos/left-bank-ww2/p05_0.webp",
+          "cap": "Le wagon en forêt de Compiègne où l'armistice de 1918 a été signé.",
+          "w": 1200,
+          "h": 675
+        },
+        {
+          "t": 129.3,
+          "img": "photos/left-bank-ww2/p06_1.webp",
+          "cap": "Neville Chamberlain — Premier ministre britannique, figure de l'apaisement d'avant-guerre.",
+          "w": 800,
+          "h": 1064
+        },
+        {
+          "t": 144.49,
+          "img": "photos/left-bank-ww2/p07_2.webp",
+          "cap": "Hitler et Chamberlain à Munich, septembre 1938.",
+          "w": 1200,
+          "h": 915
+        },
+        {
+          "t": 163.11,
+          "img": "photos/left-bank-ww2/p07_3.webp",
+          "cap": "« J'ai dans ma main un papier... » Chamberlain rentre de Munich, l'accord à la main.",
+          "w": 768,
+          "h": 432
+        },
+        {
+          "t": 182.94,
+          "img": "photos/left-bank-ww2/p08_4.webp",
+          "cap": "Les troupes allemandes franchissent la frontière polonaise, 1er septembre 1939 — début de la Seconde Guerre mondiale.",
+          "w": 547,
+          "h": 377
+        }
+      ]
+    },
+    {
+      "id": "03-fall-of-paris",
+      "index": 2,
+      "audio": "audio/left-bank-ww2/fr/03-fall-of-paris.mp3",
+      "durationSec": 426.67,
+      "sourceHash": "69a80f8a1e1b",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Bienvenue au deuxième arrêt."
+        },
+        {
+          "t": 1.68,
+          "text": "Vous êtes maintenant devant le Palais du Luxembourg, siège du Sénat français depuis 1799."
+        },
+        {
+          "t": 7.6,
+          "text": "En 1940, c'était le siège de la chambre haute du Parlement français."
+        },
+        {
+          "t": 12.16,
+          "text": "C'est ici, le 21 mai 1940, que le Premier ministre Paul Reynaud a prononcé l'un des discours les plus importants de toute la guerre —"
+        },
+        {
+          "t": 20.32,
+          "text": "le discours qui a dit au peuple français que la situation était catastrophique."
+        },
+        {
+          "t": 24.96,
+          "text": "On y reviendra dans quelques minutes."
+        },
+        {
+          "t": 26.89,
+          "text": "D'abord, plantons le décor."
+        },
+        {
+          "t": 28.97,
+          "text": "À l'arrêt précédent, on s'est arrêtés au 3 septembre 1939, le jour où la France et le Royaume-Uni ont déclaré la guerre à l'Allemagne."
+        },
+        {
+          "t": 37.05,
+          "text": "Tout a changé à Paris ce jour-là."
+        },
+        {
+          "t": 38.97,
+          "text": "Les théâtres, les cinémas et les music-halls ont fermé."
+        },
+        {
+          "t": 42.39,
+          "text": "Des sacs de sable sont apparus autour des monuments."
+        },
+        {
+          "t": 45.11,
+          "text": "Des masques à gaz ont été distribués."
+        },
+        {
+          "t": 47.51,
+          "text": "Mais sur le front, presque rien n'est arrivé."
+        },
+        {
+          "t": 49.83,
+          "text": "La Pologne est écrasée en un mois, avec l'aide soviétique."
+        },
+        {
+          "t": 53.43,
+          "text": "Mais sur le front ouest, les Allemands n'attaquent pas."
+        },
+        {
+          "t": 56.13,
+          "text": "La vie à Paris est doucement revenue à la normale — cinémas et théâtres ont rouvert, les restaurants se sont remplis."
+        },
+        {
+          "t": 62.13,
+          "text": "Les Français ont appelé cette période « la drôle de guerre »."
+        },
+        {
+          "t": 65.25,
+          "text": "Elle a duré huit mois."
+        },
+        {
+          "t": 66.91,
+          "text": "Le 26 février 1940, le premier avion de reconnaissance allemand survole directement Paris."
+        },
+        {
+          "t": 73.31,
+          "text": "C'est un tournant."
+        },
+        {
+          "t": 74.43,
+          "text": "Le nouveau Premier ministre Paul Reynaud, en fonction depuis un mois, sait que la guerre est inévitable — et il commence à y préparer les Parisiens."
+        },
+        {
+          "t": 81.95,
+          "text": "À partir du 1er avril 1940, les restrictions alimentaires commencent."
+        },
+        {
+          "t": 86.35,
+          "text": "Les pains spéciaux sont interdits."
+        },
+        {
+          "t": 88.03,
+          "text": "Le beurre disparaît des tables de restaurant."
+        },
+        {
+          "t": 90.19,
+          "text": "Boulangeries et boucheries ouvrent en alternance les jours de la semaine."
+        },
+        {
+          "t": 94.02,
+          "text": "Rien de dramatique encore — mais c'est un signal clair que les mois faciles sont finis."
+        },
+        {
+          "t": 99.62,
+          "text": "Et le 10 mai 1940, les mois faciles se terminent pour de bon."
+        },
+        {
+          "t": 104.66,
+          "text": "L'offensive allemande vient en deux phases."
+        },
+        {
+          "t": 107.07,
+          "text": "Phase un : les Allemands attaquent en Belgique et aux Pays-Bas — exactement comme le commandant en chef français, le général Maurice Gamelin, l'avait prédit."
+        },
+        {
+          "t": 115.55,
+          "text": "Il déplace un million d'hommes vers le nord pour les arrêter."
+        },
+        {
+          "t": 118.68,
+          "text": "Phase deux : le 13 mai, les Allemands attaquent plus bas —"
+        },
+        {
+          "t": 122.2,
+          "text": "par la forêt des Ardennes, que les généraux français avaient déclarée infranchissable par des colonnes blindées."
+        },
+        {
+          "t": 127.88,
+          "text": "Avec une force combinée de chars et de bombardiers en piqué Stuka,"
+        },
+        {
+          "t": 131.64,
+          "text": "ils traversent les Ardennes et la Meuse en deux jours, et taillent à travers la fine ligne de défense française."
+        },
+        {
+          "t": 137.16,
+          "text": "Et d'un coup, la route de Paris est ouverte."
+        },
+        {
+          "t": 140.85,
+          "text": "Le 15 mai à 6 h du matin, le ministre de la Défense appelle Paul Reynaud —"
+        },
+        {
+          "t": 145.01,
+          "text": "c'est la seule personne du gouvernement qui comprenne vraiment ce qui vient de se passer."
+        },
+        {
+          "t": 148.85,
+          "text": "Ses mots : « Tout est perdu."
+        },
+        {
+          "t": 150.53,
+          "text": "La route de Paris est ouverte."
+        },
+        {
+          "t": 152.27,
+          "text": "Il n'y a plus rien pour empêcher les Allemands d'atteindre la capitale. »"
+        },
+        {
+          "t": 155.39,
+          "text": "Reynaud passe le 15 mai à évaluer les dégâts."
+        },
+        {
+          "t": 159.22,
+          "text": "Le 16 à 9 h du matin, il convoque un comité de guerre d'urgence au ministère des Affaires étrangères,"
+        },
+        {
+          "t": 164.9,
+          "text": "sur le Quai d'Orsay, juste de l'autre côté de la Seine par rapport à où nous sommes."
+        },
+        {
+          "t": 169.06,
+          "text": "Trois questions urgentes dominent la réunion."
+        },
+        {
+          "t": 172.74,
+          "text": "Un : évacuer le gouvernement ?"
+        },
+        {
+          "t": 174.88,
+          "text": "Deux : évacuer la population ?"
+        },
+        {
+          "t": 177.12,
+          "text": "Trois : que faire de tous les documents classifiés à Paris ?"
+        },
+        {
+          "t": 180.24,
+          "text": "La réunion a été chaotique."
+        },
+        {
+          "t": 182.16,
+          "text": "Le ministère des Transports a admis qu'il n'avait ni les camions ni les trains pour déplacer le gouvernement en deux jours."
+        },
+        {
+          "t": 187.78,
+          "text": "On a donc décidé que le gouvernement resterait jusqu'au dernier moment, et que les rares camions disponibles serviraient à déplacer les archives."
+        },
+        {
+          "t": 194.64,
+          "text": "Mais alors que la réunion touche à sa fin, les personnes présentes commencent à entendre des bruits étouffés venant de la cour."
+        },
+        {
+          "t": 200.88,
+          "text": "Les employés du ministère des Affaires étrangères jetaient tous les dossiers classifiés par les fenêtres dans la cour."
+        },
+        {
+          "t": 206.75,
+          "text": "Une fois le tas suffisamment haut, ils l'arrosaient d'essence et l'enflammaient."
+        },
+        {
+          "t": 210.83,
+          "text": "L'ordre de brûler les dossiers venait du Secrétaire général du ministère, Alexis Léger, qui savait qu'il n'y avait aucun moyen d'évacuer 100 tonnes d'archives à temps."
+        },
+        {
+          "t": 219.72,
+          "text": "Dans la nuit du 16 mai, la nouvelle tombe : les Allemands ne se dirigent pas vers Paris."
+        },
+        {
+          "t": 224.28,
+          "text": "Ils foncent vers la côte, pour piéger les armées alliées dans le nord."
+        },
+        {
+          "t": 228.19,
+          "text": "Un point crucial : pendant que tout ça se déroulait dans le gouvernement, les Parisiens n'avaient absolument aucune idée de la gravité de la situation."
+        },
+        {
+          "t": 236.03,
+          "text": "La censure y veillait."
+        },
+        {
+          "t": 237.4,
+          "text": "Les unes de journaux du 16 mai disaient aux Parisiens que les Allemands avaient été stoppés, et que de puissantes contre-offensives étaient en cours."
+        },
+        {
+          "t": 244.84,
+          "text": "Rien de tout ça n'était vrai."
+        },
+        {
+          "t": 246.47,
+          "text": "Maintenant, revenons au palais devant vous."
+        },
+        {
+          "t": 248.47,
+          "text": "Le 21 mai 1940 — cinq jours après la grande peur — Paul Reynaud est venu ici s'adresser au Sénat."
+        },
+        {
+          "t": 254.87,
+          "text": "C'est le discours où, pour la première fois, la classe politique a entendu la vérité."
+        },
+        {
+          "t": 259.59,
+          "text": "Il ne l'a pas cachée."
+        },
+        {
+          "t": 260.86,
+          "text": "Il a parlé d'une déroute de l'armée française, d'une faute, peut-être un crime, dans la conduite des opérations."
+        },
+        {
+          "t": 266.48,
+          "text": "Il a annoncé que le général Maxime Weygand remplacerait Gamelin comme commandant en chef, et que le maréchal Philippe Pétain —"
+        },
+        {
+          "t": 272.64,
+          "text": "le héros de Verdun — entrerait au gouvernement comme vice-président du Conseil."
+        },
+        {
+          "t": 276.87,
+          "text": "Deux ans plus tard, Pétain sera l'homme à la tête de Vichy et de la collaboration avec les Allemands."
+        },
+        {
+          "t": 282.63,
+          "text": "Pendant ce temps, la coopération entre l'armée française et l'armée britannique commence à se fissurer."
+        },
+        {
+          "t": 288.25,
+          "text": "Les Britanniques se rendent compte que la France pourrait tomber, et qu'ils ont besoin de rapatrier leurs 250 000 hommes pour défendre leur propre île."
+        },
+        {
+          "t": 295.79,
+          "text": "Le résultat, c'est Dunkerque : entre le 26 mai et le 3 juin, l'intégralité du Corps expéditionnaire britannique,"
+        },
+        {
+          "t": 302.67,
+          "text": "ainsi qu'une partie des soldats français, est évacuée à travers la Manche."
+        },
+        {
+          "t": 306.99,
+          "text": "Le 3 juin, Paris est bombardé."
+        },
+        {
+          "t": 309.39,
+          "text": "Beaucoup pensent que Paris n'a jamais été bombardé pendant la Seconde Guerre mondiale, parce qu'elle a été déclarée ville ouverte."
+        },
+        {
+          "t": 315.71,
+          "text": "C'est vrai — mais seulement à partir du 12 juin."
+        },
+        {
+          "t": 318.64,
+          "text": "Le 3 juin 1940, des bombardiers allemands frappent des usines dans le 15e arrondissement."
+        },
+        {
+          "t": 324.16,
+          "text": "Plus de 250 personnes meurent."
+        },
+        {
+          "t": 326.32,
+          "text": "Le 10 juin, l'Italie déclare la guerre à la France."
+        },
+        {
+          "t": 329.44,
+          "text": "Les armées allemandes sont désormais aux portes de la ville."
+        },
+        {
+          "t": 332.34,
+          "text": "Au soir du 10, plus aucun ministre n'est resté à Paris."
+        },
+        {
+          "t": 335.78,
+          "text": "Et les Parisiens non plus."
+        },
+        {
+          "t": 337.22,
+          "text": "Aucune instruction claire n'avait été donnée à la population — mais l'exode a été massif."
+        },
+        {
+          "t": 342.42,
+          "text": "Sur les 2,8 millions Parisiens, seuls 700 000 environ sont restés."
+        },
+        {
+          "t": 347.24,
+          "text": "Près de 75 % de la population avait fui avant le 14 juin."
+        },
+        {
+          "t": 351.8,
+          "text": "Paris est déclarée ville ouverte le 12 juin."
+        },
+        {
+          "t": 354.68,
+          "text": "Les Allemands entrent dans la capitale au petit matin du 14 juin."
+        },
+        {
+          "t": 358.46,
+          "text": "Le drapeau nazi est hissé partout — sur l'Élysée, sur l'Arc de Triomphe, sur la Tour Eiffel."
+        },
+        {
+          "t": 364.22,
+          "text": "Le quartier général militaire allemand s'installe à l'Hôtel de Crillon, place de la Concorde."
+        },
+        {
+          "t": 369.2,
+          "text": "Au matin du 15 juin, chaque unité allemande défile sur les Champs-Élysées pour montrer au monde entier que Paris est tombée."
+        },
+        {
+          "t": 376.01,
+          "text": "Une semaine plus tard, Hitler fait sa seule et unique visite à Paris."
+        },
+        {
+          "t": 380.01,
+          "text": "Il arrive vers 6 h du matin le 23 juin, fait le tour de la ville — l'Opéra, le Trocadéro, le tombeau de Napoléon aux Invalides — et repart à 9 h."
+        },
+        {
+          "t": 389.32,
+          "text": "Trois heures dans la ville qu'il avait rêvé de conquérir toute sa vie d'adulte."
+        },
+        {
+          "t": 393,
+          "text": "Et enfin, le 22 juin 1940, la France signe l'armistice."
+        },
+        {
+          "t": 399.21,
+          "text": "Hitler l'a fait signer dans le même wagon de chemin de fer en forêt de Compiègne, celui où les Allemands avaient signé en 1918."
+        },
+        {
+          "t": 406.09,
+          "text": "Le wagon a ensuite été emmené à Berlin comme trophée."
+        },
+        {
+          "t": 409.61,
+          "text": "C'est la chute de Paris en 35 jours."
+        },
+        {
+          "t": 412.81,
+          "text": "D'ici, on va vers la Résistance."
+        },
+        {
+          "t": 415.3,
+          "text": "Sortez du Jardin du Luxembourg, prenez la Rue de Vaugirard vers l'est, puis tournez à gauche dans la Rue de l'Odéon."
+        },
+        {
+          "t": 421.54,
+          "text": "Arrêtez-vous devant le Théâtre de l'Odéon, et lancez l'audio du prochain interstop quand vous êtes devant."
+        }
+      ],
+      "media": [
+        {
+          "t": 74.43,
+          "img": "photos/left-bank-ww2/p10_5.webp",
+          "cap": "Paul Reynaud, Premier ministre de France à partir de mars 1940.",
+          "w": 612,
+          "h": 427
+        },
+        {
+          "t": 107.07,
+          "img": "photos/left-bank-ww2/p11_6.webp",
+          "cap": "L'offensive allemande de mai 1940.",
+          "w": 1200,
+          "h": 808
+        },
+        {
+          "t": 118.68,
+          "img": "photos/left-bank-ww2/p11_7.webp",
+          "cap": "Le général Maurice Gamelin — commandant en chef de l'armée française en mai 1940.",
+          "w": 770,
+          "h": 593
+        },
+        {
+          "t": 237.4,
+          "img": "photos/left-bank-ww2/p13_8.webp",
+          "cap": "Le Petit Parisien, 16 mai 1940.",
+          "w": 679,
+          "h": 633
+        },
+        {
+          "t": 318.64,
+          "img": "photos/left-bank-ww2/p14_9.webp",
+          "cap": "Après le bombardement de Paris, 3 juin 1940.",
+          "w": 962,
+          "h": 629
+        },
+        {
+          "t": 358.46,
+          "img": "photos/left-bank-ww2/p15_10.webp",
+          "cap": "Le drapeau nazi flottant sur l'Arc de Triomphe, juin 1940.",
+          "w": 955,
+          "h": 1400
+        },
+        {
+          "t": 376.01,
+          "img": "photos/left-bank-ww2/p16_11.webp",
+          "cap": "Hitler au Trocadéro, 23 juin 1940 — l'image la plus reproduite de sa seule visite à Paris.",
+          "w": 1049,
+          "h": 868
+        },
+        {
+          "t": 393,
+          "img": "photos/left-bank-ww2/p17_13.webp",
+          "cap": "La France divisée après l'armistice : zone occupée (nord et ouest), zone « libre » sous Vichy (sud), et l'Alsace-Moselle annexée.",
+          "w": 1024,
+          "h": 972
+        }
+      ]
+    },
     {
       "id": "04-odeon",
       "index": 3,
@@ -83,6 +874,1108 @@
         }
       ],
       "media": []
+    },
+    {
+      "id": "05-resistance",
+      "index": 4,
+      "audio": "audio/left-bank-ww2/fr/05-resistance.mp3",
+      "durationSec": 329.2,
+      "sourceHash": "29fe9c0b1fd6",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Bienvenue au troisième arrêt."
+        },
+        {
+          "t": 1.68,
+          "text": "Vous êtes au croisement de la Rue Monsieur-le-Prince et de la Rue de Vaugirard, dans le 6e arrondissement."
+        },
+        {
+          "t": 7.2,
+          "text": "Rien ici ne marque l'endroit — et c'est en partie le sujet."
+        },
+        {
+          "t": 10.48,
+          "text": "À l'automne 1940, un petit groupe d'intellectuels parisiens a commencé à se réunir dans ce quartier pour planifier ce qui deviendrait le premier réseau de résistance organisé en France."
+        },
+        {
+          "t": 20.6,
+          "text": "Ces rues, ce quartier — c'était exactement le type de petites rues anodines de la Rive Gauche où une cellule de résistance pouvait se réunir sans attirer l'attention."
+        },
+        {
+          "t": 29.96,
+          "text": "Je vais vous raconter l'histoire d'une de ces réunions, et de la femme qui en était au centre."
+        },
+        {
+          "t": 34.61,
+          "text": "Elle s'appelait Agnès Humbert."
+        },
+        {
+          "t": 36.61,
+          "text": "Elle était historienne de l'art, conservatrice de musée, et elle est devenue l'une des fondatrices du premier grand réseau de résistance à Paris."
+        },
+        {
+          "t": 43.7,
+          "text": "Chronologiquement, à l'arrêt précédent on s'est arrêtés au 14 juin 1940 — le jour de la chute de Paris."
+        },
+        {
+          "t": 50.18,
+          "text": "Huit jours plus tard, le 22 juin, la France signe l'armistice."
+        },
+        {
+          "t": 54.18,
+          "text": "Après cela, doucement, les Parisiens qui avaient fui vers le sud commencent à rentrer."
+        },
+        {
+          "t": 59.05,
+          "text": "Le personnel des grands musées parisiens aussi, dont Agnès Humbert, historienne de l'art au Musée National des Arts et Traditions Populaires."
+        },
+        {
+          "t": 66.74,
+          "text": "Elle rentre début août 1940."
+        },
+        {
+          "t": 69.38,
+          "text": "Très vite, elle remarque ce qui a changé."
+        },
+        {
+          "t": 72.1,
+          "text": "Tout est désormais étiqueté en allemand par-dessus le français."
+        },
+        {
+          "t": 75.22,
+          "text": "Les musées sont gratuits pour les soldats allemands."
+        },
+        {
+          "t": 77.78,
+          "text": "Et des expositions entières ont été modifiées ou retirées."
+        },
+        {
+          "t": 81.39,
+          "text": "Les photographies d'URSS qu'Agnès Humbert avait prises ont disparu."
+        },
+        {
+          "t": 85.47,
+          "text": "Comme les photos des grèves générales françaises de 1936."
+        },
+        {
+          "t": 89.07,
+          "text": "L'Occupation s'est infiltrée dans chaque institution."
+        },
+        {
+          "t": 91.82,
+          "text": "Avant d'en arriver au réseau de résistance lui-même, un mot sur la place centrale des musées dans cette histoire."
+        },
+        {
+          "t": 97.5,
+          "text": "Tous les grands musées parisiens ont été pris dans la guerre."
+        },
+        {
+          "t": 100.4,
+          "text": "Le Jeu de Paume, juste de l'autre côté de la Seine, est devenu le dépôt central des œuvres d'art pillées dans les collections juives de toute l'Europe."
+        },
+        {
+          "t": 108.8,
+          "text": "Hermann Göring — le numéro deux du Reich — a visité le Jeu de Paume au moins 20 fois, choisissant lui-même les pièces qu'il voulait faire expédier en Allemagne."
+        },
+        {
+          "t": 117.76,
+          "text": "De l'autre côté de la ville, au Trocadéro, le Musée de l'Homme — un musée d'anthropologie ouvert seulement trois ans plus tôt —"
+        },
+        {
+          "t": 124.72,
+          "text": "devient quelque chose de plus singulier : un point de ralliement pour les intellectuels qui refusent d'accepter l'Occupation."
+        },
+        {
+          "t": 131.13,
+          "text": "Le réseau dont on va parler tire son nom de ce musée."
+        },
+        {
+          "t": 134.97,
+          "text": "Agnès Humbert écrit dans son journal cet été-là : « C'est comme si nous étions des rats dans un piège. »"
+        },
+        {
+          "t": 140.25,
+          "text": "Elle a décidé qu'elle ne pourrait pas vivre avec l'Occupation."
+        },
+        {
+          "t": 143.13,
+          "text": "La question, c'était — qu'est-ce qu'on fait ?"
+        },
+        {
+          "t": 145.46,
+          "text": "Quand on décide de résister, la première chose qu'on fait, c'est chercher des alliés."
+        },
+        {
+          "t": 149.7,
+          "text": "C'est ce qu'elle a fait."
+        },
+        {
+          "t": 150.98,
+          "text": "Son allié le plus proche était Jean Cassou, un ami et collègue conservateur."
+        },
+        {
+          "t": 155.46,
+          "text": "Ensemble, ils ont commencé à rencontrer des personnes de confiance, une par une."
+        },
+        {
+          "t": 159.75,
+          "text": "Début septembre 1940, ils ont rassemblé un petit groupe d'une dizaine de personnes en qui ils avaient une confiance absolue."
+        },
+        {
+          "t": 167.03,
+          "text": "Ils se réunissaient chaque semaine, souvent au 14 Rue de l'Abbaye dans le 6e arrondissement — à quelques rues d'où vous vous trouvez."
+        },
+        {
+          "t": 174.16,
+          "text": "Dans leur lieu de réunion, même un petit détail comptait :"
+        },
+        {
+          "t": 177.2,
+          "text": "l'horloge restait à l'heure française, pas à l'heure allemande que l'Occupation avait imposée partout en France."
+        },
+        {
+          "t": 183.36,
+          "text": "Un tout petit acte de défiance, au quotidien."
+        },
+        {
+          "t": 187.2,
+          "text": "Leur but, c'était d'informer."
+        },
+        {
+          "t": 189.48,
+          "text": "Ils voulaient publier un journal clandestin — dire aux Parisiens les vérités que la presse censurée ne disait pas."
+        },
+        {
+          "t": 195.15,
+          "text": "Ils ont commencé petit : de simples mots écrits à la main sur des bouts de papier,"
+        },
+        {
+          "t": 199.55,
+          "text": "déposés sur les banquettes du métro, dans les boîtes aux lettres, sur les tables des cafés."
+        },
+        {
+          "t": 203.95,
+          "text": "Fin septembre, ils ont un roneo, un duplicateur à stencil, et peuvent produire des dizaines de copies à la fois."
+        },
+        {
+          "t": 210.44,
+          "text": "Le 15 décembre 1940, le groupe publie le premier numéro de son journal clandestin."
+        },
+        {
+          "t": 215.88,
+          "text": "Ils l'appellent Résistance — et le mot va rester."
+        },
+        {
+          "t": 218.76,
+          "text": "Après la guerre, c'est comme ça qu'on désignera tout le mouvement."
+        },
+        {
+          "t": 222.02,
+          "text": "Ils écrivaient sur la situation militaire telle qu'ils la comprenaient ; des messages d'espoir et de motivation ;"
+        },
+        {
+          "t": 227.76,
+          "text": "et sur le plan pratique, des comptes détaillés de la nourriture française expédiée en Allemagne —"
+        },
+        {
+          "t": 232.96,
+          "text": "les chiffres précis des vaches, cochons, poulets et vin pris dans les fermes françaises."
+        },
+        {
+          "t": 237.7,
+          "text": "L'idée, c'était de faire voir aux Parisiens ce qu'était vraiment l'Occupation, sous la surface polie des choses."
+        },
+        {
+          "t": 244.34,
+          "text": "Le journal était censé sortir toutes les deux semaines."
+        },
+        {
+          "t": 247.22,
+          "text": "Ils ont réussi seulement quatre numéros avant que le réseau ne soit démantelé."
+        },
+        {
+          "t": 251.14,
+          "text": "Début 1941, la Gestapo est arrivée à Paris et se concentrait sur des réseaux comme celui-ci."
+        },
+        {
+          "t": 257.3,
+          "text": "Le problème avec le réseau du Musée de l'Homme, c'est qu'il grossissait vite — il absorbait des réseaux plus petits, diversifiait son activité."
+        },
+        {
+          "t": 264.39,
+          "text": "À un moment, Agnès Humbert a caché un pilote polonais."
+        },
+        {
+          "t": 267.91,
+          "text": "Le réseau a aussi reçu les plans d'une base sous-marine allemande sur la côte atlantique, apportés par un officier français."
+        },
+        {
+          "t": 274.41,
+          "text": "Et finalement — comme c'est presque toujours le cas avec les réseaux qui grossissent trop vite —"
+        },
+        {
+          "t": 278.41,
+          "text": "ils ont fait entrer quelqu'un en qui ils n'auraient pas dû avoir confiance."
+        },
+        {
+          "t": 281.61,
+          "text": "Il s'appelait Albert Gaveau."
+        },
+        {
+          "t": 283.29,
+          "text": "Il travaillait pour la Gestapo."
+        },
+        {
+          "t": 285.13,
+          "text": "Un par un, les membres ont commencé à être arrêtés."
+        },
+        {
+          "t": 288.11,
+          "text": "Agnès Humbert est arrêtée le 13 avril 1941."
+        },
+        {
+          "t": 292.11,
+          "text": "Les Allemands sont venus la chercher à l'hôpital où elle rendait visite à sa mère."
+        },
+        {
+          "t": 295.63,
+          "text": "Ils l'ont ramenée chez elle et ont fouillé son appartement."
+        },
+        {
+          "t": 298.43,
+          "text": "Elle est interrogée au siège de la Gestapo rue des Saussaies, puis transférée à travers plusieurs prisons parisiennes."
+        },
+        {
+          "t": 304.19,
+          "text": "Le réseau est détruit."
+        },
+        {
+          "t": 305.73,
+          "text": "Elle a survécu aux camps, est rentrée en France après la guerre, a publié son journal Notre Guerre en 1946,"
+        },
+        {
+          "t": 312.37,
+          "text": "et a vécu tranquillement jusqu'à sa mort en 1963."
+        },
+        {
+          "t": 316.45,
+          "text": "D'ici, on a trois courts interstops avant notre arrêt final."
+        },
+        {
+          "t": 319.58,
+          "text": "Prenez la Rue Monsieur-le-Prince vers le nord, en direction de la Sorbonne."
+        },
+        {
+          "t": 323.02,
+          "text": "Environ trois minutes de marche."
+        },
+        {
+          "t": 324.7,
+          "text": "Arrêtez-vous devant le bâtiment principal de la Sorbonne, et lancez l'audio du prochain interstop."
+        }
+      ],
+      "media": [
+        {
+          "t": 117.76,
+          "img": "photos/left-bank-ww2/p20_14.webp",
+          "cap": "Le Musée de l'Homme au Trocadéro — le musée qui a donné son nom au réseau.",
+          "w": 1200,
+          "h": 953
+        },
+        {
+          "t": 150.98,
+          "img": "photos/left-bank-ww2/p21_15.webp",
+          "cap": "Jean Cassou — écrivain, historien de l'art, cofondateur du réseau du Musée de l'Homme.",
+          "w": 253,
+          "h": 349
+        },
+        {
+          "t": 210.44,
+          "img": "photos/left-bank-ww2/p22_16.webp",
+          "cap": "Le premier numéro de Résistance, décembre 1940.",
+          "w": 663,
+          "h": 790
+        },
+        {
+          "t": 305.73,
+          "img": "photos/left-bank-ww2/p23_17.webp",
+          "cap": "Notre Guerre — le journal d'Agnès Humbert, publié en 1946.",
+          "w": 340,
+          "h": 340
+        }
+      ]
+    },
+    {
+      "id": "06-sorbonne-facade",
+      "index": 5,
+      "audio": "audio/left-bank-ww2/fr/06-sorbonne-facade.mp3",
+      "durationSec": 43.36,
+      "sourceHash": "0f83d38cefc6",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Vous êtes maintenant devant l'entrée principale de la Sorbonne."
+        },
+        {
+          "t": 2.8,
+          "text": "Regardez attentivement la colonne de droite à l'entrée."
+        },
+        {
+          "t": 6.56,
+          "text": "Les impacts de balles sont toujours là."
+        },
+        {
+          "t": 8.32,
+          "text": "Des cicatrices de la semaine de la Libération que l'université a choisi de ne jamais faire restaurer."
+        },
+        {
+          "t": 13.58,
+          "text": "Ils montent sur plusieurs mètres."
+        },
+        {
+          "t": 15.58,
+          "text": "Le Quartier latin — et la Sorbonne en particulier —"
+        },
+        {
+          "t": 18.38,
+          "text": "est devenu l'un des plus importants foyers de combats de la Rive Gauche pendant l'insurrection d'août 1944."
+        },
+        {
+          "t": 24.47,
+          "text": "Étudiants, combattants FFI et Parisiens ordinaires ont fait de ces rues l'un des champs de bataille les plus intenses de la semaine."
+        },
+        {
+          "t": 31.19,
+          "text": "Les impacts sur cette colonne sont un rappel direct de cela."
+        },
+        {
+          "t": 34.95,
+          "text": "D'ici, faites le tour de la Sorbonne pour passer de l'autre côté du bâtiment."
+        },
+        {
+          "t": 39.21,
+          "text": "Trouvez la tour de l'observatoire, et lancez l'audio suivant quand vous êtes à son pied."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "07-observatory",
+      "index": 6,
+      "audio": "audio/left-bank-ww2/fr/07-observatory.mp3",
+      "durationSec": 39.9,
+      "sourceHash": "6f2efd8d5054",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Vous êtes maintenant au pied de la tour de l'observatoire de la Sorbonne."
+        },
+        {
+          "t": 3.2,
+          "text": "Levez les yeux vers la pierre."
+        },
+        {
+          "t": 4.96,
+          "text": "La tour est couverte d'impacts de balles — bien plus visibles que sur la façade principale."
+        },
+        {
+          "t": 9.76,
+          "text": "Prenez un instant pour les compter."
+        },
+        {
+          "t": 11.74,
+          "text": "C'était l'un des plus importants foyers de combats de la Rive Gauche pendant l'insurrection."
+        },
+        {
+          "t": 15.98,
+          "text": "La tour offrait de la hauteur et une ligne de tir dégagée — exactement ce que les troupes allemandes et les résistants voulaient tous les deux contrôler."
+        },
+        {
+          "t": 24.08,
+          "text": "Les traces que vous voyez sont ce qu'il en reste."
+        },
+        {
+          "t": 26.32,
+          "text": "D'ici, remontez la Rue Saint-Jacques vers le nord, en direction de la Seine."
+        },
+        {
+          "t": 31.76,
+          "text": "Tournez à droite dans la Rue Galande et continuez jusqu'à la petite place devant l'Église Saint-Séverin."
+        },
+        {
+          "t": 36.88,
+          "text": "Environ cinq minutes."
+        },
+        {
+          "t": 38.22,
+          "text": "Lancez l'audio suivant quand vous êtes là."
+        }
+      ],
+      "media": []
+    },
+    {
+      "id": "08-saint-severin",
+      "index": 7,
+      "audio": "audio/left-bank-ww2/fr/08-saint-severin.mp3",
+      "durationSec": 62.48,
+      "sourceHash": "2898f33bb01f",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Vous êtes maintenant devant l'Église Saint-Séverin, l'une des plus anciennes églises de la Rive Gauche, sur la Rue du Petit-Pont."
+        },
+        {
+          "t": 5.92,
+          "text": "Regardez la rue où vous vous tenez."
+        },
+        {
+          "t": 7.68,
+          "text": "Dans le PDF, vous trouverez une photographie prise exactement à cet endroit en août 1944."
+        },
+        {
+          "t": 14.08,
+          "text": "Le même endroit, à 80 ans d'écart."
+        },
+        {
+          "t": 16.24,
+          "text": "Ce que vous auriez vu ici en août 1944, c'est une barricade."
+        },
+        {
+          "t": 20.72,
+          "text": "Plus de 600 barricades ont été dressées dans Paris pendant la semaine de l'insurrection."
+        },
+        {
+          "t": 25.28,
+          "text": "Elles étaient faites de pavés, de tables et chaises de café, d'enseignes, de matelas, de portes — tout ce qui était assez lourd pour ralentir un char allemand."
+        },
+        {
+          "t": 33.2,
+          "text": "Les Allemands avaient environ 22 000 hommes et 100 chars dans Paris cette semaine-là."
+        },
+        {
+          "t": 37.74,
+          "text": "Les barricades étaient un cauchemar logistique pour eux."
+        },
+        {
+          "t": 40.54,
+          "text": "À chaque fois qu'ils essayaient de déplacer des blindés à travers la ville,"
+        },
+        {
+          "t": 43.58,
+          "text": "il fallait envoyer l'infanterie en avant pour démanteler les obstacles, souvent sous le feu des fenêtres au-dessus."
+        },
+        {
+          "t": 50.06,
+          "text": "D'ici, marchez en direction de la Seine."
+        },
+        {
+          "t": 52.69,
+          "text": "Traversez le pont jusqu'à l'Île de la Cité, puis arrêtez-vous sur le parvis face à Notre-Dame, avec la Préfecture de Police bien visible à votre gauche."
+        },
+        {
+          "t": 60.29,
+          "text": "Lancez l'audio de l'arrêt final quand vous êtes là."
+        }
+      ],
+      "media": [
+        {
+          "t": 7.68,
+          "img": "photos/left-bank-ww2/p25_18.webp",
+          "cap": "Barricade sur la Rue du Petit-Pont, devant Saint-Séverin — août 1944.",
+          "w": 1200,
+          "h": 893
+        },
+        {
+          "t": 20.72,
+          "img": "photos/left-bank-ww2/p26_19.webp",
+          "cap": "Barricade au 30 Rue Saint-Jacques, à quelques rues d'ici.",
+          "w": 1200,
+          "h": 826
+        }
+      ]
+    },
+    {
+      "id": "09-liberation",
+      "index": 8,
+      "audio": "audio/left-bank-ww2/fr/09-liberation.mp3",
+      "durationSec": 561.93,
+      "sourceHash": "3bf6e94ac868",
+      "subs": [
+        {
+          "t": 0,
+          "text": "Bienvenue au dernier arrêt du tour."
+        },
+        {
+          "t": 2.08,
+          "text": "Vous êtes face à Notre-Dame, l'Île de la Cité devant vous."
+        },
+        {
+          "t": 5.44,
+          "text": "Mais le bâtiment dont parle vraiment cet arrêt, c'est celui qui se trouve juste à droite de Notre-Dame, sur la même île : la Préfecture de Police de Paris."
+        },
+        {
+          "t": 13.48,
+          "text": "La Préfecture est la première place forte saisie par la résistance pendant l'insurrection d'août 1944."
+        },
+        {
+          "t": 20.27,
+          "text": "C'est là que la Libération de Paris a vraiment commencé."
+        },
+        {
+          "t": 23.72,
+          "text": "Avant de rentrer dans ce qui s'est passé ici, il faut comprendre le tableau d'ensemble."
+        },
+        {
+          "t": 27.75,
+          "text": "Paris, en août 1944, est passée terriblement près de subir le même sort que Varsovie."
+        },
+        {
+          "t": 33.75,
+          "text": "L'insurrection de Varsovie a commencé le 1er août 1944, juste trois semaines avant celle de Paris."
+        },
+        {
+          "t": 40.15,
+          "text": "Elle a duré plus de 60 jours."
+        },
+        {
+          "t": 42.15,
+          "text": "À la fin, 18 000 soldats polonais et 170 000 civils étaient morts."
+        },
+        {
+          "t": 47.03,
+          "text": "85 % de la ville était détruite."
+        },
+        {
+          "t": 49.67,
+          "text": "Les Soviétiques, qui étaient à portée d'intervention, ne sont pas venus en aide aux Polonais."
+        },
+        {
+          "t": 54.27,
+          "text": "Regardez Paris en août 1944."
+        },
+        {
+          "t": 57.31,
+          "text": "Une ville occupée par les nazis."
+        },
+        {
+          "t": 59.07,
+          "text": "Une insurrection déclenchée par son propre peuple."
+        },
+        {
+          "t": 61.63,
+          "text": "Des Alliés qui n'avaient pas initialement prévu de libérer la ville."
+        },
+        {
+          "t": 64.65,
+          "text": "Et un nouveau commandant allemand nommé par un dictateur qui n'a plus rien à perdre."
+        },
+        {
+          "t": 69.13,
+          "text": "Ça vous rappelle quelque chose ?"
+        },
+        {
+          "t": 70.81,
+          "text": "Trois raisons pour lesquelles les Alliés n'avaient pas prévu de libérer Paris tout de suite."
+        },
+        {
+          "t": 74.81,
+          "text": "Un : la peur de combats rue par rue à la Stalingrad, coûteux à la fois en soldats et en civils."
+        },
+        {
+          "t": 80.49,
+          "text": "Deux : Paris n'était pas stratégiquement essentielle."
+        },
+        {
+          "t": 83.58,
+          "text": "La traverser aurait retardé l'avancée américaine vers Berlin, où la course contre les Soviétiques était devenue la priorité."
+        },
+        {
+          "t": 89.74,
+          "text": "Trois : le cauchemar logistique de devoir soudainement nourrir trois millions de Parisiens affamés une fois la ville libérée."
+        },
+        {
+          "t": 96.22,
+          "text": "Les Alliés avaient débarqué en Normandie le 6 juin 1944,"
+        },
+        {
+          "t": 100.3,
+          "text": "et le plan initial était de balayer vers l'est en filant droit vers Berlin, en contournant Paris."
+        },
+        {
+          "t": 105.58,
+          "text": "Ce qui a fait changer les choses, c'est l'insurrection elle-même, et ce que Raoul Nordling —"
+        },
+        {
+          "t": 110.3,
+          "text": "le consul de Suède, on y revient dans une minute — a pu dire à Eisenhower sur Von Choltitz."
+        },
+        {
+          "t": 115.98,
+          "text": "Le 22 août, la décision est prise : Leclerc et ses hommes vont foncer."
+        },
+        {
+          "t": 120.85,
+          "text": "La 2e Division Blindée française et la 4e Division d'Infanterie américaine viendront en aide à Paris."
+        },
+        {
+          "t": 127.25,
+          "text": "Laissez-moi vous présenter les protagonistes de cette semaine terrible."
+        },
+        {
+          "t": 130.81,
+          "text": "Côté allemand : le général Dietrich von Choltitz, amené à Paris par Hitler en personne le 10 août."
+        },
+        {
+          "t": 136.65,
+          "text": "Sa mission : garder Paris allemande, et écraser toute insurrection sans pitié."
+        },
+        {
+          "t": 141.72,
+          "text": "Côté français, deux camps se disputent le pouvoir politique pour l'après-libération."
+        },
+        {
+          "t": 146.04,
+          "text": "Les communistes, qui dirigeaient l'essentiel des combattants de la résistance dans Paris, sous le colonel Henri Rol-Tanguy."
+        },
+        {
+          "t": 152.2,
+          "text": "Et les gaullistes, loyaux au général Charles de Gaulle."
+        },
+        {
+          "t": 155.45,
+          "text": "Ils contrôlaient l'essentiel des forces de police dans Paris, et surtout ils avaient le général Philippe Leclerc —"
+        },
+        {
+          "t": 160.81,
+          "text": "qui dirigeait la 2e Division Blindée de De Gaulle, en route vers l'est aux côtés des Alliés après le débarquement de Normandie."
+        },
+        {
+          "t": 167.35,
+          "text": "À la mi-août, Paris est en ébullition."
+        },
+        {
+          "t": 169.91,
+          "text": "La police, les gaziers, les électriciens, les transporteurs — tout le monde est en grève."
+        },
+        {
+          "t": 174.87,
+          "text": "Les Allemands préparent ouvertement la défense de la ville."
+        },
+        {
+          "t": 177.77,
+          "text": "Von Choltitz avait dit au maire de Paris qu'il était prêt à détruire tous les ponts de la ville et toutes les centrales électriques."
+        },
+        {
+          "t": 183.93,
+          "text": "Les gaullistes voulaient retarder l'insurrection — ce serait un bain de sang pour les Parisiens."
+        },
+        {
+          "t": 189.62,
+          "text": "Les communistes voulaient la lancer immédiatement, pour prendre le contrôle politique de la ville par les armes."
+        },
+        {
+          "t": 195.3,
+          "text": "Les communistes ont eu gain de cause."
+        },
+        {
+          "t": 197.3,
+          "text": "L'insurrection commence le 19 août 1944 — le 1 518e jour de l'occupation allemande."
+        },
+        {
+          "t": 204.02,
+          "text": "Même si les communistes avaient voulu tirer le premier coup de feu, les gaullistes l'ont appris et ont agi vite."
+        },
+        {
+          "t": 209.46,
+          "text": "Il aurait été trop dangereux de laisser les communistes revendiquer seuls le symbole de l'insurrection."
+        },
+        {
+          "t": 214.54,
+          "text": "Un haut fonctionnaire de police, Yves Bayet, a donc mené la police parisienne à s'emparer de la Préfecture de Police au nom du général de Gaulle."
+        },
+        {
+          "t": 223.2,
+          "text": "Il a ensuite marché jusqu'à la terrasse des Deux Magots et annoncé à Charles Luizet —"
+        },
+        {
+          "t": 227.84,
+          "text": "le lieutenant de confiance de De Gaulle, parachuté en France sept jours plus tôt — que la Préfecture était à lui."
+        },
+        {
+          "t": 233.51,
+          "text": "C'était la première fois que le bruit de la poudre résonnait dans Paris depuis la Commune de 1871."
+        },
+        {
+          "t": 239.51,
+          "text": "À 15 h 30, les Allemands envoient des chars."
+        },
+        {
+          "t": 242.33,
+          "text": "Deux Panther et un Renault récupéré roulent sur le parvis de Notre-Dame — juste devant vous, là où les touristes se tiennent aujourd'hui — et ouvrent le feu."
+        },
+        {
+          "t": 250.49,
+          "text": "La porte principale de la Préfecture explose."
+        },
+        {
+          "t": 253.21,
+          "text": "Face à cette révolte ouverte, Von Choltitz devait agir vite."
+        },
+        {
+          "t": 256.74,
+          "text": "Son plan : une frappe aérienne de la Luftwaffe sur la Préfecture à 4 h du matin le 20 août, suivie d'un assaut au sol par les chars."
+        },
+        {
+          "t": 264.82,
+          "text": "La Préfecture serait rasée."
+        },
+        {
+          "t": 266.58,
+          "text": "Ça n'est pas arrivé."
+        },
+        {
+          "t": 268.06,
+          "text": "Le consul général de Suède à Paris, Raoul Nordling, est intervenu et a proposé un cessez-le-feu qui arrangeait les deux camps."
+        },
+        {
+          "t": 275.34,
+          "text": "Von Choltitz avait besoin de temps pour consolider ses positions, la résistance avait besoin de se réapprovisionner."
+        },
+        {
+          "t": 281.5,
+          "text": "La trêve a été conclue."
+        },
+        {
+          "t": 283.13,
+          "text": "Elle n'a pas tenu."
+        },
+        {
+          "t": 284.33,
+          "text": "Les communistes ont fortement poussé contre — ils voulaient que l'insurrection garde son élan."
+        },
+        {
+          "t": 289.05,
+          "text": "Rol-Tanguy, ce jour-là, a prononcé la phrase qui restera : « Paris vaut bien 200 000 morts. »"
+        },
+        {
+          "t": 295.05,
+          "text": "Partout dans Paris, la ville s'organisait pour la guerre."
+        },
+        {
+          "t": 298.31,
+          "text": "Des presses clandestines imprimaient désormais des tracts avec des recettes de cocktails Molotov."
+        },
+        {
+          "t": 303.35,
+          "text": "Les pharmacies devenaient des arsenaux improvisés."
+        },
+        {
+          "t": 306.23,
+          "text": "Les appartements des étudiants en médecine résistants devenaient des hôpitaux de campagne."
+        },
+        {
+          "t": 310.79,
+          "text": "Dans la nuit du 22 août, après que Nordling a traversé les lignes alliées et plaidé auprès d'Eisenhower et de Bradley, la décision est enfin prise :"
+        },
+        {
+          "t": 319.11,
+          "text": "la 2e Division Blindée française du général Leclerc, soutenue par la 4e Division d'Infanterie américaine, va foncer sur Paris."
+        },
+        {
+          "t": 326.75,
+          "text": "Leclerc avait reçu l'ordre d'attendre."
+        },
+        {
+          "t": 328.91,
+          "text": "Il a commencé à bouger malgré tout."
+        },
+        {
+          "t": 330.99,
+          "text": "Le 23 août, Von Choltitz reçoit un ordre direct d'Hitler en personne."
+        },
+        {
+          "t": 335.63,
+          "text": "Si les Alliés atteignent Paris, ils ne devront trouver que des ruines."
+        },
+        {
+          "t": 339.07,
+          "text": "Partout dans la ville, les explosifs étaient déjà en place."
+        },
+        {
+          "t": 342.44,
+          "text": "Les 42 ponts."
+        },
+        {
+          "t": 343.64,
+          "text": "Le Parlement."
+        },
+        {
+          "t": 344.6,
+          "text": "Le ministère des Affaires étrangères."
+        },
+        {
+          "t": 346.6,
+          "text": "Le Palais du Luxembourg."
+        },
+        {
+          "t": 348.12,
+          "text": "Les deux hôtels de la place de la Concorde."
+        },
+        {
+          "t": 350.28,
+          "text": "Les Invalides."
+        },
+        {
+          "t": 351.4,
+          "text": "Tout était piégé."
+        },
+        {
+          "t": 352.52,
+          "text": "Choltitz attendait l'ordre final."
+        },
+        {
+          "t": 355.01,
+          "text": "Au matin du 24 août, la situation des résistants à l'intérieur de la Préfecture était désespérée."
+        },
+        {
+          "t": 360.53,
+          "text": "Ils étaient presque à court de munitions."
+        },
+        {
+          "t": 362.59,
+          "text": "Luizet et son adjoint Pisani ont appelé le commissariat de Longjumeau, à 35 kilomètres au sud de Paris, pour savoir où en étaient les divisions alliées."
+        },
+        {
+          "t": 371.39,
+          "text": "L'homme à l'autre bout du fil a tendu le combiné par la fenêtre et a dit : « Vous entendez ?"
+        },
+        {
+          "t": 376.19,
+          "text": "Ils sont juste là. »"
+        },
+        {
+          "t": 377.16,
+          "text": "Et il y a une histoire que je veux vraiment vous raconter."
+        },
+        {
+          "t": 379.72,
+          "text": "Dans l'après-midi du 24 août, quelques heures avant que les chars alliés n'entrent dans la ville,"
+        },
+        {
+          "t": 384.28,
+          "text": "le général Leclerc a ordonné à deux pilotes français une mission extraordinaire."
+        },
+        {
+          "t": 389.09,
+          "text": "Leur tâche : survoler Paris et larguer un message écrit dans la cour de la Préfecture de Police, pour dire aux résistants à l'intérieur : tenez bon, on arrive."
+        },
+        {
+          "t": 398.61,
+          "text": "Le capitaine Jean Callet était aux commandes."
+        },
+        {
+          "t": 402.29,
+          "text": "Le lieutenant Étienne Mantoux était à l'arrière, avec le message."
+        },
+        {
+          "t": 405.51,
+          "text": "La mission décolle vers 17 h."
+        },
+        {
+          "t": 407.35,
+          "text": "Ils volent bas, se cachant dans les nuages quand ils peuvent."
+        },
+        {
+          "t": 410.39,
+          "text": "Vers 18 h, ils sont au-dessus de Paris et voient l'objectif devant eux — mais les Allemands les voient aussi."
+        },
+        {
+          "t": 416.3,
+          "text": "À 800 mètres de la Préfecture, alors que Callet suit la Seine, il pique brutalement l'avion."
+        },
+        {
+          "t": 421.82,
+          "text": "Il veut faire croire aux Allemands qu'il a été touché et qu'il s'écrase, pour qu'ils cessent le feu."
+        },
+        {
+          "t": 426.54,
+          "text": "Au dernier moment possible, il redresse — et Mantoux, à l'arrière, largue le message."
+        },
+        {
+          "t": 431.66,
+          "text": "Il atterrit dans la cour de la Préfecture."
+        },
+        {
+          "t": 433.98,
+          "text": "Pour s'échapper, ils volent au ras des toits, en zigzaguant fort."
+        },
+        {
+          "t": 437.74,
+          "text": "Le train d'atterrissage de l'avion a été criblé au-dessus du sud de Paris."
+        },
+        {
+          "t": 441.89,
+          "text": "L'avion avait 13 impacts de balles quand ils ont fini par se poser dans un champ en territoire allié, basculé sur son aile droite."
+        },
+        {
+          "t": 448.93,
+          "text": "Jean Callet a survécu à la guerre et est devenu général dans l'armée française."
+        },
+        {
+          "t": 453.33,
+          "text": "Il est mort en 2006."
+        },
+        {
+          "t": 455.4,
+          "text": "Étienne Mantoux n'a pas eu cette chance — il a été tué le 29 avril 1945, moins de 10 jours avant la victoire en Europe."
+        },
+        {
+          "t": 463.53,
+          "text": "À 21 h 22 le 24 août, le premier détachement de la 2e Division Blindée française,"
+        },
+        {
+          "t": 469.37,
+          "text": "mené par le capitaine Raymond Dronne, atteint l'Hôtel de Ville."
+        },
+        {
+          "t": 472.57,
+          "text": "Les résistants à l'intérieur entonnent La Marseillaise."
+        },
+        {
+          "t": 475.29,
+          "text": "Le chant gagne les rues."
+        },
+        {
+          "t": 476.75,
+          "text": "À la radio, un présentateur demande à tous les prêtres de Paris de faire sonner leurs cloches —"
+        },
+        {
+          "t": 481.71,
+          "text": "pour la première fois en quatre ans, car elles étaient restées muettes pendant toute l'Occupation."
+        },
+        {
+          "t": 486.39,
+          "text": "La grande cloche de 13 tonnes de Notre-Dame, celle qui s'appelle Emmanuel, celle qui est juste devant vous, a sonné vers 21 h 30."
+        },
+        {
+          "t": 493.86,
+          "text": "Au matin du 25 août, la 2e Division Blindée française et la 4e Division d'Infanterie américaine font leur entrée officielle dans Paris."
+        },
+        {
+          "t": 501.78,
+          "text": "Les rues explosent."
+        },
+        {
+          "t": 503.24,
+          "text": "Les Parisiens jettent tout ce qu'ils ont — fruits, fromage, bouteilles de vin et de champagne gardées pour ce moment précis — sur les soldats."
+        },
+        {
+          "t": 510.98,
+          "text": "Et c'est ici que se termine notre tour — face à Notre-Dame, avec la Préfecture de Police qui a déclenché l'insurrection juste de l'autre côté de la Seine,"
+        },
+        {
+          "t": 518.98,
+          "text": "et la cathédrale dont les cloches ont sonné le moment où la Libération est devenue réelle."
+        },
+        {
+          "t": 523.97,
+          "text": "Vous avez traversé trois arrondissements et environ cinq années d'histoire."
+        },
+        {
+          "t": 527.57,
+          "text": "D'un Boulevard Saint-Michel tranquille d'avant-guerre, à la chute de Paris en 35 jours, au travail patient des premiers réseaux de résistance,"
+        },
+        {
+          "t": 534.85,
+          "text": "au Quartier latin criblé d'impacts, et à l'insurrection étrange, joyeuse et sanglante d'août 1944."
+        },
+        {
+          "t": 541.31,
+          "text": "Si ce tour a ajouté quelque chose à votre séjour à Paris, la meilleure chose que vous puissiez faire pour moi, c'est de laisser un petit avis sur Google."
+        },
+        {
+          "t": 549.25,
+          "text": "Et si vous voulez le refaire avec moi en personne —"
+        },
+        {
+          "t": 551.73,
+          "text": "où je partagerai les petites histoires, les digressions et les détails humains que je garde pour le tour en live — tout est sur parishistorytours.com."
+        },
+        {
+          "t": 559.65,
+          "text": "Merci d'avoir marché avec moi."
+        },
+        {
+          "t": 561.17,
+          "text": "À la prochaine."
+        }
+      ],
+      "media": [
+        {
+          "t": 130.81,
+          "img": "photos/left-bank-ww2/p28_20.webp",
+          "cap": "Le général Dietrich von Choltitz — commandant allemand du « Grand Paris », août 1944.",
+          "w": 741,
+          "h": 1000
+        },
+        {
+          "t": 155.45,
+          "img": "photos/left-bank-ww2/p29_22.webp",
+          "cap": "Le général Philippe Leclerc — commandant de la 2e Division Blindée française, qui mènera la poussée alliée dans Paris.",
+          "w": 770,
+          "h": 513
+        },
+        {
+          "t": 197.3,
+          "img": "photos/left-bank-ww2/p30_23.webp",
+          "cap": "L'appel à l'insurrection placardé sur les murs de Paris, août 1944.",
+          "w": 904,
+          "h": 558
+        },
+        {
+          "t": 289.05,
+          "img": "photos/left-bank-ww2/p31_24.webp",
+          "cap": "La presse clandestine de ces jours-là — appelant les Parisiens « Aux barricades ! »",
+          "w": 546,
+          "h": 767
+        },
+        {
+          "t": 402.29,
+          "img": "photos/left-bank-ww2/p33_27.webp",
+          "cap": "Un Piper Cub — le type d'avion léger utilisé pour la mission.",
+          "w": 1200,
+          "h": 823
+        },
+        {
+          "t": 416.3,
+          "img": "photos/left-bank-ww2/p34_28.webp",
+          "cap": "Le trajet de la mission — au-dessus de Paris, jusqu'à la Préfecture, et retour.",
+          "w": 899,
+          "h": 751
+        },
+        {
+          "t": 455.4,
+          "img": "photos/left-bank-ww2/p35_29.webp",
+          "cap": "Le message largué par Mantoux dans la cour de la Préfecture, signé Leclerc.",
+          "w": 842,
+          "h": 662
+        },
+        {
+          "t": 493.86,
+          "img": "photos/left-bank-ww2/p37_31.webp",
+          "cap": "Soldats allemands escortés à l'extérieur de l'Hôtel Meurice, QG de Von Choltitz, le 25 août 1944.",
+          "w": 1200,
+          "h": 812
+        },
+        {
+          "t": 510.98,
+          "img": "photos/left-bank-ww2/p38_32.webp",
+          "cap": "Le général de Gaulle descendant les Champs-Élysées, 26 août 1944.",
+          "w": 1024,
+          "h": 750
+        }
+      ]
     }
   ]
 }
