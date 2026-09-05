@@ -1,0 +1,9 @@
+{
+  "_comment": "Hand-placed photo anchors that survive re-runs of tools/build-media-cues.ts. paragraph/sentence are 0-based indexes in the EN script (FR mirrors them).",
+  "08-saint-severin": {
+    "p26_19": { "paragraph": 2, "sentence": 1 }
+  },
+  "09-liberation": {
+    "p38_32": { "paragraph": 30, "sentence": 0 }
+  }
+}

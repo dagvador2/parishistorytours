@@ -27,3 +27,22 @@ test("helpers", () => {
   assert.ok(a.has("dry-run"));
   assert.equal(a.get("section"), "04-odeon");
 });
+
+test("media cues resolve to a real sentence in every script", async () => {
+  const { loadMediaCues, resolveAnchor } = await import("./cues.ts");
+  const { splitParagraphs, splitSentences } = await import("./text.ts");
+  const { readFileSync } = await import("node:fs");
+  for (const lang of LANGS) {
+    const cues = loadMediaCues(lang);
+    for (const s of SECTIONS) {
+      const paragraphs = splitParagraphs(readFileSync(scriptPath(s, lang), "utf8"));
+      for (const cue of cues[s.id] ?? []) {
+        const para = paragraphs[cue.anchor.paragraph];
+        assert.ok(para, `${lang}/${s.id}/${cue.img}: paragraph ${cue.anchor.paragraph} missing`);
+        const r = resolveAnchor(splitSentences(para).map((x) => x.text), cue.anchor.startsWith);
+        assert.ok(r.exact, `${lang}/${s.id}/${cue.img}: anchor "${cue.anchor.startsWith}" not found`);
+        assert.ok(cue.cap.length > 0, `${lang}/${s.id}/${cue.img}: empty caption`);
+      }
+    }
+  }
+});

@@ -1,0 +1,240 @@
+{
+  "01-intro": [],
+  "02-context-of-war": [
+    {
+      "img": "p05_0",
+      "cap": "Le wagon en forêt de Compiègne où l'armistice de 1918 a été signé.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "Les Allemands signent l'armistice dans un"
+      }
+    },
+    {
+      "img": "p06_1",
+      "cap": "Neville Chamberlain — Premier ministre britannique, figure de l'apaisement d'avant-guerre.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "La figure centrale, c'est le Premier"
+      }
+    },
+    {
+      "img": "p07_2",
+      "cap": "Hitler et Chamberlain à Munich, septembre 1938.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Cette façon de penser a culminé"
+      }
+    },
+    {
+      "img": "p07_3",
+      "cap": "« J'ai dans ma main un papier... » Chamberlain rentre de Munich, l'accord à la main.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Chamberlain rentre chez lui en brandissant"
+      }
+    },
+    {
+      "img": "p08_4",
+      "cap": "Les troupes allemandes franchissent la frontière polonaise, 1er septembre 1939 — début de la Seconde Guerre mondiale.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "Et quand Hitler envahit la Pologne"
+      }
+    }
+  ],
+  "03-fall-of-paris": [
+    {
+      "img": "p10_5",
+      "cap": "Paul Reynaud, Premier ministre de France à partir de mars 1940.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "Le nouveau Premier ministre Paul Reynaud,"
+      }
+    },
+    {
+      "img": "p11_6",
+      "cap": "L'offensive allemande de mai 1940.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Phase un : les Allemands attaquent"
+      }
+    },
+    {
+      "img": "p11_7",
+      "cap": "Le général Maurice Gamelin — commandant en chef de l'armée française en mai 1940.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Phase deux : le treize mai,"
+      }
+    },
+    {
+      "img": "p13_8",
+      "cap": "Le Petit Parisien, 16 mai 1940.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "Les unes de journaux du seize"
+      }
+    },
+    {
+      "img": "p14_9",
+      "cap": "Après le bombardement de Paris, 3 juin 1940.",
+      "anchor": {
+        "paragraph": 18,
+        "startsWith": "Le trois juin mille neuf cent"
+      }
+    },
+    {
+      "img": "p15_10",
+      "cap": "Le drapeau nazi flottant sur l'Arc de Triomphe, juin 1940.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "Le drapeau nazi est hissé partout"
+      }
+    },
+    {
+      "img": "p16_11",
+      "cap": "Hitler au Trocadéro, 23 juin 1940 — l'image la plus reproduite de sa seule visite à Paris.",
+      "anchor": {
+        "paragraph": 21,
+        "startsWith": "Une semaine plus tard, Hitler fait"
+      }
+    },
+    {
+      "img": "p17_13",
+      "cap": "La France divisée après l'armistice : zone occupée (nord et ouest), zone « libre » sous Vichy (sud), et l'Alsace-Moselle annexée.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "Et enfin, le vingt-deux juin mille"
+      }
+    }
+  ],
+  "04-odeon": [],
+  "05-resistance": [
+    {
+      "img": "p20_14",
+      "cap": "Le Musée de l'Homme au Trocadéro — le musée qui a donné son nom au réseau.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "De l'autre côté de la ville,"
+      }
+    },
+    {
+      "img": "p21_15",
+      "cap": "Jean Cassou — écrivain, historien de l'art, cofondateur du réseau du Musée de l'Homme.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Son allié le plus proche était"
+      }
+    },
+    {
+      "img": "p22_16",
+      "cap": "Le premier numéro de Résistance, décembre 1940.",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "Le quinze décembre mille neuf cent"
+      }
+    },
+    {
+      "img": "p23_17",
+      "cap": "Notre Guerre — le journal d'Agnès Humbert, publié en 1946.",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "Elle a survécu aux camps, est"
+      }
+    }
+  ],
+  "06-sorbonne-facade": [],
+  "07-observatory": [],
+  "08-saint-severin": [
+    {
+      "img": "p25_18",
+      "cap": "Barricade sur la Rue du Petit-Pont, devant Saint-Séverin — août 1944.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous êtes maintenant devant l'Église Saint-Séverin,"
+      }
+    },
+    {
+      "img": "p26_19",
+      "cap": "Barricade au 30 Rue Saint-Jacques, à quelques rues d'ici.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Plus de six cents barricades ont"
+      }
+    }
+  ],
+  "09-liberation": [
+    {
+      "img": "p28_20",
+      "cap": "Le général Dietrich von Choltitz — commandant allemand du « Grand Paris », août 1944.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Côté allemand : le général Dietrich"
+      }
+    },
+    {
+      "img": "p29_22",
+      "cap": "Le général Philippe Leclerc — commandant de la 2e Division Blindée française, qui mènera la poussée alliée dans Paris.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "Ils contrôlaient l'essentiel des forces de"
+      }
+    },
+    {
+      "img": "p30_23",
+      "cap": "L'appel à l'insurrection placardé sur les murs de Paris, août 1944.",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "L'insurrection commence le dix-neuf août mille"
+      }
+    },
+    {
+      "img": "p31_24",
+      "cap": "La presse clandestine de ces jours-là — appelant les Parisiens « Aux barricades ! »",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "Rol-Tanguy, ce jour-là, a prononcé la"
+      }
+    },
+    {
+      "img": "p33_27",
+      "cap": "Un Piper Cub — le type d'avion léger utilisé pour la mission.",
+      "anchor": {
+        "paragraph": 24,
+        "startsWith": "Le lieutenant Étienne Mantoux était à"
+      }
+    },
+    {
+      "img": "p34_28",
+      "cap": "Le trajet de la mission — au-dessus de Paris, jusqu'à la Préfecture, et retour.",
+      "anchor": {
+        "paragraph": 25,
+        "startsWith": "À huit cents mètres de la"
+      }
+    },
+    {
+      "img": "p35_29",
+      "cap": "Le message largué par Mantoux dans la cour de la Préfecture, signé Leclerc.",
+      "anchor": {
+        "paragraph": 27,
+        "startsWith": "Étienne Mantoux n'a pas eu cette"
+      }
+    },
+    {
+      "img": "p37_31",
+      "cap": "Soldats allemands escortés à l'extérieur de l'Hôtel Meurice, QG de Von Choltitz, le 25 août 1944.",
+      "anchor": {
+        "paragraph": 29,
+        "startsWith": "Au matin du vingt-cinq août, la"
+      }
+    },
+    {
+      "img": "p38_32",
+      "cap": "Le général de Gaulle descendant les Champs-Élysées, 26 août 1944.",
+      "anchor": {
+        "paragraph": 30,
+        "startsWith": "Et c'est ici que se termine"
+      }
+    }
+  ]
+}

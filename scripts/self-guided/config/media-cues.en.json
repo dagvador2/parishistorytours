@@ -1,0 +1,240 @@
+{
+  "01-intro": [],
+  "02-context-of-war": [
+    {
+      "img": "p05_0",
+      "cap": "The carriage in the Compiègne forest where the 1918 armistice was signed.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "The Germans sign the armistice inside"
+      }
+    },
+    {
+      "img": "p06_1",
+      "cap": "Neville Chamberlain — the face of pre-war appeasement.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "The central figure here is the"
+      }
+    },
+    {
+      "img": "p07_2",
+      "cap": "Hitler and Chamberlain at Munich, September 1938.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "This way of thinking peaked at"
+      }
+    },
+    {
+      "img": "p07_3",
+      "cap": "“I have here a paper…” Chamberlain returns from Munich.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Chamberlain came home waving the agreement,"
+      }
+    },
+    {
+      "img": "p08_4",
+      "cap": "German troops crossing into Poland, 1 September 1939.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "And when Hitler invaded Poland anyway"
+      }
+    }
+  ],
+  "03-fall-of-paris": [
+    {
+      "img": "p10_5",
+      "cap": "Paul Reynaud, Prime Minister of France from March 1940.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "The new Prime Minister Paul Reynaud,"
+      }
+    },
+    {
+      "img": "p11_6",
+      "cap": "The German offensive of May 1940 — the feint in the north, the real attack through the Ardennes.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Phase one: the Germans attacked in"
+      }
+    },
+    {
+      "img": "p11_7",
+      "cap": "General Maurice Gamelin, commander-in-chief in May 1940.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Phase two: on the thirteenth of"
+      }
+    },
+    {
+      "img": "p13_8",
+      "cap": "Le Petit Parisien, 16 May 1940. Reassuring — and false.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "The newspaper headlines on the sixteenth"
+      }
+    },
+    {
+      "img": "p14_9",
+      "cap": "The aftermath of the bombing of Paris, 3 June 1940.",
+      "anchor": {
+        "paragraph": 18,
+        "startsWith": "On the third of June nineteen"
+      }
+    },
+    {
+      "img": "p15_10",
+      "cap": "The Nazi flag over the Arc de Triomphe, June 1940.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "The Nazi flag went up everywhere"
+      }
+    },
+    {
+      "img": "p16_11",
+      "cap": "Hitler at the Trocadéro, 23 June 1940.",
+      "anchor": {
+        "paragraph": 21,
+        "startsWith": "A week later, Hitler made his"
+      }
+    },
+    {
+      "img": "p17_13",
+      "cap": "France divided after the armistice: occupied zone, Vichy zone, annexed Alsace-Moselle.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "And finally, on the twenty-second of"
+      }
+    }
+  ],
+  "04-odeon": [],
+  "05-resistance": [
+    {
+      "img": "p20_14",
+      "cap": "The Musée de l’Homme at the Trocadéro — the museum that gave its name to the network.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Across town, at the Trocadéro, the"
+      }
+    },
+    {
+      "img": "p21_15",
+      "cap": "Jean Cassou — co-founder of the Musée de l’Homme network.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Her closest ally was Jean Cassou,"
+      }
+    },
+    {
+      "img": "p22_16",
+      "cap": "The first issue of Résistance, December 1940.",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "On the fifteenth of December nineteen"
+      }
+    },
+    {
+      "img": "p23_17",
+      "cap": "Notre Guerre — Agnès Humbert’s diary, published in 1946.",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "She survived the camps, returned to"
+      }
+    }
+  ],
+  "06-sorbonne-facade": [],
+  "07-observatory": [],
+  "08-saint-severin": [
+    {
+      "img": "p25_18",
+      "cap": "Barricade on Rue du Petit-Pont, in front of Saint-Séverin — August 1944.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "You're now in front of the"
+      }
+    },
+    {
+      "img": "p26_19",
+      "cap": "Barricade at 30 Rue Saint-Jacques, built by the architecture students of Paris.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "More than six hundred barricades were"
+      }
+    }
+  ],
+  "09-liberation": [
+    {
+      "img": "p28_20",
+      "cap": "General Dietrich von Choltitz — German commander of Greater Paris, August 1944.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "On the German side: General Dietrich"
+      }
+    },
+    {
+      "img": "p29_22",
+      "cap": "General Philippe Leclerc — commander of the French 2nd Armoured Division.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "They controlled most of the police"
+      }
+    },
+    {
+      "img": "p30_23",
+      "cap": "The call to insurrection plastered on Paris walls, August 1944.",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "The insurrection began on the nineteenth"
+      }
+    },
+    {
+      "img": "p31_24",
+      "cap": "The clandestine press: “To the barricades!”",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "Rol-Tanguy, that day, said the line"
+      }
+    },
+    {
+      "img": "p33_27",
+      "cap": "A Piper Cub — the type of light aircraft used for the mission.",
+      "anchor": {
+        "paragraph": 24,
+        "startsWith": "Lieutenant Étienne Mantoux was in the"
+      }
+    },
+    {
+      "img": "p34_28",
+      "cap": "The flight path of the mission over Paris.",
+      "anchor": {
+        "paragraph": 25,
+        "startsWith": "Eight hundred metres from the Préfecture,"
+      }
+    },
+    {
+      "img": "p35_29",
+      "cap": "The message dropped into the Préfecture courtyard, signed by Leclerc.",
+      "anchor": {
+        "paragraph": 27,
+        "startsWith": "Étienne Mantoux was not so lucky"
+      }
+    },
+    {
+      "img": "p37_31",
+      "cap": "German soldiers marched out of the Hôtel Meurice, 25 August 1944.",
+      "anchor": {
+        "paragraph": 29,
+        "startsWith": "On the morning of the twenty-fifth"
+      }
+    },
+    {
+      "img": "p38_32",
+      "cap": "General de Gaulle descending the Champs-Élysées, 26 August 1944.",
+      "anchor": {
+        "paragraph": 30,
+        "startsWith": "And this is where our tour"
+      }
+    }
+  ]
+}
