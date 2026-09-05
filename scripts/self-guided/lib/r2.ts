@@ -7,13 +7,15 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { GetObjectCommand, HeadBucketCommand, HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { requireEnv } from "./env.ts";
+import { optionalEnv, requireEnv } from "./env.ts";
 
 export interface R2Config {
   accountId: string;
   accessKeyId: string;
   secretAccessKey: string;
   bucket: string;
+  /** "eu" for a bucket created under the EU jurisdiction (this one), "" otherwise */
+  jurisdiction: string;
 }
 
 export function r2ConfigFromEnv(): R2Config {
@@ -22,13 +24,20 @@ export function r2ConfigFromEnv(): R2Config {
     accessKeyId: requireEnv("R2_ACCESS_KEY_ID"),
     secretAccessKey: requireEnv("R2_SECRET_ACCESS_KEY"),
     bucket: requireEnv("R2_BUCKET_NAME"),
+    jurisdiction: optionalEnv("R2_JURISDICTION", ""),
   };
+}
+
+/** Jurisdiction-restricted buckets live on a dedicated S3 endpoint: <account>.eu.r2.cloudflarestorage.com */
+export function r2Endpoint(cfg: Pick<R2Config, "accountId" | "jurisdiction">): string {
+  const j = cfg.jurisdiction && cfg.jurisdiction !== "default" ? `${cfg.jurisdiction}.` : "";
+  return `https://${cfg.accountId}.${j}r2.cloudflarestorage.com`;
 }
 
 export function r2Client(cfg: R2Config): S3Client {
   return new S3Client({
     region: "auto",
-    endpoint: `https://${cfg.accountId}.r2.cloudflarestorage.com`,
+    endpoint: r2Endpoint(cfg),
     credentials: { accessKeyId: cfg.accessKeyId, secretAccessKey: cfg.secretAccessKey },
   });
 }

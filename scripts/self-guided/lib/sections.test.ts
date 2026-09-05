@@ -46,3 +46,10 @@ test("media cues resolve to a real sentence in every script", async () => {
     }
   }
 });
+
+test("R2 endpoint honours the jurisdiction", async () => {
+  const { r2Endpoint } = await import("./r2.ts");
+  assert.equal(r2Endpoint({ accountId: "abc", jurisdiction: "eu" }), "https://abc.eu.r2.cloudflarestorage.com");
+  assert.equal(r2Endpoint({ accountId: "abc", jurisdiction: "" }), "https://abc.r2.cloudflarestorage.com");
+  assert.equal(r2Endpoint({ accountId: "abc", jurisdiction: "default" }), "https://abc.r2.cloudflarestorage.com");
+});

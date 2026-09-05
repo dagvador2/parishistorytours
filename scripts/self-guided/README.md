@@ -37,6 +37,7 @@ Tests: `pnpm self-guided:test` (node:test through tsx).
 | `FISH_AUDIO_MODEL` | `s2.1-pro-free` (free, same model) or `s2.1-pro` ($15 / M UTF-8 bytes, ≈ $0.70 per language here) |
 | `FISH_AUDIO_TEMPERATURE` / `FISH_AUDIO_TOP_P` | default 0.3 / 0.7, tighter than Fish's defaults to avoid hallucinated words |
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME` | private bucket `parishistorytours-self-guided` |
+| `R2_JURISDICTION` | `eu`: the bucket is jurisdiction-restricted, its S3 endpoint is `<account>.eu.r2.cloudflarestorage.com` |
 
 ## Everyday commands
 
