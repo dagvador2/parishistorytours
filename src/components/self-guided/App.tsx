@@ -3,18 +3,21 @@
  * header → segmented progress → map (flex 1) → bottom player, plus overlays
  * (expanded player, completion sheet, menu).
  */
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { STOPS, type Lang } from "../../data/self-guided/left-bank-ww2";
 import Header from "./Header";
 import MapView from "./MapView";
 import NextStopCard from "./NextStopCard";
 import PlayerArrived from "./PlayerArrived";
+import PlayerExpanded from "./PlayerExpanded";
+import PlayerMini from "./PlayerMini";
 import PlayerWalking from "./PlayerWalking";
 import Progress from "./Progress";
 import { bearing, dist } from "./geo";
 import { strings } from "./i18n";
 import { loadState, reducer, saveState, type TourState } from "./state";
 import { useAssets } from "./useAssets";
+import { useAudioEngine } from "./useAudioEngine";
 import { useGeolocation } from "./useGeolocation";
 
 interface Props {
@@ -38,10 +41,28 @@ export default function App({ lang: urlLang }: Props) {
     document.getElementById("ag-splash")?.remove();
   }, []);
 
-  useEffect(() => saveState(state), [state]);
+  // Persistence: every change is saved, except that playback ticks are throttled to one write per 3 s
+  // (plus a flush when the page is hidden, i.e. lock screen / app switch).
+  const lastSave = useRef<{ at: number; snapshot: TourState | null }>({ at: 0, snapshot: null });
+  const stateRef = useRef(state);
+  stateRef.current = state;
+  useEffect(() => {
+    const prev = lastSave.current.snapshot;
+    const onlyElapsed = prev !== null && Object.keys(state).every((k) => k === "elapsed" || (state as unknown as Record<string, unknown>)[k] === (prev as unknown as Record<string, unknown>)[k]);
+    if (onlyElapsed && Date.now() - lastSave.current.at < 3000) return;
+    saveState(state);
+    lastSave.current = { at: Date.now(), snapshot: state };
+  }, [state]);
+  useEffect(() => {
+    const flush = () => saveState(stateRef.current);
+    document.addEventListener("visibilitychange", flush);
+    window.addEventListener("pagehide", flush);
+    return () => { document.removeEventListener("visibilitychange", flush); window.removeEventListener("pagehide", flush); };
+  }, []);
 
   const { assets, error, loading, reload } = useAssets(state.audioLang ?? state.lang);
   const section = assets?.sections[state.idx];
+  const narrationNote = assets && assets.lang !== state.lang ? t.narrationFallback : null;
 
   // Position + compass. When the visitor turned location off in the menu, the watch is released.
   const geo = useGeolocation(!state.gpsDenied);
@@ -66,9 +87,33 @@ export default function App({ lang: urlLang }: Props) {
     return geo.heading === null ? b : (b - geo.heading + 360) % 360;
   }, [user, stop, geo.heading]);
 
-  const onPinTap = (i: number) => {
-    setMenuOpen(false);
-    dispatch({ type: "arrive", idx: i });
+  // Audio engine. `wantsAutoplay` is set by user gestures (Play, ⏮ to previous stop) so that a restored
+  // "playing" state after a reload shows the player paused instead of trying an autoplay iOS would block.
+  const wantsAutoplay = useRef(false);
+  const audio = useAudioEngine({
+    onTime: useCallback((tSec: number) => dispatch({ type: "tick", elapsed: tSec }), []),
+    onEnded: useCallback(() => dispatch({ type: "finish" }), []),
+  });
+  const audioSrc = state.phase === "playing" ? section?.audio ?? null : null;
+  useEffect(() => {
+    if (!audioSrc) {
+      audio.stop();
+      return;
+    }
+    audio.load(audioSrc, stateRef.current.elapsed, wantsAutoplay.current);
+    wantsAutoplay.current = false;
+    // Only the source identity matters (signed URLs change on refresh but the key does not).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioSrc?.split("?")[0], state.idx]);
+
+  const onPlay = () => { wantsAutoplay.current = true; dispatch({ type: "play" }); };
+  const onPrev = () => { wantsAutoplay.current = true; if (state.elapsed > 5 || state.idx === 0) audio.seek(0); dispatch({ type: "prev" }); };
+  const onSeek = (sec: number) => { audio.seek(sec); };
+  const onPinTap = (i: number) => { setMenuOpen(false); dispatch({ type: "arrive", idx: i }); };
+
+  const playerProps = section && {
+    lang: state.lang, idx: state.idx, stop, section, elapsed: state.elapsed, playing: audio.playing, narrationNote,
+    onToggle: audio.toggle, onPrev, onBack: () => audio.skip(-15), onFwd: () => audio.skip(15), onSkip: () => dispatch({ type: "finish" }), onSeek,
   };
 
   return (
@@ -102,7 +147,13 @@ export default function App({ lang: urlLang }: Props) {
             <PlayerWalking lang={state.lang} idx={state.idx} gpsDenied={state.gpsDenied} distanceM={distanceM} onArrive={() => dispatch({ type: "arrive", idx: state.idx })} />
           )}
           {state.phase === "arrived" && section && (
-            <PlayerArrived lang={state.lang} stop={stop} durationSec={section.durationSec} onPlay={() => dispatch({ type: "play" })} />
+            <PlayerArrived lang={state.lang} stop={stop} durationSec={section.durationSec} onPlay={onPlay} />
+          )}
+          {state.phase === "playing" && playerProps && !state.expanded && (
+            <PlayerMini {...playerProps} onExpand={() => dispatch({ type: "expand" })} />
+          )}
+          {state.phase === "playing" && playerProps && state.expanded && (
+            <PlayerExpanded {...playerProps} onCollapse={() => dispatch({ type: "collapse" })} />
           )}
         </>
       )}
