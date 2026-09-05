@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import Stripe from "stripe";
 import { finalizeBooking } from "../../lib/booking";
+import { fulfillDigitalPurchase, isDigitalProductSession } from "../../lib/self-guided/fulfill";
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-07-30.basil",
@@ -24,6 +25,20 @@ export const POST: APIRoute = async ({ request }) => {
   // Traiter l'événement
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
+
+    // Digital product (self-guided tour): separate fulfilment, additive to the
+    // tour bookings below. Idempotent on the session id.
+    if (isDigitalProductSession(session)) {
+      try {
+        const origin = new URL(request.url).origin;
+        const r = await fulfillDigitalPurchase(session, origin.includes("localhost") ? origin : undefined);
+        if (!r.created) console.log("[self-guided] purchase already fulfilled for", session.id);
+      } catch (error) {
+        console.error("[self-guided] fulfilment failed:", error instanceof Error ? error.message : error);
+        return new Response("Error processing digital purchase", { status: 500 });
+      }
+      return new Response("Success", { status: 200 });
+    }
 
     try {
       const metadata = session.metadata;
