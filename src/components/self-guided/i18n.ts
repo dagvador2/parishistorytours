@@ -36,6 +36,11 @@ const T = {
     mapAttribution: "Map data © OpenStreetMap contributors",
     locationSettings: "Location is blocked for this site. Enable it in your browser or phone settings, then reload.",
     hour: "h",
+    accessErrorTitle: "This link does not open the tour",
+    accessNoToken: "Open the tour from the link in your purchase email — it carries your personal access.",
+    accessInvalid: "This access link is not valid. Check the link in your purchase email, or contact Clément.",
+    productPage: "About the self-guided tour",
+    zip: "Download offline package (PDF + audio)",
   },
   fr: {
     selfGuided: "Visite libre", stops: "étapes", next: "Suivant", stop: "Étape", inter: "Interstop", start: "Départ",
@@ -67,6 +72,11 @@ const T = {
     mapAttribution: "Données cartographiques © contributeurs OpenStreetMap",
     locationSettings: "La position est bloquée pour ce site. Activez-la dans les réglages du navigateur ou du téléphone, puis rechargez.",
     hour: "h",
+    accessErrorTitle: "Ce lien n’ouvre pas la visite",
+    accessNoToken: "Ouvrez la visite depuis le lien de votre email d’achat : il contient votre accès personnel.",
+    accessInvalid: "Ce lien d’accès n’est pas valide. Vérifiez le lien de votre email d’achat, ou contactez Clément.",
+    productPage: "À propos de la visite libre",
+    zip: "Télécharger le pack hors ligne (PDF + audio)",
   },
 } as const;
 

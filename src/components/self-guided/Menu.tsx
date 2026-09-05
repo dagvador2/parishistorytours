@@ -20,6 +20,8 @@ interface Props {
   available: Lang[];
   gpsDenied: boolean;
   pdfUrl: string | null;
+  /** offline package (PDF + MP3) while the 30-day download window is open */
+  zipUrl: string | null;
   offline: OfflineStatus;
   onClose: () => void;
   onSetLang: (l: Lang) => void;
@@ -39,7 +41,7 @@ function Segmented({ value, onChange }: { value: Lang; onChange: (l: Lang) => vo
   );
 }
 
-export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, offline, onClose, onSetLang, onSetAudioLang, onToggleGps, onRestart, onPdfClick }: Props) {
+export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, zipUrl, offline, onClose, onSetLang, onSetAudioLang, onToggleGps, onRestart, onPdfClick }: Props) {
   const t = strings(lang);
   const offlineLine =
     offline.state === "preparing" ? `${t.offlinePreparing} ${offline.done}/${offline.total} ${t.offlineAudio}`
@@ -66,6 +68,11 @@ export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, of
         <a href={pdfUrl ?? "#"} target="_blank" rel="noopener" className="ag-row ag-row--link" onClick={onPdfClick} aria-disabled={!pdfUrl}>
           <span>{t.pdf}</span><span className="ag-row__hint">↓</span>
         </a>
+        {zipUrl && (
+          <a href={zipUrl} className="ag-row ag-row--link" onClick={onPdfClick}>
+            <span>{t.zip}</span><span className="ag-row__hint">↓</span>
+          </a>
+        )}
         <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener" className="ag-row ag-row--link">
           <span>{t.support}</span><span className="ag-row__hint">WhatsApp ↗</span>
         </a>

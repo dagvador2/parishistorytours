@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { AssetsResponse } from "../../lib/self-guided/types";
 import { MAP_TILES_URL } from "./mapStyle";
-import { assetsUrl } from "./useAssets";
+import { accessApiUrl, resolveToken } from "./useAssets";
 import type { OfflineStatus } from "./Menu";
 
 const SW_URL = "/self-guided-tour/sw.js";
@@ -20,7 +20,8 @@ export function offlineUrls(assets: AssetsResponse): string[] {
   }
   urls.add(assets.pdf);
   // The API answer for this language (served from cache when offline) and the app pages (both locales).
-  urls.add(assetsUrl(assets.lang));
+  const token = resolveToken();
+  if (token) urls.add(accessApiUrl(token, assets.lang));
   urls.add("/self-guided-tour/access");
   urls.add("/fr/self-guided-tour/access");
   urls.add(MAP_TILES_URL);

@@ -1,28 +1,54 @@
 ---
 /**
- * The audioguide webapp (chantier B). Reachable without authentication for
- * now, behind SELF_GUIDED_DEV_MODE; chantier C adds the purchase token.
- * The FR URL (/fr/self-guided-tour/access) rewrites here with locals.lang = "fr".
+ * The audioguide webapp. Access is bound to a purchase token
+ * (?token=…, from the purchase email). When the query carries a token it is
+ * validated here so a wrong link gets a clear page; without a query the shell
+ * is rendered and the client uses the token it remembered (installed PWA).
  */
 import SelfGuidedLayout from "../../layouts/SelfGuidedLayout.astro";
 import AudioGuideApp from "../../components/self-guided/App";
-import { selfGuidedDevMode } from "../../lib/self-guided/dev-mode";
+import { findPurchaseByToken, SUPPORT_EMAIL } from "../../lib/self-guided/purchase";
+import { WHATSAPP_NUMBER } from "../../lib/whatsapp";
 
 export const prerender = false;
 
-if (!selfGuidedDevMode()) {
-  return new Response("Not found", { status: 404 });
-}
-
 const lang = Astro.locals.lang;
 const title = lang === "fr" ? "WWII Left Bank · Visite libre" : "WWII Left Bank · Self-guided tour";
+const token = Astro.url.searchParams.get("token");
+
+let invalid = false;
+if (token) {
+  try {
+    invalid = !(await findPurchaseByToken(token));
+  } catch (e) {
+    console.error("[self-guided/access page] token check failed:", e);
+    // Database hiccup: let the client retry through the API rather than blocking a paying visitor.
+  }
+}
+if (invalid) Astro.response.status = 401;
+const prefix = lang === "fr" ? "/fr" : "";
 ---
 <SelfGuidedLayout lang={lang} title={title}>
-  <div class="ag-app">
-    <div class="ag-splash" id="ag-splash" aria-hidden="true">
-      <div class="ag-monogram">P</div>
-      <div>{lang === "fr" ? "Chargement de votre visite…" : "Loading your tour…"}</div>
+  {invalid ? (
+    <div class="ag-app">
+      <div class="ag-center">
+        <div class="ag-monogram">P</div>
+        <div class="ag-center__title">{lang === "fr" ? "Ce lien n’ouvre pas la visite" : "This link does not open the tour"}</div>
+        <div>{lang === "fr" ? "Ce lien d’accès n’est pas valide. Vérifiez le lien de votre email d’achat, ou contactez Clément." : "This access link is not valid. Check the link in your purchase email, or contact Clément."}</div>
+        <div class="ag-center__actions">
+          <a class="ag-btn-ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener">WhatsApp</a>
+          <a class="ag-btn-ghost" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+          <a class="ag-btn-ghost" href={`${prefix}/self-guided-tour`}>{lang === "fr" ? "À propos de la visite libre" : "About the self-guided tour"}</a>
+        </div>
+      </div>
     </div>
-    <AudioGuideApp client:only="react" lang={lang} />
-  </div>
+  ) : (
+    <div class="ag-app">
+      <div class="ag-splash" id="ag-splash" aria-hidden="true">
+        <div class="ag-monogram">P</div>
+        <div>{lang === "fr" ? "Chargement de votre visite…" : "Loading your tour…"}</div>
+      </div>
+      <AudioGuideApp client:only="react" lang={lang} />
+    </div>
+  )}
 </SelfGuidedLayout>

@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { GEOFENCE_RADIUS_M, STOPS, type Lang } from "../../data/self-guided/left-bank-ww2";
 import { track } from "../../scripts/track";
+import { WHATSAPP_NUMBER } from "../../lib/whatsapp";
 import CompleteSheet from "./CompleteSheet";
 import Header from "./Header";
 import MapView from "./MapView";
@@ -68,7 +69,7 @@ export default function App({ lang: urlLang }: Props) {
     return () => { document.removeEventListener("visibilitychange", flush); window.removeEventListener("pagehide", flush); };
   }, []);
 
-  const { assets, error, loading, reload } = useAssets(state.audioLang ?? state.lang);
+  const { assets, purchase, error, loading, reload } = useAssets(state.audioLang ?? state.lang);
   const section = assets?.sections[state.idx];
   const narrationNote = assets && assets.lang !== state.lang ? t.narrationFallback : null;
 
@@ -180,8 +181,13 @@ export default function App({ lang: urlLang }: Props) {
       <Progress phase={state.phase} idx={state.idx} completed={state.completed} />
       {error && !assets ? (
         <div className="ag-center">
-          <div>{t.loadError}</div>
-          <button type="button" className="ag-btn-ghost" onClick={() => void reload()}>{t.retry}</button>
+          <div className="ag-center__title">{error === "network" ? t.loadError : t.accessErrorTitle}</div>
+          {error !== "network" && <div>{error === "no_token" ? t.accessNoToken : t.accessInvalid}</div>}
+          <div className="ag-center__actions">
+            {error === "network" && <button type="button" className="ag-btn-ghost" onClick={() => void reload()}>{t.retry}</button>}
+            <a className="ag-btn-ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener">{t.support}</a>
+            <a className="ag-btn-ghost" href={state.lang === "fr" ? "/fr/self-guided-tour" : "/self-guided-tour"}>{t.productPage}</a>
+          </div>
         </div>
       ) : !assets ? (
         <div className="ag-center">{loading ? t.loading : ""}</div>
@@ -231,6 +237,7 @@ export default function App({ lang: urlLang }: Props) {
           available={assets?.available ?? []}
           gpsDenied={state.gpsDenied}
           pdfUrl={assets?.pdf ?? null}
+          zipUrl={purchase?.downloadAvailable ? purchase.zipUrl : null}
           offline={offline}
           onClose={() => setMenuOpen(false)}
           onSetLang={onSetLang}

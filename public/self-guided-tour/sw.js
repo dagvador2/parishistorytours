@@ -110,7 +110,7 @@ self.addEventListener("fetch", (event) => {
   }
   if (url.origin !== self.location.origin) return;
 
-  if (url.pathname.startsWith("/api/self-guided/assets")) {
+  if (url.pathname.startsWith("/api/self-guided/access") || url.pathname.startsWith("/api/self-guided/assets")) {
     event.respondWith(networkFirst(ASSETS, req));
     return;
   }

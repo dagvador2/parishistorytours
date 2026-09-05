@@ -12,7 +12,7 @@ export { presignGet };
 export const SIGNED_URL_TTL_SEC = 2 * 3600;
 
 function env(name: string): string | undefined {
-  const v = (import.meta.env as Record<string, string | undefined>)[name] ?? process.env[name];
+  const v = ((import.meta as unknown as { env?: Record<string, string | undefined> }).env?.[name]) ?? process.env[name];
   return v && v.length > 0 ? v : undefined;
 }
 

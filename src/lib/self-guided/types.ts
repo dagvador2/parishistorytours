@@ -60,3 +60,17 @@ export interface AssetsResponse {
     }
   >;
 }
+
+/** What GET /api/self-guided/access returns. */
+export interface AccessResponse {
+  purchase: {
+    email: string;
+    language: "en" | "fr";
+    purchasedAt: string;
+    downloadExpiresAt: string;
+    downloadAvailable: boolean;
+    /** offline package (PDF + MP3), valid until downloadExpiresAt */
+    zipUrl: string;
+  };
+  assets: AssetsResponse;
+}
