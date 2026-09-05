@@ -28,3 +28,7 @@ pnpm-debug.log*
 
 # Full-resolution photo originals (optimized .webp versions live in public/photos/)
 photo-originals/
+
+# Self-guided tour pipeline — generated assets live on R2, only manifests are versioned
+scripts/self-guided/output/*
+!scripts/self-guided/output/manifest/

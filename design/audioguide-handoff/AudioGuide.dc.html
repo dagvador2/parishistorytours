@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{margin:0;height:100%;background:#F7F3EC;}
+a{color:#8B0000}a:hover{color:#5E0000}
+button{font-family:inherit}
+@keyframes phtPulse{0%{transform:scale(1);opacity:.85}100%{transform:scale(1.14);opacity:0}}
+@keyframes phtFade{0%{opacity:0;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+@keyframes phtDot{0%{transform:scale(.6);opacity:.6}100%{transform:scale(2.4);opacity:0}}
+.pht-user{position:relative;width:18px;height:18px}
+.pht-user i{position:absolute;inset:0;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);box-sizing:border-box}
+.pht-user b{position:absolute;inset:0;border-radius:50%;background:rgba(26,115,232,.45);animation:phtDot 1.8s ease-out infinite}
+.leaflet-container{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,sans-serif;background:#EDE7DC}
+.leaflet-tile-pane{filter:grayscale(.85) sepia(.22) brightness(1.04) contrast(.95)}
+</style>
+</helmet>
+<div style="position:relative;width:100%;height:100%;min-height:600px;display:flex;flex-direction:column;background:#F7F3EC;color:#1C1714;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:10px;padding:12px 12px 10px 16px;background:#F7F3EC;border-bottom:1px solid #E4DCD0;z-index:5">
+    <div style="width:32px;height:32px;border-radius:50%;background:#8B0000;color:#F7F3EC;font-family:Georgia,'Times New Roman',serif;display:grid;place-items:center;font-size:18px;flex-shrink:0">P</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.15;color:#1C1714;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">WWII Left Bank</div>
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6B5A4E;margin-top:2px;white-space:nowrap">{{ t.selfGuided }} · {{ progressLabel }}</div>
+    </div>
+    <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;flex-shrink:0;border-radius:12px" style-active="background:#E4DCD0">
+      <span style="display:flex;flex-direction:column;gap:5px"><span style="display:block;width:20px;height:2px;background:#1C1714"></span><span style="display:block;width:20px;height:2px;background:#1C1714"></span><span style="display:block;width:14px;height:2px;background:#1C1714"></span></span>
+    </button>
+  </div>
+  <!-- Segmented progress -->
+  <div style="display:flex;gap:3px;padding:0 16px 8px;background:#F7F3EC;z-index:5">
+    <sc-for list="{{ segments }}" as="s" hint-placeholder-count="9">
+      <span style="flex:{{ s.flex }};height:3px;border-radius:2px;background:{{ s.color }}"></span>
+    </sc-for>
+  </div>
+
+  <!-- Map -->
+  <div style="position:relative;flex:1;min-height:0;background:#EDE7DC">
+    <div ref="{{ mapRef }}" style="position:absolute;inset:0"></div>
+
+    <sc-if value="{{ gpsDenied }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;top:10px;left:12px;right:12px;z-index:500;display:flex;align-items:center;gap:10px;background:#1C1714;color:#F7F3EC;border-radius:12px;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.25)">
+        <span style="width:8px;height:8px;border-radius:50%;background:#C9A24A;flex-shrink:0"></span>
+        <span style="flex:1;font-size:13px;line-height:1.3">{{ t.gpsOff }}</span>
+        <button onClick="{{ toggleGps }}" style="border:1px solid rgba(247,243,236,.5);background:transparent;color:#F7F3EC;font-size:12px;font-weight:600;border-radius:8px;padding:8px 10px;cursor:pointer;min-height:36px">{{ t.enable }}</button>
+      </div>
+    </sc-if>
+
+    <!-- Recenter -->
+    <button onClick="{{ recenter }}" aria-label="Recenter" style="position:absolute;right:12px;bottom:12px;z-index:500;width:44px;height:44px;border-radius:50%;border:1px solid #E4DCD0;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);display:grid;place-items:center;cursor:pointer" style-active="background:#EDE7DC">
+      <span style="display:block;width:14px;height:14px;border-radius:50%;border:2px solid #1C1714;box-sizing:border-box;position:relative"><span style="position:absolute;left:3px;top:3px;width:4px;height:4px;border-radius:50%;background:#1C1714"></span></span>
+    </button>
+
+    <!-- Next-stop card -->
+    <sc-if value="{{ showNextCard }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;left:12px;right:68px;bottom:12px;z-index:500;display:flex;align-items:center;gap:12px;background:#1C1714;color:#F7F3EC;border-radius:14px;padding:10px 12px 10px 10px;box-shadow:0 6px 18px rgba(0,0,0,.28)">
+        <div style="width:40px;height:40px;border-radius:50%;background:#8B0000;display:grid;place-items:center;flex-shrink:0">
+          <sc-if value="{{ hasGps }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" style="transform:rotate({{ bearing }}deg);transition:transform .4s ease"><path d="M12 3 L19 20 L12 16 L5 20 Z" fill="#F7F3EC"></path></svg></sc-if>
+          <sc-if value="{{ gpsDenied }}" hint-placeholder-val="{{ false }}"><span style="display:block;width:12px;height:12px;border-radius:50%;border:2px solid #F7F3EC;box-sizing:border-box"></span></sc-if>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#C9B8A6">{{ nextEyebrow }}</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ current.name }}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:20px;font-weight:700;line-height:1;letter-spacing:-.01em">{{ distLabel }}</div>
+          <div style="font-size:11px;color:#C9B8A6;margin-top:3px">{{ walkLabel }}</div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- PLAYER · A walking -->
+  <sc-if value="{{ isWalking }}" hint-placeholder-val="{{ true }}">
+    <div style="background:#FFFFFF;border-top:1px solid #E4DCD0;padding:16px 16px 22px;display:flex;align-items:center;gap:14px;z-index:5">
+      <div style="width:44px;height:44px;border-radius:50%;background:#EDE7DC;display:grid;place-items:center;flex-shrink:0">
+        <span style="display:block;width:10px;height:10px;border-radius:50%;background:#1A73E8;box-shadow:0 0 0 3px #fff"></span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.25;color:#1C1714">{{ headTo }}</div>
+        <div style="font-size:13px;color:#6B5A4E;margin-top:4px">{{ walkSub }}</div>
+      </div>
+      <button onClick="{{ arriveNow }}" style="border:1px solid #E4DCD0;background:#F7F3EC;color:#8B0000;font-size:12px;font-weight:600;border-radius:10px;padding:0 12px;min-height:44px;cursor:pointer;white-space:nowrap;flex-shrink:0" style-active="background:#E4DCD0">{{ t.imHere }}</button>
+    </div>
+  </sc-if>
+
+  <!-- PLAYER · B arrived -->
+  <sc-if value="{{ isArrived }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#8B0000;color:#F7F3EC;padding:18px 16px 22px;z-index:5;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:rgba(247,243,236,.16);display:grid;place-items:center;flex-shrink:0;font-family:Georgia,'Times New Roman',serif;font-size:18px">{{ current.badge }}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#E8C9C9">{{ t.arrivedEyebrow }}</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;line-height:1.2">{{ arrivedTitle }}</div>
+        </div>
+      </div>
+      <div style="position:relative">
+        {{ pulseHalo }}
+        <button onClick="{{ play }}" style="position:relative;width:100%;min-height:56px;border:0;border-radius:14px;background:#F7F3EC;color:#8B0000;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer" style-active="background:#EDE7DC">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M6 4 L20 12 L6 20 Z" fill="#8B0000"></path></svg>
+          <span>{{ playLabel }}</span>
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- PLAYER · C mini (playing, collapsed) -->
+  <sc-if value="{{ isMini }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#FFFFFF;border-top:1px solid #E4DCD0;padding:14px 16px 18px;z-index:5;display:flex;flex-direction:column;gap:10px">
+      <div onClick="{{ expand }}" style="display:flex;align-items:center;gap:12px;cursor:pointer">
+        <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}"><img src="{{ photo.img }}" alt="" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#EDE7DC"></sc-if>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8B0000;font-weight:600">{{ nowPlayingEyebrow }}</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:18px;line-height:1.2;color:#1C1714;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ current.name }}</div>
+        </div>
+        <span style="width:32px;height:32px;display:grid;place-items:center;color:#6B5A4E;flex-shrink:0"><span style="display:block;width:9px;height:9px;border-top:2px solid #6B5A4E;border-right:2px solid #6B5A4E;transform:rotate(-45deg);margin-top:5px"></span></span>
+      </div>
+      <div>
+        <div onClick="{{ seekBar }}" style="position:relative;height:24px;display:flex;align-items:center;cursor:pointer">
+          <div style="position:absolute;left:0;right:0;height:4px;border-radius:2px;background:#E4DCD0"></div>
+          <div style="position:absolute;left:0;width:{{ pct }}%;height:4px;border-radius:2px;background:#8B0000"></div>
+          <div style="position:absolute;left:calc({{ pct }}% - 7px);width:14px;height:14px;border-radius:50%;background:#8B0000;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);box-sizing:border-box"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B5A4E;font-variant-numeric:tabular-nums;margin-top:-4px"><span>{{ elapsedLabel }}</span><span>{{ durationLabel }}</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 48px 64px 48px 48px;justify-content:center;align-items:center;gap:14px">
+        <button onClick="{{ prevStop }}" aria-label="Previous stop" style="width:48px;height:48px;border-radius:50%;border:1px solid #E4DCD0;background:#F7F3EC;cursor:pointer;display:grid;place-items:center" style-active="background:#E4DCD0">
+          <span style="display:flex;align-items:center;gap:2px"><span style="display:block;width:3px;height:12px;background:#1C1714;border-radius:1px"></span><svg width="12" height="12" viewBox="0 0 24 24"><path d="M19 4 L5 12 L19 20 Z" fill="#1C1714"></path></svg></span>
+        </button>
+        <button onClick="{{ back15 }}" style="width:48px;height:48px;border-radius:50%;border:1px solid #E4DCD0;background:#F7F3EC;color:#1C1714;font-size:12px;font-weight:700;cursor:pointer;display:grid;place-items:center" style-active="background:#E4DCD0">−15</button>
+        <button onClick="{{ togglePlay }}" aria-label="Play/Pause" style="width:64px;height:64px;border-radius:50%;border:0;padding:0;background:#8B0000;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,0,0,.35)" style-active="background:#6E0000">
+          <sc-if value="{{ playing }}" hint-placeholder-val="{{ true }}"><span style="display:flex;gap:5px;line-height:0"><span style="display:block;width:6px;height:22px;background:#F7F3EC;border-radius:1px"></span><span style="display:block;width:6px;height:22px;background:#F7F3EC;border-radius:1px"></span></span></sc-if>
+          <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" style="display:block"><path d="M7 4 L21 12 L7 20 Z" fill="#F7F3EC"></path></svg></sc-if>
+        </button>
+        <button onClick="{{ fwd15 }}" style="width:48px;height:48px;border-radius:50%;border:1px solid #E4DCD0;background:#F7F3EC;color:#1C1714;font-size:12px;font-weight:700;cursor:pointer;display:grid;place-items:center" style-active="background:#E4DCD0">+15</button>
+        <button onClick="{{ skip }}" aria-label="Skip to next stop" style="width:48px;height:48px;border-radius:50%;border:1px solid #E4DCD0;background:#F7F3EC;cursor:pointer;display:grid;place-items:center" style-active="background:#E4DCD0">
+          <span style="display:flex;align-items:center;gap:2px"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 4 L19 12 L5 20 Z" fill="#1C1714"></path></svg><span style="display:block;width:3px;height:12px;background:#1C1714;border-radius:1px"></span></span>
+        </button>
+      </div>
+      <div style="text-align:center;font-size:12px;color:#6B5A4E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ playingSub }}</div>
+    </div>
+  </sc-if>
+
+  <!-- PLAYER · expanded (photos + subtitles) -->
+  <sc-if value="{{ isExpanded }}" hint-placeholder-val="{{ false }}">
+    <div onTouchStart="{{ dragStart }}" onTouchEnd="{{ dragEnd }}" style="position:absolute;inset:0;z-index:650;background:#1C1714;color:#F7F3EC;display:flex;flex-direction:column">
+      <div onClick="{{ collapse }}" style="display:flex;align-items:center;gap:8px;padding:8px 8px 4px 8px;cursor:pointer;flex-shrink:0">
+        <span style="width:44px;height:44px;display:grid;place-items:center"><span style="display:block;width:11px;height:11px;border-left:2px solid #F7F3EC;border-bottom:2px solid #F7F3EC;transform:rotate(-45deg);margin-top:-6px"></span></span>
+        <div style="flex:1;text-align:center;min-width:0">
+          <div style="width:36px;height:4px;border-radius:2px;background:rgba(247,243,236,.35);margin:0 auto 6px"></div>
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#C9B8A6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ nowPlayingEyebrow }}</div>
+        </div>
+        <span style="width:44px;height:44px"></span>
+      </div>
+      <div style="position:relative;flex:0 0 44%;min-height:0;margin:6px 16px 0;border-radius:14px;overflow:hidden;background:#2A2320">
+        {{ photoEl }}
+        <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:repeating-linear-gradient(135deg,#2A2320 0 10px,#302925 10px 20px)">
+            <div style="width:48px;height:48px;border-radius:50%;background:#8B0000;color:#F7F3EC;font-family:Georgia,'Times New Roman',serif;display:grid;place-items:center;font-size:24px">{{ current.badge }}</div>
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;color:#C9B8A6;text-align:center;padding:0 24px">{{ lookAround }}</div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding:8px 20px 0;min-height:34px;font-size:12px;line-height:1.35;color:#C9B8A6;font-style:italic;text-align:center;text-wrap:pretty">{{ photo.cap }}</div>
+      <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 22px">
+        <div style="font-family:Georgia,'Times New Roman',serif;font-size:{{ subSize }}px;line-height:1.35;text-align:center;text-wrap:pretty;color:#F7F3EC">{{ subText }}</div>
+      </div>
+      <div style="padding:0 16px 22px;display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+        <div>
+          <div onClick="{{ seekBar }}" style="position:relative;height:24px;display:flex;align-items:center;cursor:pointer">
+            <div style="position:absolute;left:0;right:0;height:4px;border-radius:2px;background:rgba(247,243,236,.22)"></div>
+            <div style="position:absolute;left:0;width:{{ pct }}%;height:4px;border-radius:2px;background:#F7F3EC"></div>
+            <div style="position:absolute;left:calc({{ pct }}% - 7px);width:14px;height:14px;border-radius:50%;background:#F7F3EC;box-sizing:border-box"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#C9B8A6;font-variant-numeric:tabular-nums;margin-top:-4px"><span>{{ elapsedLabel }}</span><span>{{ durationLabel }}</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:48px 48px 64px 48px 48px;justify-content:center;align-items:center;gap:14px">
+          <button onClick="{{ prevStop }}" aria-label="Previous stop" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(247,243,236,.3);background:transparent;cursor:pointer;display:grid;place-items:center" style-active="background:rgba(247,243,236,.12)">
+            <span style="display:flex;align-items:center;gap:2px"><span style="display:block;width:3px;height:12px;background:#F7F3EC;border-radius:1px"></span><svg width="12" height="12" viewBox="0 0 24 24"><path d="M19 4 L5 12 L19 20 Z" fill="#F7F3EC"></path></svg></span>
+          </button>
+          <button onClick="{{ back15 }}" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(247,243,236,.3);background:transparent;color:#F7F3EC;font-size:12px;font-weight:700;cursor:pointer;display:grid;place-items:center" style-active="background:rgba(247,243,236,.12)">−15</button>
+          <button onClick="{{ togglePlay }}" aria-label="Play/Pause" style="width:64px;height:64px;border-radius:50%;border:0;padding:0;background:#F7F3EC;display:flex;align-items:center;justify-content:center;cursor:pointer" style-active="background:#E4DCD0">
+            <sc-if value="{{ playing }}" hint-placeholder-val="{{ true }}"><span style="display:flex;gap:5px;line-height:0"><span style="display:block;width:6px;height:22px;background:#8B0000;border-radius:1px"></span><span style="display:block;width:6px;height:22px;background:#8B0000;border-radius:1px"></span></span></sc-if>
+            <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}"><svg width="24" height="24" viewBox="0 0 24 24" style="display:block"><path d="M7 4 L21 12 L7 20 Z" fill="#8B0000"></path></svg></sc-if>
+          </button>
+          <button onClick="{{ fwd15 }}" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(247,243,236,.3);background:transparent;color:#F7F3EC;font-size:12px;font-weight:700;cursor:pointer;display:grid;place-items:center" style-active="background:rgba(247,243,236,.12)">+15</button>
+          <button onClick="{{ skip }}" aria-label="Skip to next stop" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(247,243,236,.3);background:transparent;cursor:pointer;display:grid;place-items:center" style-active="background:rgba(247,243,236,.12)">
+            <span style="display:flex;align-items:center;gap:2px"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 4 L19 12 L5 20 Z" fill="#F7F3EC"></path></svg><span style="display:block;width:3px;height:12px;background:#F7F3EC;border-radius:1px"></span></span>
+          </button>
+        </div>
+        <div style="text-align:center;font-size:12px;color:#C9B8A6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ playingSub }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- TOUR COMPLETE -->
+  <sc-if value="{{ isComplete }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:600;background:rgba(28,23,20,.45);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:#F7F3EC;border-radius:24px 24px 0 0;padding:26px 22px 28px;display:flex;flex-direction:column;gap:18px;box-shadow:0 -10px 30px rgba(0,0,0,.25)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:50%;background:#8B0000;color:#F7F3EC;font-family:Georgia,'Times New Roman',serif;display:grid;place-items:center;font-size:20px">P</div>
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8B0000;font-weight:600">{{ t.completeEyebrow }}</div>
+        </div>
+        <div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;line-height:1.1;color:#1C1714;text-wrap:pretty">{{ t.completeTitle }}</div>
+          <div style="font-size:14px;line-height:1.45;color:#6B5A4E;margin-top:8px;text-wrap:pretty">{{ t.completeBody }}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#E4DCD0;border:1px solid #E4DCD0;border-radius:12px;overflow:hidden">
+          <div style="background:#fff;padding:12px 10px;text-align:center"><div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#1C1714">1 h 34</div><div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B5A4E;margin-top:3px">{{ t.recapTime }}</div></div>
+          <div style="background:#fff;padding:12px 10px;text-align:center"><div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#1C1714">2.1 km</div><div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B5A4E;margin-top:3px">{{ t.recapDist }}</div></div>
+          <div style="background:#fff;padding:12px 10px;text-align:center"><div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#1C1714">9 / 9</div><div style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6B5A4E;margin-top:3px">{{ t.recapStops }}</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <a href="https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8" target="_blank" style="display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:14px;background:#8B0000;color:#F7F3EC;font-size:16px;font-weight:700;text-decoration:none">{{ t.ctaReview }}</a>
+          <a href="https://www.parishistorytours.com/" target="_blank" style="display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:14px;border:1.5px solid #1C1714;color:#1C1714;font-size:16px;font-weight:600;text-decoration:none;background:transparent">{{ t.ctaTours }}</a>
+        </div>
+        <button onClick="{{ restart }}" style="border:0;background:transparent;color:#6B5A4E;font-size:13px;text-decoration:underline;cursor:pointer;min-height:32px">{{ t.restart }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MENU -->
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ toggleMenu }}" style="position:absolute;inset:0;z-index:700;background:rgba(28,23,20,.45);display:flex;flex-direction:column;justify-content:flex-end">
+      <div onClick="{{ stop }}" style="background:#F7F3EC;border-radius:24px 24px 0 0;padding:14px 20px 28px;display:flex;flex-direction:column;gap:6px">
+        <div style="width:40px;height:4px;border-radius:2px;background:#C9B8A6;margin:0 auto 10px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E4DCD0">
+          <span style="font-size:15px;color:#1C1714">{{ t.language }}</span>
+          <span style="display:flex;border:1px solid #1C1714;border-radius:8px;overflow:hidden">
+            <button onClick="{{ setEn }}" style="min-width:52px;min-height:36px;border:0;font-size:13px;font-weight:600;cursor:pointer;background:{{ enBg }};color:{{ enFg }}">EN</button>
+            <button onClick="{{ setFr }}" style="min-width:52px;min-height:36px;border:0;font-size:13px;font-weight:600;cursor:pointer;background:{{ frBg }};color:{{ frFg }}">FR</button>
+          </span>
+        </div>
+        <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #E4DCD0;font-size:15px;color:#1C1714;text-decoration:none"><span>{{ t.pdf }}</span><span style="color:#6B5A4E">↓</span></a>
+        <a href="https://wa.me/33620622480" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #E4DCD0;font-size:15px;color:#1C1714;text-decoration:none"><span>{{ t.support }}</span><span style="color:#6B5A4E">WhatsApp ↗</span></a>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #E4DCD0">
+          <span style="font-size:15px;color:#1C1714">{{ t.location }}</span>
+          <button onClick="{{ toggleGps }}" style="min-height:36px;border:1px solid #E4DCD0;background:#fff;border-radius:8px;padding:0 12px;font-size:13px;font-weight:600;color:#1C1714;cursor:pointer">{{ gpsLabel }}</button>
+        </div>
+        <button onClick="{{ restart }}" style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border:0;background:transparent;font-size:15px;color:#8B0000;cursor:pointer;text-align:left">{{ t.restart }}</button>
+        <div style="font-size:11px;color:#6B5A4E;text-align:center;margin-top:8px">Paris History Tours · parishistorytours.com</div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:375,&quot;height&quot;:812},&quot;phase&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;walking&quot;,&quot;arrived&quot;,&quot;playing&quot;,&quot;complete&quot;],&quot;default&quot;:&quot;walking&quot;,&quot;tsType&quot;:&quot;'walking'|'arrived'|'playing'|'complete'&quot;,&quot;section&quot;:&quot;Scenario&quot;},&quot;expanded&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scenario&quot;},&quot;stopIndex&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:2,&quot;min&quot;:0,&quot;max&quot;:8,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scenario&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;fr&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'fr'&quot;,&quot;section&quot;:&quot;Scenario&quot;},&quot;gpsDenied&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scenario&quot;}}">
+const STOPS = [
+  { kind:'intro', badge:'S', min:3, pos:[48.8464,2.3401], name:{en:'Introduction',fr:'Introduction'}, place:{en:'60 Boulevard Saint-Michel',fr:'60 boulevard Saint-Michel'} },
+  { kind:'stop', n:1, badge:'1', min:9, pos:[48.8467,2.3404], name:{en:'60 Boulevard Saint-Michel',fr:'60 boulevard Saint-Michel'}, place:{en:'The war in context',fr:'Le contexte de la guerre'} },
+  { kind:'stop', n:2, badge:'2', min:7, pos:[48.8489,2.3373], name:{en:'Palais du Luxembourg',fr:'Palais du Luxembourg'}, place:{en:'The Fall of Paris',fr:'La chute de Paris'} },
+  { kind:'inter', badge:'·', min:2, pos:[48.8501,2.3386], name:{en:'Théâtre de l’Odéon',fr:'Théâtre de l’Odéon'}, place:{en:'Plaque to Jacques Guierre',fr:'Plaque Jacques Guierre'} },
+  { kind:'stop', n:3, badge:'3', min:11, pos:[48.8484,2.3408], name:{en:'Rue Monsieur-le-Prince × Vaugirard',fr:'Rue Monsieur-le-Prince × Vaugirard'}, place:{en:'Resistance — Agnès Humbert',fr:'Résistance — Agnès Humbert'} },
+  { kind:'inter', badge:'·', min:2, pos:[48.8487,2.3430], name:{en:'Sorbonne façade',fr:'Façade de la Sorbonne'}, place:{en:'Bullet marks, right column',fr:'Impacts de balles, colonne droite'} },
+  { kind:'inter', badge:'·', min:1, pos:[48.8490,2.3447], name:{en:'Sorbonne observatory tower',fr:'Tour de l’observatoire'}, place:{en:'',fr:''} },
+  { kind:'inter', badge:'·', min:3, pos:[48.8519,2.3457], name:{en:'Église Saint-Séverin',fr:'Église Saint-Séverin'}, place:{en:'The barricades',fr:'Les barricades'} },
+  { kind:'stop', n:4, badge:'4', min:8, pos:[48.8532,2.3478], name:{en:'Facing Notre-Dame',fr:'Face à Notre-Dame'}, place:{en:'Liberation',fr:'La Libération'} },
+];
+const ROUTE = [[48.8464,2.3401],[48.8467,2.3404],[48.8478,2.3412],[48.8484,2.3395],[48.8489,2.3373],[48.8491,2.3380],[48.8501,2.3386],[48.8500,2.3395],[48.8484,2.3408],[48.8479,2.3413],[48.8486,2.3424],[48.8487,2.3430],[48.8484,2.3445],[48.8490,2.3447],[48.8505,2.3452],[48.8519,2.3457],[48.8528,2.3466],[48.8532,2.3478]];
+const USER = [48.8466,2.3405];
+const T = {
+  en:{ selfGuided:'Self-guided', stops:'stops', next:'Next', stop:'Stop', inter:'Interstop', start:'Start', gpsOff:'Location is off — tap a pin to start its audio.', enable:'Enable', imHere:'I’m here', headTo:'Head to', about:'about', minWalk:'minutes walk', arrivedEyebrow:'You’ve arrived', arrivedAt:'You’ve arrived at', playAudio:'Play audio', nowPlaying:'Now playing', left:'left', end:'End of tour', completeEyebrow:'Tour complete', completeTitle:'Merci — and well walked.', completeBody:'From Boulevard Saint-Michel to Notre-Dame, 1940 to 1944. If the walk meant something to you, a review helps other travellers find it.', recapTime:'Duration', recapDist:'Walked', recapStops:'Stops', ctaReview:'Leave a Google review', ctaTours:'Discover my in-person tours', restart:'Restart tour', language:'Language', pdf:'Download PDF map', support:'Contact Clément', location:'Location', on:'On', off:'Off', tapPin:'Tap a pin to start', min:'min' },
+  fr:{ selfGuided:'Visite libre', stops:'étapes', next:'Suivant', stop:'Étape', inter:'Interstop', start:'Départ', gpsOff:'Position désactivée — touchez un repère pour lancer l’audio.', enable:'Activer', imHere:'J’y suis', headTo:'Direction', about:'environ', minWalk:'min à pied', arrivedEyebrow:'Vous êtes arrivé', arrivedAt:'Vous êtes arrivé à', playAudio:'Écouter l’audio', nowPlaying:'En cours', left:'restantes', end:'Fin de la visite', completeEyebrow:'Visite terminée', completeTitle:'Merci — et bien marché.', completeBody:'Du boulevard Saint-Michel à Notre-Dame, de 1940 à 1944. Si cette balade vous a touché, un avis aide d’autres voyageurs à la découvrir.', recapTime:'Durée', recapDist:'Parcouru', recapStops:'Étapes', ctaReview:'Laisser un avis Google', ctaTours:'Découvrir mes visites guidées', restart:'Recommencer', language:'Langue', pdf:'Télécharger le plan PDF', support:'Contacter Clément', location:'Position', on:'Activée', off:'Désactivée', tapPin:'Touchez un repère', min:'min' }
+};
+const dist = (a,b) => { const R=6371000, r=Math.PI/180, dLat=(b[0]-a[0])*r, dLon=(b[1]-a[1])*r, s=Math.sin(dLat/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(s)); };
+const bearing = (a,b) => { const r=Math.PI/180, y=Math.sin((b[1]-a[1])*r)*Math.cos(b[0]*r), x=Math.cos(a[0]*r)*Math.sin(b[0]*r)-Math.sin(a[0]*r)*Math.cos(b[0]*r)*Math.cos((b[1]-a[1])*r); return (Math.atan2(y,x)*180/Math.PI+360)%360; };
+const mmss = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.mapRef = React.createRef();
+    const idx = Math.min(8, Math.max(0, Number(props.stopIndex ?? 2)));
+    const phase = props.phase || 'walking';
+    this.state = { phase, idx, completed: phase === 'complete' ? 9 : idx, elapsed: phase === 'playing' ? Math.min(148, Math.round(STOPS[idx].min * 60 * 0.4)) : 0, playing: true, menuOpen: false, lang: props.lang || 'en', gpsDenied: props.gpsDenied === true || props.gpsDenied === 'true', expanded: props.expanded === true || props.expanded === 'true', content: null };
+    import('./tour-content.js').then(m => { this.tl = m.timeline; this.setState({ content: m.CONTENT }); }).catch(e => console.warn('tour-content', e));
+  }
+  cues(idx) {
+    const c = this.state.content; if (!c || !c[idx] || !this.tl) return { subs: [], media: [] };
+    const key = `${idx}`; this.cache = this.cache || {};
+    return this.cache[key] || (this.cache[key] = this.tl(c[idx], STOPS[idx].min * 60));
+  }
+  label(i, lang) { const s = STOPS[i], t = T[lang]; if (!s) return t.end; if (s.kind === 'stop') return `${t.stop} ${s.n} — ${s.name[lang]}`; if (s.kind === 'intro') return `${t.start} — ${s.name[lang]}`; return `${t.inter} — ${s.name[lang]}`; }
+  componentDidMount() {
+    this.poll = setInterval(() => {
+      const el = this.mapRef.current, css = [...document.querySelectorAll('link[href*="leaflet.css"]')].some(l => l.sheet);
+      if (window.L && css && el && el.getBoundingClientRect().height > 100) { clearInterval(this.poll); this.initMap(); }
+    }, 80);
+    this.syncTimer();
+  }
+  componentWillUnmount() { clearInterval(this.poll); clearInterval(this.tick); if (this.ro) this.ro.disconnect(); if (this.map) this.map.remove(); }
+  componentDidUpdate(p, s) {
+    if (s.idx !== this.state.idx || s.completed !== this.state.completed || s.phase !== this.state.phase || s.gpsDenied !== this.state.gpsDenied) { this.drawMarkers(); this.fitView(); }
+    if (s.phase !== this.state.phase || s.playing !== this.state.playing) this.syncTimer();
+  }
+  syncTimer() { clearInterval(this.tick); if (this.state.phase === 'playing' && this.state.playing) this.tick = setInterval(() => { const d = STOPS[this.state.idx].min * 60; if (this.state.elapsed + 1 >= d) this.finish(); else this.setState(st => ({ elapsed: st.elapsed + 1 })); }, 1000); }
+  finish() { const next = this.state.idx + 1; if (next >= STOPS.length) this.setState({ phase: 'complete', completed: 9, elapsed: 0 }); else this.setState({ phase: 'walking', idx: next, completed: Math.max(this.state.completed, next), elapsed: 0, playing: true }); }
+  initMap() {
+    const L = window.L, map = L.map(this.mapRef.current, { zoomControl: false, attributionControl: false });
+    this.map = map;
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { subdomains: 'abc', maxZoom: 19, errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAO3n3AAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==' }).addTo(map);
+    L.polyline(ROUTE, { color: '#8B0000', weight: 3, opacity: .6, dashArray: '1 7', lineCap: 'round' }).addTo(map);
+    this.layer = L.layerGroup().addTo(map);
+    this.drawMarkers(); this.fitView();
+    let last = 0;
+    this.ro = new ResizeObserver(() => { const h = this.mapRef.current ? this.mapRef.current.offsetHeight : 0; if (h && h !== last) { last = h; map.invalidateSize(); this.fitView(); } });
+    this.ro.observe(this.mapRef.current);
+    setTimeout(() => { map.invalidateSize(); this.fitView(); }, 300);
+  }
+  drawMarkers() {
+    if (!this.layer) return; const L = window.L; this.layer.clearLayers();
+    const { idx, completed, phase, gpsDenied } = this.state;
+    STOPS.forEach((s, i) => {
+      const done = i < completed && phase !== 'complete' ? true : phase === 'complete';
+      const isNext = i === idx && phase !== 'complete';
+      const main = s.kind === 'stop';
+      const size = main ? 32 : 16;
+      let html;
+      if (main) html = `<div style="width:32px;height:32px;border-radius:50%;background:${done ? '#B4A79A' : '#8B0000'};color:#F7F3EC;border:3px solid #fff;box-sizing:border-box;display:grid;place-items:center;font:700 13px Georgia,serif;box-shadow:0 2px 6px rgba(0,0,0,.3);${isNext ? 'outline:4px solid rgba(139,0,0,.28);' : ''}">${done ? '✓' : s.n}</div>`;
+      else html = `<div style="width:16px;height:16px;border-radius:50%;background:${done ? '#B4A79A' : '#F7F3EC'};border:3px solid ${done ? '#B4A79A' : '#8B0000'};box-sizing:border-box;box-shadow:0 1px 4px rgba(0,0,0,.25);${isNext ? 'outline:4px solid rgba(139,0,0,.28);' : ''}"></div>`;
+      const m = L.marker(s.pos, { icon: L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] }), zIndexOffset: main ? 200 : 100 });
+      m.on('click', () => this.setState({ idx: i, phase: 'arrived', elapsed: 0, menuOpen: false }));
+      this.layer.addLayer(m);
+    });
+    if (!gpsDenied) this.layer.addLayer(L.marker(USER, { icon: L.divIcon({ html: '<div class="pht-user"><b></b><i></i></div>', className: '', iconSize: [18, 18], iconAnchor: [9, 9] }), zIndexOffset: 500, interactive: false }));
+  }
+  fitView() {
+    if (!this.map) return; const L = window.L; const { idx, phase, gpsDenied } = this.state;
+    const pts = phase === 'complete' || gpsDenied ? STOPS.map(s => s.pos) : [USER, STOPS[idx].pos];
+    this.map.fitBounds(L.latLngBounds(pts), { paddingTopLeft: [50, 40], paddingBottomRight: [50, 90], maxZoom: 17, animate: true });
+  }
+  renderVals() {
+    const { phase, idx, completed, elapsed, playing, menuOpen, lang, gpsDenied } = this.state;
+    const t = T[lang], cur = STOPS[idx], d = cur.min * 60;
+    const m = Math.round(dist(USER, cur.pos) / 10) * 10, walkMin = Math.max(1, Math.round(m / 80));
+    const label = i => this.label(i, lang);
+    const segments = STOPS.map((s, i) => ({ flex: s.kind === 'stop' ? 3 : 1, color: (phase === 'complete' || i < completed) ? '#8B0000' : i === idx ? '#C9A24A' : '#E4DCD0' }));
+    const { subs, media } = this.cues(idx);
+    const sub = [...subs].reverse().find(s => s.t <= elapsed) || subs[0] || { text: '' };
+    const photo = [...media].reverse().find(m => m.t <= elapsed) || null;
+    const expanded = phase === 'playing' && this.state.expanded;
+    return {
+      t, mapRef: this.mapRef, menuOpen, gpsDenied, hasGps: !gpsDenied, playing, paused: !playing,
+      isWalking: phase === 'walking', isArrived: phase === 'arrived', isPlaying: phase === 'playing', isComplete: phase === 'complete',
+      isMini: phase === 'playing' && !this.state.expanded, isExpanded: expanded,
+      hasPhoto: !!photo, noPhoto: !photo, photo: photo || { img: '', cap: '' },
+      photoEl: photo ? React.createElement('img', { key: photo.img, src: photo.img, alt: '', style: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', animation: 'phtFade .7s ease-out both' } }) : null,
+      subText: sub.text, subSize: sub.text.length > 170 ? 16 : sub.text.length > 110 ? 18 : 21,
+      lookAround: lang === 'en' ? 'No photo for this passage — look around you.' : 'Pas de photo pour ce passage — regardez autour de vous.',
+      expand: () => this.setState({ expanded: true }), collapse: () => this.setState({ expanded: false }),
+      dragStart: e => { this.dragY = e.touches[0].clientY; }, dragEnd: e => { if (this.dragY != null && e.changedTouches[0].clientY - this.dragY > 70) this.setState({ expanded: false }); this.dragY = null; },
+      showNextCard: phase === 'walking',
+      current: { name: cur.name[lang], badge: cur.badge },
+      progressLabel: `${phase === 'complete' ? 9 : completed} ${lang === 'en' ? 'of' : 'sur'} 9 ${t.stops}`,
+      segments,
+      bearing: Math.round(bearing(USER, cur.pos)),
+      nextEyebrow: gpsDenied ? t.tapPin : `${t.next} · ${cur.kind === 'stop' ? `${t.stop} ${cur.n}` : cur.kind === 'intro' ? t.start : t.inter}`,
+      distLabel: gpsDenied ? '—' : `${m} m`, walkLabel: gpsDenied ? '' : `≈ ${walkMin} ${t.min}`,
+      headTo: `${t.headTo} ${label(idx)}`,
+      walkSub: gpsDenied ? t.gpsOff : `${m} m — ${t.about} ${walkMin} ${t.minWalk}`,
+      arrivedTitle: `${t.arrivedAt} ${cur.kind === 'stop' ? `${t.stop} ${cur.n}` : cur.name[lang]}`,
+      playLabel: `${t.playAudio} (${cur.min} ${t.min})`,
+      nowPlayingEyebrow: `${t.nowPlaying} · ${cur.kind === 'stop' ? `${t.stop} ${cur.n}` : cur.kind === 'intro' ? t.start : t.inter}${cur.place[lang] ? ' · ' + cur.place[lang] : ''}`,
+      pct: Math.min(100, elapsed / d * 100), elapsedLabel: mmss(elapsed), durationLabel: mmss(d),
+      playingSub: `${mmss(d - elapsed)} ${t.left} · ${t.next}: ${label(idx + 1)}`,
+      pulseHalo: React.createElement('span', { style: { position: 'absolute', inset: -6, borderRadius: 20, border: '2px solid rgba(247,243,236,.7)', animation: 'phtPulse 1.6s ease-out infinite', pointerEvents: 'none' } }),
+      enBg: lang === 'en' ? '#1C1714' : '#F7F3EC', enFg: lang === 'en' ? '#F7F3EC' : '#1C1714', frBg: lang === 'fr' ? '#1C1714' : '#F7F3EC', frFg: lang === 'fr' ? '#F7F3EC' : '#1C1714',
+      gpsLabel: gpsDenied ? t.off : t.on,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })), stop: e => e.stopPropagation(),
+      setEn: () => this.setState({ lang: 'en' }), setFr: () => this.setState({ lang: 'fr' }),
+      toggleGps: () => this.setState(s => ({ gpsDenied: !s.gpsDenied })),
+      recenter: () => this.fitView(),
+      arriveNow: () => this.setState({ phase: 'arrived' }),
+      play: () => this.setState({ phase: 'playing', elapsed: 0, playing: true, expanded: true }),
+      togglePlay: () => this.setState(s => ({ playing: !s.playing })),
+      back15: () => this.setState(s => ({ elapsed: Math.max(0, s.elapsed - 15) })),
+      fwd15: () => this.setState(s => ({ elapsed: Math.min(d - 1, s.elapsed + 15) })),
+      seekBar: e => { const r = e.currentTarget.getBoundingClientRect(); this.setState({ elapsed: Math.floor(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * (d - 1)) }); },
+      skip: () => this.finish(),
+      prevStop: () => this.setState(s => s.elapsed > 5 || s.idx === 0 ? { elapsed: 0 } : { idx: s.idx - 1, elapsed: 0, playing: true }),
+      restart: () => this.setState({ phase: 'walking', idx: 0, completed: 0, elapsed: 0, playing: true, menuOpen: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>
