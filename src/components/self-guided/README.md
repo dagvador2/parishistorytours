@@ -7,8 +7,8 @@ fonts. Design source of truth: `design/audioguide-handoff/README.md`.
 
 ```
 src/data/self-guided/left-bank-ww2.ts   STOPS (GPS, kinds, names), ROUTE polyline, geofence radius  ← edit after the field test
-src/lib/self-guided/                    types (manifest contract), R2 client for Astro, dev-mode guard
-src/pages/api/self-guided/assets.ts     GET manifest with presigned URLs (2 h), languages available on the bucket
+src/lib/self-guided/                    types, R2 client for Astro, assets builder, purchase/pdf/email/fulfil (commerce)
+src/pages/api/self-guided/access.ts     GET ?token= → purchase + manifest with presigned URLs (2 h); assets.ts = same without the purchase
 src/pages/self-guided-tour/access.astro EN page (SSR); src/pages/fr/self-guided-tour/access.astro rewrites to it
 src/layouts/SelfGuidedLayout.astro      app-like layout, PWA meta, GA4 bootstrap
 src/styles/self-guided.css              design tokens + component classes (Tailwind is not loaded here)
@@ -36,8 +36,36 @@ scripts/self-guided/tools/set-r2-cors.ts  CORS policy of the bucket (needed by t
 |---|---|---|
 | `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME` | Vercel + `.env` | private bucket (same values as the pipeline) |
 | `R2_JURISDICTION=eu` | Vercel + `.env` | EU bucket endpoint `<account>.eu.r2.cloudflarestorage.com` |
-| `SELF_GUIDED_DEV_MODE=true` | Vercel **Preview only** + `.env` | temporary guard; the page and the API answer 404 without it. Removed by chantier C |
+| `SELF_GUIDED_DEV_TOKEN` | `.env`, Vercel **Preview only** | optional: this exact `?token=` opens the app without a purchase (field tests). Unset in production |
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | already set | checkout + webhook (test keys locally, live on Vercel) |
+| `STRIPE_PRICE_ID_SELF_GUIDED_EARLYBIRD`, `STRIPE_PRICE_ID_SELF_GUIDED_NORMAL` | Vercel + `.env` | from `scripts/self-guided/tools/create-stripe-product.ts` (900 / 1400 cents) |
+| `SELF_GUIDED_LAUNCH_DATE` | Vercel + `.env` | ISO date; early-bird price for 30 days from there |
+| `SUPABASE_SERVICE_ROLE_KEY` | Vercel + `.env` | digital_purchases is only reachable with the service role |
+| `PUBLIC_SITE_URL` | Vercel | origin of the links in the purchase email |
 | `PUBLIC_MAPBOX_TOKEN` | already set | not used by the audioguide (MapLibre + self-hosted tiles) |
+
+## Access (chantier C)
+
+A purchase creates a row in `digital_purchases` (migration in
+`supabase/migrations/`) with a random `access_token`. The email links to
+`/self-guided-tour/access?token=…`; the page validates the token server-side
+(clear 401 page otherwise), the client stores it in localStorage so the
+installed PWA works without the query string, and every API call carries it.
+The PDF menu entry opens `/api/self-guided/download-pdf` (watermarked with
+the buyer's email, permanent); the offline package
+`/api/self-guided/download-zip` (PDF + 9 MP3) is offered for 30 days.
+
+Flow: product page `/self-guided-tour` → `POST /api/create-checkout-self-guided`
+→ Stripe Checkout → `/self-guided-tour/success` polls
+`/api/self-guided/check-purchase` → webhook `checkout.session.completed`
+with `metadata.product_slug` → insert + watermarked PDF + Resend email.
+The webhook branch is additive: sessions without `product_slug` follow the
+tour-booking path unchanged.
+
+Local end-to-end test: `stripe login`, `stripe listen --forward-to
+localhost:4321/api/stripe-webhook` (put the printed `whsec_` in `.env.local`
+with `sk_test_` keys), create the product with `create-stripe-product.ts`,
+apply the migration, then buy with card 4242 4242 4242 4242.
 
 ## Languages
 

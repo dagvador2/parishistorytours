@@ -23,7 +23,11 @@ interface ImportMetaEnv {
   readonly R2_SECRET_ACCESS_KEY: string;
   readonly R2_BUCKET_NAME: string;
   readonly R2_JURISDICTION: string;
-  readonly SELF_GUIDED_DEV_MODE: string;
+  readonly SELF_GUIDED_DEV_TOKEN: string;
+  readonly STRIPE_PRICE_ID_SELF_GUIDED_EARLYBIRD: string;
+  readonly STRIPE_PRICE_ID_SELF_GUIDED_NORMAL: string;
+  readonly SELF_GUIDED_LAUNCH_DATE: string;
+  readonly PUBLIC_SITE_URL: string;
 }
 
 interface ImportMeta {

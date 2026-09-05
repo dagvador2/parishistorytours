@@ -50,7 +50,9 @@ try {
   if (await objectExists(wanted)) audioPreview = { url: await sign(wanted), lang };
   else if (await objectExists(other)) audioPreview = { url: await sign(other), lang: lang === "fr" ? "en" : "fr" };
   const pdfKey = `preview/${PRODUCT_SLUG}/${lang}/pdf-preview.pdf`;
+  const pdfOther = `preview/${PRODUCT_SLUG}/${lang === "fr" ? "en" : "fr"}/pdf-preview.pdf`;
   if (await objectExists(pdfKey)) pdfPreview = await sign(pdfKey);
+  else if (await objectExists(pdfOther)) pdfPreview = await sign(pdfOther);
 } catch (e) {
   console.warn("[self-guided] previews unavailable:", e instanceof Error ? e.message : e);
 }
@@ -207,7 +209,7 @@ const productJsonLd = {
           <p class="sgp-form__error" id="sgp-error" hidden>{sg("buy.error")} <a href={waHref} rel="noopener">WhatsApp</a></p>
           <p class="sgp-form__secure">{sg("buy.secure")}</p>
         </form>
-        {!priceLive && <p class="sgp-note" data-price-fallback>Price shown is the list price.</p>}
+        {!priceLive && <p class="sgp-note" data-price-fallback>{lang === "fr" ? "Prix affiché : tarif public." : "Price shown is the list price."}</p>}
       </div>
     </section>
 
