@@ -1,0 +1,28 @@
+---
+/**
+ * The audioguide webapp (chantier B). Reachable without authentication for
+ * now, behind SELF_GUIDED_DEV_MODE; chantier C adds the purchase token.
+ * The FR URL (/fr/self-guided-tour/access) rewrites here with locals.lang = "fr".
+ */
+import SelfGuidedLayout from "../../layouts/SelfGuidedLayout.astro";
+import AudioGuideApp from "../../components/self-guided/App";
+import { selfGuidedDevMode } from "../../lib/self-guided/dev-mode";
+
+export const prerender = false;
+
+if (!selfGuidedDevMode()) {
+  return new Response("Not found", { status: 404 });
+}
+
+const lang = Astro.locals.lang;
+const title = lang === "fr" ? "WWII Left Bank · Visite libre" : "WWII Left Bank · Self-guided tour";
+---
+<SelfGuidedLayout lang={lang} title={title}>
+  <div class="ag-app">
+    <div class="ag-splash" id="ag-splash" aria-hidden="true">
+      <div class="ag-monogram">P</div>
+      <div>{lang === "fr" ? "Chargement de votre visite…" : "Loading your tour…"}</div>
+    </div>
+    <AudioGuideApp client:only="react" lang={lang} />
+  </div>
+</SelfGuidedLayout>

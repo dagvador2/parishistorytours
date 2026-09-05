@@ -1,0 +1,45 @@
+---
+/**
+ * Minimal, app-like layout for the self-guided audioguide: no site chrome,
+ * no webfonts, viewport-fit for notches, noindex. GA4 is bootstrapped the
+ * same way as BaseLayout so src/scripts/track.ts works here too.
+ */
+import "../styles/self-guided.css";
+
+interface Props {
+  lang: "en" | "fr";
+  title: string;
+}
+const { lang, title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#F7F3EC" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="WWII Left Bank" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <script is:inline>
+      // @ts-nocheck
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-26695P8H33');
+      function loadAnalytics(){ var j=document.createElement('script'); j.async=true; j.src='https://www.googletagmanager.com/gtag/js?id=G-26695P8H33'; document.head.appendChild(j); }
+      if ('requestIdleCallback' in window) requestIdleCallback(loadAnalytics, { timeout: 3500 }); else setTimeout(loadAnalytics, 3500);
+    </script>
+  </head>
+  <body>
+    <div id="ag-root">
+      <slot />
+    </div>
+  </body>
+</html>

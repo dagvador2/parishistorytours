@@ -1,0 +1,95 @@
+/*
+ * Audioguide "WWII Left Bank" — self-contained stylesheet.
+ * Tokens from design/audioguide-handoff/README.md ("Design tokens").
+ * System fonts only, no webfont; the site's global.css is NOT loaded on this page.
+ */
+:root {
+  --ag-paper: #F7F3EC;
+  --ag-paper-2: #EDE7DC;
+  --ag-hairline: #E4DCD0;
+  --ag-ink: #1C1714;
+  --ag-ink-muted: #6B5A4E;
+  --ag-ink-on-dark-muted: #C9B8A6;
+  --ag-visited: #B4A79A;
+  --ag-red: #8B0000;
+  --ag-red-pressed: #6E0000;
+  --ag-red-tint: #E8C9C9;
+  --ag-gold: #C9A24A;
+  --ag-gps: #1A73E8;
+  --ag-white: #FFFFFF;
+  --ag-dark: #1C1714;
+  --ag-well: #2A2320;
+  --ag-well-stripe: #302925;
+  --ag-scrim: rgba(28, 23, 20, .45);
+  --ag-serif: Georgia, "Times New Roman", serif;
+  --ag-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif;
+  --ag-shadow-card: 0 6px 18px rgba(0, 0, 0, .28);
+  --ag-shadow-fab: 0 2px 8px rgba(0, 0, 0, .18);
+  --ag-shadow-play: 0 4px 12px rgba(139, 0, 0, .35);
+  --ag-shadow-sheet: 0 -10px 30px rgba(0, 0, 0, .25);
+  --ag-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --ag-safe-top: env(safe-area-inset-top, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--ag-paper); }
+body {
+  color: var(--ag-ink);
+  font-family: var(--ag-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+button { font-family: inherit; font-size: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+a { color: var(--ag-red); }
+
+/* Root: fills the visual viewport. dvh follows the iOS toolbars; the min-height keeps the layout sane on tiny screens. */
+#ag-root { height: 100%; }
+.ag-app {
+  position: relative;
+  height: 100dvh;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--ag-paper);
+  padding-top: var(--ag-safe-top);
+}
+
+/* Splash shown until the React island mounts */
+.ag-splash {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: var(--ag-paper); color: var(--ag-ink-muted); font-size: 13px;
+}
+.ag-monogram {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--ag-red); color: var(--ag-paper);
+  font-family: var(--ag-serif); display: grid; place-items: center; font-size: 18px; flex-shrink: 0;
+}
+
+/* Header */
+.ag-header {
+  display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px 16px;
+  background: var(--ag-paper); border-bottom: 1px solid var(--ag-hairline); z-index: 5;
+}
+.ag-header__text { flex: 1; min-width: 0; }
+.ag-header__title { font-family: var(--ag-serif); font-size: 17px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-header__eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ag-ink-muted); margin-top: 2px; white-space: nowrap; }
+.ag-iconbtn { width: 44px; height: 44px; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; flex-shrink: 0; border-radius: 12px; }
+.ag-iconbtn:active { background: var(--ag-hairline); }
+.ag-burger { display: flex; flex-direction: column; gap: 5px; }
+.ag-burger span { display: block; height: 2px; background: var(--ag-ink); width: 20px; }
+.ag-burger span:last-child { width: 14px; }
+
+/* Segmented progress */
+.ag-progress { display: flex; gap: 3px; padding: 0 16px 8px; background: var(--ag-paper); z-index: 5; }
+.ag-progress__seg { height: 3px; border-radius: 2px; background: var(--ag-hairline); transition: background .3s; }
+.ag-progress__seg--main { flex: 3; }
+.ag-progress__seg--inter { flex: 1; }
+.ag-progress__seg--done { background: var(--ag-red); }
+.ag-progress__seg--current { background: var(--ag-gold); }
+
+/* Generic states */
+.ag-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; color: var(--ag-ink-muted); font-size: 14px; line-height: 1.4; }
+.ag-btn-ghost { border: 1px solid var(--ag-hairline); background: var(--ag-paper); color: var(--ag-red); font-size: 12px; font-weight: 600; border-radius: 10px; padding: 0 12px; min-height: 44px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.ag-btn-ghost:active { background: var(--ag-hairline); }
