@@ -707,8 +707,8 @@ export const fr = {
   // site. Note et prix viennent de src/data/site.ts, jamais codes en dur ici.
   meta: {
     selfGuided: {
-      title: "Visite libre WW2 Rive Gauche à Paris, audioguide — 14 €",
-      description: "Faites le tour WW2 Rive Gauche à votre rythme : 9 sections audio racontées par le guide, carte GPS, photographies d’archives synchronisées, fonctionne hors ligne. Un achat, français et anglais."
+      title: "Visite libre Seconde Guerre mondiale, Rive Gauche — audioguide",
+      description: "Faites le tour Seconde Guerre mondiale de la Rive Gauche à votre rythme : 9 sections audio racontées par le guide, carte GPS, photographies d’archives synchronisées, fonctionne hors ligne."
     },
     selfGuidedSuccess: {
       title: "Paiement reçu — Visite libre",
@@ -1249,7 +1249,7 @@ export const fr = {
   selfGuided: {
     kicker: "Visite libre · Rive Gauche",
     heroTitle: "Faites le tour à votre rythme",
-    heroSubtitle: "La balade WW2 Rive Gauche en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photographies d’archives synchronisées avec la narration.",
+    heroSubtitle: "La balade Seconde Guerre mondiale sur la Rive Gauche, en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photographies d’archives synchronisées avec la narration.",
     heroCta: "Prendre la visite libre",
     facts: { walk: "2 km · environ 90 min", sections: "9 sections audio", access: "À vous pendant {days} jours" },
     honest: {
@@ -1270,7 +1270,7 @@ export const fr = {
     },
     voice: {
       kicker: "Raconté de ma propre voix",
-      title: "Chaque mot est de moi.",
+      title: "Le même guide, les mêmes recherches.",
       body: "J’ai écrit le script à partir des mêmes recherches que les visites guidées, et la narration est ma voix. Ni narrateur de studio, ni audioguide générique de la ville : le même guide, aux mêmes endroits, qui raconte la même histoire.",
       note: "La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et sera ajoutée à tous les achats sans frais."
     },
@@ -1282,12 +1282,12 @@ export const fr = {
     },
     buy: {
       kicker: "Prendre la visite",
-      title: "Un achat, les deux langues",
+      title: "Un paiement unique, pas d’abonnement",
       earlyBird: "Prix de lancement",
-      earlyBirdDays: "encore {days} jours",
-      normalPrice: "puis {price}",
-      perPack: "en une fois, pour un voyageur ou tout le groupe",
-      visitDate: "Jour de votre balade",
+      earlyBirdUntil: "Prix de lancement jusqu’au {date}",
+      wasPrice: "Prix habituel {price}",
+      perPack: "Payé une seule fois, pour un voyageur ou tout le groupe. Rien ne se renouvelle, rien n’est prélevé ensuite.",
+      visitDate: "Jour prévu de votre balade",
       visitDateHint: "Facultatif. La visite s’ouvre la veille au soir et reste ouverte {days} jours, vous pouvez donc acheter bien à l’avance. Laissez vide pour commencer aujourd’hui.",
       accessNote: "Choisissez le jour où vous comptez marcher : la visite s’ouvre la veille au soir, pour {days} jours. La fiche explicative vous parvient tout de suite, quelle que soit la date d’achat. Chargez la page une fois en wifi et elle continue de fonctionner sans données jusqu’à la fin de votre fenêtre.",
       email: "Votre email",

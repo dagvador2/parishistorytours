@@ -1249,7 +1249,7 @@ export const en = {
   selfGuided: {
     kicker: "Self-guided · Left Bank",
     heroTitle: "Do the tour on your own time",
-    heroSubtitle: "The WWII Left Bank walk as a self-guided audio tour: my voice in your ears, a map that guides you, the archive photographs synchronised with the narration.",
+    heroSubtitle: "The Second World War walk on the Left Bank, as a self-guided audio tour: my voice in your ears, a map that guides you, the archive photographs synchronised with the narration.",
     heroCta: "Get the self-guided tour",
     facts: { walk: "2 km · about 90 min", sections: "9 audio sections", access: "Yours for {days} days" },
     honest: {
@@ -1270,7 +1270,7 @@ export const en = {
     },
     voice: {
       kicker: "Narrated in my own voice",
-      title: "Every word is mine.",
+      title: "The same guide, the same research.",
       body: "I wrote the script from the same research as the guided tours, and the narration is my voice. Not a studio narrator, not a generic city audioguide: the same guide, at the same places, telling the same history.",
       note: "The French narration is available today; the English narration is being recorded and will be added to every purchase at no cost."
     },
@@ -1282,12 +1282,12 @@ export const en = {
     },
     buy: {
       kicker: "Get the tour",
-      title: "One purchase, both languages",
+      title: "A single payment, no subscription",
       earlyBird: "Launch price",
-      earlyBirdDays: "{days} days left",
-      normalPrice: "then {price}",
-      perPack: "one-time, for one traveller or the whole group",
-      visitDate: "Day of your walk",
+      earlyBirdUntil: "Launch price until {date}",
+      wasPrice: "Usual price {price}",
+      perPack: "Paid once, for one traveller or the whole group. Nothing renews, nothing is charged again.",
+      visitDate: "Planned day of your walk",
       visitDateHint: "Optional. The tour opens the evening before and stays open for {days} days, so you can buy well ahead. Leave it empty to start today.",
       accessNote: "Pick the day you plan to walk and the tour opens the evening before, for {days} days. The explanatory sheet reaches you straight away, whenever you buy. Load the page once on wifi and it keeps working without data until the end of your window.",
       email: "Your email",

@@ -110,6 +110,8 @@ export interface ActivePrice {
   earlyBird: boolean;
   /** days left in the early-bird window (0 when not early bird) */
   daysLeft: number;
+  /** ISO date the launch price ends, null when it is already over */
+  earlyBirdEndsAt: string | null;
 }
 
 /** `STRIPE_PRICE_ID_SELF_GUIDED_FR_NORMAL` and friends: one product per language. */
@@ -127,10 +129,15 @@ export function getActivePriceId(lang: PurchaseLang, now: Date = new Date()): Ac
   if (early && launch && !Number.isNaN(launch.getTime())) {
     const end = launch.getTime() + EARLY_BIRD_DAYS * 86400_000;
     if (now.getTime() < end) {
-      return { priceId: early, earlyBird: true, daysLeft: Math.max(1, Math.ceil((end - now.getTime()) / 86400_000)) };
+      return {
+        priceId: early,
+        earlyBird: true,
+        daysLeft: Math.max(1, Math.ceil((end - now.getTime()) / 86400_000)),
+        earlyBirdEndsAt: new Date(end).toISOString(),
+      };
     }
   }
-  return { priceId: normal, earlyBird: false, daysLeft: 0 };
+  return { priceId: normal, earlyBird: false, daysLeft: 0, earlyBirdEndsAt: null };
 }
 
 export interface PriceInfo extends ActivePrice {
