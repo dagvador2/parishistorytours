@@ -33,12 +33,14 @@ export function accessApiUrl(token: string, lang: Lang): string {
   return `/api/self-guided/access?token=${encodeURIComponent(token)}&lang=${lang}`;
 }
 
-export type AssetsErrorKind = "no_token" | "invalid_token" | "expired" | "network";
+export type AssetsErrorKind = "no_token" | "invalid_token" | "expired" | "not_open_yet" | "network";
 
 export function useAssets(requested: Lang) {
   const [assets, setAssets] = useState<AssetsResponse | null>(null);
   const [purchase, setPurchase] = useState<AccessResponse["purchase"] | null>(null);
   const [error, setError] = useState<AssetsErrorKind | null>(null);
+  /** when error is "not_open_yet": the date the tour opens */
+  const [opensAt, setOpensAt] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const timer = useRef<number | undefined>(undefined);
 
@@ -60,6 +62,12 @@ export function useAssets(requested: Lang) {
       }
       if (res.status === 410) {
         setError("expired");
+        return;
+      }
+      if (res.status === 403) {
+        const body = (await res.json().catch(() => ({}))) as { accessStartsAt?: string };
+        setOpensAt(body.accessStartsAt ?? null);
+        setError("not_open_yet");
         return;
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -92,5 +100,5 @@ export function useAssets(requested: Lang) {
     };
   }, [load]);
 
-  return { assets, purchase, error, loading, reload: load };
+  return { assets, purchase, error, opensAt, loading, reload: load };
 }

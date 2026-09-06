@@ -4,7 +4,7 @@
  * attached — the tour lives in the web app.
  */
 import type Stripe from "stripe";
-import { accessDays, accessUrl, findPurchaseBySession, insertPurchase, PRODUCT_SLUG, type PurchaseLang } from "./purchase";
+import { accessDays, accessUrl, findPurchaseBySession, insertPurchase, isVisitDate, PRODUCT_SLUG, type PurchaseLang } from "./purchase";
 import { pdfFilename, watermarkPdf } from "./pdf";
 import { sendPurchaseEmail } from "./email";
 
@@ -32,6 +32,7 @@ export async function fulfillDigitalPurchase(session: Stripe.Checkout.Session, o
     language,
     amountPaidCents: session.amount_total ?? 0,
     currency: session.currency ?? "eur",
+    visitDate: isVisitDate(session.metadata?.visit_date) ? session.metadata!.visit_date : null,
   });
   if (!created) return { created: false, emailSent: false };
 

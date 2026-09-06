@@ -69,7 +69,7 @@ export default function App({ lang: urlLang }: Props) {
     return () => { document.removeEventListener("visibilitychange", flush); window.removeEventListener("pagehide", flush); };
   }, []);
 
-  const { assets, purchase, error, loading, reload } = useAssets(state.audioLang ?? state.lang);
+  const { assets, purchase, error, opensAt, loading, reload } = useAssets(state.audioLang ?? state.lang);
   const section = assets?.sections[state.idx];
   const narrationNote = assets && assets.lang !== state.lang ? t.narrationFallback : null;
 
@@ -182,10 +182,21 @@ export default function App({ lang: urlLang }: Props) {
       {error && !assets ? (
         <div className="ag-center">
           <div className="ag-center__title">
-            {error === "network" ? t.loadError : error === "expired" ? t.accessExpiredTitle : t.accessErrorTitle}
+            {error === "network" ? t.loadError
+              : error === "expired" ? t.accessExpiredTitle
+              : error === "not_open_yet" ? t.accessNotOpenTitle
+              : t.accessErrorTitle}
           </div>
           {error !== "network" && (
-            <div>{error === "no_token" ? t.accessNoToken : error === "expired" ? t.accessExpiredBody : t.accessInvalid}</div>
+            <div>
+              {error === "no_token" ? t.accessNoToken
+                : error === "expired" ? t.accessExpiredBody
+                : error === "not_open_yet"
+                  ? t.accessNotOpenBody.replace("{date}", opensAt
+                      ? new Date(opensAt).toLocaleDateString(state.lang === "fr" ? "fr-FR" : "en-GB", { day: "numeric", month: "long" })
+                      : "")
+                  : t.accessInvalid}
+            </div>
           )}
           <div className="ag-center__actions">
             {error === "network" && <button type="button" className="ag-btn-ghost" onClick={() => void reload()}>{t.retry}</button>}

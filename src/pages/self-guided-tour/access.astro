@@ -8,7 +8,7 @@
  */
 import SelfGuidedLayout from "../../layouts/SelfGuidedLayout.astro";
 import AudioGuideApp from "../../components/self-guided/App";
-import { accessExpired, findPurchaseByToken, SUPPORT_EMAIL } from "../../lib/self-guided/purchase";
+import { accessExpired, accessNotOpenYet, findPurchaseByToken, SUPPORT_EMAIL } from "../../lib/self-guided/purchase";
 import { WHATSAPP_NUMBER } from "../../lib/whatsapp";
 
 export const prerender = false;
@@ -18,12 +18,17 @@ const isFr = lang === "fr";
 const title = isFr ? "WWII Left Bank · Visite libre" : "WWII Left Bank · Self-guided tour";
 const token = Astro.url.searchParams.get("token");
 
-let state: "ok" | "invalid" | "expired" = "ok";
+let state: "ok" | "invalid" | "expired" | "notOpen" = "ok";
+let opensAt: string | null = null;
 if (token) {
   try {
     const purchase = await findPurchaseByToken(token);
     if (!purchase) state = "invalid";
     else if (accessExpired(purchase)) state = "expired";
+    else if (accessNotOpenYet(purchase)) {
+      state = "notOpen";
+      opensAt = purchase.access_starts_at;
+    }
   } catch (e) {
     console.error("[self-guided/access page] token check failed:", e);
     // Database hiccup: let the client retry through the API rather than blocking a paying visitor.
@@ -31,6 +36,11 @@ if (token) {
 }
 if (state === "invalid") Astro.response.status = 401;
 if (state === "expired") Astro.response.status = 410;
+if (state === "notOpen") Astro.response.status = 403;
+
+const opensLabel = opensAt
+  ? new Date(opensAt).toLocaleDateString(isFr ? "fr-FR" : "en-GB", { day: "numeric", month: "long" })
+  : "";
 
 const copy = {
   invalid: {
@@ -44,6 +54,12 @@ const copy = {
     body: isFr
       ? "Votre lien était valable quelques jours après l’achat. Si vous n’avez pas pu faire la visite, écrivez-moi et je le rouvre."
       : "Your link was valid for a few days after purchase. If you did not get to walk the tour, write to me and I will reopen it.",
+  },
+  notOpen: {
+    title: isFr ? "Pas encore ouvert" : "Not open yet",
+    body: isFr
+      ? `Vous avez choisi une date plus tard. La visite s’ouvre la veille au soir, le ${opensLabel}. Revenez à ce moment-là, le lien reste le même.`
+      : `You chose to walk on a later date. The tour opens on the evening before, on ${opensLabel}. Come back then — the link stays the same.`,
   },
 }[state === "ok" ? "invalid" : state];
 const prefix = isFr ? "/fr" : "";

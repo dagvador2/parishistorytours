@@ -23,6 +23,7 @@ const COPY = {
     ],
     validTitle: "Your access",
     valid: (days: number, date: string) => `The link works for ${days} days, until ${date}. Walk the tour during your stay; once the page is loaded on wifi it keeps working offline for the rest of that window.`,
+    validLater: (opens: string, until: string) => `You chose to walk on a later date, so the tour opens on the evening of ${opens} and stays open until ${until}. Until then this email is all you need — the link will simply say it is not open yet.`,
     checklistTitle: "Before you leave",
     checklist: ["Charge your phone and bring headphones.", "Start at 60 Boulevard Saint-Michel, in front of the building.", "Count about 90 minutes for the 2 km."],
     support: `Questions? Reply to this email. Enjoy the walk.`,
@@ -41,6 +42,7 @@ const COPY = {
     ],
     validTitle: "Votre accès",
     valid: (days: number, date: string) => `Le lien fonctionne ${days} jours, jusqu’au ${date}. Faites la visite pendant votre séjour ; une fois la page chargée en wifi, elle continue de fonctionner hors ligne jusqu’à cette date.`,
+    validLater: (opens: string, until: string) => `Vous avez choisi une date plus tard : la visite s’ouvre le ${opens} au soir et reste ouverte jusqu’au ${until}. D’ici là, cet email suffit — le lien indiquera simplement que l’accès n’est pas encore ouvert.`,
     checklistTitle: "Avant de partir",
     checklist: ["Chargez votre téléphone et prenez des écouteurs.", "Commencez au 60 boulevard Saint-Michel, devant le bâtiment.", "Comptez environ 90 minutes pour les 2 km."],
     support: `Une question ? Répondez à cet email. Bonne balade.`,
@@ -67,7 +69,11 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 export function buildPurchaseEmail(p: DigitalPurchase, accessUrl: string, accessDays: number) {
   const c = COPY[p.language];
   const name = firstNameFromEmail(p.email);
-  const until = new Date(p.access_expires_at).toLocaleDateString(c.locale, { day: "numeric", month: "long", year: "numeric" });
+  const fmt = (iso: string) => new Date(iso).toLocaleDateString(c.locale, { day: "numeric", month: "long", year: "numeric" });
+  const until = fmt(p.access_expires_at);
+  // Bought for a later walk: the app opens the evening before that day.
+  const opensLater = new Date(p.access_starts_at).getTime() - Date.now() > 12 * 3600_000;
+  const validLine = opensLater ? c.validLater(fmt(p.access_starts_at), until) : c.valid(accessDays, until);
   const li = (items: readonly string[], tag: "ol" | "ul") => items.map((x) => `<li style="margin:0 0 8px">${esc(x)}</li>`).join("");
   const html = `<!doctype html><html><body style="margin:0;background:#fafaf7;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1a1a1a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fafaf7"><tr><td align="center" style="padding:32px 16px">
@@ -80,7 +86,7 @@ export function buildPurchaseEmail(p: DigitalPurchase, accessUrl: string, access
 <div style="font-size:12px;color:#4a4a4a;margin-top:10px;word-break:break-all">${esc(accessUrl)}</div></td></tr>
 <tr><td style="padding:0 32px;font-size:15px;line-height:1.6;color:#4a4a4a"><ol style="margin:0;padding-left:20px">${li(c.how, "ol")}</ol></td></tr>
 <tr><td style="padding:24px 32px 0;font-family:Georgia,'Times New Roman',serif;font-size:18px">${esc(c.validTitle)}</td></tr>
-<tr><td style="padding:8px 32px 0;font-size:15px;line-height:1.6;color:#4a4a4a">${esc(c.valid(accessDays, until))}</td></tr>
+<tr><td style="padding:8px 32px 0;font-size:15px;line-height:1.6;color:#4a4a4a">${esc(validLine)}</td></tr>
 <tr><td style="padding:24px 32px 0;font-family:Georgia,'Times New Roman',serif;font-size:18px">${esc(c.checklistTitle)}</td></tr>
 <tr><td style="padding:8px 32px 0;font-size:15px;line-height:1.6;color:#4a4a4a"><ul style="margin:0;padding-left:20px">${li(c.checklist, "ul")}</ul></td></tr>
 <tr><td style="padding:24px 32px 0;font-size:14px;line-height:1.6;color:#4a4a4a">${esc(c.support)}</td></tr>
@@ -91,7 +97,7 @@ export function buildPurchaseEmail(p: DigitalPurchase, accessUrl: string, access
   const text = [
     c.hello(name), "", c.intro, "", `${c.cta}: ${accessUrl}`, "",
     ...c.how.map((x, i) => `${i + 1}. ${x}`), "",
-    c.validTitle, c.valid(accessDays, until), "",
+    c.validTitle, validLine, "",
     c.checklistTitle, ...c.checklist.map((x) => `- ${x}`), "",
     c.support, c.sign,
   ].join("\n");

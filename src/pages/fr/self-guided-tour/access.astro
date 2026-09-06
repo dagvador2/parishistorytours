@@ -1,5 +1,6 @@
 ---
 // French URL of the audioguide: same page, the middleware already set locals.lang = "fr".
+// The query string carries the access token, so it must survive the rewrite.
 export const prerender = false;
-return Astro.rewrite("/self-guided-tour/access");
+return Astro.rewrite(`/self-guided-tour/access${Astro.url.search}`);
 ---

@@ -67,6 +67,8 @@ export interface AccessResponse {
     email: string;
     language: "en" | "fr";
     purchasedAt: string;
+    /** the link opens on this date (evening before the chosen walk) */
+    accessStartsAt: string;
     /** the access link stops working after this date */
     accessExpiresAt: string;
     /** whole days left before that (0 on the last day) */
