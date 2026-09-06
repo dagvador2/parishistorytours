@@ -40,7 +40,12 @@ const T = {
     accessNoToken: "Open the tour from the link in your purchase email — it carries your personal access.",
     accessInvalid: "This access link is not valid. Check the link in your purchase email, or contact Clément.",
     productPage: "About the self-guided tour",
-    zip: "Download offline package (PDF + audio)",
+    accessExpiredTitle: "This access has expired",
+    accessExpiredBody: "Your link was valid for a few days after purchase. If you did not get to walk the tour, write to me and I will reopen it.",
+    buyAgain: "See the self-guided tour",
+    accessLeft: "Access",
+    accessDays: "{days} days left",
+    accessLastDay: "last day",
   },
   fr: {
     selfGuided: "Visite libre", stops: "étapes", next: "Suivant", stop: "Étape", inter: "Interstop", start: "Départ",
@@ -76,7 +81,12 @@ const T = {
     accessNoToken: "Ouvrez la visite depuis le lien de votre email d’achat : il contient votre accès personnel.",
     accessInvalid: "Ce lien d’accès n’est pas valide. Vérifiez le lien de votre email d’achat, ou contactez Clément.",
     productPage: "À propos de la visite libre",
-    zip: "Télécharger le pack hors ligne (PDF + audio)",
+    accessExpiredTitle: "Cet accès a expiré",
+    accessExpiredBody: "Votre lien était valable quelques jours après l’achat. Si vous n’avez pas pu faire la visite, écrivez-moi et je le rouvre.",
+    buyAgain: "Voir la visite libre",
+    accessLeft: "Accès",
+    accessDays: "encore {days} jours",
+    accessLastDay: "dernier jour",
   },
 } as const;
 

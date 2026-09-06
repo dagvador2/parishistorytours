@@ -181,12 +181,18 @@ export default function App({ lang: urlLang }: Props) {
       <Progress phase={state.phase} idx={state.idx} completed={state.completed} />
       {error && !assets ? (
         <div className="ag-center">
-          <div className="ag-center__title">{error === "network" ? t.loadError : t.accessErrorTitle}</div>
-          {error !== "network" && <div>{error === "no_token" ? t.accessNoToken : t.accessInvalid}</div>}
+          <div className="ag-center__title">
+            {error === "network" ? t.loadError : error === "expired" ? t.accessExpiredTitle : t.accessErrorTitle}
+          </div>
+          {error !== "network" && (
+            <div>{error === "no_token" ? t.accessNoToken : error === "expired" ? t.accessExpiredBody : t.accessInvalid}</div>
+          )}
           <div className="ag-center__actions">
             {error === "network" && <button type="button" className="ag-btn-ghost" onClick={() => void reload()}>{t.retry}</button>}
             <a className="ag-btn-ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener">{t.support}</a>
-            <a className="ag-btn-ghost" href={state.lang === "fr" ? "/fr/self-guided-tour" : "/self-guided-tour"}>{t.productPage}</a>
+            <a className="ag-btn-ghost" href={state.lang === "fr" ? "/fr/self-guided-tour" : "/self-guided-tour"}>
+              {error === "expired" ? t.buyAgain : t.productPage}
+            </a>
           </div>
         </div>
       ) : !assets ? (
@@ -237,7 +243,7 @@ export default function App({ lang: urlLang }: Props) {
           available={assets?.available ?? []}
           gpsDenied={state.gpsDenied}
           pdfUrl={assets?.pdf ?? null}
-          zipUrl={purchase?.downloadAvailable ? purchase.zipUrl : null}
+          daysLeft={purchase ? purchase.daysLeft : null}
           offline={offline}
           onClose={() => setMenuOpen(false)}
           onSetLang={onSetLang}

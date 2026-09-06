@@ -19,7 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const origin = request.headers.get("origin") ?? new URL(request.url).origin;
     const prefix = language === "fr" ? "/fr" : "";
-    const active = getActivePriceId();
+    const active = getActivePriceId(language);
 
     const session = await stripe().checkout.sessions.create({
       mode: "payment",

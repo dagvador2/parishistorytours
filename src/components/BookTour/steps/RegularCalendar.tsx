@@ -32,11 +32,11 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
   // Self-guided fallback offer (digital product) — price fetched live, label degrades without it.
   const [selfGuidedPrice, setSelfGuidedPrice] = useState<string | null>(null);
   useEffect(() => {
-    fetch("/api/self-guided/price")
+    fetch(`/api/self-guided/price?lang=${lang === "fr" ? "fr" : "en"}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((p) => { if (p && typeof p.amountCents === "number") setSelfGuidedPrice(`€${(p.amountCents / 100).toFixed(p.amountCents % 100 ? 2 : 0)}`); })
       .catch(() => {});
-  }, []);
+  }, [lang]);
   const [participantError, setParticipantError] = useState("");
   const [attempted, setAttempted] = useState(false);
   const firstRun = useRef(true);

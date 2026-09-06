@@ -2,10 +2,12 @@
  * GET /api/self-guided/access?token=…&lang=en|fr
  * Resolves a purchase token: purchase summary + the manifest with signed
  * URLs. The webapp calls it at start and every ~2 h (URL refresh).
+ * The access link is time-limited: 410 once it has expired.
  */
 import type { APIRoute } from "astro";
 import { AssetsError, buildAssets, jsonResponse, type Lang } from "../../../lib/self-guided/assets";
-import { downloadAvailable, findPurchaseByToken, touchLastAccess } from "../../../lib/self-guided/purchase";
+import { accessDaysLeft, accessExpired, findPurchaseByToken, touchLastAccess } from "../../../lib/self-guided/purchase";
+import { welcomePdfExists } from "../../../lib/self-guided/pdf";
 
 export const prerender = false;
 
@@ -14,17 +16,20 @@ export const GET: APIRoute = async ({ url }) => {
   try {
     const purchase = await findPurchaseByToken(token);
     if (!purchase) return jsonResponse({ error: "invalid_token" }, 401);
+    if (accessExpired(purchase)) {
+      return jsonResponse({ error: "expired", accessExpiresAt: purchase.access_expires_at }, 410);
+    }
     const requested = ((url.searchParams.get("lang") ?? purchase.language) as Lang) === "fr" ? "fr" : "en";
-    const pdfUrl = `${url.origin}/api/self-guided/download-pdf?token=${purchase.access_token}&lang=${requested}`;
+    const hasWelcome = await welcomePdfExists(requested).catch(() => false);
+    const pdfUrl = hasWelcome ? `${url.origin}/api/self-guided/download-pdf?token=${purchase.access_token}&lang=${requested}` : null;
     const [assets] = await Promise.all([buildAssets(purchase.product_slug, requested, pdfUrl), touchLastAccess(purchase.id).catch(() => {})]);
     return jsonResponse({
       purchase: {
         email: purchase.email,
         language: purchase.language,
         purchasedAt: purchase.purchased_at,
-        downloadExpiresAt: purchase.download_expires_at,
-        downloadAvailable: downloadAvailable(purchase),
-        zipUrl: `${url.origin}/api/self-guided/download-zip?token=${purchase.access_token}&lang=${requested}`,
+        accessExpiresAt: purchase.access_expires_at,
+        daysLeft: accessDaysLeft(purchase),
       },
       assets,
     });

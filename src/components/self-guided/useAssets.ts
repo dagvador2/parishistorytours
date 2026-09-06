@@ -33,7 +33,7 @@ export function accessApiUrl(token: string, lang: Lang): string {
   return `/api/self-guided/access?token=${encodeURIComponent(token)}&lang=${lang}`;
 }
 
-export type AssetsErrorKind = "no_token" | "invalid_token" | "network";
+export type AssetsErrorKind = "no_token" | "invalid_token" | "expired" | "network";
 
 export function useAssets(requested: Lang) {
   const [assets, setAssets] = useState<AssetsResponse | null>(null);
@@ -56,6 +56,10 @@ export function useAssets(requested: Lang) {
       if (res.status === 401) {
         try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
         setError("invalid_token");
+        return;
+      }
+      if (res.status === 410) {
+        setError("expired");
         return;
       }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

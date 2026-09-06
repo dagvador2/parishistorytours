@@ -19,9 +19,10 @@ interface Props {
   audioLang: Lang;
   available: Lang[];
   gpsDenied: boolean;
+  /** short welcome sheet, null while none is published */
   pdfUrl: string | null;
-  /** offline package (PDF + MP3) while the 30-day download window is open */
-  zipUrl: string | null;
+  /** whole days left before the access link expires, null for the dev token */
+  daysLeft: number | null;
   offline: OfflineStatus;
   onClose: () => void;
   onSetLang: (l: Lang) => void;
@@ -41,7 +42,7 @@ function Segmented({ value, onChange }: { value: Lang; onChange: (l: Lang) => vo
   );
 }
 
-export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, zipUrl, offline, onClose, onSetLang, onSetAudioLang, onToggleGps, onRestart, onPdfClick }: Props) {
+export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, daysLeft, offline, onClose, onSetLang, onSetAudioLang, onToggleGps, onRestart, onPdfClick }: Props) {
   const t = strings(lang);
   const offlineLine =
     offline.state === "preparing" ? `${t.offlinePreparing} ${offline.done}/${offline.total} ${t.offlineAudio}`
@@ -65,12 +66,9 @@ export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, zi
         ) : audioLang !== lang ? (
           <div className="ag-row ag-row--note">{t.narrationFallbackLong}</div>
         ) : null}
-        <a href={pdfUrl ?? "#"} target="_blank" rel="noopener" className="ag-row ag-row--link" onClick={onPdfClick} aria-disabled={!pdfUrl}>
-          <span>{t.pdf}</span><span className="ag-row__hint">↓</span>
-        </a>
-        {zipUrl && (
-          <a href={zipUrl} className="ag-row ag-row--link" onClick={onPdfClick}>
-            <span>{t.zip}</span><span className="ag-row__hint">↓</span>
+        {pdfUrl && (
+          <a href={pdfUrl} target="_blank" rel="noopener" className="ag-row ag-row--link" onClick={onPdfClick}>
+            <span>{t.pdf}</span><span className="ag-row__hint">↓</span>
           </a>
         )}
         <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener" className="ag-row ag-row--link">
@@ -80,6 +78,12 @@ export default function Menu({ lang, audioLang, available, gpsDenied, pdfUrl, zi
           <span className="ag-row__label">{t.location}</span>
           <button type="button" className="ag-pill" onClick={onToggleGps}>{gpsDenied ? t.off : t.on}</button>
         </div>
+        {daysLeft !== null && (
+          <div className="ag-row">
+            <span className="ag-row__label">{t.accessLeft}</span>
+            <span className="ag-row__hint">{daysLeft <= 0 ? t.accessLastDay : t.accessDays.replace("{days}", String(daysLeft))}</span>
+          </div>
+        )}
         <button type="button" className="ag-row ag-row--danger" onClick={onRestart}>{t.restart}</button>
         {offlineLine && <div className={`ag-offline ag-offline--${offline.state}`} role="status">{offlineLine}</div>}
         <div className="ag-sheet__foot">Paris History Tours · parishistorytours.com<br />{t.mapAttribution}</div>
