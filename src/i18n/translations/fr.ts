@@ -540,12 +540,12 @@ export const fr = {
   // FAQ
   faq: {
     selfGuided: [
-      { question: "Comment fonctionne la visite libre ?", answer: "Après le paiement, vous recevez un email avec un lien personnel. Ouvrez-le sur votre téléphone : une carte montre le parcours et votre position, et la narration démarre quand vous arrivez à chaque étape. Les sous-titres et les photos du guide imprimé suivent l’audio. Le guide PDF est joint à l’email." },
-      { question: "Ai-je besoin d’internet pendant la balade ?", answer: "Non. Ouvrez la page une fois en wifi (à l’hôtel par exemple) et attendez « Prêt pour le hors ligne » : l’audio, les photos et la carte du Quartier latin sont alors stockés sur votre téléphone. Le GPS fonctionne sans données." },
-      { question: "Puis-je l’offrir ?", answer: "Oui. Indiquez l’email du destinataire au paiement : le lien d’accès lui est envoyé. Ou achetez avec votre email et transférez le lien." },
-      { question: "Combien de temps ai-je accès ?", answer: "La webapp est à vous sans limite de temps. Le téléchargement complet (PDF + fichiers audio) est disponible 30 jours après l’achat ; le PDF reste téléchargeable depuis l’application." },
-      { question: "Et si mon téléphone n’a pas de GPS, ou si je refuse la géolocalisation ?", answer: "La visite fonctionne quand même : touchez une étape sur la carte pour lancer sa narration, et suivez les indications de marche du PDF entre les étapes." },
-      { question: "Est-ce disponible en anglais ?", answer: "L’interface, le PDF et le prix incluent les deux langues. La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et apparaîtra automatiquement dans votre visite, sans frais." }
+      { question: "Comment fonctionne la visite libre ?", answer: "Après le paiement, vous recevez un email avec un lien personnel. Ouvrez-le sur votre téléphone : une carte montre le parcours et votre position, et la narration démarre quand vous arrivez à chaque étape. Les sous-titres et les photographies d’archives suivent l’audio." },
+      { question: "Ai-je besoin d’internet pendant la balade ?", answer: "Non. Ouvrez la page une fois en wifi (à l’hôtel par exemple) et attendez « Prêt pour le hors ligne » : l’audio, les photographies et la carte du Quartier latin sont alors stockés sur votre téléphone. Le GPS fonctionne sans données." },
+      { question: "Combien de temps ai-je accès ?", answer: "Le lien ouvre la visite pendant quelques jours après l’achat, le temps de la faire pendant votre séjour. Une fois la page chargée en wifi, elle continue de fonctionner hors ligne jusque-là. Si votre voyage est décalé, écrivez-moi et je rouvre l’accès." },
+      { question: "Puis-je l’offrir ?", answer: "Oui. Indiquez l’email du destinataire au paiement : le lien d’accès lui est envoyé. Gardez en tête que la durée d’accès démarre à l’achat, achetez-le donc peu avant son voyage." },
+      { question: "Et si mon téléphone n’a pas de GPS, ou si je refuse la géolocalisation ?", answer: "La visite fonctionne quand même : touchez une étape sur la carte pour lancer sa narration, et l’application vous indique où se trouve la suivante." },
+      { question: "Est-ce disponible en anglais ?", answer: "L’interface et le prix incluent les deux langues. La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et apparaîtra automatiquement dans votre visite, sans frais." }
     ],
     title: "Questions Fréquentes",
     items: [
@@ -708,7 +708,7 @@ export const fr = {
   meta: {
     selfGuided: {
       title: "Visite libre WW2 Rive Gauche à Paris, audioguide — 14 €",
-      description: "Faites le tour WW2 Rive Gauche à votre rythme : 9 sections audio racontées par le guide, carte GPS, photos d’archives synchronisées, PDF de 38 pages, mode hors ligne. Un achat, français et anglais."
+      description: "Faites le tour WW2 Rive Gauche à votre rythme : 9 sections audio racontées par le guide, carte GPS, photographies d’archives synchronisées, fonctionne hors ligne. Un achat, français et anglais."
     },
     selfGuidedSuccess: {
       title: "Paiement reçu — Visite libre",
@@ -1249,9 +1249,9 @@ export const fr = {
   selfGuided: {
     kicker: "Visite libre · Rive Gauche",
     heroTitle: "Faites le tour à votre rythme",
-    heroSubtitle: "La balade WW2 Rive Gauche en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photos du guide imprimé synchronisées avec la narration.",
+    heroSubtitle: "La balade WW2 Rive Gauche en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photographies d’archives synchronisées avec la narration.",
     heroCta: "Prendre la visite libre",
-    facts: { walk: "2 km · environ 90 min", sections: "9 sections audio", langs: "Français et anglais inclus" },
+    facts: { walk: "2 km · environ 90 min", sections: "9 sections audio", access: "À vous pendant {days} jours" },
     honest: {
       kicker: "Un plan B, dit simplement",
       title: "Rien ne vaut la balade avec moi.",
@@ -1264,9 +1264,8 @@ export const fr = {
       items: [
         { title: "9 sections racontées", body: "Environ 30 minutes de narration pour 2 km : une introduction, quatre arrêts principaux et quatre courts arrêts entre eux." },
         { title: "Une carte qui vous guide", body: "Votre position, le parcours, la prochaine étape, sa distance. L’audio démarre quand vous y êtes." },
-        { title: "Des photos d’archives synchronisées", body: "Les photographies du guide imprimé apparaissent au bon moment de la narration, avec leurs légendes." },
-        { title: "Le guide PDF de 38 pages", body: "La version imprimée, avec les indications de marche et toutes les photos, à garder." },
-        { title: "Fonctionne hors ligne", body: "Ouvrez-le une fois en wifi ; toute la visite est ensuite disponible sans données. Un téléchargement complet (PDF + audio) est inclus pendant 30 jours." }
+        { title: "Des photographies d’archives synchronisées", body: "Les photographies du guide imprimé apparaissent au bon moment de la narration, avec leurs légendes." },
+        { title: "Fonctionne sans données", body: "Ouvrez-la une fois en wifi et toute la visite est stockée sur votre téléphone : audio, photos et carte. Aucun forfait data nécessaire pendant la balade." }
       ]
     },
     voice: {
@@ -1276,23 +1275,22 @@ export const fr = {
       note: "La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et sera ajoutée à tous les achats sans frais."
     },
     preview: {
-      kicker: "Écoutez et regardez avant d’acheter",
+      kicker: "Écoutez avant d’acheter",
       title: "Trente secondes de l’introduction",
       audioNote: "Extrait en français.",
-      pdfTitle: "Les trois premières pages du guide",
-      pdfCta: "Ouvrir l’aperçu PDF",
       audioUnavailable: "Extrait bientôt disponible."
     },
     buy: {
       kicker: "Prendre la visite",
-      title: "Un achat, les deux langues, sans limite de temps",
+      title: "Un achat, les deux langues",
       earlyBird: "Prix de lancement",
       earlyBirdDays: "encore {days} jours",
       normalPrice: "puis {price}",
       perPack: "en une fois, pour un voyageur ou tout le groupe",
+      accessNote: "Votre lien ouvre la visite pendant {days} jours, le temps de la faire pendant votre séjour. Chargez la page une fois en wifi et elle continue de fonctionner sans données jusque-là.",
       email: "Votre email",
-      emailHint: "Le lien d’accès et le PDF y sont envoyés.",
-      language: "Langue préférée",
+      emailHint: "Le lien d’accès y est envoyé.",
+      language: "Langue de la narration",
       submit: "Payer {price} et accéder",
       submitting: "Redirection vers le paiement…",
       secure: "Paiement sécurisé par Stripe · Envoi immédiat par email",
@@ -1301,10 +1299,10 @@ export const fr = {
     success: {
       kicker: "Paiement reçu",
       title: "Votre visite arrive",
-      body: "Nous préparons votre lien d’accès personnel et le guide PDF. Vérifiez votre boîte mail (et les spams) dans la minute.",
+      body: "Nous préparons votre lien d’accès personnel. Vérifiez votre boîte mail (et les spams) dans la minute.",
       ready: "Votre accès est prêt.",
       open: "Ouvrir la visite",
-      slow: "C’est plus long que d’habitude. L’email va arriver ; sinon, écrivez à hello@parishistorytours.com.",
+      slow: "C’est plus long que d’habitude. L’email va arriver ; sinon, écrivez à clement@parishistorytours.com.",
       home: "Retour au site"
     }
   },

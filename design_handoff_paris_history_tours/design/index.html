@@ -1,0 +1,2559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paris History Tours — Walk the war through Paris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Limelight&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS — ATELIER (default) ============ */
+  :root, [data-dir="atelier"] {
+    --ink:        #1a1814;
+    --ink-2:      #2c2822;
+    --paper:      #efe6d3;
+    --paper-2:    #e5d9bf;
+    --paper-3:    #f7f1e1;
+    --rouge:      #b8352a;
+    --rouge-dark: #8b2419;
+    --gold:       #c89b3c;
+    --gold-dark:  #8e6a20;
+    --teal:       #2d5a5a;
+    --teal-dark:  #1e3f3f;
+    --border:     rgba(26,24,20,0.18);
+
+    --font-display: 'Limelight', 'Playfair Display', Georgia, serif;
+    --font-serif:   'Playfair Display', Georgia, serif;
+    --font-sans:    'Inter', system-ui, sans-serif;
+    --font-mono:    'DM Mono', ui-monospace, monospace;
+
+    --shadow-poster: 0 4px 0 var(--ink), 0 24px 48px -12px rgba(26,24,20,.35);
+    --shadow-card:   0 2px 0 rgba(26,24,20,.5), 0 12px 24px -8px rgba(26,24,20,.2);
+  }
+
+  /* ============ BASE ============ */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: 0; background: 0; color: inherit; }
+  h1, h2, h3, h4 { margin: 0; font-weight: normal; letter-spacing: -0.01em; }
+
+  /* Paper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(200,155,60,.06) 0, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(184,53,42,.05) 0, transparent 40%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0.18 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.35'/></svg>");
+    mix-blend-mode: multiply;
+  }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--ink);
+    color: var(--paper-3);
+    border-bottom: 3px double var(--gold);
+  }
+  .nav-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .brand-mark {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border: 2px solid var(--gold);
+    background: var(--ink-2);
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-size: 20px;
+    position: relative;
+  }
+  .brand-mark::before, .brand-mark::after {
+    content: ''; position: absolute;
+    border: 1px solid var(--gold); opacity: .5;
+  }
+  .brand-mark::before { inset: 3px; }
+  .brand-text { line-height: 1; }
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--paper-3);
+  }
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+
+  .nav-links {
+    display: flex; gap: 32px; align-items: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .nav-links a {
+    position: relative; padding: 8px 0;
+    color: var(--paper-3);
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a.active { color: var(--gold); }
+  .nav-links a.active::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 2px; background: var(--gold);
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .lang-toggle {
+    display: inline-flex; border: 1px solid var(--gold);
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.2em;
+  }
+  .lang-toggle button {
+    padding: 6px 12px; color: var(--paper-3);
+    transition: all .2s;
+  }
+  .lang-toggle button.on { background: var(--gold); color: var(--ink); }
+
+  .btn-book {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    background: var(--rouge);
+    color: var(--paper-3);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    border: 2px solid var(--rouge);
+    box-shadow: 3px 3px 0 var(--gold);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-book:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--gold); }
+  .btn-book:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--gold); }
+
+  /* ============ HERO / POSTER ============ */
+  .hero {
+    position: relative;
+    padding: 80px 32px 120px;
+    max-width: 1400px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  /* Backbone — shared across all directions, gives hero structural spine */
+  .hero-backbone {
+    display: none;
+  }
+  [data-dir="quiet"] .hero-backbone {
+    display: block;
+    margin-bottom: 64px;
+  }
+  .bb-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .bb-index {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+  }
+  .bb-label {
+    text-align: center;
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  .bb-date {
+    color: var(--ink-2);
+    font-size: 11px;
+  }
+  .bb-label-row, .bb-meta-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 10px 0;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .bb-label-row { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--border); opacity: .7; }
+  .bb-meta-row {
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+    font-weight: 400;
+    padding: 14px 0;
+  }
+  .hero-single {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 8px 0 0;
+    text-align: center;
+    position: relative;
+  }
+  .hero-single .poster-tag { justify-content: center; }
+  .hero-single .poster-h1 {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 16ch;
+  }
+  .hero-single .hero-lede {
+    max-width: 62ch;
+    margin: 32px auto 28px;
+    text-align: center;
+  }
+  .hero-single .hero-lede::first-letter { float: none; margin: 0; }
+  .hero-single .hero-cta-row {
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+  .hero-single .hero-media {
+    margin-top: 8px;
+    margin-bottom: 48px;
+  }
+  .hero-single .hero-stats {
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 880px;
+    margin: 0 auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  @media (max-width: 760px) {
+    .hero-single .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .hero-poster {
+    position: relative;
+    background: var(--paper-3);
+    border: 4px solid var(--ink);
+    box-shadow: var(--shadow-poster);
+    padding: 32px;
+    transform: rotate(-0.4deg);
+  }
+  .hero-poster::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid var(--ink); pointer-events: none;
+  }
+  .poster-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    text-align: center;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 16px;
+    justify-content: center;
+  }
+  .poster-tag::before, .poster-tag::after {
+    content: ''; flex: 1; height: 1px; background: var(--ink); opacity: .3;
+  }
+  .poster-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 8vw, 104px);
+    line-height: 0.92;
+    text-align: center;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .poster-h1 .rouge { color: var(--rouge); display: block; }
+  .poster-h1 .small {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.4em;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--teal);
+    display: block;
+    margin: 8px 0;
+    font-weight: 400;
+  }
+  .poster-rule {
+    height: 4px; background: var(--ink); margin: 24px 40px;
+    position: relative;
+  }
+  .poster-rule::before, .poster-rule::after {
+    content: ''; position: absolute; top: -6px;
+    width: 16px; height: 16px;
+    background: var(--gold); border: 2px solid var(--ink);
+    transform: rotate(45deg);
+  }
+  .poster-rule::before { left: -8px; }
+  .poster-rule::after { right: -8px; }
+
+  .poster-meta {
+    display: flex; justify-content: space-around;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-top: 8px;
+  }
+  .poster-meta > div { text-align: center; }
+  .poster-meta b {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--rouge);
+    display: block;
+    letter-spacing: 0;
+    margin-bottom: 2px;
+  }
+
+  .hero-right {
+    position: relative;
+  }
+  .hero-lede {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.45;
+    font-style: italic;
+    color: var(--ink-2);
+    margin-bottom: 32px;
+    max-width: 480px;
+  }
+  /* Hero media collage */
+  .hero-media {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: 180px 180px;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .hero-media figure { margin: 0; position: relative; overflow: hidden; background: var(--paper-2); }
+  .hero-media-main { grid-row: span 2; aspect-ratio: auto; border: 1px solid var(--border); }
+  .hero-media-side { aspect-ratio: auto; border: 1px solid var(--border); }
+  .hero-media figure img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .5s ease;
+  }
+  .hero-media figure:hover img { transform: scale(1.03); }
+  .hero-media figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 12px 14px;
+    background: linear-gradient(transparent, rgba(0,0,0,.8));
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .hero-media figcaption b {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0;
+    margin-bottom: 2px;
+  }
+  [data-dir="atelier"] .hero-media figcaption b,
+  [data-dir="cinema"] .hero-media figcaption b {
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--gold);
+  }
+  [data-dir="atelier"] .hero-media figure,
+  [data-dir="cinema"] .hero-media figure { border: 2px solid var(--ink); }
+  [data-dir="archive"] .hero-media-main { transform: rotate(-0.5deg); }
+  [data-dir="archive"] .hero-media-a { transform: rotate(0.4deg); }
+  [data-dir="archive"] .hero-media-b { transform: rotate(-0.3deg); }
+
+  @media (max-width: 760px) {
+    .hero-media { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .hero-media-main { grid-row: span 1; aspect-ratio: 1/1; grid-column: span 2; }
+    .hero-media-side { aspect-ratio: 1/1; }
+  }
+  .hero-lede::first-letter {
+    font-family: var(--font-display);
+    font-size: 4em;
+    float: left;
+    line-height: 0.85;
+    padding: 6px 12px 0 0;
+    color: var(--rouge);
+    font-style: normal;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 32px;
+  }
+  .hero-stat {
+    padding: 16px 8px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .hero-stat:last-child { border-right: 0; }
+  .hero-stat b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--rouge);
+    line-height: 1;
+  }
+  .hero-stat span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-top: 6px;
+    display: block;
+  }
+  .hero-cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary, .btn-ghost {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 28px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper-3);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--rouge);
+  }
+  .btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--rouge); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 2px solid var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper-3); }
+
+  /* decorative corner ornaments */
+  .ornament {
+    position: absolute; pointer-events: none;
+    width: 80px; height: 80px;
+    color: var(--gold);
+    opacity: .8;
+  }
+
+  /* ============ SECTION COMMON ============ */
+  section { position: relative; z-index: 1; }
+  .section-head {
+    text-align: center;
+    padding: 64px 32px 32px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .section-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-bottom: 16px;
+  }
+  .section-kicker::before, .section-kicker::after {
+    content: ''; width: 40px; height: 1px; background: var(--ink); opacity: .3;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .section-sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-2);
+    margin-top: 16px;
+  }
+
+  /* ============ TOURS ============ */
+  .tours {
+    padding: 0 32px 96px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .tours-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    padding: 40px 0;
+  }
+  .tour-card {
+    background: var(--paper-3);
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    position: relative;
+    transition: transform .2s, box-shadow .2s;
+    display: flex; flex-direction: column;
+  }
+  .tour-card:hover {
+    transform: translateY(-4px) rotate(0.2deg);
+    box-shadow: 0 2px 0 rgba(26,24,20,.5), 0 20px 32px -8px rgba(26,24,20,.3);
+  }
+  .tour-card:nth-child(1):hover { transform: translateY(-4px) rotate(-0.3deg); }
+  .tour-card:nth-child(3):hover { transform: translateY(-4px) rotate(0.4deg); }
+
+  .tour-img {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--paper-2);
+    overflow: hidden;
+  }
+  .tour-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: sepia(0.3) saturate(0.85) contrast(1.05);
+  }
+  .tour-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(26,24,20,.3) 100%);
+  }
+  .tour-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--rouge);
+    color: var(--paper-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    z-index: 2;
+    border: 1px solid var(--ink);
+  }
+  .tour-number {
+    position: absolute; top: 16px; right: 16px;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    background: var(--paper-3);
+    border: 2px solid var(--ink);
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--rouge);
+    z-index: 2;
+  }
+  .tour-body { padding: 24px 24px 28px; flex: 1; display: flex; flex-direction: column; }
+  .tour-era {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .tour-title {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin: 10px 0 14px;
+  }
+  .tour-desc {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink-2);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .tour-specs {
+    display: flex; justify-content: space-between;
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .tour-specs b { display: block; color: var(--rouge); font-family: var(--font-display); font-size: 18px; letter-spacing: 0; margin-bottom: 2px; }
+  .tour-cta {
+    margin-top: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px;
+    background: var(--ink); color: var(--paper-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: background .2s;
+  }
+  .tour-cta:hover { background: var(--rouge); }
+  .tour-cta::after { content: '→'; font-size: 16px; }
+
+  /* ============ MAP / ROUTE ============ */
+  .route {
+    background: var(--ink);
+    color: var(--paper-3);
+    padding: 96px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .route::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--gold-dark) 1px, transparent 1px),
+      linear-gradient(90deg, var(--gold-dark) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: .08;
+  }
+  .route-inner { max-width: 1400px; margin: 0 auto; position: relative; }
+  .route .section-title { color: var(--paper-3); }
+  .route .section-sub { color: var(--paper-2); opacity: .85; }
+  .route .section-kicker { color: var(--gold); }
+  .route .section-kicker::before, .route .section-kicker::after { background: var(--paper-3); }
+
+  .route-tabs {
+    display: flex; justify-content: center; gap: 0;
+    margin: 32px auto 40px;
+    border: 2px solid var(--gold);
+    max-width: fit-content;
+  }
+  .route-tab {
+    padding: 14px 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--paper-3);
+    border-right: 1px solid var(--gold);
+    transition: all .2s;
+  }
+  .route-tab:last-child { border-right: 0; }
+  .route-tab.on { background: var(--gold); color: var(--ink); }
+  .route-tab:not(.on):hover { background: rgba(200,155,60,.15); }
+
+  .route-stage {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: stretch;
+  }
+  .map-wrap {
+    position: relative;
+    background: var(--ink-2);
+    border: 2px solid var(--gold);
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  .map-wrap svg { width: 100%; height: 100%; display: block; }
+
+  .map-legend {
+    position: absolute; top: 16px; left: 16px;
+    background: rgba(26,24,20,.9);
+    border: 1px solid var(--gold);
+    padding: 12px 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper-3);
+    max-width: 180px;
+  }
+  .map-legend b { color: var(--gold); font-family: var(--font-display); letter-spacing: 0.02em; display: block; margin-bottom: 4px; font-size: 14px; }
+
+  .stops-panel {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .stop-card {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 16px;
+    padding: 16px;
+    background: var(--ink-2);
+    border: 1px solid rgba(200,155,60,.2);
+    transition: all .2s;
+    cursor: pointer;
+    align-items: center;
+  }
+  .stop-card:hover, .stop-card.on {
+    background: rgba(200,155,60,.08);
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+  .stop-num {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-size: 20px;
+    background: var(--ink);
+  }
+  .stop-card.on .stop-num { background: var(--gold); color: var(--ink); }
+  .stop-text h4 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    color: var(--paper-3);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stop-text p {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--paper-2);
+    line-height: 1.4;
+    opacity: .8;
+  }
+  .stop-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ============ COMPARE ============ */
+  .compare {
+    padding: 0 32px 96px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .compare-table {
+    background: var(--paper-3);
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    margin-top: 32px;
+    overflow: hidden;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-row:last-child { border-bottom: 0; }
+  .compare-row > div {
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .compare-row > div:last-child { border-right: 0; }
+  .compare-head {
+    background: var(--ink);
+    color: var(--paper-3);
+  }
+  .compare-head > div {
+    font-family: var(--font-display);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--paper-3);
+    padding: 18px 24px;
+  }
+  .compare-head > div:first-child {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+  }
+  .compare-label {
+    font-family: var(--font-mono) !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge) !important;
+    background: var(--paper-2);
+  }
+  .check { color: var(--teal); font-weight: 700; }
+  .cross { color: var(--ink-2); opacity: .3; }
+
+  /* ============ GALLERY ============ */
+  .gallery {
+    background: var(--paper-2);
+    padding: 96px 32px;
+    position: relative;
+  }
+  .gallery-grid {
+    max-width: 1400px; margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 180px 180px;
+    gap: 14px;
+  }
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    transition: transform .3s;
+  }
+  .gallery-item:hover { transform: scale(1.02) rotate(-0.3deg); }
+  .gallery-item:nth-child(1) { grid-row: span 2; }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: sepia(0.6) saturate(0.7) contrast(1.1) brightness(0.95);
+    transition: filter .3s;
+  }
+  .gallery-item:hover img { filter: sepia(0.2) saturate(1) contrast(1.05); }
+  .gallery-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px 20px;
+    background: linear-gradient(transparent, rgba(26,24,20,.85));
+    color: var(--paper-3);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13px;
+  }
+  .gallery-caption b {
+    display: block;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ============ BOOK ============ */
+  .book {
+    padding: 96px 32px 48px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .book-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 40px;
+  }
+  .book-card {
+    background: var(--paper-3);
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    padding: 40px;
+    position: relative;
+  }
+  .book-card.featured {
+    background: var(--ink);
+    color: var(--paper-3);
+  }
+  .book-card h3 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .book-card.featured h3 { color: var(--gold); }
+  .book-card p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    margin: 0 0 24px;
+    color: var(--ink-2);
+  }
+  .book-card.featured p { color: var(--paper-2); }
+  .book-price {
+    font-family: var(--font-display);
+    font-size: 48px;
+    color: var(--rouge);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .book-card.featured .book-price { color: var(--gold); }
+  .book-price small { font-size: 14px; font-family: var(--font-mono); letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-2); margin-left: 6px; }
+  .book-card.featured .book-price small { color: var(--paper-2); }
+  .book-features {
+    list-style: none; padding: 0; margin: 24px 0;
+    font-family: var(--font-sans);
+    font-size: 14px;
+  }
+  .book-features li {
+    padding: 8px 0 8px 24px;
+    position: relative;
+    border-bottom: 1px dashed var(--border);
+  }
+  .book-card.featured .book-features li { border-bottom-color: rgba(200,155,60,.2); }
+  .book-features li::before {
+    content: '✦'; position: absolute; left: 0; color: var(--rouge);
+  }
+  .book-card.featured .book-features li::before { color: var(--gold); }
+
+  .whatsapp-chip {
+    margin-top: 64px;
+    padding: 28px 40px;
+    background: var(--teal);
+    color: var(--paper-3);
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    flex-wrap: wrap;
+  }
+  .whatsapp-chip b {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: block;
+  }
+  .whatsapp-chip span {
+    font-family: var(--font-serif); font-style: italic; font-size: 15px; opacity: .9;
+  }
+  .whatsapp-chip a {
+    display: inline-flex; gap: 10px; align-items: center;
+    padding: 14px 22px;
+    background: var(--paper-3);
+    color: var(--teal-dark);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--gold);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .whatsapp-chip a:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--gold); }
+
+  /* ============ BOOKING PARTNERS ============ */
+  .booking-partners { max-width: 1100px; margin: 24px auto 0; padding: 24px 0 0; border-top: 1px solid var(--border); text-align: center; }
+  .booking-partners-label {
+    display: block; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-2);
+    margin-bottom: 24px;
+  }
+  [data-dir="quiet"] .booking-partners-label { font-family: var(--font-sans); letter-spacing: 0.15em; font-size: 11px; }
+  .booking-partners-logos { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .booking-partners-logos img { height: 28px; width: auto; opacity: .6; transition: opacity .2s; filter: grayscale(1); }
+  .booking-partners-logos a:hover img { opacity: 1; filter: grayscale(0); }
+
+  /* ============ ABOUT ============ */
+  .about {
+    background: var(--paper-3);
+    padding: 96px 32px;
+    border-top: 3px double var(--gold-dark);
+    border-bottom: 3px double var(--gold-dark);
+  }
+  .about-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .about-portrait {
+    aspect-ratio: 3/4;
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-card);
+    background: var(--paper-2);
+    display: grid; place-items: center;
+    font-family: var(--font-display);
+    color: var(--gold-dark);
+    font-size: 80px;
+    position: relative;
+    transform: rotate(-1deg);
+  }
+  .about-portrait::after {
+    content: 'C.D-S.'; position: absolute; bottom: 16px; right: 16px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink);
+    opacity: .5;
+  }
+  .about-body h2 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .about-body .by {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin-bottom: 24px;
+  }
+  .about-body p {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin-bottom: 16px;
+  }
+  .about-body p:first-of-type::first-letter {
+    font-family: var(--font-display);
+    font-size: 3.5em;
+    float: left;
+    line-height: 0.85;
+    padding: 6px 14px 0 0;
+    color: var(--rouge);
+  }
+  .about-credentials {
+    margin-top: 28px;
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .cred {
+    padding: 8px 14px;
+    background: var(--ink);
+    color: var(--paper-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ============ FAQ ============ */
+  .faq {
+    padding: 48px 32px 96px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .faq-item {
+    border-top: 2px solid var(--ink);
+    padding: 20px 0;
+  }
+  .faq-item:last-child { border-bottom: 2px solid var(--ink); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    padding: 8px 0;
+    cursor: pointer;
+    gap: 16px;
+  }
+  .faq-q::after {
+    content: '+';
+    font-family: var(--font-mono);
+    font-size: 28px;
+    color: var(--rouge);
+    transition: transform .2s;
+  }
+  .faq-item.open .faq-q::after { content: '−'; }
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height .3s ease;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    padding-right: 40px;
+  }
+  .faq-item.open .faq-a {
+    max-height: 500px;
+    padding-top: 8px;
+  }
+
+  /* ============ REVIEWS ============ */
+  .reviews {
+    background: var(--rouge);
+    color: var(--paper-3);
+    padding: 64px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .reviews::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,.04) 20px, rgba(0,0,0,.04) 21px);
+  }
+  .reviews-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 48px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .reviews-stars {
+    font-family: var(--font-display);
+    font-size: 80px;
+    line-height: 1;
+    display: flex; align-items: baseline; gap: 16px;
+  }
+  .reviews-stars small { font-size: 18px; font-family: var(--font-mono); letter-spacing: 0.25em; text-transform: uppercase; }
+  .reviews-quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.5;
+    max-width: 560px;
+  }
+  .reviews-quote cite {
+    display: block; margin-top: 12px;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--ink);
+    color: var(--paper-2);
+    padding: 64px 32px 32px;
+    border-top: 3px double var(--gold);
+  }
+  .footer-grid {
+    max-width: 1400px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  .footer-brand .brand-mark { width: 56px; height: 56px; font-size: 26px; }
+  .footer-brand p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    margin: 20px 0 0;
+    max-width: 320px;
+    color: var(--paper-2);
+    opacity: .8;
+    font-size: 15px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; padding: 0; margin: 0; }
+  .footer-col li { padding: 6px 0; font-family: var(--font-sans); font-size: 14px; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1400px; margin: 56px auto 0;
+    padding-top: 24px;
+    border-top: 1px solid rgba(200,155,60,.2);
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper-2);
+    opacity: .6;
+    flex-wrap: wrap; gap: 16px;
+  }
+
+  /* ============ TWEAKS PANEL ============ */
+  .tweaks {
+    position: fixed; bottom: 24px; right: 24px;
+    z-index: 200;
+    background: var(--paper-3);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--rouge);
+    padding: 20px;
+    width: 340px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    display: none;
+  }
+  .tweaks.on { display: block; }
+  .tweaks h5 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: 0 0 14px;
+    letter-spacing: 0.05em;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tweaks h5 span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rouge);
+  }
+  .tweaks-row { margin-bottom: 14px; }
+  .tweaks label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 6px;
+  }
+  .tweaks-opts { display: flex; gap: 0; border: 1px solid var(--ink); }
+  .tweaks-opts button {
+    flex: 1; padding: 8px 4px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-right: 1px solid var(--ink);
+    background: var(--paper-3);
+    transition: all .15s;
+  }
+  .tweaks-opts button:last-child { border-right: 0; }
+  .tweaks-opts button.on { background: var(--ink); color: var(--paper-3); }
+
+  /* ============ DIRECTION D: QUIET (minimalist — default) ============ */
+  [data-dir="quiet"] {
+    --ink:        #1a1a1a;
+    --ink-2:      #4a4a4a;
+    --paper:      #fafaf7;
+    --paper-2:    #f0efea;
+    --paper-3:    #ffffff;
+    --rouge:      #8a3b2e;
+    --rouge-dark: #5c2418;
+    --gold:       #8a7a4a;
+    --gold-dark:  #5c5230;
+    --teal:       #3a4a48;
+    --teal-dark:  #242f2d;
+    --border:     rgba(26,26,26,0.1);
+
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-serif:   'Playfair Display', Georgia, serif;
+    --font-sans:    'Inter', system-ui, sans-serif;
+    --font-mono:    'Inter', system-ui, sans-serif;
+
+    --shadow-poster: none;
+    --shadow-card:   none;
+  }
+  /* Quiet: remove paper texture */
+  [data-dir="quiet"] body::before,
+  body[data-dir="quiet"]::before { display: none; }
+
+  /* Quiet: restrained nav */
+  [data-dir="quiet"] .nav { background: var(--paper-3); color: var(--ink); border-bottom: 1px solid var(--border); }
+  [data-dir="quiet"] .brand-mark { border-color: var(--ink); background: transparent; color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+  [data-dir="quiet"] .brand-mark::before, [data-dir="quiet"] .brand-mark::after { display: none; }
+  [data-dir="quiet"] .brand-name { color: var(--ink); font-family: var(--font-display); font-weight: 600; text-transform: none; letter-spacing: 0; font-size: 20px; }
+  [data-dir="quiet"] .brand-sub { color: var(--ink-2); letter-spacing: 0.08em; font-weight: 400; font-family: var(--font-sans); font-size: 11px; text-transform: none; }
+  [data-dir="quiet"] .nav-links { font-family: var(--font-sans); font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 500; gap: 28px; }
+  [data-dir="quiet"] .nav-links a { color: var(--ink-2); }
+  [data-dir="quiet"] .nav-links a:hover,
+  [data-dir="quiet"] .nav-links a.active { color: var(--ink); }
+  [data-dir="quiet"] .nav-links a.active::after { background: var(--ink); height: 1px; }
+  [data-dir="quiet"] .lang-toggle { border-color: var(--border); }
+  [data-dir="quiet"] .lang-toggle button { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.05em; font-weight: 500; }
+  [data-dir="quiet"] .lang-toggle button.on { background: var(--ink); color: var(--paper-3); }
+  [data-dir="quiet"] .btn-book { background: var(--ink); color: var(--paper-3); border-color: var(--ink); box-shadow: none; font-family: var(--font-sans); font-size: 13px; letter-spacing: 0.05em; text-transform: none; font-weight: 500; border-radius: 2px; padding: 10px 18px; }
+  [data-dir="quiet"] .btn-book:hover { background: transparent; color: var(--ink); transform: none; box-shadow: none; }
+
+  /* Quiet: hero becomes calm editorial */
+  [data-dir="quiet"] .hero { padding: 64px 32px 96px; }
+  [data-dir="quiet"] .hero-grid { gap: 72px; position: relative; padding-top: 8px; }
+  [data-dir="quiet"] .hero-grid::before {
+    content: ''; position: absolute;
+    top: 0; bottom: 0; left: calc(46.5% - 36px);
+    width: 1px; background: var(--border);
+  }
+  [data-dir="quiet"] .hero-poster { padding-right: 36px; padding-top: 8px; }
+  [data-dir="quiet"] .hero-poster .poster-h1 { font-size: clamp(52px, 6.5vw, 84px); }
+  [data-dir="quiet"] .poster-meta { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); gap: 32px; }
+  [data-dir="quiet"] .hero-right { padding-left: 0; }
+  [data-dir="quiet"] .hero-right::before {
+    content: 'The Offer';
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-weight: 500;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  [data-dir="quiet"] .poster-tag {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: block;
+  }
+  [data-dir="quiet"] .hero-cta-row { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+  @media (max-width: 900px) {
+    [data-dir="quiet"] .hero-grid::before { display: none; }
+    [data-dir="quiet"] .hero-poster { padding-right: 0; }
+    .bb-label-row, .bb-meta-row { grid-template-columns: 1fr 1fr; }
+  }
+  [data-dir="quiet"] .hero-poster { background: transparent; border: 0; box-shadow: none; padding: 0; transform: none; }
+  [data-dir="quiet"] .hero-poster::before { display: none; }
+  [data-dir="quiet"] .poster-tag { color: var(--ink-2); font-family: var(--font-sans); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; margin-bottom: 28px; justify-content: flex-start; }
+  [data-dir="quiet"] .poster-tag::before { display: none; }
+  [data-dir="quiet"] .poster-tag::after { flex: 0; width: 40px; background: var(--ink); }
+  [data-dir="quiet"] .poster-h1 { text-align: left; text-transform: none; font-family: var(--font-display); font-weight: 500; letter-spacing: -0.02em; line-height: 1; font-size: clamp(56px, 7vw, 96px); }
+  [data-dir="quiet"] .poster-h1 .rouge { color: var(--ink); font-style: italic; font-weight: 400; display: inline; }
+  [data-dir="quiet"] .poster-h1 .small { font-family: var(--font-serif); color: var(--ink-2); font-size: 0.35em; font-style: italic; font-weight: 400; margin: 16px 0; letter-spacing: 0; }
+  [data-dir="quiet"] .poster-rule { display: none; }
+  [data-dir="quiet"] .poster-meta { justify-content: flex-start; gap: 48px; margin-top: 40px; }
+  [data-dir="quiet"] .poster-meta > div { text-align: left; }
+  [data-dir="quiet"] .poster-meta b { color: var(--ink); font-family: var(--font-display); font-weight: 500; font-size: 32px; }
+  [data-dir="quiet"] .poster-meta span { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; font-size: 11px; margin-top: 4px; }
+
+  [data-dir="quiet"] .hero-lede { font-family: var(--font-serif); font-size: 20px; line-height: 1.6; font-style: normal; color: var(--ink-2); }
+  [data-dir="quiet"] .hero-lede::first-letter { font-family: var(--font-display); color: var(--ink); font-size: 3.5em; padding: 4px 10px 0 0; }
+  [data-dir="quiet"] .hero-stats { border-color: var(--border); }
+  [data-dir="quiet"] .hero-stat { border-right-color: var(--border); }
+  [data-dir="quiet"] .hero-stat b { color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .hero-stat span { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; }
+  [data-dir="quiet"] .btn-primary { background: var(--ink); color: var(--paper-3); border-color: var(--ink); box-shadow: none; font-family: var(--font-sans); font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 500; border-radius: 2px; padding: 14px 24px; }
+  [data-dir="quiet"] .btn-primary:hover { transform: none; box-shadow: none; background: transparent; color: var(--ink); }
+  [data-dir="quiet"] .btn-ghost { border-color: var(--border); color: var(--ink); font-family: var(--font-sans); font-size: 14px; letter-spacing: 0; text-transform: none; font-weight: 500; border-radius: 2px; padding: 14px 24px; border-width: 1px; }
+  [data-dir="quiet"] .btn-ghost:hover { background: var(--ink); color: var(--paper-3); }
+
+  /* Quiet: section heads */
+  [data-dir="quiet"] .section-kicker { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.2em; font-weight: 500; }
+  [data-dir="quiet"] .section-kicker::before, [data-dir="quiet"] .section-kicker::after { background: var(--ink); opacity: .15; }
+  [data-dir="quiet"] .section-title { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.02em; color: var(--ink); }
+  [data-dir="quiet"] .section-sub { font-family: var(--font-serif); font-style: normal; color: var(--ink-2); font-size: 18px; }
+
+  /* Quiet: tour cards */
+  [data-dir="quiet"] .tour-card { background: var(--paper-3); border: 1px solid var(--border); box-shadow: none; }
+  [data-dir="quiet"] .tour-card:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 24px -12px rgba(0,0,0,.15) !important; border-color: var(--ink); }
+  [data-dir="quiet"] .tour-badge { background: transparent; color: var(--ink); border: 1px solid var(--ink); font-family: var(--font-sans); font-weight: 500; letter-spacing: 0.1em; }
+  [data-dir="quiet"] .tour-number { background: var(--paper-3); border: 1px solid var(--border); color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .tour-era { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.1em; font-weight: 500; }
+  [data-dir="quiet"] .tour-title { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; font-size: 28px; }
+  [data-dir="quiet"] .tour-desc { font-style: normal; font-family: var(--font-sans); color: var(--ink-2); }
+  [data-dir="quiet"] .tour-specs { border-top-color: var(--border); border-top-style: solid; font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; }
+  [data-dir="quiet"] .tour-specs b { color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .tour-cta { background: transparent; color: var(--ink); border-top: 1px solid var(--border); font-family: var(--font-sans); letter-spacing: 0; text-transform: none; font-weight: 500; font-size: 14px; padding: 16px 24px; }
+  [data-dir="quiet"] .tour-cta:hover { background: var(--ink); color: var(--paper-3); }
+
+  /* Quiet: route (light, not dark) */
+  [data-dir="quiet"] .route { background: var(--paper-2); color: var(--ink); }
+  [data-dir="quiet"] .route::before { display: none; }
+  [data-dir="quiet"] .route .section-title { color: var(--ink); }
+  [data-dir="quiet"] .route .section-sub { color: var(--ink-2); opacity: 1; }
+  [data-dir="quiet"] .route .section-kicker { color: var(--ink-2); }
+  [data-dir="quiet"] .route .section-kicker::before,
+  [data-dir="quiet"] .route .section-kicker::after { background: var(--ink); opacity: .15; }
+  [data-dir="quiet"] .route-tabs { border: 1px solid var(--border); background: var(--paper-3); }
+  [data-dir="quiet"] .route-tab { color: var(--ink-2); border-right-color: var(--border); font-family: var(--font-sans); letter-spacing: 0.05em; text-transform: none; font-weight: 500; font-size: 13px; }
+  [data-dir="quiet"] .route-tab.on { background: var(--ink); color: var(--paper-3); }
+  [data-dir="quiet"] .route-tab:not(.on):hover { background: rgba(0,0,0,.04); }
+  [data-dir="quiet"] .map-wrap { background: var(--paper-3); border: 1px solid var(--border); }
+  [data-dir="quiet"] .map-legend { background: rgba(255,255,255,.95); border: 1px solid var(--border); color: var(--ink); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; }
+  [data-dir="quiet"] .map-legend b { color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .stop-card { background: var(--paper-3); border: 1px solid var(--border); }
+  [data-dir="quiet"] .stop-card:hover, [data-dir="quiet"] .stop-card.on { background: var(--paper-3); border-color: var(--ink); }
+  [data-dir="quiet"] .stop-num { background: var(--paper-3); border: 1px solid var(--ink); color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .stop-card.on .stop-num { background: var(--ink); color: var(--paper-3); }
+  [data-dir="quiet"] .stop-text h4 { color: var(--ink); font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; font-size: 17px; }
+  [data-dir="quiet"] .stop-text p { color: var(--ink-2); font-family: var(--font-sans); font-style: normal; opacity: 1; }
+  [data-dir="quiet"] .stop-time { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.05em; font-size: 12px; }
+
+  /* Quiet: reviews strip (no red) */
+  [data-dir="quiet"] .reviews { background: var(--ink); color: var(--paper-3); }
+  [data-dir="quiet"] .reviews::before { display: none; }
+  [data-dir="quiet"] .reviews-stars { font-family: var(--font-display); font-weight: 400; }
+  [data-dir="quiet"] .reviews-stars small { font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; }
+  [data-dir="quiet"] .reviews-quote { font-family: var(--font-serif); font-style: italic; }
+  [data-dir="quiet"] .reviews-quote cite { color: var(--paper-2); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; opacity: .7; }
+
+  /* Quiet: compare */
+  [data-dir="quiet"] .compare-table { background: var(--paper-3); border: 1px solid var(--border); box-shadow: none; }
+  [data-dir="quiet"] .compare-head { background: var(--paper-2); color: var(--ink); }
+  [data-dir="quiet"] .compare-head > div { color: var(--ink); font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; font-size: 16px; }
+  [data-dir="quiet"] .compare-head > div:first-child { color: var(--ink-2); font-family: var(--font-sans); font-weight: 500; letter-spacing: 0.1em; font-size: 11px; text-transform: uppercase; }
+  [data-dir="quiet"] .compare-label { background: var(--paper-2); color: var(--ink-2) !important; font-family: var(--font-sans) !important; font-weight: 500; letter-spacing: 0.05em; text-transform: none; }
+  [data-dir="quiet"] .check { color: var(--ink); }
+
+  /* Quiet: gallery */
+  [data-dir="quiet"] .gallery { background: var(--paper-2); }
+  [data-dir="quiet"] .gallery-item { border: 1px solid var(--border); box-shadow: none; }
+  [data-dir="quiet"] .gallery-item:hover { transform: none; }
+  [data-dir="quiet"] .gallery-item img { filter: grayscale(1) contrast(1.05); }
+  [data-dir="quiet"] .gallery-item:hover img { filter: none; }
+  [data-dir="quiet"] .gallery-caption { font-family: var(--font-sans); font-style: normal; font-size: 13px; }
+  [data-dir="quiet"] .gallery-caption b { color: var(--paper-2); font-family: var(--font-sans); letter-spacing: 0.1em; font-weight: 500; }
+
+  /* Quiet: book — both cards share the same neutral treatment */
+  [data-dir="quiet"] .book-card { background: var(--paper-3); border: 1px solid var(--border); box-shadow: none; }
+  [data-dir="quiet"] .book-card.featured { background: var(--paper-3); color: var(--ink); }
+  [data-dir="quiet"] .book-card h3 { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; color: var(--ink); }
+  [data-dir="quiet"] .book-card.featured h3 { color: var(--ink); }
+  [data-dir="quiet"] .book-card p { font-style: normal; font-family: var(--font-sans); color: var(--ink-2); }
+  [data-dir="quiet"] .book-card.featured p { color: var(--ink-2); }
+  [data-dir="quiet"] .book-price { color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .book-card.featured .book-price { color: var(--ink); }
+  [data-dir="quiet"] .book-price small { font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; color: var(--ink-2); }
+  [data-dir="quiet"] .book-card.featured .book-price small { color: var(--ink-2); }
+  [data-dir="quiet"] .book-features li { color: var(--ink); border-bottom-color: var(--border); }
+  [data-dir="quiet"] .book-card.featured .book-features li { color: var(--ink); border-bottom-color: var(--border); }
+  [data-dir="quiet"] .book-features li::before { color: var(--ink); content: '—'; }
+  [data-dir="quiet"] .book-card.featured .book-features li::before { color: var(--ink); }
+  [data-dir="quiet"] .whatsapp-chip { background: var(--paper-3); color: var(--ink); border: 1px solid var(--border); box-shadow: none; }
+  [data-dir="quiet"] .whatsapp-chip b { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; }
+  [data-dir="quiet"] .whatsapp-chip span { font-style: normal; font-family: var(--font-sans); color: var(--ink-2); }
+  [data-dir="quiet"] .whatsapp-chip a { background: var(--ink); color: var(--paper-3); border-color: var(--ink); box-shadow: none; font-family: var(--font-sans); letter-spacing: 0; text-transform: none; font-weight: 500; border-radius: 2px; }
+  [data-dir="quiet"] .whatsapp-chip a:hover { background: transparent; color: var(--ink); transform: none; box-shadow: none; }
+
+  /* Quiet: about */
+  [data-dir="quiet"] .about { background: var(--paper-3); border: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  [data-dir="quiet"] .about-portrait { border: 1px solid var(--border); box-shadow: none; transform: none; color: var(--ink); font-family: var(--font-display); font-weight: 500; background: var(--paper-2); }
+  [data-dir="quiet"] .about-portrait::after { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; }
+  [data-dir="quiet"] .about-body h2 { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.02em; }
+  [data-dir="quiet"] .about-body .by { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.1em; font-weight: 500; }
+  [data-dir="quiet"] .about-body p { font-family: var(--font-serif); font-style: normal; }
+  [data-dir="quiet"] .about-body p:first-of-type::first-letter { color: var(--ink); font-family: var(--font-display); font-weight: 500; }
+  [data-dir="quiet"] .cred { background: transparent; color: var(--ink); border: 1px solid var(--border); font-family: var(--font-sans); letter-spacing: 0.08em; text-transform: none; font-weight: 500; }
+
+  /* Quiet: faq */
+  [data-dir="quiet"] .faq-item { border-top-color: var(--border); border-top-width: 1px; }
+  [data-dir="quiet"] .faq-item:last-child { border-bottom-color: var(--border); border-bottom-width: 1px; }
+  [data-dir="quiet"] .faq-q { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; font-size: 19px; }
+  [data-dir="quiet"] .faq-q::after { color: var(--ink-2); }
+  [data-dir="quiet"] .faq-a { font-family: var(--font-serif); font-style: normal; }
+
+  /* Quiet: footer */
+  [data-dir="quiet"] footer { background: var(--paper-3); color: var(--ink-2); border-top: 1px solid var(--border); }
+  [data-dir="quiet"] footer .brand-mark { color: var(--ink); border-color: var(--ink); }
+  [data-dir="quiet"] footer .brand-name { color: var(--ink); }
+  [data-dir="quiet"] footer .brand-sub { color: var(--ink-2); }
+  [data-dir="quiet"] .footer-brand p { font-style: normal; font-family: var(--font-sans); color: var(--ink-2); }
+  [data-dir="quiet"] .footer-col h4 { color: var(--ink); font-family: var(--font-sans); letter-spacing: 0.1em; font-weight: 600; }
+  [data-dir="quiet"] .footer-col a:hover { color: var(--ink); }
+  [data-dir="quiet"] .footer-bottom { border-top-color: var(--border); color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.05em; text-transform: none; opacity: 1; }
+
+  /* Quiet: tweaks panel */
+  [data-dir="quiet"] .tweaks { background: var(--paper-3); border: 1px solid var(--border); box-shadow: 0 8px 24px -8px rgba(0,0,0,.12); border-radius: 4px; }
+  [data-dir="quiet"] .tweaks h5 { font-family: var(--font-display); font-weight: 500; text-transform: none; letter-spacing: -0.01em; }
+  [data-dir="quiet"] .tweaks h5 span { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.1em; font-weight: 500; }
+  [data-dir="quiet"] .tweaks label { color: var(--ink-2); font-family: var(--font-sans); letter-spacing: 0.08em; font-weight: 500; }
+  [data-dir="quiet"] .tweaks-opts { border-color: var(--border); }
+  [data-dir="quiet"] .tweaks-opts button { border-right-color: var(--border); font-family: var(--font-sans); letter-spacing: 0; text-transform: none; font-weight: 500; font-size: 12px; }
+  [data-dir="quiet"] .tweaks-opts button.on { background: var(--ink); color: var(--paper-3); }
+
+  /* ============ DIRECTION B: ARCHIVE (editorial serif) ============ */
+  [data-dir="archive"] {
+    --ink:        #1f1a13;
+    --ink-2:      #3a3227;
+    --paper:      #f3ead9;
+    --paper-2:    #e9ddc3;
+    --paper-3:    #faf4e4;
+    --rouge:      #8a2a20;
+    --rouge-dark: #5c1a13;
+    --gold:       #a68544;
+    --gold-dark:  #6e5528;
+    --teal:       #3a5a52;
+
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-serif:   'Playfair Display', Georgia, serif;
+  }
+  [data-dir="archive"] .poster-h1 { text-transform: none; font-weight: 900; font-style: italic; }
+  [data-dir="archive"] .brand-name { text-transform: none; font-family: var(--font-display); font-weight: 700; letter-spacing: 0; font-size: 22px; font-style: italic; }
+  [data-dir="archive"] .section-title,
+  [data-dir="archive"] .tour-title,
+  [data-dir="archive"] .stop-text h4,
+  [data-dir="archive"] .about-body h2,
+  [data-dir="archive"] .faq-q,
+  [data-dir="archive"] .book-card h3 {
+    text-transform: none; font-weight: 900; letter-spacing: -0.01em;
+  }
+  [data-dir="archive"] .hero-poster { transform: none; }
+  [data-dir="archive"] .tour-card:hover { transform: translateY(-4px) !important; }
+
+  /* ============ DIRECTION C: CINEMA (dark documentary) ============ */
+  [data-dir="cinema"] {
+    --ink:        #f1e9d7;
+    --ink-2:      #d8cfb9;
+    --paper:      #14120e;
+    --paper-2:    #1c1914;
+    --paper-3:    #22201a;
+    --rouge:      #d14935;
+    --rouge-dark: #a2372a;
+    --gold:       #e2b659;
+    --gold-dark:  #8e6a20;
+    --teal:       #6b9a92;
+    --border:     rgba(241,233,215,0.15);
+
+    --shadow-poster: 0 4px 0 #000, 0 24px 48px -12px rgba(0,0,0,.6);
+    --shadow-card:   0 2px 0 rgba(0,0,0,.5), 0 12px 24px -8px rgba(0,0,0,.4);
+  }
+  [data-dir="cinema"] body::before { opacity: .5; }
+  [data-dir="cinema"] .hero-poster::before { border-color: rgba(241,233,215,.3); }
+  [data-dir="cinema"] .route { background: #0a0908; }
+  [data-dir="cinema"] .about { border-color: var(--gold-dark); }
+  [data-dir="cinema"] .compare-label { background: var(--paper-2); }
+  [data-dir="cinema"] .tour-img img { filter: sepia(0.1) saturate(0.9) contrast(1.1) brightness(0.85); }
+  [data-dir="cinema"] .gallery-item img { filter: grayscale(0.7) contrast(1.1) brightness(0.9); }
+
+  /* ============ MOBILE NAV + STICKY BAR (always available) ============ */
+  .nav-burger { display: none; }
+  .mobile-drawer { display: none; }
+  .mobile-booking-bar { display: none; }
+
+  @media (max-width: 760px) {
+    /* --- Nav: hamburger + minimal header --- */
+    .nav-inner { padding: 10px 16px; }
+    .nav-links { display: none; }
+    .nav-right .lang-toggle { display: none; }
+    .nav-right .btn-book { display: none; }
+    .brand-sub { display: none; }
+    .brand-mark { width: 36px; height: 36px; font-size: 16px; }
+    .brand-name { font-size: 16px; letter-spacing: 0.04em; }
+    .nav-burger {
+      display: grid; place-items: center;
+      width: 40px; height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    [data-dir="atelier"] .nav-burger,
+    [data-dir="cinema"] .nav-burger { border-color: var(--gold); }
+    .nav-burger span {
+      display: block; width: 18px; height: 1.5px;
+      background: currentColor;
+      position: relative;
+    }
+    .nav-burger span::before, .nav-burger span::after {
+      content: ''; position: absolute; left: 0;
+      width: 18px; height: 1.5px; background: currentColor;
+    }
+    .nav-burger span::before { top: -6px; }
+    .nav-burger span::after { top: 6px; }
+
+    .mobile-drawer {
+      display: block;
+      position: fixed; inset: 0;
+      z-index: 300;
+      background: var(--paper);
+      transform: translateX(100%);
+      transition: transform .3s ease;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .mobile-drawer.on { transform: translateX(0); }
+    .mobile-drawer-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .mobile-drawer-close {
+      width: 40px; height: 40px; display: grid; place-items: center;
+      border: 1px solid var(--border); border-radius: 2px;
+      font-size: 20px;
+    }
+    .mobile-drawer nav a {
+      display: block;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    [data-dir="atelier"] .mobile-drawer nav a,
+    [data-dir="cinema"] .mobile-drawer nav a { text-transform: uppercase; font-family: var(--font-display); letter-spacing: 0.02em; }
+    .mobile-drawer-lang {
+      display: flex; gap: 12px;
+      margin-top: 32px;
+      font-family: var(--font-sans); font-size: 13px; letter-spacing: 0.05em;
+    }
+    .mobile-drawer-lang button {
+      flex: 1; padding: 14px;
+      border: 1px solid var(--border);
+      font-weight: 500;
+    }
+    .mobile-drawer-lang button.on { background: var(--ink); color: var(--paper-3); border-color: var(--ink); }
+
+    /* --- Sticky bottom booking bar --- */
+    .mobile-booking-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      position: fixed; left: 0; right: 0; bottom: 0;
+      z-index: 150;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      background: var(--paper-3);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 12px -4px rgba(0,0,0,.08);
+    }
+    .mobile-booking-bar .mbb-price {
+      line-height: 1.15;
+    }
+    .mobile-booking-bar .mbb-price b {
+      display: block;
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 20px; color: var(--ink);
+    }
+    .mobile-booking-bar .mbb-price span {
+      font-family: var(--font-sans); font-size: 11px; color: var(--ink-2);
+      letter-spacing: 0.04em;
+    }
+    .mobile-booking-bar a {
+      padding: 14px 20px;
+      background: var(--ink); color: var(--paper-3);
+      font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    [data-dir="atelier"] .mobile-booking-bar a,
+    [data-dir="cinema"] .mobile-booking-bar a {
+      background: var(--rouge); text-transform: uppercase; letter-spacing: 0.15em; font-size: 11px;
+      font-family: var(--font-mono);
+    }
+    body { padding-bottom: 80px; }
+
+    /* --- Layout compressions --- */
+    .hero { padding: 32px 20px 48px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    [data-dir="quiet"] .hero-grid { gap: 40px; }
+    [data-dir="quiet"] .hero-grid::before { display: none; }
+    [data-dir="quiet"] .hero-poster { padding-right: 0; }
+    [data-dir="quiet"] .hero-right::before { display: none; }
+    [data-dir="quiet"] .hero { padding: 32px 20px 48px; }
+    .poster-h1 { font-size: clamp(40px, 10vw, 56px) !important; }
+    [data-dir="quiet"] .poster-h1 { font-size: clamp(40px, 10vw, 56px) !important; }
+    .hero-lede { font-size: 17px !important; max-width: none; }
+    .hero-lede::first-letter { font-size: 3em !important; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero-stat { border-bottom: 1px solid var(--border); }
+    .hero-stat:nth-child(n+3) { border-bottom: 0; }
+    .hero-stat:nth-child(2) { border-right: 0; }
+    .poster-meta { gap: 16px !important; flex-wrap: wrap; justify-content: space-between !important; }
+    .poster-meta > div { flex: 1; min-width: 80px; }
+    .hero-cta-row { flex-direction: column; }
+    .hero-cta-row a { width: 100%; justify-content: center; }
+
+    .section-head { padding: 48px 20px 24px; }
+    .section-title { font-size: clamp(30px, 8vw, 40px) !important; }
+    .section-sub { font-size: 16px; }
+
+    /* Tours — horizontal swipe carousel, one tour per screen */
+    .tours { padding: 0 0 48px; }
+    .tours-grid {
+      grid-template-columns: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-snap-stop: always;
+      padding: 20px 16px 32px;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tours-grid::-webkit-scrollbar { display: none; }
+    .tour-card {
+      flex: 0 0 calc(100vw - 32px);
+      scroll-snap-align: center;
+    }
+    .tour-card:hover { transform: none !important; }
+    .tour-swipe-hint {
+      display: block;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      opacity: .5;
+      padding: 0 20px 8px;
+    }
+
+    /* Route */
+    .route { padding: 48px 20px 56px; }
+    .route-stage { grid-template-columns: 1fr; gap: 24px; }
+    .route-tabs { flex-wrap: wrap; max-width: none; width: 100%; margin: 20px 0 28px; }
+    .route-tab { flex: 1; font-size: 10px !important; padding: 12px 8px !important; }
+    .map-legend { font-size: 9px; padding: 8px 10px; max-width: 140px; }
+
+    /* Compare — stacked cards, NOT table */
+    .compare { padding: 0 20px 48px; }
+    .compare-table {
+      border: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      display: grid; gap: 16px;
+    }
+    .compare-head { display: none !important; }
+    .compare-row {
+      display: none;
+    }
+    .compare-mobile-card {
+      display: block;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 2px;
+    }
+    [data-dir="atelier"] .compare-mobile-card,
+    [data-dir="cinema"] .compare-mobile-card { border: 2px solid var(--ink); box-shadow: var(--shadow-card); border-radius: 0; }
+    .compare-mobile-card h4 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 22px; margin-bottom: 4px;
+      color: var(--ink);
+    }
+    [data-dir="atelier"] .compare-mobile-card h4,
+    [data-dir="cinema"] .compare-mobile-card h4 { text-transform: uppercase; letter-spacing: 0.02em; }
+    .compare-mobile-card .cmc-era {
+      font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--ink-2); margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .compare-mobile-card dl {
+      display: grid; grid-template-columns: auto 1fr; gap: 10px 20px; margin: 0;
+      font-family: var(--font-sans); font-size: 13px;
+    }
+    .compare-mobile-card dt { color: var(--ink-2); letter-spacing: 0.04em; }
+    .compare-mobile-card dd { margin: 0; color: var(--ink); font-weight: 500; }
+
+    /* Gallery — horizontal swipe carousel */
+    .gallery { padding: 48px 0; }
+    .gallery .section-head { padding: 0 20px; }
+    .gallery-grid {
+      grid-template-columns: none;
+      grid-template-rows: none;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 20px 16px 24px;
+      gap: 12px;
+      margin: 20px 0 0;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .gallery-grid::-webkit-scrollbar { display: none; }
+    .gallery-item {
+      flex: 0 0 calc(100vw - 64px);
+      scroll-snap-align: center;
+      aspect-ratio: 4/3;
+      grid-row: auto !important;
+    }
+    .gallery-item:nth-child(1) { grid-row: auto; aspect-ratio: 4/3; }
+    .gallery-swipe-hint {
+      display: block;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--ink-2);
+      opacity: .5;
+      padding: 0 20px;
+    }
+
+    /* Book */
+    .book { padding: 48px 20px 32px; }
+    .book-grid { grid-template-columns: 1fr; gap: 16px; }
+    .book-card { padding: 28px 24px; }
+    .book-card h3 { font-size: 24px !important; }
+    .whatsapp-chip { margin-top: 32px; padding: 20px; flex-direction: column; align-items: stretch; text-align: left; }
+    .whatsapp-chip a { width: 100%; justify-content: center; }
+
+    /* About */
+    .about { padding: 48px 20px; }
+    .about-inner { grid-template-columns: 1fr; gap: 24px; }
+    .about-portrait { max-width: 200px; margin: 0 auto; }
+    .about-body h2 { font-size: 34px !important; }
+    .about-body p { font-size: 16px !important; }
+
+    /* FAQ */
+    .faq { padding: 48px 20px 32px; }
+    .faq-q { font-size: 16px !important; padding: 4px 0 !important; }
+    .faq-a { font-size: 14px !important; padding-right: 0 !important; }
+
+    /* Reviews strip */
+    .reviews { padding: 40px 20px; }
+    .reviews-inner { flex-direction: column; gap: 20px; text-align: center; }
+    .reviews-stars { font-size: 56px; }
+    .reviews-quote { font-size: 17px; }
+
+    /* Footer */
+    footer { padding: 48px 20px 32px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: left; }
+
+    /* Tweaks panel lower-left so it doesn't fight sticky bar */
+    .tweaks { bottom: 90px; right: 12px; left: 12px; width: auto; padding: 16px; }
+  }
+
+  /* Default desktop: hide mobile-only pieces */
+  .compare-mobile-card { display: none; }
+  .tour-swipe-hint { display: none; }
+  .gallery-swipe-hint { display: none; }
+</style>
+</head>
+<body data-dir="quiet">
+
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-head">
+    <div class="brand">
+      <div class="brand-mark">P</div>
+      <div class="brand-text">
+        <div class="brand-name">Paris History</div>
+      </div>
+    </div>
+    <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Close">×</button>
+  </div>
+  <nav>
+    <a href="#tours">Tours</a>
+    <a href="#route">Route</a>
+    <a href="#compare">Compare</a>
+    <a href="#about">About</a>
+    <a href="#faq">FAQ</a>
+    <a href="#book">Book a Tour</a>
+  </nav>
+  <div class="mobile-drawer-lang">
+    <button class="on">English</button>
+    <button>Français</button>
+  </div>
+</div>
+
+<!-- Mobile sticky booking bar -->
+<div class="mobile-booking-bar">
+  <div class="mbb-price">
+    <b>From €45</b>
+    <span>Small group · 2h walk</span>
+  </div>
+  <a href="#book">Book a Tour</a>
+</div>
+
+<!-- ================= NAV ================= -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">P</div>
+      <div class="brand-text">
+        <div class="brand-name">Paris History</div>
+        <div class="brand-sub">Walking Tours · Est. 2024</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#tours" class="active">Tours</a>
+      <a href="#route">Route</a>
+      <a href="#compare">Compare</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="on">EN</button>
+        <button>FR</button>
+      </div>
+      <a href="#book" class="btn-book">Book a Tour</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-backbone"></div>
+
+  <div class="hero-single">
+    <div class="poster-tag">Paris · 52 BC — 1944</div>
+    <h1 class="poster-h1">
+      The stories <span class="rouge">Paris</span>
+      <span class="small">keeps in the streets, from Lutetia to the</span>
+      Liberation
+    </h1>
+    <p class="hero-lede">
+      Private walking tours through two thousand years of Parisian history — Roman Lutetia, Viking sieges, revolutionary nights, and a specialist focus on the Fall, the Resistance, and the Liberation of 1940–44. Led by an independent historian who has spent years in the archives so every story reaches you in full.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#tours" class="btn-primary">Browse Tours →</a>
+      <a href="#route" class="btn-ghost">See the Route</a>
+    </div>
+    <div class="hero-media">
+      <figure class="hero-media-main">
+        <img src="https://www.parishistorytours.com/photos/left_bank/notre-dame-de-paris.webp" alt="Notre-Dame de Paris">
+        <figcaption><b>Notre-Dame</b>Site of De Gaulle's victory Te Deum · August 26, 1944</figcaption>
+      </figure>
+      <figure class="hero-media-side hero-media-a">
+        <img src="https://www.parishistorytours.com/photos/right_bank/bridge_alexander_third_paris.webp" alt="Pont Alexandre III">
+        <figcaption><b>Pont Alexandre III</b>Saved from demolition, 1944</figcaption>
+      </figure>
+      <figure class="hero-media-side hero-media-b">
+        <img src="https://www.parishistorytours.com/photos/right_bank/place_vendome_paris_day.webp" alt="Place Vendôme">
+        <figcaption><b>Place Vendôme</b>The Ritz, liberated</figcaption>
+      </figure>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>3</b><span>Distinct Tours</span></div>
+      <div class="hero-stat"><b>2000</b><span>Years Covered</span></div>
+      <div class="hero-stat"><b>25+</b><span>Countries</span></div>
+      <div class="hero-stat"><b>4.9</b><span>Google ★</span></div>
+      <div class="hero-stat"><b>10</b><span>Max Group</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TOURS ================= -->
+<section id="tours">
+  <div class="section-head">
+    <div class="section-kicker">Three Journeys</div>
+    <h2 class="section-title">Choose your tour</h2>
+    <p class="section-sub">Each tour is a self-contained story — the Fall, the Resistance, the Liberation — walked in real places where it happened.</p>
+  </div>
+  <div class="tours">
+    <span class="tour-swipe-hint">← Swipe to browse tours →</span>
+    <div class="tours-grid">
+
+      <article class="tour-card">
+        <div class="tour-img">
+          <span class="tour-badge">WW2</span>
+          <div class="tour-number">I</div>
+          <img src="https://www.parishistorytours.com/photos/left_bank/notre-dame-de-paris.webp" alt="Notre-Dame de Paris">
+        </div>
+        <div class="tour-body">
+          <div class="tour-era">1940 — 1944 · Left Bank</div>
+          <h3 class="tour-title">Left Bank Tour</h3>
+          <p class="tour-desc">From Boulevard Saint-Michel to Notre-Dame — the Sorbonne student resistance, the Luxembourg Luftwaffe, and the sniper-fire Te Deum of the Liberation.</p>
+          <div class="tour-specs">
+            <div><b>4</b>Stops</div>
+            <div><b>2h</b>Duration</div>
+            <div><b>2.5km</b>Walk</div>
+          </div>
+          <a href="#book" class="tour-cta">Reserve a Spot</a>
+        </div>
+      </article>
+
+      <article class="tour-card">
+        <div class="tour-img">
+          <span class="tour-badge">WW2</span>
+          <div class="tour-number">II</div>
+          <img src="https://www.parishistorytours.com/photos/right_bank/place_vendome_paris_day.webp" alt="Place Vendôme">
+        </div>
+        <div class="tour-body">
+          <div class="tour-era">1940 — 1944 · Right Bank</div>
+          <h3 class="tour-title">Right Bank Tour</h3>
+          <p class="tour-desc">Pont Alexandre III to Place Vendôme — the bridges Hitler ordered razed, the Concorde plundered with looted art, and Hemingway "liberating" the Ritz bar.</p>
+          <div class="tour-specs">
+            <div><b>4</b>Stops</div>
+            <div><b>2h</b>Duration</div>
+            <div><b>2.5km</b>Walk</div>
+          </div>
+          <a href="#book" class="tour-cta">Reserve a Spot</a>
+        </div>
+      </article>
+
+      <article class="tour-card">
+        <div class="tour-img">
+          <span class="tour-badge">2000 YRS</span>
+          <div class="tour-number">III</div>
+          <img src="https://www.parishistorytours.com/photos/left_bank/luxembourg_palace_paris.webp" alt="Palais du Luxembourg">
+        </div>
+        <div class="tour-body">
+          <div class="tour-era">52 BC — 1791 · General</div>
+          <h3 class="tour-title">General History</h3>
+          <p class="tour-desc">Two thousand years in an afternoon — the Roman conquest of Lutetia, the Viking siege of 885, and the royal escape attempt of 1791 that ended a monarchy.</p>
+          <div class="tour-specs">
+            <div><b>3</b>Stops</div>
+            <div><b>1.5h</b>Duration</div>
+            <div><b>2km</b>Walk</div>
+          </div>
+          <a href="#book" class="tour-cta">Reserve a Spot</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROUTE ================= -->
+<section id="route" class="route">
+  <div class="route-inner">
+    <div class="section-head">
+      <div class="section-kicker">On the Ground</div>
+      <h2 class="section-title">The Route, stop by stop</h2>
+      <p class="section-sub">Every tour is a designed walk — short distances, charged places, and full-length stories at each stop.</p>
+    </div>
+
+    <div class="route-tabs" role="tablist">
+      <button class="route-tab on" data-tour="left">Left Bank</button>
+      <button class="route-tab" data-tour="right">Right Bank</button>
+      <button class="route-tab" data-tour="general">General History</button>
+    </div>
+
+    <div class="route-stage">
+      <div class="map-wrap">
+        <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">
+          <!-- river Seine -->
+          <path id="seine" d="M 40 260 Q 150 220, 260 250 T 500 240 L 560 235"
+                fill="none" stroke="#2d5a5a" stroke-width="28" stroke-linecap="round" opacity="0.55"/>
+          <path d="M 40 260 Q 150 220, 260 250 T 500 240 L 560 235"
+                fill="none" stroke="#c89b3c" stroke-width="1" stroke-dasharray="2 4" opacity="0.3"/>
+          <!-- île de la cité -->
+          <ellipse cx="290" cy="248" rx="45" ry="13" fill="#efe6d3" opacity="0.4" stroke="#c89b3c" stroke-width="1"/>
+          <text x="290" y="252" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#c89b3c" letter-spacing="1">ÎLE DE LA CITÉ</text>
+
+          <!-- grid blocks -->
+          <g stroke="#c89b3c" stroke-width="0.5" fill="none" opacity="0.15">
+            <rect x="60" y="40" width="80" height="60"/>
+            <rect x="160" y="30" width="100" height="70"/>
+            <rect x="280" y="50" width="90" height="50"/>
+            <rect x="400" y="30" width="120" height="70"/>
+            <rect x="80" y="120" width="60" height="80"/>
+            <rect x="180" y="140" width="80" height="60"/>
+            <rect x="300" y="120" width="90" height="80"/>
+            <rect x="420" y="120" width="100" height="80"/>
+            <rect x="50" y="300" width="100" height="80"/>
+            <rect x="170" y="290" width="90" height="90"/>
+            <rect x="280" y="290" width="80" height="90"/>
+            <rect x="380" y="300" width="100" height="80"/>
+          </g>
+
+          <!-- LEFT BANK stops -->
+          <g id="stops-left">
+            <g data-i="1"><line x1="120" y1="340" x2="180" y2="330" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g data-i="2"><line x1="180" y1="330" x2="250" y2="320" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g data-i="3"><line x1="250" y1="320" x2="290" y2="310" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g data-i="4"><line x1="290" y1="310" x2="310" y2="265" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+
+            <circle cx="120" cy="340" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="120" y="345" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">1</text>
+            <circle cx="180" cy="330" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="180" y="335" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">2</text>
+            <circle cx="250" cy="320" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="250" y="325" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">3</text>
+            <circle cx="310" cy="265" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="310" y="270" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">4</text>
+          </g>
+
+          <!-- RIGHT BANK stops -->
+          <g id="stops-right" style="display:none">
+            <g><line x1="200" y1="180" x2="320" y2="190" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g><line x1="320" y1="190" x2="400" y2="170" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g><line x1="400" y1="170" x2="460" y2="150" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+
+            <circle cx="200" cy="180" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="200" y="185" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">1</text>
+            <circle cx="280" cy="170" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="280" y="175" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">2</text>
+            <circle cx="360" cy="180" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="360" y="185" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">3</text>
+            <circle cx="440" cy="150" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="440" y="155" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">4</text>
+          </g>
+
+          <!-- GENERAL stops -->
+          <g id="stops-general" style="display:none">
+            <g><line x1="180" y1="330" x2="290" y2="250" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+            <g><line x1="290" y1="250" x2="360" y2="180" stroke="#c89b3c" stroke-width="2" stroke-dasharray="4 4"/></g>
+
+            <circle cx="180" cy="330" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="180" y="335" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">1</text>
+            <circle cx="290" cy="250" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="290" y="255" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">2</text>
+            <circle cx="360" cy="180" r="14" fill="#b8352a" stroke="#efe6d3" stroke-width="2"/><text x="360" y="185" text-anchor="middle" font-family="Limelight" font-size="14" fill="#efe6d3">3</text>
+          </g>
+
+          <!-- compass -->
+          <g transform="translate(530,60)">
+            <circle r="22" fill="none" stroke="#c89b3c" stroke-width="1"/>
+            <path d="M 0 -18 L 4 0 L 0 3 L -4 0 Z" fill="#b8352a"/>
+            <path d="M 0 18 L 4 0 L 0 -3 L -4 0 Z" fill="#c89b3c" opacity="0.5"/>
+            <text y="-26" text-anchor="middle" font-family="DM Mono" font-size="9" fill="#c89b3c">N</text>
+          </g>
+        </svg>
+        <div class="map-legend">
+          <b id="legendTitle">Left Bank</b>
+          <span id="legendMeta">4 stops · 2.5 km</span>
+        </div>
+      </div>
+
+      <div class="stops-panel" id="stopsPanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS STRIP ================= -->
+<section class="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-stars">
+      4.9 ★★★★★ <small>Google · 42 reviews</small>
+    </div>
+    <div class="reviews-quote">
+      "Clement's research transforms every corner of Paris. Two hours that felt like three, in the best possible way — a masterclass in storytelling."
+      <cite>— Verified traveler, Google Reviews</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMPARE ================= -->
+<section id="compare" class="compare">
+  <div class="section-head">
+    <div class="section-kicker">Which should I pick?</div>
+    <h2 class="section-title">Compare the three</h2>
+    <p class="section-sub">A side-by-side look at duration, focus, and what you'll see — so you don't have to guess.</p>
+  </div>
+  <div class="compare-table">
+    <!-- Mobile card view -->
+    <div class="compare-mobile-card">
+      <h4>Left Bank · WW2</h4>
+      <div class="cmc-era">1940 — 1944 · Recommended for first-timers</div>
+      <dl>
+        <dt>Duration</dt><dd>2 hours</dd>
+        <dt>Stops</dt><dd>4 locations</dd>
+        <dt>Distance</dt><dd>~2.5 km</dd>
+        <dt>Key site</dt><dd>Notre-Dame</dd>
+        <dt>Focus</dt><dd>Student resistance, intellectual history</dd>
+        <dt>Languages</dt><dd>EN / FR</dd>
+      </dl>
+    </div>
+    <div class="compare-mobile-card">
+      <h4>Right Bank · WW2</h4>
+      <div class="cmc-era">1940 — 1944 · Occupation politics</div>
+      <dl>
+        <dt>Duration</dt><dd>2 hours</dd>
+        <dt>Stops</dt><dd>4 locations</dd>
+        <dt>Distance</dt><dd>~2.5 km</dd>
+        <dt>Key site</dt><dd>Place Vendôme</dd>
+        <dt>Focus</dt><dd>Occupation, looted art, liberation</dd>
+        <dt>Languages</dt><dd>EN / FR</dd>
+      </dl>
+    </div>
+    <div class="compare-mobile-card">
+      <h4>General History</h4>
+      <div class="cmc-era">52 BC — 1791 · Two thousand years</div>
+      <dl>
+        <dt>Duration</dt><dd>1.5 hours</dd>
+        <dt>Stops</dt><dd>3 locations</dd>
+        <dt>Distance</dt><dd>~2 km</dd>
+        <dt>Key site</dt><dd>Thermes de Cluny</dd>
+        <dt>Focus</dt><dd>Ancient, medieval, revolutionary Paris</dd>
+        <dt>Languages</dt><dd>EN / FR</dd>
+      </dl>
+    </div>
+    <!-- Desktop table view (hidden on mobile by .compare-row { display:none }) -->
+    <div class="compare-row compare-head">
+      <div>At a glance</div>
+      <div>Left Bank · WW2</div>
+      <div>Right Bank · WW2</div>
+      <div>General History</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Period</div>
+      <div>1940 — 1944</div>
+      <div>1940 — 1944</div>
+      <div>52 BC — 1791</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Duration</div>
+      <div>2 hours</div>
+      <div>2 hours</div>
+      <div>1.5 hours</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Stops</div>
+      <div>4 locations</div>
+      <div>4 locations</div>
+      <div>3 locations</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Walking distance</div>
+      <div>~2.5 km</div>
+      <div>~2.5 km</div>
+      <div>~2 km</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Key site</div>
+      <div>Notre-Dame</div>
+      <div>Place Vendôme</div>
+      <div>Île de la Cité</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Student / intellectual history</div>
+      <div class="check">●  Yes</div>
+      <div class="cross">○</div>
+      <div class="cross">○</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Occupation politics</div>
+      <div class="cross">○</div>
+      <div class="check">●  Yes</div>
+      <div class="cross">○</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Ancient & medieval</div>
+      <div class="cross">○</div>
+      <div class="cross">○</div>
+      <div class="check">●  Yes</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Best for first-time visitors</div>
+      <div class="check">●  Recommended</div>
+      <div class="cross">○</div>
+      <div class="cross">○</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-label">Available in EN / FR</div>
+      <div class="check">● ●</div>
+      <div class="check">● ●</div>
+      <div class="check">● ●</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section class="gallery">
+  <div class="section-head">
+    <div class="section-kicker">Then & Now</div>
+    <h2 class="section-title">The Paris you'll walk</h2>
+    <p class="section-sub">Same streets, eighty years apart — the sites we visit, photographed then and today.</p>
+    <span class="gallery-swipe-hint">← Swipe to browse →</span>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://www.parishistorytours.com/photos/left_bank/notre-dame-de-paris.webp" alt="Notre-Dame">
+      <div class="gallery-caption"><b>Stop 4 · Left Bank</b>Notre-Dame — site of De Gaulle's Te Deum, August 26, 1944, held under sniper fire</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://www.parishistorytours.com/photos/right_bank/bridge_alexander_third_paris.webp" alt="Pont Alexandre III">
+      <div class="gallery-caption"><b>Stop 1 · Right Bank</b>Pont Alexandre III</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://www.parishistorytours.com/photos/right_bank/place_concorde_paris.webp" alt="Place de la Concorde">
+      <div class="gallery-caption"><b>Stop 3 · Right Bank</b>Place de la Concorde</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://www.parishistorytours.com/photos/left_bank/luxembourg_palace_paris.webp" alt="Palais du Luxembourg">
+      <div class="gallery-caption"><b>Stop 2 · Left Bank</b>Palais du Luxembourg — Luftwaffe HQ</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://www.parishistorytours.com/photos/right_bank/place_vendome_paris_day.webp" alt="Place Vendôme">
+      <div class="gallery-caption"><b>Stop 4 · Right Bank</b>Place Vendôme — the "liberation" of the Ritz</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="about">
+  <div class="about-inner">
+    <div class="about-portrait">CDS</div>
+    <div class="about-body">
+      <div class="by">Your Guide · Independent Historian</div>
+      <h2>Clement Daguet-Schott</h2>
+      <p>
+        A passionate history enthusiast and independent tour guide based in Paris since 2024. After months of dedicated research across twenty-plus historical books, memoirs, and primary sources, I built three immersive walking tours that bring Paris to life — from the Fall of France and the French Resistance to two thousand years of Parisian history.
+      </p>
+      <p>
+        Whether you're a curious traveler, a history buff, or an educator, these tours are designed to make history tangible. Rigorous research, engaging storytelling, iconic landmarks — walked at a comfortable pace, told with time for questions.
+      </p>
+      <div class="about-credentials">
+        <span class="cred">20+ Primary Sources</span>
+        <span class="cred">4.9 ★ Google</span>
+        <span class="cred">25+ Countries</span>
+        <span class="cred">EN / FR</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BOOK ================= -->
+<section id="book" class="book">
+  <div class="section-head">
+    <div class="section-kicker">Book Your Tour</div>
+    <h2 class="section-title">Let's organise your visit</h2>
+    <p class="section-sub">Two ways to join — a scheduled small group, or a private tour for you alone.</p>
+  </div>
+
+  <div class="book-grid">
+    <div class="book-card">
+      <h3>Join a Scheduled Tour</h3>
+      <p>See upcoming dates, pick a time, secure your spot.</p>
+      <div class="book-price">€45 <small>/ person</small></div>
+      <ul class="book-features">
+        <li>Small group — max 10 people</li>
+        <li>Set dates, published monthly</li>
+        <li>Free cancellation up to 24h before</li>
+        <li>Available in English or French</li>
+      </ul>
+      <a href="#" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px">See Upcoming Dates →</a>
+    </div>
+
+    <div class="book-card featured">
+      <h3>Book a Private Tour</h3>
+      <p>Your group only — set the date, set the pace.</p>
+      <div class="book-price">Custom <small>pricing</small></div>
+      <ul class="book-features">
+        <li>Exclusive — your group only</li>
+        <li>Any date, any time, any tour</li>
+        <li>Custom itinerary possible on request</li>
+        <li>Ideal for families, educators, luxury travel</li>
+      </ul>
+      <a href="#" class="btn-primary" style="width:100%;justify-content:center;margin-top:8px">Request a Quote →</a>
+    </div>
+  </div>
+
+  <div class="whatsapp-chip">
+    <div>
+      <b>Prefer a direct message?</b>
+      <span>Drop Clement a line on WhatsApp — usually a reply within a few hours.</span>
+    </div>
+    <a href="https://wa.me/+33620622480">WhatsApp →</a>
+  </div>
+
+  <div class="booking-partners">
+    <span class="booking-partners-label">Also book on</span>
+    <div class="booking-partners-logos">
+      <a href="https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/"><img src="https://www.parishistorytours.com/logos/get your guide logo.webp" alt="GetYourGuide"></a>
+      <a href="https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2"><img src="https://www.parishistorytours.com/logos/Viator_Logo.png" alt="Viator"></a>
+      <a href="https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html"><img src="https://www.parishistorytours.com/logos/Tripadvisor-Logo.png" alt="TripAdvisor"></a>
+      <a href="https://tourist.com/p/24194"><img src="https://www.parishistorytours.com/logos/tourist_logo.svg" alt="Tourist.com"></a>
+      <a href="https://parisjetaime.com/activite/Paris-history-tours-p4833"><img src="https://www.parishistorytours.com/logos/parisjetaime_logo.svg" alt="Paris je t'aime"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" class="faq">
+  <div class="section-head" style="padding-left:0;padding-right:0">
+    <div class="section-kicker">Good to know</div>
+    <h2 class="section-title">Frequently asked</h2>
+  </div>
+  <div id="faqList"></div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <div class="brand-name">Paris History</div>
+          <div class="brand-sub">Walking Tours · Est. 2024</div>
+        </div>
+      </div>
+      <p>Discover the hidden stories of Paris through expert-guided historical walking tours.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tours</h4>
+      <ul>
+        <li><a href="#tours">Left Bank · WW2</a></li>
+        <li><a href="#tours">Right Bank · WW2</a></li>
+        <li><a href="#tours">General History</a></li>
+        <li><a href="#compare">Compare</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <ul>
+        <li><a href="#about">About Clement</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://wa.me/+33620622480">WhatsApp</a></li>
+        <li><a href="mailto:clemdaguetschott@gmail.com">Email</a></li>
+        <li><a href="https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8">Google Maps</a></li>
+        <li><a href="https://www.instagram.com/parishistorytour/">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Paris History Tours · All Rights Reserved</div>
+    <div>Also on GetYourGuide · Viator · TripAdvisor · Paris je t'aime</div>
+  </div>
+</footer>
+
+<script>
+// Locked direction: Quiet. Image filter: color.
+// (Tweaks panel removed during Quiet-only cleanup pass.)
+
+// ===== STOPS DATA =====
+const STOPS = {
+  left: {
+    title: "Left Bank · WW2",
+    meta: "4 stops · 2.5 km · 2 h",
+    items: [
+      { n: 1, title: "Boulevard Saint-Michel",  blurb: "The student quarter and the early lines of Resistance — intellectual heart of occupied Paris.", time: "0:00" },
+      { n: 2, title: "Palais du Luxembourg",    blurb: "Luftwaffe headquarters for all four years of occupation — today the French Senate.", time: "0:35" },
+      { n: 3, title: "The Sorbonne",            blurb: "Student resistance, clandestine papers, and the 1944 insurrection in the Latin Quarter.", time: "1:10" },
+      { n: 4, title: "Notre-Dame de Paris",     blurb: "De Gaulle's Te Deum on August 26, 1944 — held under active sniper fire from the galleries.", time: "1:45" }
+    ]
+  },
+  right: {
+    title: "Right Bank · WW2",
+    meta: "4 stops · 2.5 km · 2 h",
+    items: [
+      { n: 1, title: "Pont Alexandre III",      blurb: "Hitler ordered Paris's bridges destroyed. The German garrison refused. This one survived.", time: "0:00" },
+      { n: 2, title: "Hôtel de Crillon",        blurb: "The German military command at the top of the Champs-Élysées during the occupation.", time: "0:30" },
+      { n: 3, title: "Place de la Concorde",    blurb: "Storage for looted art. Site of the first French flag raised over a public building in 1944.", time: "1:05" },
+      { n: 4, title: "Place Vendôme",           blurb: "Hemingway 'liberated' the Ritz bar here on August 25, 1944 — the most famous private liberation of the war.", time: "1:40" }
+    ]
+  },
+  general: {
+    title: "General History",
+    meta: "3 stops · 2 km · 1.5 h",
+    items: [
+      { n: 1, title: "Thermes de Cluny",        blurb: "Roman Lutetia — the conquest of 52 BC and the bathhouse that survived two thousand years.", time: "0:00" },
+      { n: 2, title: "Île de la Cité",          blurb: "The Viking siege of 885–886 — when Paris nearly fell and a dynasty was made defending it.", time: "0:40" },
+      { n: 3, title: "Jardin des Tuileries",    blurb: "The royal escape attempt of 1791 — the night Louis XVI chose flight, and a monarchy ended.", time: "1:15" }
+    ]
+  }
+};
+
+// ===== FAQ DATA =====
+const FAQ = [
+  ["How long is the WWII walking tour in Paris?", "Each tour lasts approximately 2 hours and covers about 2.5 km with 4 historic stops. The pace is comfortable for all fitness levels."],
+  ["Are tours available in French and English?", "Yes, all tours are available in both English and French. Choose your preferred language when booking."],
+  ["What's the difference between Left Bank and Right Bank?", "Both cover three themes: the Fall, the Resistance, the Liberation. Left Bank visits Boulevard Saint-Michel, Luxembourg, Sorbonne, and Notre-Dame. Right Bank covers Pont Alexandre III, Concorde, and Vendôme. Each tells unique stories tied to its locations."],
+  ["Can I book a private WWII tour?", "Yes — regular group tours (max 10) and private tours for your group only. Private tours offer full flexibility on dates, times, and pace."],
+  ["Is the tour suitable for children?", "The tour is designed for adults and older teenagers interested in history. Content covers wartime events and is presented in an educational, respectful manner."],
+  ["Where do the tours start and end?", "Meeting points are communicated 24 hours before. Left Bank: Boulevard Saint-Michel → Notre-Dame. Right Bank: Pont Alexandre III → Place Vendôme. General History: Thermes de Cluny → Tuileries."],
+  ["What period does the General History tour cover?", "Two thousand years — Gallic settlement and Roman conquest of Lutetia (52 BC), the Viking siege of 885–886, and the French Revolution with the royal escape of 1791. 1.5 hours, 3 stops."],
+  ["What is your cancellation policy?", "Free cancellation or reschedule up to 24 hours before. Less than 24 hours is non-refundable. Contact via WhatsApp or email to make changes."],
+  ["What should I wear or bring?", "Comfortable walking shoes — 2.5 km on foot. Water, sunscreen in summer, umbrella if rain. No special equipment. The tour is entirely outdoors."],
+  ["Is the tour accessible for reduced mobility?", "Paved, flat streets and sidewalks in central Paris. Some cobblestones or curbs on sections. Contact us in advance for specific needs and we'll adapt the route where possible."],
+  ["What happens if it rains?", "Tours run rain or shine — Paris history doesn't stop for weather. In severe weather (storms, heat warnings), we'll contact you to reschedule at no cost."],
+  ["How far in advance should I book?", "Book at least 3–5 days ahead, especially in peak season (April–October). Last-minute bookings sometimes available — check the calendar or send a WhatsApp."]
+];
+
+// ===== RENDER STOPS =====
+function renderStops(which) {
+  const d = STOPS[which];
+  document.getElementById('legendTitle').textContent = d.title;
+  document.getElementById('legendMeta').textContent = d.meta;
+  const panel = document.getElementById('stopsPanel');
+  panel.innerHTML = d.items.map((s,i) => `
+    <div class="stop-card ${i===0?'on':''}" data-i="${i}">
+      <div class="stop-num">${s.n}</div>
+      <div class="stop-text">
+        <h4>${s.title}</h4>
+        <p>${s.blurb}</p>
+      </div>
+      <div class="stop-time">${s.time}</div>
+    </div>
+  `).join('');
+  panel.querySelectorAll('.stop-card').forEach(el => {
+    el.addEventListener('click', () => {
+      panel.querySelectorAll('.stop-card').forEach(x => x.classList.remove('on'));
+      el.classList.add('on');
+    });
+  });
+  ['left','right','general'].forEach(t => {
+    const g = document.getElementById('stops-'+t);
+    if (g) g.style.display = (t===which) ? '' : 'none';
+  });
+}
+renderStops('left');
+
+document.querySelectorAll('.route-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.route-tab').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    renderStops(btn.dataset.tour);
+  });
+});
+
+// ===== RENDER FAQ =====
+document.getElementById('faqList').innerHTML = FAQ.map(([q,a]) => `
+  <div class="faq-item">
+    <div class="faq-q">${q}</div>
+    <div class="faq-a"><p>${a}</p></div>
+  </div>
+`).join('');
+document.querySelectorAll('.faq-item').forEach((item,i) => {
+  const q = item.querySelector('.faq-q');
+  q.addEventListener('click', () => item.classList.toggle('open'));
+  if (i === 0) item.classList.add('open');
+});
+
+// ===== MOBILE DRAWER =====
+const burger = document.getElementById('navBurger');
+const drawer = document.getElementById('mobileDrawer');
+const drawerClose = document.getElementById('mobileDrawerClose');
+if (burger && drawer) {
+  burger.addEventListener('click', () => drawer.classList.add('on'));
+  drawerClose.addEventListener('click', () => drawer.classList.remove('on'));
+  drawer.querySelectorAll('nav a').forEach(a => a.addEventListener('click', () => drawer.classList.remove('on')));
+}
+
+// ===== LANG TOGGLE =====
+document.querySelectorAll('.lang-toggle button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.lang-toggle button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+
+// ===== APPLY FIXED STATE (Quiet, color images) =====
+const state = { dir: 'quiet', filter: 'color' };
+
+function applyState() {
+  document.body.setAttribute('data-dir', state.dir);
+  // filter
+  const filterMap = {
+    sepia: 'sepia(0.3) saturate(0.85) contrast(1.05)',
+    grey:  'grayscale(0.9) contrast(1.1)',
+    color: 'none'
+  };
+  const galleryMap = {
+    sepia: 'sepia(0.6) saturate(0.7) contrast(1.1) brightness(0.95)',
+    grey:  'grayscale(1) contrast(1.15) brightness(0.95)',
+    color: 'none'
+  };
+  document.querySelectorAll('.tour-img img').forEach(img => img.style.filter = filterMap[state.filter]);
+  document.querySelectorAll('.gallery-item img').forEach(img => img.style.filter = galleryMap[state.filter]);
+  // (tweaks UI removed — no-op)
+}
+applyState();
+
+// (tweaks click handlers removed)
+
+// ===== EDIT MODE HOST PROTOCOL (no-op; tweaks panel removed) =====
+
+// Smooth scroll for nav
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      e.preventDefault();
+      window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+    }
+  });
+});
+
+// Active nav state on scroll
+const sections = ['tours','route','compare','about','faq'].map(id => ({id, el: document.getElementById(id)})).filter(x => x.el);
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 140;
+  let activeId = 'tours';
+  sections.forEach(s => { if (s.el.offsetTop <= y) activeId = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#'+activeId);
+  });
+});
+</script>
+
+</body>
+</html>

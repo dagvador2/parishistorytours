@@ -18,7 +18,7 @@ export function offlineUrls(assets: AssetsResponse): string[] {
     urls.add(s.audio);
     for (const m of s.media) urls.add(m.img);
   }
-  urls.add(assets.pdf);
+  if (assets.pdf) urls.add(assets.pdf);
   // The API answer for this language (served from cache when offline) and the app pages (both locales).
   const token = resolveToken();
   if (token) urls.add(accessApiUrl(token, assets.lang));

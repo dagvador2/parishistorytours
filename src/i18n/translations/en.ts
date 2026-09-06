@@ -540,12 +540,12 @@ export const en = {
   // FAQ
   faq: {
     selfGuided: [
-      { question: "How does the self-guided tour work?", answer: "After payment you receive an email with a personal link. Open it on your phone: a map shows the route and your position, and the narration starts when you reach each stop. Subtitles and the photos from the printed guide follow the audio. The PDF guide is attached to the email." },
-      { question: "Do I need an internet connection during the walk?", answer: "No. Open the page once on wifi (at your hotel, for instance) and wait for “Ready for offline use”: the audio, the photos and the map of the Latin Quarter are then stored on your phone. GPS works without data." },
-      { question: "Can I offer it as a gift?", answer: "Yes. Enter the recipient’s email at checkout: the access link goes to them. Or buy it with your own email and forward the link." },
-      { question: "How long do I have access?", answer: "The web app is yours for good. The full download (PDF + audio files) is available for 30 days after purchase; the PDF itself stays downloadable from the app." },
-      { question: "What if my phone has no GPS, or I refuse location access?", answer: "The tour still works: tap a stop on the map to start its narration, and follow the walking directions of the PDF between stops." },
-      { question: "Is it available in English?", answer: "The interface, the PDF and the price include both languages. The French narration is available today; the English narration is being recorded and will appear in your tour automatically, at no extra cost." }
+      { question: "How does the self-guided tour work?", answer: "After payment you receive an email with a personal link. Open it on your phone: a map shows the route and your position, and the narration starts when you reach each stop. Subtitles and the archive photographs follow the audio." },
+      { question: "Do I need an internet connection during the walk?", answer: "No. Open the page once on wifi (at your hotel, for instance) and wait for “Ready for offline use”: the audio, the photographs and the map of the Latin Quarter are then stored on your phone. GPS works without data." },
+      { question: "How long do I have access?", answer: "The link opens the tour for a few days after purchase, the time to walk it during your stay. Once the page has been loaded on wifi it keeps working offline until then. If your trip is delayed, write to me and I will reopen it." },
+      { question: "Can I offer it as a gift?", answer: "Yes. Enter the recipient’s email at checkout: the access link goes to them. Keep in mind the access window starts at purchase, so buy it close to their trip." },
+      { question: "What if my phone has no GPS, or I refuse location access?", answer: "The tour still works: tap a stop on the map to start its narration, and the app tells you where the next one is." },
+      { question: "Is it available in English?", answer: "The interface and the price include both languages. The French narration is available today; the English narration is being recorded and will appear in your tour automatically, at no extra cost." }
     ],
     title: "Frequently Asked Questions",
     items: [
@@ -708,7 +708,7 @@ export const en = {
   meta: {
     selfGuided: {
       title: "Self-Guided WWII Left Bank Audio Tour of Paris — €14",
-      description: "Walk the Left Bank WWII tour on your own time: 9 audio sections narrated by the guide, GPS map, synchronised archive photos, 38-page PDF, offline mode. One purchase, English and French."
+      description: "Walk the Left Bank WWII tour on your own time: 9 audio sections narrated by the guide, GPS map, synchronised archive photographs, works offline. One purchase, English and French."
     },
     selfGuidedSuccess: {
       title: "Payment received — Self-Guided Tour",
@@ -1249,9 +1249,9 @@ export const en = {
   selfGuided: {
     kicker: "Self-guided · Left Bank",
     heroTitle: "Do the tour on your own time",
-    heroSubtitle: "The WWII Left Bank walk as a self-guided audio tour: my voice in your ears, a map that guides you, the photos of the printed guide synchronised with the narration.",
+    heroSubtitle: "The WWII Left Bank walk as a self-guided audio tour: my voice in your ears, a map that guides you, the archive photographs synchronised with the narration.",
     heroCta: "Get the self-guided tour",
-    facts: { walk: "2 km · about 90 min", sections: "9 audio sections", langs: "English & French included" },
+    facts: { walk: "2 km · about 90 min", sections: "9 audio sections", access: "Yours for {days} days" },
     honest: {
       kicker: "Plan B, said plainly",
       title: "Nothing beats walking with me.",
@@ -1264,9 +1264,8 @@ export const en = {
       items: [
         { title: "9 narrated sections", body: "About 30 minutes of narration for 2 km: an introduction, four main stops and four short stops between them." },
         { title: "A map that guides you", body: "Your position, the route, the next stop, its distance. The audio starts when you get there." },
-        { title: "Archive photos, synchronised", body: "The photographs of the printed guide appear at the right moment of the narration, with their captions." },
-        { title: "The 38-page PDF guide", body: "The printed version, with walking directions and all the photos, to keep." },
-        { title: "Works offline", body: "Open it once on wifi; the whole tour is then available without data. A full download (PDF + audio) is included for 30 days." }
+        { title: "Archive photographs, synchronised", body: "The photographs of the printed guide appear at the right moment of the narration, with their captions." },
+        { title: "Works without data", body: "Open it once on wifi and the whole tour is stored on your phone: audio, photos and map. No roaming needed on the walk." }
       ]
     },
     voice: {
@@ -1276,23 +1275,22 @@ export const en = {
       note: "The French narration is available today; the English narration is being recorded and will be added to every purchase at no cost."
     },
     preview: {
-      kicker: "Listen and look before buying",
+      kicker: "Listen before buying",
       title: "Thirty seconds of the introduction",
       audioNote: "Preview in French — the English recording is in progress.",
-      pdfTitle: "The first three pages of the guide",
-      pdfCta: "Open the PDF preview",
       audioUnavailable: "Preview coming soon."
     },
     buy: {
       kicker: "Get the tour",
-      title: "One purchase, both languages, no time limit",
+      title: "One purchase, both languages",
       earlyBird: "Launch price",
       earlyBirdDays: "{days} days left",
       normalPrice: "then {price}",
       perPack: "one-time, for one traveller or the whole group",
+      accessNote: "Your link opens the tour for {days} days, the time to walk it during your stay. Load the page once on wifi and it keeps working without data until then.",
       email: "Your email",
-      emailHint: "The access link and the PDF are sent there.",
-      language: "Preferred language",
+      emailHint: "The access link is sent there.",
+      language: "Narration language",
       submit: "Pay {price} and get access",
       submitting: "Redirecting to payment…",
       secure: "Secure payment by Stripe · Instant delivery by email",
@@ -1301,10 +1299,10 @@ export const en = {
     success: {
       kicker: "Payment received",
       title: "Your tour is on its way",
-      body: "We are preparing your personal access link and the PDF guide. Check your inbox (and the spam folder) in the next minute.",
+      body: "We are preparing your personal access link. Check your inbox (and the spam folder) in the next minute.",
       ready: "Your access is ready.",
       open: "Open the tour",
-      slow: "This is taking longer than usual. The email will arrive shortly; if not, write to hello@parishistorytours.com.",
+      slow: "This is taking longer than usual. The email will arrive shortly; if not, write to clement@parishistorytours.com.",
       home: "Back to the site"
     }
   },

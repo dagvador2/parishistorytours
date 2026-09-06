@@ -1,0 +1,78 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const lang = Astro.locals.lang;
+const t = useTranslations(lang);
+
+const blocks = [
+  {
+    label: t('quiet.home.backbone.bookingLabel'),
+    facts: [t('quiet.home.backbone.booking1'), t('quiet.home.backbone.booking2')],
+  },
+  {
+    label: t('quiet.home.backbone.credibilityLabel'),
+    facts: [t('quiet.home.backbone.credibility1'), t('quiet.home.backbone.credibility2')],
+  },
+  {
+    label: t('quiet.home.backbone.logisticsLabel'),
+    facts: [t('quiet.home.backbone.logistics1'), t('quiet.home.backbone.logistics2')],
+  },
+];
+---
+
+<section class="qbackbone">
+  <div class="qbackbone__inner">
+    {blocks.map((block) => (
+      <div class="qbackbone__col">
+        <p class="qbackbone__label">{block.label}</p>
+        <ul>
+          {block.facts.map((fact) => <li>{fact}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .qbackbone {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--paper);
+  }
+  .qbackbone__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .qbackbone__col { display: flex; flex-direction: column; gap: 8px; }
+  .qbackbone__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0;
+  }
+  .qbackbone__col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .qbackbone__col li {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 760px) {
+    .qbackbone__inner { grid-template-columns: 1fr; gap: 20px; padding: 24px; }
+  }
+</style>

@@ -29,10 +29,10 @@ export class AssetsError extends Error {
 }
 
 /**
- * @param pdfUrl  what the "Download PDF" menu entry should open (the watermarked
- *                download route once a purchase exists); defaults to the signed master.
+ * @param pdfUrl  what the "Download PDF" menu entry should open, or null when no
+ *                welcome sheet is published (the printed guide is never served).
  */
-export async function buildAssets(product: string, requested: Lang, pdfUrl?: string): Promise<AssetsResponse> {
+export async function buildAssets(product: string, requested: Lang, pdfUrl: string | null = null): Promise<AssetsResponse> {
   if (product !== PRODUCT_ID) throw new AssetsError(404, "Unknown product");
   if (!LANGS.includes(requested)) throw new AssetsError(400, "lang must be en or fr");
   const available = await availableLangs(product);
@@ -46,8 +46,7 @@ export async function buildAssets(product: string, requested: Lang, pdfUrl?: str
   }
 
   const expiresAt = new Date(Date.now() + SIGNED_URL_TTL_SEC * 1000).toISOString();
-  const [pdf, sections] = await Promise.all([
-    pdfUrl ?? sign(`pdf/${product}/${lang}/master.pdf`),
+  const [sections] = await Promise.all([
     Promise.all(
       manifest.sections.map(async (s) => ({
         id: s.id,
@@ -62,7 +61,7 @@ export async function buildAssets(product: string, requested: Lang, pdfUrl?: str
     ),
   ]);
 
-  return { product, lang, requested, available, generatedAt: manifest.generatedAt, totalDurationSec: manifest.totalDurationSec, expiresAt, pdf, sections };
+  return { product, lang, requested, available, generatedAt: manifest.generatedAt, totalDurationSec: manifest.totalDurationSec, expiresAt, pdf: pdfUrl, sections };
 }
 
 export const jsonResponse = (body: unknown, status = 200, extra: Record<string, string> = {}) =>

@@ -1,10 +1,11 @@
 /**
  * Fulfilment of a paid Checkout Session of the digital product (called by
- * the Stripe webhook): idempotent insert, watermarked PDF, email.
+ * the Stripe webhook): idempotent insert, then the access email. No guide is
+ * attached — the tour lives in the web app.
  */
 import type Stripe from "stripe";
-import { accessUrl, DOWNLOAD_DAYS, findPurchaseBySession, insertPurchase, PRODUCT_SLUG, type PurchaseLang } from "./purchase";
-import { watermarkPdf } from "./pdf";
+import { accessDays, accessUrl, findPurchaseBySession, insertPurchase, PRODUCT_SLUG, type PurchaseLang } from "./purchase";
+import { pdfFilename, watermarkPdf } from "./pdf";
 import { sendPurchaseEmail } from "./email";
 
 export function isDigitalProductSession(session: Stripe.Checkout.Session): boolean {
@@ -12,11 +13,12 @@ export function isDigitalProductSession(session: Stripe.Checkout.Session): boole
 }
 
 export function siteOrigin(): string {
-  return (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.PUBLIC_SITE_URL ?? process.env.PUBLIC_SITE_URL ?? "https://www.parishistorytours.com";
+  const meta = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
+  return meta?.PUBLIC_SITE_URL ?? process.env.PUBLIC_SITE_URL ?? "https://www.parishistorytours.com";
 }
 
 export async function fulfillDigitalPurchase(session: Stripe.Checkout.Session, origin = siteOrigin()): Promise<{ created: boolean; emailSent: boolean; error?: string }> {
-  // Idempotence: a retried webhook must not insert, generate or email twice.
+  // Idempotence: a retried webhook must not insert or email twice.
   const existing = await findPurchaseBySession(session.id);
   if (existing) return { created: false, emailSent: false };
 
@@ -34,12 +36,12 @@ export async function fulfillDigitalPurchase(session: Stripe.Checkout.Session, o
   if (!created) return { created: false, emailSent: false };
 
   const url = accessUrl(origin, purchase);
-  const zipUrl = `${origin}/api/self-guided/download-zip?token=${purchase.access_token}&lang=${purchase.language}`;
   let emailSent = false;
   let error: string | undefined;
   try {
-    const pdf = await watermarkPdf(purchase.language, purchase.email);
-    const r = await sendPurchaseEmail(purchase, url, zipUrl, DOWNLOAD_DAYS, pdf);
+    // Attached only if a short welcome sheet has been uploaded for that language.
+    const welcome = await watermarkPdf(purchase.language, purchase.email).catch(() => null);
+    const r = await sendPurchaseEmail(purchase, url, accessDays(), welcome ? { filename: pdfFilename(purchase.language), content: welcome } : undefined);
     emailSent = r.success;
     error = r.error;
   } catch (e) {

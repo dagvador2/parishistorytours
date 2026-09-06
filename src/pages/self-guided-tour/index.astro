@@ -15,7 +15,7 @@ import { useTranslations } from "../../i18n/utils";
 import { GOOGLE_REVIEWS } from "../../data/site";
 import { formatEUR } from "../../lib/price";
 import { waLink } from "../../lib/whatsapp";
-import { fetchPriceInfo, PRODUCT_SLUG } from "../../lib/self-guided/purchase";
+import { accessDays, fetchPriceInfo, PRODUCT_SLUG } from "../../lib/self-guided/purchase";
 import { objectExists, sign } from "../../lib/self-guided/r2";
 import pantheon from "../../images/pantheon_de_Paris.webp";
 import guidePhoto from "../../images/guide-photo.webp";
@@ -32,7 +32,7 @@ const FALLBACK = { amountCents: 1400, normalAmountCents: 1400, earlyBird: false,
 let price = FALLBACK;
 let priceLive = false;
 try {
-  const p = await fetchPriceInfo();
+  const p = await fetchPriceInfo(lang);
   price = { amountCents: p.amountCents, normalAmountCents: p.normalAmountCents, earlyBird: p.earlyBird, daysLeft: p.daysLeft };
   priceLive = true;
 } catch (e) {
@@ -41,20 +41,18 @@ try {
 const eur = (cents: number) => formatEUR(lang, (cents / 100).toFixed(cents % 100 === 0 ? 0 : 2));
 const priceLabel = eur(price.amountCents);
 
-// Previews on R2 (private): signed for 2 h; the page is CDN-cached for 1 h at most.
+const days = accessDays();
+
+// Audio preview on R2 (private): signed for 2 h; the page is CDN-cached for 1 h at most.
+// The printed guide is never previewed or handed out — it is what the app protects.
 let audioPreview: { url: string; lang: "en" | "fr" } | null = null;
-let pdfPreview: string | null = null;
 try {
   const wanted = `preview/${PRODUCT_SLUG}/${lang}/intro-30s.mp3`;
   const other = `preview/${PRODUCT_SLUG}/${lang === "fr" ? "en" : "fr"}/intro-30s.mp3`;
   if (await objectExists(wanted)) audioPreview = { url: await sign(wanted), lang };
   else if (await objectExists(other)) audioPreview = { url: await sign(other), lang: lang === "fr" ? "en" : "fr" };
-  const pdfKey = `preview/${PRODUCT_SLUG}/${lang}/pdf-preview.pdf`;
-  const pdfOther = `preview/${PRODUCT_SLUG}/${lang === "fr" ? "en" : "fr"}/pdf-preview.pdf`;
-  if (await objectExists(pdfKey)) pdfPreview = await sign(pdfKey);
-  else if (await objectExists(pdfOther)) pdfPreview = await sign(pdfOther);
 } catch (e) {
-  console.warn("[self-guided] previews unavailable:", e instanceof Error ? e.message : e);
+  console.warn("[self-guided] preview unavailable:", e instanceof Error ? e.message : e);
 }
 
 const includes = t("selfGuided.includes.items") as { title: string; body: string }[];
@@ -103,7 +101,7 @@ const productJsonLd = {
           <li>{price.earlyBird ? `${priceLabel} · ${sg("buy.earlyBird")}` : priceLabel}</li>
           <li>{sg("facts.walk")}</li>
           <li>{sg("facts.sections")}</li>
-          <li>{sg("facts.langs")}</li>
+          <li>{sg("facts.access").replace("{days}", String(days))}</li>
         </ul>
         <a href="#buy" class="sgp-btn sgp-btn--primary">{sg("heroCta")}</a>
       </div>
@@ -153,27 +151,17 @@ const productJsonLd = {
 
     <!-- Previews -->
     <section class="sgp-section sgp-section--paper2">
-      <div class="sgp-inner sgp-previews">
-        <div>
-          <p class="sgp-kicker">{sg("preview.kicker")}</p>
-          <h2 class="sgp-h2">{sg("preview.title")}</h2>
-          {audioPreview ? (
-            <>
-              <audio controls preload="none" class="sgp-audio" src={audioPreview.url} data-track="self_guided_preview_play"></audio>
-              {audioPreview.lang !== lang && <p class="sgp-note">{sg("preview.audioNote")}</p>}
-            </>
-          ) : (
-            <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
-          )}
-        </div>
-        <div>
-          <h3 class="sgp-h3">{sg("preview.pdfTitle")}</h3>
-          {pdfPreview ? (
-            <a href={pdfPreview} target="_blank" rel="noopener" class="sgp-btn sgp-btn--ghost" data-track="self_guided_pdf_preview">{sg("preview.pdfCta")}</a>
-          ) : (
-            <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
-          )}
-        </div>
+      <div class="sgp-inner sgp-inner--narrow">
+        <p class="sgp-kicker">{sg("preview.kicker")}</p>
+        <h2 class="sgp-h2">{sg("preview.title")}</h2>
+        {audioPreview ? (
+          <>
+            <audio controls preload="none" class="sgp-audio" src={audioPreview.url} data-track="self_guided_preview_play"></audio>
+            {audioPreview.lang !== lang && <p class="sgp-note">{sg("preview.audioNote")}</p>}
+          </>
+        ) : (
+          <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
+        )}
       </div>
     </section>
 
@@ -191,6 +179,7 @@ const productJsonLd = {
             </div>
           )}
           <div class="sgp-price__per">{sg("buy.perPack")}</div>
+          <p class="sgp-access">{sg("buy.accessNote").replace("{days}", String(days))}</p>
         </div>
         <form class="sgp-form" id="sgp-form" novalidate>
           <label class="sgp-field">
@@ -288,7 +277,6 @@ const productJsonLd = {
   .sgp-voice__img { width: 100%; height: auto; display: block; }
   @media (max-width: 900px) { .sgp-voice { grid-template-columns: 1fr; gap: 28px; } .sgp-voice__photo { max-width: 420px; } }
 
-  .sgp-previews { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px; align-items: end; }
   .sgp-audio { width: 100%; max-width: 480px; display: block; margin-top: 8px; }
 
   .sgp-buy { background: var(--paper-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -297,6 +285,7 @@ const productJsonLd = {
   .sgp-price__early { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 10px; font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); }
   .sgp-badge { background: var(--rouge); color: var(--paper-3); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 5px 9px; border-radius: 2px; }
   .sgp-price__per { font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+  .sgp-access { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 16px 0 0; max-width: 52ch; border-left: 2px solid var(--border); padding-left: 14px; }
   .sgp-form { display: flex; flex-direction: column; gap: 18px; max-width: 480px; }
   .sgp-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-sans); font-size: 14px; color: var(--ink); border: 0; padding: 0; margin: 0; }
   .sgp-field input[type=email] { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--ink); border-radius: 2px; background: var(--paper-3); }

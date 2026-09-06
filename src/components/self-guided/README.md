@@ -38,8 +38,9 @@ scripts/self-guided/tools/set-r2-cors.ts  CORS policy of the bucket (needed by t
 | `R2_JURISDICTION=eu` | Vercel + `.env` | EU bucket endpoint `<account>.eu.r2.cloudflarestorage.com` |
 | `SELF_GUIDED_DEV_TOKEN` | `.env`, Vercel **Preview only** | optional: this exact `?token=` opens the app without a purchase (field tests). Unset in production |
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | already set | checkout + webhook (test keys locally, live on Vercel) |
-| `STRIPE_PRICE_ID_SELF_GUIDED_EARLYBIRD`, `STRIPE_PRICE_ID_SELF_GUIDED_NORMAL` | Vercel + `.env` | from `scripts/self-guided/tools/create-stripe-product.ts` (900 / 1400 cents) |
+| `STRIPE_PRICE_ID_SELF_GUIDED_{EN,FR}_{EARLYBIRD,NORMAL}` | Vercel + `.env` | four ids from `scripts/self-guided/tools/create-stripe-product.ts` (one product per language, 900 / 1400 cents) |
 | `SELF_GUIDED_LAUNCH_DATE` | Vercel + `.env` | ISO date; early-bird price for 30 days from there |
+| `SELF_GUIDED_ACCESS_DAYS` | Vercel + `.env` | how long the purchase link opens the app (default 7) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Vercel + `.env` | digital_purchases is only reachable with the service role |
 | `PUBLIC_SITE_URL` | Vercel | origin of the links in the purchase email |
 | `PUBLIC_MAPBOX_TOKEN` | already set | not used by the audioguide (MapLibre + self-hosted tiles) |
@@ -51,9 +52,14 @@ A purchase creates a row in `digital_purchases` (migration in
 `/self-guided-tour/access?token=…`; the page validates the token server-side
 (clear 401 page otherwise), the client stores it in localStorage so the
 installed PWA works without the query string, and every API call carries it.
-The PDF menu entry opens `/api/self-guided/download-pdf` (watermarked with
-the buyer's email, permanent); the offline package
-`/api/self-guided/download-zip` (PDF + 9 MP3) is offered for 30 days.
+Access is time-limited: the link opens the app for `SELF_GUIDED_ACCESS_DAYS`
+days (7 by default), the time to walk the tour during a stay. Past that the
+page and the API answer 410 with a clear screen. There is no download
+package and the 38-page printed guide is never served: it is the content the
+app exists to protect, so the purchase email carries no attachment. If a
+short welcome sheet is uploaded to `pdf/<product>/<lang>/welcome.pdf` it is
+attached to the email and offered in the menu, watermarked with the buyer's
+email; while none exists, the menu entry simply does not appear.
 
 Flow: product page `/self-guided-tour` → `POST /api/create-checkout-self-guided`
 → Stripe Checkout → `/self-guided-tour/success` polls

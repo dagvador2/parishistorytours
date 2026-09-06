@@ -50,8 +50,8 @@ export interface AssetsResponse {
   totalDurationSec: number;
   /** ISO date after which the signed URLs stop working */
   expiresAt: string;
-  /** signed URL of the PDF guide in the served language */
-  pdf: string;
+  /** signed URL of the short welcome sheet, null when none is published */
+  pdf: string | null;
   sections: Array<
     Omit<ManifestSection, "audio" | "media"> & {
       audio: string;
@@ -67,10 +67,10 @@ export interface AccessResponse {
     email: string;
     language: "en" | "fr";
     purchasedAt: string;
-    downloadExpiresAt: string;
-    downloadAvailable: boolean;
-    /** offline package (PDF + MP3), valid until downloadExpiresAt */
-    zipUrl: string;
+    /** the access link stops working after this date */
+    accessExpiresAt: string;
+    /** whole days left before that (0 on the last day) */
+    daysLeft: number;
   };
   assets: AssetsResponse;
 }
