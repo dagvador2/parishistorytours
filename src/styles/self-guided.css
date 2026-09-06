@@ -32,8 +32,16 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--ag-paper); }
+
+/* The audioguide is a single non-scrolling screen. iOS Safari would otherwise
+   let the document rubber-band and scroll the app out of view whenever the
+   toolbars collapse and 100dvh grows: the document is locked instead, and only
+   the app's own panes move. */
+html, body { margin: 0; height: 100%; background: var(--ag-paper); overflow: hidden; }
 body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
   color: var(--ag-ink);
   font-family: var(--ag-sans);
   -webkit-font-smoothing: antialiased;
@@ -49,7 +57,7 @@ a { color: var(--ag-red); }
 .ag-app {
   position: relative;
   height: 100dvh;
-  min-height: 600px;
+  max-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

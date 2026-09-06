@@ -153,11 +153,28 @@ export default function MapView({ lang, phase, idx, completed, gpsDenied, user, 
         drawUser();
         fitView();
       });
-      const ro = new ResizeObserver(() => {
-        m.resize();
-      });
+      // iOS Safari resizes the viewport as its toolbars collapse, and the canvas
+      // keeps a stale size unless it is told again — hence the observer, the
+      // viewport listeners and a few delayed calls after the first paint.
+      const resize = () => {
+        if (!disposed && map.current) map.current.resize();
+      };
+      const ro = new ResizeObserver(resize);
       ro.observe(container.current!);
+      const timers = [80, 300, 800, 1600].map((ms) => window.setTimeout(resize, ms));
+      window.addEventListener("resize", resize);
+      window.addEventListener("orientationchange", resize);
+      window.addEventListener("pageshow", resize);
+      const vv = window.visualViewport;
+      vv?.addEventListener("resize", resize);
+      vv?.addEventListener("scroll", resize);
       cleanup = () => {
+        timers.forEach((t) => window.clearTimeout(t));
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("orientationchange", resize);
+        window.removeEventListener("pageshow", resize);
+        vv?.removeEventListener("resize", resize);
+        vv?.removeEventListener("scroll", resize);
         ro.disconnect();
         pins.current.forEach((p) => p.remove());
         pins.current = [];
