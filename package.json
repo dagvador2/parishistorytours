@@ -46,6 +46,7 @@
     "@types/mapbox-gl": "^3.4.1",
     "@types/node": "^24.1.0",
     "@types/react-simple-maps": "^3.0.6",
+    "docx": "^9.7.1",
     "pdf-lib": "^1.17.1",
     "tsx": "^4.23.13"
   }

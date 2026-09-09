@@ -157,3 +157,8 @@ bucket-scoped **R2 API token** (dashboard → R2 → Manage API tokens → Objec
   displayed rewrite, per language
 - `pnpm tsx scripts/self-guided/tools/build-media-cues.ts` → photo anchoring
   decisions with scores
+- `pnpm tsx scripts/self-guided/tools/export-docx.ts --lang both` →
+  `output/review/narration-<lang>.docx`: the spoken text verbatim with every
+  photo placed where it appears, for review and hand editing. Paragraph
+  splitting and anchor resolution reuse the generator's own helpers, so an
+  anchor that would break is flagged in red in the document.
