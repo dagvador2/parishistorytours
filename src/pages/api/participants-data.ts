@@ -1,27 +1,23 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '../../lib/supabase';
+import { fetchPublishedFigures } from '../../lib/tour-stats';
 
-export const GET: APIRoute = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('data_participants_tour')
-      .select('*');
+/**
+ * Public statistics endpoint — aggregates only.
+ *
+ * It used to return every row of the participants table, names included. The
+ * tracking tables it now sits on top of hold phone numbers, e-mail addresses
+ * and revenue, so this serves the same two aggregate views as /key-figures and
+ * nothing else.
+ */
+export const GET: APIRoute = async ({ url }) => {
+  const lang = url.searchParams.get('lang') === 'fr' ? 'fr' : 'en';
+  const { figures, countries } = await fetchPublishedFigures(lang);
 
-    if (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ data }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  return new Response(JSON.stringify({ figures, countries }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=300, s-maxage=3600',
+    },
+  });
 };

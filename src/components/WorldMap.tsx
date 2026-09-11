@@ -6,40 +6,24 @@
 import { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 
-interface CountryData {
-  [countryCode: string]: number;
+/** One country of the choropleth. Comes from src/lib/tour-stats.ts. */
+export interface MapCountry {
+  /** ISO 3166-1 numeric — matches `geo.id` in public/data/world-110m.json. */
+  id: string;
+  /** ISO 3166-1 alpha-2 — the flag code. */
+  code: string;
+  /** Already localised to the page language. */
+  name: string;
+  count: number;
 }
 
 interface WorldMapProps {
-  countryData: CountryData;
+  countries: MapCountry[];
   maxValue: number;
   theme?: 'default' | 'quiet';
 }
 
 const geoUrl = '/data/world-110m.json';
-
-const getCountryFlagCode = (countryName: string): string => {
-  const flagCodeMap: Record<string, string> = {
-    'United States of America': 'US', 'United Kingdom': 'GB',
-    'France': 'FR', 'Germany': 'DE', 'Spain': 'ES', 'Italy': 'IT',
-    'Canada': 'CA', 'Australia': 'AU', 'Japan': 'JP', 'China': 'CN',
-    'Brazil': 'BR', 'India': 'IN', 'Netherlands': 'NL', 'Belgium': 'BE',
-    'Switzerland': 'CH', 'Austria': 'AT', 'Sweden': 'SE', 'Norway': 'NO',
-    'Denmark': 'DK', 'Finland': 'FI', 'Poland': 'PL',
-    'Czech Republic': 'CZ', 'Portugal': 'PT', 'Greece': 'GR',
-    'Turkey': 'TR', 'Russia': 'RU', 'Mexico': 'MX', 'Argentina': 'AR',
-    'Chile': 'CL', 'Colombia': 'CO', 'Peru': 'PE', 'Venezuela': 'VE',
-    'South Africa': 'ZA', 'Egypt': 'EG', 'Morocco': 'MA', 'Nigeria': 'NG',
-    'Kenya': 'KE', 'South Korea': 'KR', 'Thailand': 'TH', 'Vietnam': 'VN',
-    'Singapore': 'SG', 'Malaysia': 'MY', 'Indonesia': 'ID',
-    'Philippines': 'PH', 'New Zealand': 'NZ', 'Israel': 'IL',
-    'Saudi Arabia': 'SA', 'United Arab Emirates': 'AE', 'Iran': 'IR',
-    'Iraq': 'IQ', 'Pakistan': 'PK', 'Bangladesh': 'BD', 'Sri Lanka': 'LK',
-    'Ireland': 'IE', 'Iceland': 'IS', 'Luxembourg': 'LU', 'Malta': 'MT',
-    'Cyprus': 'CY', 'Lebanon': 'LB', 'Tunisie': 'TN',
-  };
-  return flagCodeMap[countryName] || 'UN';
-};
 
 function getFlagEmoji(countryCode: string): string {
   const flagMap: Record<string, string> = {
@@ -51,7 +35,8 @@ function getFlagEmoji(countryCode: string): string {
   return flagMap[countryCode] || '🌍';
 }
 
-export default function WorldMap({ countryData, maxValue, theme = 'default' }: WorldMapProps) {
+export default function WorldMap({ countries, maxValue, theme = 'default' }: WorldMapProps) {
+  const byId = new Map(countries.map((c) => [String(c.id), c]));
   const [tooltip, setTooltip] = useState<{ x: number; y: number; content: string; country: string; flag: string; count: number } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const isQuiet = theme === 'quiet';
@@ -108,37 +93,33 @@ export default function WorldMap({ countryData, maxValue, theme = 'default' }: W
     : ['#dbeafe', '#93c5fd', '#3b82f6', '#1d4ed8', '#1e3a8a'];
 
   const handleCountryClick = (geo: any) => {
-    const countryName = geo.properties.name;
-    const count = countryData[countryName] || 0;
+    const hit = byId.get(String(geo.id));
+    if (!hit) return;
 
-    if (count > 0) {
-      setTooltip({
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-        content: `${count} participant${count > 1 ? 's' : ''}`,
-        country: countryName,
-        flag: getCountryFlagCode(countryName),
-        count,
-      });
-      if (isMobile) setTimeout(() => setTooltip(null), 3000);
-    }
+    setTooltip({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      content: `${hit.count} participant${hit.count > 1 ? 's' : ''}`,
+      country: hit.name,
+      flag: hit.code,
+      count: hit.count,
+    });
+    if (isMobile) setTimeout(() => setTooltip(null), 3000);
   };
 
   const handleMouseMove = (event: React.MouseEvent<SVGPathElement, MouseEvent>, geo: any) => {
     if (isMobile) return;
-    const countryName = geo.properties.name;
-    const count = countryData[countryName] || 0;
+    const hit = byId.get(String(geo.id));
+    if (!hit) return;
 
-    if (count > 0) {
-      setTooltip({
-        x: event.clientX,
-        y: event.clientY,
-        content: `${count} participant${count > 1 ? 's' : ''}`,
-        country: countryName,
-        flag: getCountryFlagCode(countryName),
-        count,
-      });
-    }
+    setTooltip({
+      x: event.clientX,
+      y: event.clientY,
+      content: `${hit.count} participant${hit.count > 1 ? 's' : ''}`,
+      country: hit.name,
+      flag: hit.code,
+      count: hit.count,
+    });
   };
 
   const handleMouseLeave = () => {
@@ -195,8 +176,7 @@ export default function WorldMap({ countryData, maxValue, theme = 'default' }: W
             <Geographies geography={geoUrl}>
               {({ geographies }: { geographies: any[] }) =>
                 geographies.map((geo) => {
-                  const countryName = geo.properties.name;
-                  const value = countryData[countryName] || 0;
+                  const value = byId.get(String(geo.id))?.count ?? 0;
 
                   return (
                     <Geography

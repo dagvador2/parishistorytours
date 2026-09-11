@@ -43,7 +43,7 @@ export const en = {
     welcome: {
       title: "Welcome",
       intro: "I'm <strong>Clement Daguet-Schott</strong>, a passionate history enthusiast and independent tour guide based in Paris since 2024.<br/>After months of dedicated research across 20+ historical books, memoirs, and primary sources, I created three immersive walking tours that bring the history of Paris to life — from the Fall of France and the French Resistance to 2,000 years of Parisian history.",
-      description: "Whether you're a curious traveler, a history buff, or an educator, these walking tours are designed to make history tangible. With a 4.9/5 rating from over 42 Google reviews and visitors from 25+ countries, the tours combine rigorous historical research with engaging storytelling across iconic Parisian landmarks."
+      description: "Whether you're a curious traveler, a history buff, or an educator, these walking tours are designed to make history tangible. With a 4.9/5 rating from over 50 Google reviews and visitors from 50+ countries, the tours combine rigorous historical research with engaging storytelling across iconic Parisian landmarks."
     },
     gallery: {
       title: "Gallery",
@@ -496,12 +496,12 @@ export const en = {
   // Key Figures page
   keyFigures: {
     title: "Key Figures",
-    subtitle: "Discover the journey behind Paris History Tours - from months of research to hundreds of participants from around the world.",
+    subtitle: "Discover the journey behind Paris History Tours - from months of research to more than 800 participants from around the world.",
     guide: {
       title: "Meet Clement, Your Guide",
       bio1: "Clement Daguet-Schott is a Paris-based history enthusiast and independent walking tour guide. His passion for history led him to spend months conducting extensive research across 20+ books, including historical texts, personal memoirs, and academic sources, to build tours that are both historically rigorous and deeply engaging.",
       bio2: "Each tour stop is chosen not just for its historical significance but for the untold stories connected to it — from Rose Valland's secret mission to track Nazi art theft, to Ernest Hemingway's role in the Liberation, to the student resistance networks at the Sorbonne.",
-      bio3: "Since founding Paris History Tours in 2024, Clement has guided hundreds of visitors from over 25 countries, maintaining a 4.9/5 rating on Google Maps. The tours are available in both English and French, as private experiences or small group sessions of up to 10 participants."
+      bio3: "Since founding Paris History Tours in 2024, Clement has guided more than 800 visitors from over 50 countries across 130+ walking tours, maintaining a 4.9/5 rating on Google Maps. The tours are available in both English and French, as private experiences or small group sessions of up to 10 participants."
     },
     building: {
       title: "Building the Tours",
@@ -736,7 +736,7 @@ export const en = {
     },
     keyFigures: {
       title: "Your Guide in Paris — Clément Daguet-Schott",
-      description: `History enthusiast and independent guide in Paris. Over 20 books of research, visitors from 25+ countries and a ${RATING}/5 rating on Google Maps.`
+      description: `History enthusiast and independent guide in Paris. Over 20 books of research, visitors from 50+ countries and a ${RATING}/5 rating on Google Maps.`
     },
     blog: {
       title: "Blog — Paris During World War II",
@@ -1188,7 +1188,7 @@ export const en = {
       relatedKicker: "Keep reading",
       relatedHeading: "Related articles",
       authorKicker: "About the author",
-      authorBio: "History enthusiast and independent tour guide in Paris. 20+ books of research, visitors from 25+ countries, and a 4.9/5 Google rating.",
+      authorBio: "History enthusiast and independent tour guide in Paris. 20+ books of research, visitors from 50+ countries, and a 4.9/5 Google rating.",
       authorLink: "More about Clément",
       ctaKicker: "See the streets",
       ctaHeading: "Walk these stories in person.",
@@ -1238,7 +1238,7 @@ export const en = {
       cta: {
         kicker: "Walk with me",
         title: "Ready to see Paris differently?",
-        subtitle: "Join the hundreds of visitors who have rediscovered Paris through the stories of its twentieth century.",
+        subtitle: "Join the 800+ visitors who have rediscovered Paris through the stories of its twentieth century.",
         primary: "Book a Tour",
         secondary: "See the tours"
       }

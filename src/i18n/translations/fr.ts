@@ -43,7 +43,7 @@ export const fr = {
     welcome: {
       title: "Bienvenue",
       intro: "Je suis <strong>Clément Daguet-Schott</strong>, passionné d'histoire et guide touristique indépendant à Paris depuis 2024.<br/>Après des mois de recherche intensive à travers plus de 20 ouvrages historiques, mémoires et sources primaires, j'ai créé trois visites à pied immersives qui font revivre l'histoire de Paris — de la Chute de la France et la Résistance à 2 000 ans d'histoire parisienne.",
-      description: "Que vous soyez un voyageur curieux, un passionné d'histoire ou un éducateur, ces visites rendent l'histoire tangible. Avec une note de 4.9/5 sur plus de 42 avis Google et des visiteurs de plus de 25 pays, les visites allient recherche historique rigoureuse et narration captivante à travers les sites emblématiques de Paris."
+      description: "Que vous soyez un voyageur curieux, un passionné d'histoire ou un éducateur, ces visites rendent l'histoire tangible. Avec une note de 4.9/5 sur plus de 50 avis Google et des visiteurs de plus de 50 pays, les visites allient recherche historique rigoureuse et narration captivante à travers les sites emblématiques de Paris."
     },
     gallery: {
       title: "Galerie",
@@ -496,12 +496,12 @@ export const fr = {
   // Key Figures page
   keyFigures: {
     title: "Chiffres Clés",
-    subtitle: "Découvrez le parcours derrière Paris History Tours - des mois de recherche à des centaines de participants du monde entier.",
+    subtitle: "Découvrez le parcours derrière Paris History Tours - des mois de recherche à plus de 800 participants du monde entier.",
     guide: {
       title: "Rencontrez Clément, votre guide",
       bio1: "Clément Daguet-Schott est un passionné d'histoire et guide de visites à pied indépendant basé à Paris. Sa passion pour l'histoire l'a conduit à passer des mois de recherche intensive à travers plus de 20 ouvrages, incluant textes historiques, mémoires personnels et sources académiques, pour construire des visites à la fois historiquement rigoureuses et profondément captivantes.",
       bio2: "Chaque arrêt de la visite est choisi non seulement pour sa signification historique mais pour les histoires méconnues qui y sont liées — de la mission secrète de Rose Valland pour traquer les vols d'art nazis, au rôle d'Ernest Hemingway dans la Libération, en passant par les réseaux de résistance étudiants à la Sorbonne.",
-      bio3: "Depuis la création de Paris History Tours en 2024, Clément a guidé des centaines de visiteurs de plus de 25 pays, maintenant une note de 4.9/5 sur Google Maps. Les visites sont disponibles en français et en anglais, en expérience privée ou en petits groupes jusqu'à 10 participants."
+      bio3: "Depuis la création de Paris History Tours en 2024, Clément a guidé plus de 800 visiteurs de plus de 50 pays au fil de 130 visites et plus, maintenant une note de 4.9/5 sur Google Maps. Les visites sont disponibles en français et en anglais, en expérience privée ou en petits groupes jusqu'à 10 participants."
     },
     building: {
       title: "Construire les Visites",
@@ -736,7 +736,7 @@ export const fr = {
     },
     keyFigures: {
       title: "Votre guide à Paris — Clément Daguet-Schott",
-      description: `Passionné d'histoire et guide indépendant à Paris. Plus de 20 livres de recherche, des visiteurs de 25+ pays et une note de ${RATING}/5 sur Google Maps.`
+      description: `Passionné d'histoire et guide indépendant à Paris. Plus de 20 livres de recherche, des visiteurs de 50+ pays et une note de ${RATING}/5 sur Google Maps.`
     },
     blog: {
       title: "Blog — Paris pendant la Seconde Guerre mondiale",
@@ -1188,7 +1188,7 @@ export const fr = {
       relatedKicker: "Lire aussi",
       relatedHeading: "Articles liés",
       authorKicker: "À propos de l'auteur",
-      authorBio: "Passionné d'histoire et guide indépendant à Paris. Plus de 20 ouvrages de recherche, des visiteurs de 25+ pays et une note de 4,9/5 sur Google.",
+      authorBio: "Passionné d'histoire et guide indépendant à Paris. Plus de 20 ouvrages de recherche, des visiteurs de 50+ pays et une note de 4,9/5 sur Google.",
       authorLink: "En savoir plus sur Clément",
       ctaKicker: "Voir les rues",
       ctaHeading: "Parcourez ces histoires en vrai.",
@@ -1238,7 +1238,7 @@ export const fr = {
       cta: {
         kicker: "Marchez avec moi",
         title: "Prêt à voir Paris autrement ?",
-        subtitle: "Rejoignez les centaines de visiteurs qui ont redécouvert Paris à travers les récits de son vingtième siècle.",
+        subtitle: "Rejoignez les 800+ visiteurs qui ont redécouvert Paris à travers les récits de son vingtième siècle.",
         primary: "Réserver une visite",
         secondary: "Voir les visites"
       }

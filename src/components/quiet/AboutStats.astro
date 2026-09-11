@@ -4,15 +4,19 @@ import WorldMap from '../WorldMap.tsx';
 
 interface Stat { label: string; value: number; }
 interface CountryItem { country: string; count: number; code: string; percentage: number; }
+/** One country of the choropleth, keyed by its ISO 3166-1 numeric id. */
+interface MapCountry { id: string; code: string; name: string; count: number; }
 
 interface Props {
   stats: Stat[];
   topCountries: CountryItem[];
-  worldMapData: Record<string, number>;
-  worldMapMax: number;
+  mapCountries: MapCountry[];
+  mapMax: number;
+  /** Plain-prose restatement of the same figures, for screen readers and assistants. */
+  summary: string;
 }
 
-const { stats, topCountries, worldMapData, worldMapMax } = Astro.props;
+const { stats, topCountries, mapCountries, mapMax, summary } = Astro.props;
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 ---
@@ -36,10 +40,7 @@ const t = useTranslations(lang);
 
     <!-- AI-readable copy -->
     <div class="sr-only">
-      <p>{lang === 'fr'
-        ? 'Chiffres clés de Paris History Tours : plus de 300 participants venus de plus de 25 pays à travers plus de 60 visites guidées, couvrant plus de 150 kilomètres de parcours pédestres dans le Paris historique. Les visiteurs viennent des États-Unis, du Royaume-Uni, d\'Allemagne, de France, du Canada, d\'Australie, d\'Espagne et de nombreux autres pays. Fondé en 2024, Paris History Tours maintient une note de 4.9 sur 5 étoiles avec plus de 42 avis Google.'
-        : 'Paris History Tours key statistics: over 300 participants from 25+ countries across 60+ guided tours, covering more than 150 kilometers of walking tours through historic Paris. Visitors come from the United States, United Kingdom, Germany, France, Canada, Australia, Spain, and many more countries. Founded in 2024, Paris History Tours has maintained a 4.9 out of 5 star rating across 42+ Google reviews.'
-      }</p>
+      <p>{summary}</p>
     </div>
 
     <div class="qstats__split">
@@ -70,7 +71,7 @@ const t = useTranslations(lang);
       </div>
 
       <div class="qstats__panel qstats__panel--map">
-        <WorldMap client:visible countryData={worldMapData} maxValue={worldMapMax} theme="quiet" />
+        <WorldMap client:visible countries={mapCountries} maxValue={mapMax} theme="quiet" />
       </div>
     </div>
   </div>
