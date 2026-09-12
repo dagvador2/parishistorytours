@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import TopBar from "../components/quiet/TopBar.astro";
 import Nav from "../components/quiet/Nav.astro";
 import { useTranslations } from '../i18n/utils';
 import { waLink } from '../lib/whatsapp';
@@ -11,7 +10,6 @@ const langPrefix = lang === 'fr' ? '/fr' : '';
 const waHref = waLink(t('quiet.wa.booked') as string);
 ---
 <BaseLayout title={t('meta.success.title')} description={t('meta.success.description')} noindex={true} theme="quiet">
-  <TopBar />
   <Nav context="tour" />
   <main>
     <section class="qsuccess">

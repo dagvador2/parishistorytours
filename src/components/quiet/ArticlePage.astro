@@ -8,7 +8,6 @@ import JsonLd from '../JsonLd.astro';
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-import TopBar from './TopBar.astro';
 import Nav from './Nav.astro';
 import MobileBookingBar from './MobileBookingBar.astro';
 import ArticleHero from './ArticleHero.astro';
@@ -64,7 +63,6 @@ const blogLabel = lang === 'fr' ? 'Blog' : 'Blog';
   theme="quiet"
   alternates={alternates}
 >
-  <TopBar />
   <Nav context="tour" />
 
   <main class="qarticle">

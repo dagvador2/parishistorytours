@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { useTranslations } from '../i18n/utils';
 
-import TopBar from '../components/quiet/TopBar.astro';
 import Nav from '../components/quiet/Nav.astro';
 import MobileBookingBar from '../components/quiet/MobileBookingBar.astro';
 import PartnersHero from '../components/quiet/PartnersHero.astro';
@@ -22,7 +21,6 @@ const description = lang === 'fr'
 ---
 
 <BaseLayout title={title} description={description} theme="quiet">
-  <TopBar />
   <Nav context="tour" />
   <main>
     <PartnersHero />

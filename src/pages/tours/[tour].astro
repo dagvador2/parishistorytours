@@ -7,7 +7,6 @@ import { formatEUR } from "../../lib/price";
 import { useTranslations } from '../../i18n/utils';
 import { tours } from '../../data/tours';
 
-import TopBar from "../../components/quiet/TopBar.astro";
 import Nav from "../../components/quiet/Nav.astro";
 import MobileBookingBar from "../../components/quiet/MobileBookingBar.astro";
 import TourHero from "../../components/quiet/TourHero.astro";
@@ -108,7 +107,6 @@ const jsonLdGuideJobTitle =
   ogImage={tourConfig.ogImage}
   theme="quiet"
 >
-  <TopBar />
   <Nav context="tour" book="#book" />
 
   <main>

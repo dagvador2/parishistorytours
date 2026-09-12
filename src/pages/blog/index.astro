@@ -4,7 +4,6 @@ import JsonLd from '../../components/JsonLd.astro';
 import { getCollection } from 'astro:content';
 import { useTranslations } from '../../i18n/utils';
 
-import TopBar from '../../components/quiet/TopBar.astro';
 import Nav from '../../components/quiet/Nav.astro';
 import MobileBookingBar from '../../components/quiet/MobileBookingBar.astro';
 import BlogHeader from '../../components/quiet/BlogHeader.astro';
@@ -27,7 +26,6 @@ const sortedPosts = allPosts.sort((a, b) =>
   description={t('meta.blog.description')}
   theme="quiet"
 >
-  <TopBar />
   <Nav context="tour" />
 
   <main>

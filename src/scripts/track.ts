@@ -57,7 +57,7 @@ export function initClickTracking(): void {
         track('contact_whatsapp', { path: location.pathname });
       } else if (href.startsWith('mailto:')) {
         track('contact_email', { path: location.pathname });
-      } else if (el.closest('.qbook__partner, .qbc__partner, .qfeatured__partner')) {
+      } else if (el.closest('.qlogos__item')) {
         track('click_partner', {
           partner: el.getAttribute('aria-label') || 'unknown',
           path: location.pathname,

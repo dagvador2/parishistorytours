@@ -7,7 +7,6 @@ import JsonLd from "../components/JsonLd.astro";
 import { GOOGLE_REVIEWS, GOOGLE_MAPS_URL, TOUR_PRICES } from "../data/site";
 
 // Quiet chrome + sections
-import TopBar from "../components/quiet/TopBar.astro";
 import Nav from "../components/quiet/Nav.astro";
 import MobileBookingBar from "../components/quiet/MobileBookingBar.astro";
 import HeroHome from "../components/quiet/HeroHome.astro";
@@ -32,7 +31,6 @@ const langPrefix = isDefaultLang ? '' : '/fr';
   ogImage="/photos/left_bank/Paris_WW2_guide.webp"
   theme="quiet"
 >
-  <TopBar />
   <Nav context="home" />
 
   <main>
@@ -58,7 +56,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
     "url": "https://www.parishistorytours.com",
     "telephone": "+33620622480",
     "email": "clement@parishistorytours.com",
-    "foundingDate": "2024",
+    "foundingDate": "2023",
     "slogan": t('jsonLd.slogan'),
     "knowsLanguage": ["en", "fr"],
     "currenciesAccepted": "EUR",
@@ -188,7 +186,7 @@ const langPrefix = isDefaultLang ? '' : '/fr';
     },
     "email": "clement@parishistorytours.com",
     "telephone": "+33620622480",
-    "foundingDate": "2024",
+    "foundingDate": "2023",
     "founder": { "@type": "Person", "name": "Clement Daguet-Schott" },
     "sameAs": [
       GOOGLE_MAPS_URL,

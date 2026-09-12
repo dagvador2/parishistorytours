@@ -1,0 +1,174 @@
+---
+/**
+ * Single source of truth for the "also featured / also book on" logo rows.
+ *
+ * Logos ship at wildly different aspect ratios and ink densities, so a shared
+ * box size makes them look *less* uniform, not more. Each entry therefore
+ * carries two optical corrections, measured once against a rendered row:
+ *   - `h`  : rendered height in px, normalized on cap-height rather than on the
+ *            bounding box (a wide all-caps wordmark needs far less height than
+ *            a square icon mark to read at the same weight).
+ *   - `op` : resting opacity, raised for logos whose brand color desaturates to
+ *            a light gray (Airbnb coral, Tourist teal) so every mark sits at the
+ *            same value against the paper background.
+ * The raster sources are pre-trimmed (`*_trim.webp`) — the originals carry large
+ * transparent margins that made the marks render tiny inside a fixed box.
+ */
+
+type PartnerKey = 'getyourguide' | 'viator' | 'airbnb' | 'tripadvisor' | 'google' | 'tourist' | 'parisjetaime';
+
+const REGISTRY: Record<
+  PartnerKey,
+  { name: string; src: string; h: number; ratio: number; op: number; href: string }
+> = {
+  getyourguide: {
+    name: 'GetYourGuide',
+    src: '/logos/getyourguide_logo_trim.webp',
+    h: 16, ratio: 10.6, op: 0.75,
+    href: 'https://www.getyourguide.com/paris-l16/world-war-ii-tour-in-paris-fall-resistance-liberation-t537162/',
+  },
+  viator: {
+    name: 'Viator',
+    src: '/logos/viator_logo_trim.webp',
+    h: 22, ratio: 4.0, op: 0.55,
+    href: 'https://www.viator.com/tours/Paris/World-War-II-Tour-in-Paris-Fall-Resistance-and-Liberation/d479-5642691P2',
+  },
+  airbnb: {
+    name: 'Airbnb',
+    src: '/logos/airbnb_logo.svg',
+    h: 21, ratio: 4.58, op: 0.8,
+    href: 'https://www.airbnb.fr/experiences/7090570',
+  },
+  tripadvisor: {
+    name: 'Tripadvisor',
+    src: '/logos/tripadvisor_logo_trim.webp',
+    h: 22, ratio: 4.68, op: 0.55,
+    href: 'https://www.tripadvisor.fr/Attraction_Review-g187147-d34229671-Reviews-Paris_History_Tours-Paris_Ile_de_France.html',
+  },
+  google: {
+    name: 'Google',
+    src: '/logos/google_logo_trim.webp',
+    h: 26, ratio: 0.98, op: 0.7,
+    href: 'https://maps.app.goo.gl/AGYuzh8jHA9KXv9h8',
+  },
+  tourist: {
+    name: 'Tourist.com',
+    src: '/logos/tourist_logo.svg',
+    h: 24, ratio: 2.94, op: 0.75,
+    href: 'https://tourist.com/p/24194',
+  },
+  parisjetaime: {
+    name: "Paris je t'aime",
+    src: '/logos/parisjetaime_logo.svg',
+    h: 32, ratio: 1.0, op: 0.6,
+    href: 'https://parisjetaime.com/activite/Paris-history-tours-p4833',
+  },
+};
+
+const ORDER: PartnerKey[] = [
+  'getyourguide', 'viator', 'airbnb', 'tripadvisor', 'google', 'tourist', 'parisjetaime',
+];
+
+interface Props {
+  /** Small uppercase caption above the row. Omit to render the row bare. */
+  label?: string;
+  /** Which logos to show. A `null`/`undefined` href drops that logo entirely;
+   *  a key mapped to `true` uses the registry's canonical URL. */
+  links?: Partial<Record<PartnerKey, string | true | null | undefined>>;
+  /** Extra class hook for callers that need to tune spacing. */
+  class?: string;
+}
+
+const { label, links, class: className } = Astro.props;
+
+const selection = links ?? Object.fromEntries(ORDER.map((k) => [k, true]));
+
+const items = ORDER.flatMap((key) => {
+  const value = selection[key as PartnerKey];
+  if (!value) return [];
+  const entry = REGISTRY[key];
+  return [{
+    key,
+    ...entry,
+    href: value === true ? entry.href : value,
+    width: Math.round(entry.h * entry.ratio),
+  }];
+});
+---
+
+<div class:list={['qlogos', className]}>
+  {label && <span class="qlogos__label">{label}</span>}
+  <div class="qlogos__row">
+    {items.map((item) => (
+      <a
+        href={item.href}
+        class="qlogos__item"
+        target="_blank"
+        rel="noopener"
+        aria-label={item.name}
+        style={`--logo-h:${item.h}px;--logo-op:${item.op}`}
+      >
+        <img
+          src={item.src}
+          alt={item.name}
+          width={item.width}
+          height={item.h}
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .qlogos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+  .qlogos__label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .qlogos__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px 44px;
+  }
+  .qlogos__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Uniform line box so every mark sits on the same optical baseline,
+       whatever its own rendered height. */
+    height: 34px;
+    filter: grayscale(1);
+    opacity: var(--logo-op, 0.6);
+    transition: opacity 160ms ease, filter 160ms ease;
+  }
+  .qlogos__item:hover { opacity: 1; filter: grayscale(0); }
+  .qlogos__item img {
+    display: block;
+    height: var(--logo-h, 22px);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 760px) {
+    .qlogos__row { gap: 18px 28px; }
+    /* Scale the whole row down proportionally rather than per-logo, so the
+       optical balance tuned above survives on small screens. */
+    .qlogos__item { height: 28px; }
+    .qlogos__item img { height: calc(var(--logo-h, 22px) * 0.82); }
+  }
+</style>

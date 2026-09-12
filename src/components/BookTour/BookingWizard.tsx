@@ -16,9 +16,12 @@ interface WizardProps {
   /** Hide the wizard's own title / WhatsApp CTA / partner-logos row.
    *  Used when the surrounding section already provides those elements. */
   hideChrome?: boolean;
+  /** Hide the inline "private tour" link under the date list — for pages that
+   *  already give the private tour its own block. */
+  hidePrivateLink?: boolean;
 }
 
-const Wizard: React.FC<WizardProps> = ({ hideChrome = false }) => {
+const Wizard: React.FC<WizardProps> = ({ hideChrome = false, hidePrivateLink = false }) => {
   const { booking, setBooking, t } = useBooking();
   const [mode, setMode] = useState<Mode>("choose");
   const [step, setStep] = useState(1);
@@ -55,6 +58,30 @@ const Wizard: React.FC<WizardProps> = ({ hideChrome = false }) => {
     return () => window.removeEventListener("pht:select-tour", handler);
   }, []);
 
+  // The "Book your private tour" block outside the island dispatches this so
+  // the wizard opens straight on the private form, with the tour pre-selected
+  // when the caller names one.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const slug = (e as CustomEvent<string | undefined>).detail as Tour | undefined;
+      if (slug && ALL_TOURS.includes(slug)) {
+        setBooking({ ...bookingRef.current, tour: slug });
+      }
+      track("select_mode", { mode: "private", source: "private_block" });
+      setPreselectedSlot(null);
+      setMode("private");
+      setStep(1);
+    };
+    window.addEventListener("pht:private-tour", handler);
+    return () => window.removeEventListener("pht:private-tour", handler);
+  }, []);
+
+  // Let the surrounding page follow along: the booking section swaps its own
+  // headings so a private form never sits under a "scheduled walks" title.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("pht:booking-mode", { detail: mode }));
+  }, [mode]);
+
   const goToMode = (m: Mode) => {
     if (m === "choose") setPreselectedSlot(null);
     setMode(m);
@@ -71,6 +98,7 @@ const Wizard: React.FC<WizardProps> = ({ hideChrome = false }) => {
     if (mode === "choose") {
       return (
         <UpcomingSessions
+          hidePrivateLink={hidePrivateLink}
           onSelectSlot={handleSlotFromList}
           onSeeCalendar={() => {
             track("select_mode", { mode: "calendar" });
@@ -217,6 +245,7 @@ interface BookingWizardProps {
   lang: string;
   defaultTour?: string;
   hideChrome?: boolean;
+  hidePrivateLink?: boolean;
 }
 
 const BookingWizard: React.FC<BookingWizardProps> = ({
@@ -224,10 +253,11 @@ const BookingWizard: React.FC<BookingWizardProps> = ({
   lang,
   defaultTour,
   hideChrome = false,
+  hidePrivateLink = false,
 }) => {
   return (
     <BookingProvider translations={translations} lang={lang} defaultTour={defaultTour}>
-      <Wizard hideChrome={hideChrome} />
+      <Wizard hideChrome={hideChrome} hidePrivateLink={hidePrivateLink} />
     </BookingProvider>
   );
 };

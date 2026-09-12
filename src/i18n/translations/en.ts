@@ -42,7 +42,7 @@ export const en = {
     subtitle: "Immersive historical walking tours in Paris",
     welcome: {
       title: "Welcome",
-      intro: "I'm <strong>Clement Daguet-Schott</strong>, a passionate history enthusiast and independent tour guide based in Paris since 2024.<br/>After months of dedicated research across 20+ historical books, memoirs, and primary sources, I created three immersive walking tours that bring the history of Paris to life — from the Fall of France and the French Resistance to 2,000 years of Parisian history.",
+      intro: "I'm <strong>Clement Daguet-Schott</strong>, a passionate history enthusiast and independent tour guide based in Paris since 2023.<br/>After months of dedicated research across 20+ historical books, memoirs, and primary sources, I created three immersive walking tours that bring the history of Paris to life — from the Fall of France and the French Resistance to 2,000 years of Parisian history.",
       description: "Whether you're a curious traveler, a history buff, or an educator, these walking tours are designed to make history tangible. With a 4.9/5 rating from over 50 Google reviews and visitors from 50+ countries, the tours combine rigorous historical research with engaging storytelling across iconic Parisian landmarks."
     },
     gallery: {
@@ -501,7 +501,7 @@ export const en = {
       title: "Meet Clement, Your Guide",
       bio1: "Clement Daguet-Schott is a Paris-based history enthusiast and independent walking tour guide. His passion for history led him to spend months conducting extensive research across 20+ books, including historical texts, personal memoirs, and academic sources, to build tours that are both historically rigorous and deeply engaging.",
       bio2: "Each tour stop is chosen not just for its historical significance but for the untold stories connected to it — from Rose Valland's secret mission to track Nazi art theft, to Ernest Hemingway's role in the Liberation, to the student resistance networks at the Sorbonne.",
-      bio3: "Since founding Paris History Tours in 2024, Clement has guided more than 800 visitors from over 50 countries across 130+ walking tours, maintaining a 4.9/5 rating on Google Maps. The tours are available in both English and French, as private experiences or small group sessions of up to 10 participants."
+      bio3: "Since founding Paris History Tours in 2023, Clement has guided more than 800 visitors from over 50 countries across 130+ walking tours, maintaining a 4.9/5 rating on Google Maps. The tours are available in both English and French, as private experiences or small group sessions of up to 10 participants."
     },
     building: {
       title: "Building the Tours",
@@ -821,12 +821,9 @@ export const en = {
       book: "Hello Clément! I'd like to book the {tour}. Could you tell me more about availability?",
       booked: "Hello Clément! I just booked a tour on your site and have a question.",
     },
-    topBar: {
-      notice: "Tours in English & French · Private groups available"
-    },
     nav: {
       brand: "Paris History Tours",
-      tagline: "Walking Tours · Est. 2024",
+      tagline: "Walking Tours · Est. 2023",
       tours: "Tours",
       route: "Route",
       compare: "Compare",
@@ -1012,7 +1009,10 @@ export const en = {
       },
       compare: {
         kicker: "Compare",
-        title: "One guide, three walks.",
+        title: "One guide, four walks.",
+        lead: "Same guide, same research, four very different walks. Here is what separates them.",
+        viewCta: "See the tour",
+        bookCta: "Book",
         axisPrice: "Price",
         axisFocus: "Focus",
         axisRoute: "Route",
@@ -1033,7 +1033,12 @@ export const en = {
         generalRoute: "Cluny → Cité → Tuileries",
         generalDuration: "1.5 hours",
         generalStops: "3 stops · 2 km",
-        generalBestFor: "Families · first-timers · non-WWII"
+        generalBestFor: "Families · first-timers · non-WWII",
+        foodWineFocus: "Food & wine · 9th arr.",
+        foodWineRoute: "Covered passages → rue des Martyrs",
+        foodWineDuration: "3 hours",
+        foodWineStops: "4 artisans · ~1 km",
+        foodWineBestFor: "Food lovers · small groups · tastings"
       },
       reviews: {
         kicker: "Reviews",
@@ -1047,18 +1052,27 @@ export const en = {
         p3: "I guide in English and in French. All of the research comes from primary sources — archives, memoirs, newspapers of the day — cross-checked against the scholarship.",
         credLabel: "Credentials",
         cred1: "History enthusiast & storyteller",
-        cred2: "Guiding since 2024",
+        cred2: "Guiding since 2023",
         cred3: "On TripAdvisor, GetYourGuide, Paris je t'aime"
       },
       booking: {
         kicker: "Booking",
         title: "How to book.",
-        description: "Book directly on this site for the best experience — pick a date, pay in one step, I'll confirm within 24 hours. WhatsApp and email work too if you'd rather talk first.",
+        description: "Two ways in: join one of the scheduled walks, or book the tour privately for your own group, on the date and at the time you choose.",
         partnerLabel: "Also book on",
         whatsappLabel: "WhatsApp",
         emailLabel: "Email",
-        directHeading: "Or book directly",
-        directDescription: "Pick a date, a party size, pay in one step. Bookings confirm within 24 hours."
+        scheduledStep: "Option 1",
+        scheduledHeading: "Join a scheduled walk",
+        scheduledDescription: "Pick one of the next available dates, choose your party size and pay in one step. Ten people maximum, and bookings confirm within 24 hours.",
+        privateStep: "Option 2",
+        privateHeading: "Book a private tour",
+        privateDescription: "Your group only, on the date and at the time that suit you — same route, same research, at your own pace.",
+        privateCta: "Book your private tour",
+        privateWhatsapp: "Or ask me a question on WhatsApp",
+        privatePoint1: "Your group only — nobody else joins",
+        privatePoint2: "Any date, any start time",
+        privatePoint3: "In English or in French, at your pace",
       },
       faq: {
         kicker: "Questions",

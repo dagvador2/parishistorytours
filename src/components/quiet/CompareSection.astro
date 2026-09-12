@@ -1,55 +1,91 @@
 ---
+import { Picture } from 'astro:assets';
 import { useTranslations } from '../../i18n/utils';
 import { TOUR_PRICES } from '../../data/site';
 import { formatEUR } from '../../lib/price';
+import leftBankImg from '../../images/notre-dame-de-paris.webp';
+import rightBankImg from '../../images/place_vendome_paris_day.webp';
+import generalImg from '../../images/luxembourg_palace_paris.webp';
+import foodWineImg from '../../images/food_wine_degustation.webp';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
 const langPrefix = lang === 'en' ? '' : '/fr';
 
-const priceFor = (slug: string) => `${t('quiet.common.from')} ${formatEUR(lang, TOUR_PRICES[slug])}`;
-
+// All four tours from the grid above appear here — a three-column comparison
+// under a four-card grid reads as a contradiction, not as a shortlist.
 const tours = [
   {
-    title: t('quiet.home.tours.leftBankTitle'),
+    slug: 'left-bank',
+    img: leftBankImg,
+    alt: t('quiet.home.hero.mediaMainAlt') as string,
+    numeral: t('quiet.home.tours.leftBankNumeral') as string,
+    title: t('quiet.home.tours.leftBankTitle') as string,
     href: `${langPrefix}/tours/left-bank/`,
-    price: priceFor('left-bank'),
-    focus: t('quiet.home.compare.leftBankFocus'),
-    route: t('quiet.home.compare.leftBankRoute'),
-    duration: t('quiet.home.compare.leftBankDuration'),
-    stops: t('quiet.home.compare.leftBankStops'),
-    bestFor: t('quiet.home.compare.leftBankBestFor'),
+    focus: t('quiet.home.compare.leftBankFocus') as string,
+    route: t('quiet.home.compare.leftBankRoute') as string,
+    duration: t('quiet.home.compare.leftBankDuration') as string,
+    stops: t('quiet.home.compare.leftBankStops') as string,
+    bestFor: t('quiet.home.compare.leftBankBestFor') as string,
   },
   {
-    title: t('quiet.home.tours.rightBankTitle'),
+    slug: 'right-bank',
+    img: rightBankImg,
+    alt: t('quiet.home.hero.mediaSideBAlt') as string,
+    numeral: t('quiet.home.tours.rightBankNumeral') as string,
+    title: t('quiet.home.tours.rightBankTitle') as string,
     href: `${langPrefix}/tours/right-bank/`,
-    price: priceFor('right-bank'),
-    focus: t('quiet.home.compare.rightBankFocus'),
-    route: t('quiet.home.compare.rightBankRoute'),
-    duration: t('quiet.home.compare.rightBankDuration'),
-    stops: t('quiet.home.compare.rightBankStops'),
-    bestFor: t('quiet.home.compare.rightBankBestFor'),
+    focus: t('quiet.home.compare.rightBankFocus') as string,
+    route: t('quiet.home.compare.rightBankRoute') as string,
+    duration: t('quiet.home.compare.rightBankDuration') as string,
+    stops: t('quiet.home.compare.rightBankStops') as string,
+    bestFor: t('quiet.home.compare.rightBankBestFor') as string,
   },
   {
-    title: t('quiet.home.tours.generalTitle'),
+    slug: 'general-history',
+    img: generalImg,
+    alt: 'Palais du Luxembourg',
+    numeral: t('quiet.home.tours.generalNumeral') as string,
+    title: t('quiet.home.tours.generalTitle') as string,
     href: `${langPrefix}/tours/general-history/`,
-    price: priceFor('general-history'),
-    focus: t('quiet.home.compare.generalFocus'),
-    route: t('quiet.home.compare.generalRoute'),
-    duration: t('quiet.home.compare.generalDuration'),
-    stops: t('quiet.home.compare.generalStops'),
-    bestFor: t('quiet.home.compare.generalBestFor'),
+    focus: t('quiet.home.compare.generalFocus') as string,
+    route: t('quiet.home.compare.generalRoute') as string,
+    duration: t('quiet.home.compare.generalDuration') as string,
+    stops: t('quiet.home.compare.generalStops') as string,
+    bestFor: t('quiet.home.compare.generalBestFor') as string,
+  },
+  {
+    slug: 'food-wine',
+    img: foodWineImg,
+    alt: 'Nourritour — Food & Wine',
+    numeral: t('quiet.home.tours.foodWineNumeral') as string,
+    title: t('quiet.home.tours.foodWineTitle') as string,
+    href: `${langPrefix}/tours/food-wine/`,
+    focus: t('quiet.home.compare.foodWineFocus') as string,
+    route: t('quiet.home.compare.foodWineRoute') as string,
+    duration: t('quiet.home.compare.foodWineDuration') as string,
+    stops: t('quiet.home.compare.foodWineStops') as string,
+    bestFor: t('quiet.home.compare.foodWineBestFor') as string,
   },
 ];
 
-const axes: { key: keyof (typeof tours)[number]; label: string }[] = [
-  { key: 'price',    label: t('quiet.home.compare.axisPrice') },
-  { key: 'focus',    label: t('quiet.home.compare.axisFocus') },
-  { key: 'route',    label: t('quiet.home.compare.axisRoute') },
-  { key: 'duration', label: t('quiet.home.compare.axisDuration') },
-  { key: 'stops',    label: t('quiet.home.compare.axisStops') },
-  { key: 'bestFor',  label: t('quiet.home.compare.axisBestFor') },
+type AxisKey = 'focus' | 'duration' | 'route' | 'stops' | 'bestFor';
+
+// Ordered by how much each line actually decides the choice. `emphasis` gets
+// the value darker, larger type so the eye lands on the differences first.
+const axes: { key: AxisKey; label: string; emphasis?: boolean }[] = [
+  { key: 'focus',    label: t('quiet.home.compare.axisFocus') as string, emphasis: true },
+  { key: 'duration', label: t('quiet.home.compare.axisDuration') as string, emphasis: true },
+  { key: 'route',    label: t('quiet.home.compare.axisRoute') as string },
+  { key: 'stops',    label: t('quiet.home.compare.axisStops') as string },
+  { key: 'bestFor',  label: t('quiet.home.compare.axisBestFor') as string },
 ];
+
+const fromLabel = t('quiet.common.from') as string;
+const priceLabel = t('quiet.home.compare.axisPrice') as string;
+const viewCta = t('quiet.home.compare.viewCta') as string;
+const bookCta = t('quiet.home.compare.bookCta') as string;
+const price = (slug: string) => formatEUR(lang, TOUR_PRICES[slug]);
 ---
 
 <section id="compare" class="qcompare">
@@ -57,40 +93,115 @@ const axes: { key: keyof (typeof tours)[number]; label: string }[] = [
     <header class="qcompare__header">
       <p class="qcompare__kicker">{t('quiet.home.compare.kicker')}</p>
       <h2 class="qcompare__title">{t('quiet.home.compare.title')}</h2>
+      <p class="qcompare__lead">{t('quiet.home.compare.lead')}</p>
     </header>
 
-    <!-- Desktop: axis-per-row matrix -->
-    <div class="qcompare__table" role="table">
-      <div class="qcompare__row qcompare__row--head" role="row">
-        <div class="qcompare__cell qcompare__cell--axis" role="columnheader"></div>
-        {tours.map((tour) => (
-          <a href={tour.href} class="qcompare__cell qcompare__cell--title" role="columnheader">{tour.title}</a>
-        ))}
-      </div>
-
-      {axes.map((axis) => (
-        <div class="qcompare__row" role="row">
-          <div class="qcompare__cell qcompare__cell--axis" role="rowheader">{axis.label}</div>
-          {tours.map((tour) => (
-            <div class="qcompare__cell" role="cell">{tour[axis.key]}</div>
+    <!-- Wide screens: a real table, so every row stays aligned across columns -->
+    <div class="qcompare__tablewrap">
+      <table class="qcompare__table">
+        <colgroup>
+          <col class="qcompare__col-rail" />
+          {tours.map(() => <col class="qcompare__col-tour" />)}
+        </colgroup>
+        <thead>
+          <tr>
+            <td class="qcompare__rail qcompare__rail--head"></td>
+            {tours.map((tour) => (
+              <th scope="col" class="qcompare__head">
+                <a href={tour.href} class="qcompare__headlink">
+                  <span class="qcompare__thumb">
+                    <Picture
+                      src={tour.img}
+                      alt={tour.alt}
+                      width={520}
+                      height={Math.round((520 / tour.img.width) * tour.img.height)}
+                      widths={[260, 520]}
+                      sizes="(max-width: 900px) 84vw, 260px"
+                      formats={["avif", "webp"]}
+                      fallbackFormat="webp"
+                      quality={78}
+                      loading="lazy"
+                    />
+                    <span class="qcompare__numeral" aria-hidden="true">{tour.numeral}</span>
+                  </span>
+                  <span class="qcompare__name">{tour.title}</span>
+                </a>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="qcompare__rail">{priceLabel}</th>
+            {tours.map((tour) => (
+              <td class="qcompare__cell">
+                <span class="qcompare__price"><i>{fromLabel}</i><b>{price(tour.slug)}</b></span>
+              </td>
+            ))}
+          </tr>
+          {axes.map((axis) => (
+            <tr>
+              <th scope="row" class="qcompare__rail">{axis.label}</th>
+              {tours.map((tour) => (
+                <td class:list={['qcompare__cell', { 'is-emphasis': axis.emphasis }]}>{tour[axis.key]}</td>
+              ))}
+            </tr>
           ))}
-        </div>
-      ))}
+          <tr>
+            <td class="qcompare__rail qcompare__rail--foot"></td>
+            {tours.map((tour) => (
+              <td class="qcompare__cell qcompare__cell--actions">
+                <div class="qcompare__actions">
+                  <a href="#book" class="qcompare__book" data-select-tour={tour.slug} data-track="compare_book">{bookCta}</a>
+                  <a href={tour.href} class="qcompare__view">{viewCta} <span aria-hidden="true">→</span></a>
+                </div>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- Mobile: one swipable card per tour -->
-    <div class="qcompare__carousel" aria-hidden="false">
+    <!-- Small screens: one swipeable card per tour, each carrying its own labels -->
+    <div class="qcompare__cards">
       {tours.map((tour) => (
-        <article class="qcompare__tcard">
-          <a href={tour.href} class="qcompare__tcard-title">{tour.title}</a>
-          <dl class="qcompare__tcard-list">
+        <article class="qcompare__card">
+          <a href={tour.href} class="qcompare__headlink">
+            <span class="qcompare__thumb">
+              <Picture
+                src={tour.img}
+                alt=""
+                width={520}
+                height={Math.round((520 / tour.img.width) * tour.img.height)}
+                widths={[260, 520]}
+                sizes="84vw"
+                formats={["avif", "webp"]}
+                fallbackFormat="webp"
+                quality={78}
+                loading="lazy"
+              />
+              <span class="qcompare__numeral" aria-hidden="true">{tour.numeral}</span>
+            </span>
+            <span class="qcompare__name">{tour.title}</span>
+          </a>
+          <dl class="qcompare__list">
+            <div>
+              <dt>{priceLabel}</dt>
+              <dd><span class="qcompare__price"><i>{fromLabel}</i><b>{price(tour.slug)}</b></span></dd>
+            </div>
             {axes.map((axis) => (
               <div>
                 <dt>{axis.label}</dt>
-                <dd>{tour[axis.key]}</dd>
+                <dd class:list={[{ 'is-emphasis': axis.emphasis }]}>{tour[axis.key]}</dd>
               </div>
             ))}
           </dl>
+          <div class="qcompare__cell--actions">
+            <div class="qcompare__actions">
+              <a href="#book" class="qcompare__book" data-select-tour={tour.slug} data-track="compare_book">{bookCta}</a>
+              <a href={tour.href} class="qcompare__view">{viewCta} <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
         </article>
       ))}
     </div>
@@ -103,12 +214,12 @@ const axes: { key: keyof (typeof tours)[number]; label: string }[] = [
     padding: 96px 32px;
   }
   .qcompare__inner { max-width: 1280px; margin: 0 auto; }
-  .qcompare__header { margin-bottom: 56px; }
+  .qcompare__header { margin-bottom: 48px; max-width: 720px; }
   .qcompare__kicker {
     font-family: var(--font-sans);
     font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-2);
     margin: 0 0 16px;
@@ -116,121 +227,255 @@ const axes: { key: keyof (typeof tours)[number]; label: string }[] = [
   .qcompare__title {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: 48px;
+    font-size: clamp(34px, 4.2vw, 48px);
     letter-spacing: -0.01em;
     color: var(--ink);
-    margin: 0;
+    margin: 0 0 16px;
     line-height: 1.1;
   }
-
-  .qcompare__table {
-    display: grid;
-    gap: 0;
-  }
-  .qcompare__row {
-    display: grid;
-    grid-template-columns: 180px repeat(3, 1fr);
-    gap: 32px;
-    padding: 20px 0;
-    border-top: 1px solid var(--border);
-  }
-  .qcompare__row--head {
-    border-top: none;
-    padding-bottom: 20px;
-  }
-  .qcompare__row:last-child { border-bottom: 1px solid var(--border); }
-  .qcompare__cell {
+  .qcompare__lead {
     font-family: var(--font-sans);
-    font-size: 15px;
-    color: var(--ink);
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0;
   }
-  .qcompare__cell--axis {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
+
+  /* --- wide-screen table --- */
+  .qcompare__table {
+    table-layout: fixed;
+    border-collapse: separate;
+    /* Horizontal spacing separates the columns into distinct blocks; the
+       column background below then reads as a card per tour. The negative
+       margin cancels the spacing border-spacing also adds at both edges. */
+    border-spacing: 16px 0;
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+  }
+  /* Column tint is what replaces the old borderless rows: each tour is a
+     legible vertical block instead of six loose lines of text. */
+  .qcompare__col-tour { background: var(--paper-3); }
+  .qcompare__col-rail { width: 128px; }
+
+  .qcompare__rail {
+    text-align: left;
+    vertical-align: middle;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ink-2);
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    white-space: nowrap;
   }
-  .qcompare__cell--title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 20px;
+  .qcompare__rail--head,
+  .qcompare__rail--foot { border-top: none; padding: 0; }
+  .qcompare__rail--foot { border-top: 1px solid transparent; }
+
+  .qcompare__head {
+    text-align: left;
+    vertical-align: bottom;
+    font-weight: 400;
+    padding: 16px 16px 18px;
+  }
+  .qcompare__headlink {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-decoration: none;
     color: var(--ink);
+  }
+  .qcompare__thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .qcompare__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+  .qcompare__headlink:hover .qcompare__thumb :global(img) { transform: scale(1.04); }
+  .qcompare__numeral {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    background: var(--paper-3);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 50%;
+  }
+  .qcompare__name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .qcompare__headlink:hover .qcompare__name {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .qcompare__cell {
+    vertical-align: middle;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .qcompare__cell.is-emphasis {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .qcompare__price {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .qcompare__price i {
+    font-style: normal;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .qcompare__price b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .qcompare__cell--actions { padding-bottom: 20px; }
+  .qcompare__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .qcompare__book {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    background: var(--ink);
+    color: var(--paper-3);
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 120ms ease, border-color 120ms ease;
+  }
+  .qcompare__book:hover { background: var(--rouge); border-color: var(--rouge); }
+  .qcompare__view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
     text-decoration: none;
   }
-  .qcompare__cell--title:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .qcompare__view:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
-  /* Mobile swipable per-tour cards — hidden above 760px */
-  .qcompare__carousel { display: none; }
+  /* --- small-screen cards --- */
+  .qcompare__cards { display: none; }
 
-  @media (max-width: 900px) {
-    .qcompare { padding: 64px 0; }
-    .qcompare__header { padding: 0 20px; }
-    .qcompare__title { font-size: 36px; }
+  @media (max-width: 1100px) {
+    .qcompare__col-rail { width: 104px; }
+    .qcompare__table { border-spacing: 10px 0; margin: 0 -10px; width: calc(100% + 20px); }
+    .qcompare__cell, .qcompare__head { padding-left: 12px; padding-right: 12px; }
+    .qcompare__name { font-size: 18px; }
+    .qcompare__rail { font-size: 9px; letter-spacing: 0.12em; }
+    .qcompare__price b { font-size: 22px; }
   }
 
-  @media (max-width: 760px) {
-    .qcompare__table { display: none; }
-    .qcompare__carousel {
+  @media (max-width: 900px) {
+    .qcompare { padding: 72px 0; }
+    .qcompare__header { padding: 0 20px; margin-bottom: 32px; }
+    .qcompare__tablewrap { display: none; }
+    .qcompare__cards {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: 86%;
-      gap: 16px;
+      grid-auto-columns: 84%;
+      gap: 14px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding: 0 20px 16px;
+      padding: 0 20px 14px;
       scroll-padding: 0 20px;
     }
-    .qcompare__carousel::-webkit-scrollbar { display: none; }
-    .qcompare__tcard {
+    .qcompare__cards::-webkit-scrollbar { display: none; }
+    .qcompare__card {
       scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
       background: var(--paper-3);
       border: 1px solid var(--border);
-      padding: 28px 24px;
+      padding: 16px 16px 20px;
+    }
+    .qcompare__list {
+      margin: 16px 0 0;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      flex: 1;
     }
-    .qcompare__tcard-title {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: 24px;
-      color: var(--ink);
-      text-decoration: none;
-      line-height: 1.2;
-    }
-    .qcompare__tcard-list {
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .qcompare__tcard-list > div {
-      padding: 14px 0;
+    .qcompare__list > div {
+      padding: 12px 0;
       border-top: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
-    .qcompare__tcard-list > div:last-child { border-bottom: 1px solid var(--border); }
-    .qcompare__tcard-list dt {
+    .qcompare__list dt {
       font-family: var(--font-sans);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--ink-2);
+      margin-bottom: 4px;
     }
-    .qcompare__tcard-list dd {
+    .qcompare__list dd {
       margin: 0;
       font-family: var(--font-sans);
-      font-size: 15px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--ink-2);
+    }
+    .qcompare__list dd.is-emphasis {
+      font-size: 16px;
+      font-weight: 500;
       color: var(--ink);
-      line-height: 1.4;
+    }
+    .qcompare__cell--actions {
+      padding: 16px 0 0;
+      border-top: 1px solid var(--border);
     }
   }
 </style>
+
+<script>
+  // "Book" pre-selects that tour in the wizard further down the page, the same
+  // way the tour cards do; the #book anchor then scrolls to it.
+  document.querySelectorAll<HTMLElement>('#compare [data-select-tour]').forEach((el) => {
+    el.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('pht:select-tour', { detail: el.dataset.selectTour }));
+    });
+  });
+</script>

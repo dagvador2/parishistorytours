@@ -10,6 +10,9 @@ interface Props {
   onSelectSlot: (slot: SessionSlot) => void;
   onSeeCalendar: () => void;
   onSelectPrivate: () => void;
+  /** Suppressed where the page already carries a dedicated private-tour block,
+   *  so the same offer isn't made twice within one screen. */
+  hidePrivateLink?: boolean;
 }
 
 /**
@@ -18,7 +21,7 @@ interface Props {
  * before seeing something they can actually book. The full calendar and the
  * private path remain one click away below the list.
  */
-const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSelectPrivate }) => {
+const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSelectPrivate, hidePrivateLink = false }) => {
   const { booking, setBooking, t, lang } = useBooking();
   const [slots, setSlots] = useState<SessionSlot[]>([]);
   const [loading, setLoading] = useState(true);
@@ -184,16 +187,20 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
         >
           {tu.seeCalendar || "See the full calendar"}
         </button>
-        <span className="hidden sm:inline text-[var(--ink-2)]" aria-hidden="true">
-          ·
-        </span>
-        <button
-          type="button"
-          onClick={onSelectPrivate}
-          className="text-sm font-medium text-[var(--ink)] underline underline-offset-4 hover:text-[var(--rouge)] cursor-pointer"
-        >
-          {tu.privateCta || "Private tour — pick your own date & time"}
-        </button>
+        {!hidePrivateLink && (
+          <>
+            <span className="hidden sm:inline text-[var(--ink-2)]" aria-hidden="true">
+              ·
+            </span>
+            <button
+              type="button"
+              onClick={onSelectPrivate}
+              className="text-sm font-medium text-[var(--ink)] underline underline-offset-4 hover:text-[var(--rouge)] cursor-pointer"
+            >
+              {tu.privateCta || "Private tour — pick your own date & time"}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

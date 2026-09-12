@@ -42,7 +42,7 @@ export const fr = {
     subtitle: "Visites historiques immersives à pied dans Paris",
     welcome: {
       title: "Bienvenue",
-      intro: "Je suis <strong>Clément Daguet-Schott</strong>, passionné d'histoire et guide touristique indépendant à Paris depuis 2024.<br/>Après des mois de recherche intensive à travers plus de 20 ouvrages historiques, mémoires et sources primaires, j'ai créé trois visites à pied immersives qui font revivre l'histoire de Paris — de la Chute de la France et la Résistance à 2 000 ans d'histoire parisienne.",
+      intro: "Je suis <strong>Clément Daguet-Schott</strong>, passionné d'histoire et guide touristique indépendant à Paris depuis 2023.<br/>Après des mois de recherche intensive à travers plus de 20 ouvrages historiques, mémoires et sources primaires, j'ai créé trois visites à pied immersives qui font revivre l'histoire de Paris — de la Chute de la France et la Résistance à 2 000 ans d'histoire parisienne.",
       description: "Que vous soyez un voyageur curieux, un passionné d'histoire ou un éducateur, ces visites rendent l'histoire tangible. Avec une note de 4.9/5 sur plus de 50 avis Google et des visiteurs de plus de 50 pays, les visites allient recherche historique rigoureuse et narration captivante à travers les sites emblématiques de Paris."
     },
     gallery: {
@@ -501,7 +501,7 @@ export const fr = {
       title: "Rencontrez Clément, votre guide",
       bio1: "Clément Daguet-Schott est un passionné d'histoire et guide de visites à pied indépendant basé à Paris. Sa passion pour l'histoire l'a conduit à passer des mois de recherche intensive à travers plus de 20 ouvrages, incluant textes historiques, mémoires personnels et sources académiques, pour construire des visites à la fois historiquement rigoureuses et profondément captivantes.",
       bio2: "Chaque arrêt de la visite est choisi non seulement pour sa signification historique mais pour les histoires méconnues qui y sont liées — de la mission secrète de Rose Valland pour traquer les vols d'art nazis, au rôle d'Ernest Hemingway dans la Libération, en passant par les réseaux de résistance étudiants à la Sorbonne.",
-      bio3: "Depuis la création de Paris History Tours en 2024, Clément a guidé plus de 800 visiteurs de plus de 50 pays au fil de 130 visites et plus, maintenant une note de 4.9/5 sur Google Maps. Les visites sont disponibles en français et en anglais, en expérience privée ou en petits groupes jusqu'à 10 participants."
+      bio3: "Depuis la création de Paris History Tours en 2023, Clément a guidé plus de 800 visiteurs de plus de 50 pays au fil de 130 visites et plus, maintenant une note de 4.9/5 sur Google Maps. Les visites sont disponibles en français et en anglais, en expérience privée ou en petits groupes jusqu'à 10 participants."
     },
     building: {
       title: "Construire les Visites",
@@ -821,12 +821,9 @@ export const fr = {
       book: "Bonjour Clément ! Je souhaite réserver la visite {tour}. Pouvez-vous m'en dire plus sur vos disponibilités ?",
       booked: "Bonjour Clément ! Je viens de réserver une visite sur votre site et j'ai une question.",
     },
-    topBar: {
-      notice: "Visites en anglais & français · Groupes privés disponibles"
-    },
     nav: {
       brand: "Paris History Tours",
-      tagline: "Visites à pied · Depuis 2024",
+      tagline: "Visites à pied · Depuis 2023",
       tours: "Visites",
       route: "Parcours",
       compare: "Comparer",
@@ -1012,7 +1009,10 @@ export const fr = {
       },
       compare: {
         kicker: "Comparer",
-        title: "Un guide, trois parcours.",
+        title: "Un guide, quatre parcours.",
+        lead: "Même guide, mêmes recherches, quatre parcours très différents. Voici ce qui les distingue.",
+        viewCta: "Voir la visite",
+        bookCta: "Réserver",
         axisPrice: "Tarif",
         axisFocus: "Thème",
         axisRoute: "Parcours",
@@ -1033,7 +1033,12 @@ export const fr = {
         generalRoute: "Cluny → Cité → Tuileries",
         generalDuration: "1 h 30",
         generalStops: "3 arrêts · 2 km",
-        generalBestFor: "Familles · primo-visiteurs · hors WWII"
+        generalBestFor: "Familles · primo-visiteurs · hors WWII",
+        foodWineFocus: "Gastronomie & vin · 9e",
+        foodWineRoute: "Passages couverts → rue des Martyrs",
+        foodWineDuration: "3 heures",
+        foodWineStops: "4 artisans · ~1 km",
+        foodWineBestFor: "Gourmands · petits groupes · dégustation"
       },
       reviews: {
         kicker: "Avis",
@@ -1047,18 +1052,27 @@ export const fr = {
         p3: "Je guide en français et en anglais. Les recherches s'appuient toutes sur des sources primaires — archives, mémoires, presse d'époque — croisées avec l'historiographie récente.",
         credLabel: "Parcours",
         cred1: "Passionné d'histoire & conteur",
-        cred2: "Guide depuis 2024",
+        cred2: "Guide depuis 2023",
         cred3: "Sur TripAdvisor, GetYourGuide, Paris je t'aime"
       },
       booking: {
         kicker: "Réservation",
         title: "Comment réserver.",
-        description: "Réservez directement sur ce site pour la meilleure expérience — choisissez une date, payez en une étape, je confirme sous 24 heures. WhatsApp et email restent possibles si vous préférez échanger d'abord.",
+        description: "Deux façons de venir : rejoindre une visite programmée, ou réserver la visite en privé pour votre groupe, à la date et à l'heure de votre choix.",
         partnerLabel: "Aussi disponible sur",
         whatsappLabel: "WhatsApp",
         emailLabel: "Email",
-        directHeading: "Ou réservez directement",
-        directDescription: "Choisissez une date, un nombre de personnes, payez en une étape. Confirmation sous 24 heures."
+        scheduledStep: "Option 1",
+        scheduledHeading: "Rejoindre une visite programmée",
+        scheduledDescription: "Choisissez une des prochaines dates disponibles, indiquez le nombre de personnes et payez en une étape. Dix personnes maximum, confirmation sous 24 heures.",
+        privateStep: "Option 2",
+        privateHeading: "Réserver une visite privée",
+        privateDescription: "Votre groupe uniquement, à la date et à l'heure qui vous conviennent — même parcours, mêmes recherches, à votre rythme.",
+        privateCta: "Réserver votre visite privée",
+        privateWhatsapp: "Ou posez-moi une question sur WhatsApp",
+        privatePoint1: "Votre groupe seulement — personne d'autre",
+        privatePoint2: "N'importe quelle date, n'importe quelle heure",
+        privatePoint3: "En français ou en anglais, à votre rythme",
       },
       faq: {
         kicker: "Questions",

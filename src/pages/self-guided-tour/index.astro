@@ -7,7 +7,6 @@
 import { Picture } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import JsonLd from "../../components/JsonLd.astro";
-import TopBar from "../../components/quiet/TopBar.astro";
 import Nav from "../../components/quiet/Nav.astro";
 import Reviews from "../../components/quiet/Reviews.astro";
 import FAQ from "../../components/quiet/FAQ.astro";
@@ -91,7 +90,6 @@ const productJsonLd = {
 
 <BaseLayout title={t("meta.selfGuided.title")} description={t("meta.selfGuided.description")} theme="quiet">
   <JsonLd data={productJsonLd} />
-  <TopBar />
   <Nav context="tour" book="#buy" />
 
   <main class="sgp">

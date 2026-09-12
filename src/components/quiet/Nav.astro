@@ -36,6 +36,15 @@ const links = [
 
 const bookHref = book ?? (context === 'home' ? '#book' : `${homeRoot}#book`);
 const waHref = waLink(t('quiet.wa.generic') as string);
+
+// Language switcher — lives in the nav since the black top bar was removed.
+// Normalize to a trailing slash so the links match the canonical URLs and the
+// sitemap, otherwise Search Console sees two URLs per page.
+const pathname = Astro.url.pathname;
+const stripped = pathname.startsWith('/fr') ? (pathname.replace(/^\/fr/, '') || '/') : pathname;
+const basePath = stripped.endsWith('/') ? stripped : `${stripped}/`;
+const enUrl = basePath;
+const frUrl = `/fr${basePath}`;
 ---
 
 <nav class="quiet-nav" data-quiet-nav>
@@ -55,6 +64,11 @@ const waHref = waLink(t('quiet.wa.generic') as string);
     </div>
 
     <div class="quiet-nav__right">
+      <div class="quiet-nav__lang" role="group" aria-label="Language">
+        <a href={enUrl} class:list={["quiet-nav__lang-item", { 'is-active': lang === 'en' }]} hreflang="en">EN</a>
+        <span class="quiet-nav__lang-sep" aria-hidden="true">/</span>
+        <a href={frUrl} class:list={["quiet-nav__lang-item", { 'is-active': lang === 'fr' }]} hreflang="fr">FR</a>
+      </div>
       <a href={bookHref} class="quiet-nav__book" data-track="nav_book">{t('quiet.nav.bookTour')}</a>
       <button class="quiet-nav__burger" id="quietNavBurger" aria-label={t('quiet.nav.menuLabel')} aria-expanded="false" aria-controls="quietDrawer">
         <span></span><span></span><span></span>
@@ -85,6 +99,11 @@ const waHref = waLink(t('quiet.wa.generic') as string);
     </nav>
     <div class="quiet-drawer__foot">
       <a href={waHref} class="quiet-drawer__foot-item" rel="noopener">+33 6 20 62 24 80</a>
+      <div class="quiet-drawer__lang" role="group" aria-label="Language">
+        <a href={enUrl} class:list={["quiet-drawer__lang-item", { 'is-active': lang === 'en' }]} hreflang="en">EN</a>
+        <span aria-hidden="true">/</span>
+        <a href={frUrl} class:list={["quiet-drawer__lang-item", { 'is-active': lang === 'fr' }]} hreflang="fr">FR</a>
+      </div>
     </div>
   </aside>
 </div>
@@ -166,6 +185,28 @@ const waHref = waLink(t('quiet.wa.generic') as string);
     align-items: center;
     gap: 12px;
   }
+  .quiet-nav__lang {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+  }
+  .quiet-nav__lang-item {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 2px 1px;
+    transition: color 120ms ease;
+  }
+  .quiet-nav__lang-item:hover { color: var(--ink); }
+  .quiet-nav__lang-item.is-active {
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .quiet-nav__lang-sep { color: var(--border); }
+
   .quiet-nav__book {
     background: var(--ink);
     color: var(--paper-3);
@@ -213,6 +254,9 @@ const waHref = waLink(t('quiet.wa.generic') as string);
   @media (max-width: 760px) {
     .quiet-nav__inner { padding: 0 16px; }
     .quiet-nav__book { display: none; }
+    /* EN/FR lives in the drawer footer on mobile — keeping it in the bar too
+       would crowd the 375px header. */
+    .quiet-nav__lang { display: none; }
     .quiet-nav__burger { display: flex; }
   }
 
@@ -352,6 +396,21 @@ const waHref = waLink(t('quiet.wa.generic') as string);
     letter-spacing: 0.02em;
   }
   .quiet-drawer__foot-item:hover { color: var(--ink); }
+  .quiet-drawer__lang {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--border);
+    letter-spacing: 0.06em;
+  }
+  .quiet-drawer__lang-item {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .quiet-drawer__lang-item.is-active { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
   @media (min-width: 761px) {
     .quiet-drawer { display: none; }

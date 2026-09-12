@@ -7,9 +7,10 @@ interface Props {
   defaultTour?: 'left-bank' | 'right-bank';
   tourFilter?: string; // legacy prop alias
   hideChrome?: boolean;
+  hidePrivateLink?: boolean;
 }
 
-const { defaultTour, tourFilter, hideChrome = false } = Astro.props;
+const { defaultTour, tourFilter, hideChrome = false, hidePrivateLink = false } = Astro.props;
 const resolvedTour = defaultTour || tourFilter;
 
 const lang = Astro.locals.lang;
@@ -19,5 +20,5 @@ const bookingT = allTranslations[lang].booking;
 
 {/* Section Book your tour */}
 <div id="book-tour" class="mb-16">
-	<BookingWizard client:idle translations={bookingT} lang={lang} defaultTour={resolvedTour} hideChrome={hideChrome} />
+	<BookingWizard client:idle translations={bookingT} lang={lang} defaultTour={resolvedTour} hideChrome={hideChrome} hidePrivateLink={hidePrivateLink} />
 </div>
