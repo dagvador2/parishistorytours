@@ -6,7 +6,7 @@ author: "Clément Daguet-Schott"
 lang: fr
 translationKey: what-to-expect-ww2-tour
 tags: ["Visite guidée Paris", "Seconde Guerre mondiale Paris", "Tour WW2 Paris", "Libération de Paris", "Visite privée Paris"]
-image: "/photos/left_bank/Paris_ww2_group_photo_4.webp"
+image: "/photos/left_bank/Paris_WW2_group_notre_dame_parvis.webp"
 imageAlt: "Un petit groupe lors d'une visite guidée WWII à Paris avec le guide Clément Daguet-Schott"
 ---
 

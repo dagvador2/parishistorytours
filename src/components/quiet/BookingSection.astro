@@ -42,27 +42,8 @@ const bookingPartners = {
       <p class="qbook__desc">{t('quiet.home.booking.description')}</p>
     </header>
 
-    {/* Block 1 — the scheduled sessions, booked through the wizard */}
-    <div class="qbook__block">
-      <div class="qbook__block-head qbook__block-head--scheduled">
-        <span class="qbook__step">{t('quiet.home.booking.scheduledStep')}</span>
-        <h3 class="qbook__block-title">{t('quiet.home.booking.scheduledHeading')}</h3>
-        <p class="qbook__block-desc">{t('quiet.home.booking.scheduledDescription')}</p>
-      </div>
-      {/* Swapped in by the script below once the wizard is on its private path,
-          so the form never sits under a "scheduled walks" heading. */}
-      <div class="qbook__block-head qbook__block-head--private">
-        <span class="qbook__step">{t('quiet.home.booking.privateStep')}</span>
-        <h3 class="qbook__block-title">{t('quiet.home.booking.privateHeading')}</h3>
-        <p class="qbook__block-desc">{t('quiet.home.booking.privateDescription')}</p>
-      </div>
-      <div class="qbook__wizard">
-        <BookTour tourFilter={tourFilter} hideChrome={true} hidePrivateLink={true} />
-      </div>
-    </div>
-
-    {/* Block 2 — the private tour, given its own panel and its own big CTA
-        instead of hiding behind a text link under the date list. */}
+    {/* Block 1 — the private tour leads: it is the offer we push, so it gets
+        the first slot, its own panel and its own big CTA. */}
     <div class="qbook__block qbook__block--private">
       <div class="qbook__private">
         <div class="qbook__private-copy">
@@ -81,6 +62,25 @@ const bookingPartners = {
           </button>
           <a href={waHref} class="qbook__private-wa" rel="noopener">{t('quiet.home.booking.privateWhatsapp')}</a>
         </div>
+      </div>
+    </div>
+
+    {/* Block 2 — the scheduled sessions, booked through the wizard */}
+    <div class="qbook__block">
+      <div class="qbook__block-head qbook__block-head--scheduled">
+        <span class="qbook__step">{t('quiet.home.booking.scheduledStep')}</span>
+        <h3 class="qbook__block-title">{t('quiet.home.booking.scheduledHeading')}</h3>
+        <p class="qbook__block-desc">{t('quiet.home.booking.scheduledDescription')}</p>
+      </div>
+      {/* Swapped in by the script below once the wizard is on its private path,
+          so the form never sits under a "scheduled walks" heading. */}
+      <div class="qbook__block-head qbook__block-head--private">
+        <span class="qbook__step">{t('quiet.home.booking.privateStep')}</span>
+        <h3 class="qbook__block-title">{t('quiet.home.booking.privateHeading')}</h3>
+        <p class="qbook__block-desc">{t('quiet.home.booking.privateDescription')}</p>
+      </div>
+      <div class="qbook__wizard">
+        <BookTour tourFilter={tourFilter} hideChrome={true} hidePrivateLink={true} />
       </div>
     </div>
 
@@ -143,6 +143,7 @@ const bookingPartners = {
   .qbook[data-booking-mode="private"] .qbook__block-head--private { display: block; }
   /* The panel has done its job once the private form is open. */
   .qbook[data-booking-mode="private"] .qbook__block--private { display: none; }
+  .qbook[data-booking-mode="private"] .qbook__block--private + .qbook__block { margin-top: 0; }
   .qbook__step {
     display: inline-block;
     font-family: var(--font-sans);

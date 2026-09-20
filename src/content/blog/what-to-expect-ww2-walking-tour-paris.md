@@ -6,7 +6,7 @@ author: "Clement Daguet-Schott"
 lang: en
 translationKey: what-to-expect-ww2-tour
 tags: ["WWII Walking Tour Paris", "Paris History Tour", "World War II Paris", "Private Tour Paris", "Liberation of Paris"]
-image: "/photos/left_bank/Paris_ww2_group_photo_4.webp"
+image: "/photos/left_bank/Paris_WW2_group_notre_dame_parvis.webp"
 imageAlt: "A small group on a WWII walking tour in Paris with guide Clement Daguet-Schott"
 ---
 

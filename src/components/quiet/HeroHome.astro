@@ -2,9 +2,9 @@
 import { Picture } from 'astro:assets';
 import { useTranslations } from '../../i18n/utils';
 import { GOOGLE_REVIEWS, GOOGLE_MAPS_URL, TOUR_PRICES } from '../../data/site';
-import notreDame from '../../images/notre-dame-de-paris.webp';
-import bridge from '../../images/bridge_alexander_third_paris.webp';
-import vendome from '../../images/place_vendome_paris_day.webp';
+import heroGuide from '../../images/hero/hero-col-1-guide.webp';
+import heroLuxembourg from '../../images/hero/hero-col-2-luxembourg.webp';
+import heroGroup from '../../images/hero/hero-col-3-group.webp';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -12,6 +12,16 @@ const t = useTranslations(lang);
 // The primary CTA carries the entry price — "how much?" answered above the fold.
 const minPrice = Math.min(...Object.values(TOUR_PRICES).map(Number));
 const bookPriceLabel = (t('quiet.common.fromPriceShort') as string).replace('{price}', String(minPrice));
+
+// AVIF est retiré des <Picture> du hero : mesuré sur ces photos, il sort 40 à
+// 65 % plus lourd que le WebP à toutes les largeurs, et serait toujours choisi.
+// Trois colonnes : qui vous guide · le lieu · le groupe. Elles partent décalées
+// et dérivent à des vitesses différentes au défilement (voir la feuille de style).
+const columns = [
+  { src: heroGuide,      key: 'mediaGuide', modifier: 'a', eager: true },
+  { src: heroLuxembourg, key: 'mediaPlace', modifier: 'b', eager: false },
+  { src: heroGroup,      key: 'mediaGroup', modifier: 'c', eager: false },
+];
 
 const stats = [
   { value: t('quiet.home.hero.statToursValue'),     label: t('quiet.home.hero.statToursLabel') },
@@ -27,10 +37,7 @@ const stats = [
     <div class="qhero__tag">{t('quiet.home.hero.posterTag')}</div>
 
     <h1 class="qhero__headline">
-      {t('quiet.home.hero.headlinePart1')}
-      <span class="qhero__accent"> {t('quiet.home.hero.headlineAccent')} </span>
-      <span class="qhero__small">{t('quiet.home.hero.headlinePart2')}</span>
-      {t('quiet.home.hero.headlinePart3')}
+      {t('quiet.home.hero.headlineLead')}{' '}<em class="qhero__accent">{t('quiet.home.hero.headlineAccent')}</em>{t('quiet.home.hero.headlineTail')}
     </h1>
 
     <p class="qhero__lede">{t('quiet.home.hero.lede')}</p>
@@ -47,18 +54,12 @@ const stats = [
     </div>
 
     <div class="qhero__media">
-      <figure class="qhero__media-main">
-        <Picture src={notreDame} alt={t('quiet.home.hero.mediaMainAlt')} widths={[640, 960, 1280]} sizes="(max-width:900px) 100vw, 50vw" formats={["avif","webp"]} fallbackFormat="webp" quality={80} loading="eager" class="qhero__img" />
-        <figcaption><b>{t('quiet.home.hero.mediaMainLabel')}</b>{t('quiet.home.hero.mediaMainCaption')}</figcaption>
-      </figure>
-      <figure class="qhero__media-side">
-        <Picture src={bridge} alt={t('quiet.home.hero.mediaSideAAlt')} widths={[400, 640, 800]} sizes="(max-width:900px) 50vw, 25vw" formats={["avif","webp"]} fallbackFormat="webp" quality={80} loading="lazy" class="qhero__img" />
-        <figcaption><b>{t('quiet.home.hero.mediaSideALabel')}</b>{t('quiet.home.hero.mediaSideACaption')}</figcaption>
-      </figure>
-      <figure class="qhero__media-side">
-        <Picture src={vendome} alt={t('quiet.home.hero.mediaSideBAlt')} widths={[400, 640, 800]} sizes="(max-width:900px) 50vw, 25vw" formats={["avif","webp"]} fallbackFormat="webp" quality={80} loading="lazy" class="qhero__img" />
-        <figcaption><b>{t('quiet.home.hero.mediaSideBLabel')}</b>{t('quiet.home.hero.mediaSideBCaption')}</figcaption>
-      </figure>
+      {columns.map((col) => (
+        <figure class:list={['qhero__frame', `qhero__frame--${col.modifier}`]}>
+          <Picture src={col.src} alt={t(`quiet.home.hero.${col.key}Alt`)} widths={[360, 540, 720, 900]} sizes="(max-width:900px) 76vw, 33vw" formats={["webp"]} fallbackFormat="webp" quality={72} loading={col.eager ? 'eager' : 'lazy'} class="qhero__img" />
+          <figcaption><b>{t(`quiet.home.hero.${col.key}Label`)}</b>{t(`quiet.home.hero.${col.key}Caption`)}</figcaption>
+        </figure>
+      ))}
     </div>
 
     <div class="qhero__stats">
@@ -108,11 +109,11 @@ const stats = [
   .qhero__headline {
     font-family: var(--font-display);
     font-weight: 500;
-    font-size: clamp(48px, 7.2vw, 92px);
-    line-height: 0.98;
+    font-size: clamp(38px, 5.4vw, 68px);
+    line-height: 1.04;
     letter-spacing: -0.02em;
     color: var(--ink);
-    max-width: 16ch;
+    max-width: 24ch;
     margin: 0 auto;
   }
   .qhero__accent {
@@ -120,38 +121,15 @@ const stats = [
     font-style: italic;
     font-weight: 500;
   }
-  .qhero__small {
-    display: block;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-style: italic;
-    font-size: 0.5em;
-    color: var(--ink-2);
-    letter-spacing: 0;
-    line-height: 1.3;
-    margin: 14px 0 4px;
-    max-width: 34ch;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   .qhero__lede {
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: 20px;
+    font-size: 19px;
     line-height: 1.6;
     color: var(--ink-2);
-    max-width: 62ch;
-    margin: 32px auto 28px;
-  }
-  .qhero__lede::first-letter {
-    font-family: var(--font-display);
-    font-weight: 500;
-    color: var(--ink);
-    font-size: 3.2em;
-    float: left;
-    line-height: 0.9;
-    padding: 6px 12px 0 0;
+    max-width: 58ch;
+    margin: 24px auto 26px;
   }
 
   .qhero__rating {
@@ -205,30 +183,47 @@ const stats = [
   .qhero__btn--ghost { background: transparent; color: var(--ink); }
   .qhero__btn--ghost:hover { background: var(--ink); color: var(--paper-3); }
 
+  /* Trois colonnes de largeur égale, volontairement désalignées. */
   .qhero__media {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    aspect-ratio: 16 / 9;
-    margin: 48px 0;
+    align-items: start;
+    margin: 48px 0 88px;
     text-align: left;
   }
-  .qhero__media-main {
-    grid-row: span 2;
-    margin: 0;
+  .qhero__frame {
     position: relative;
+    margin: 0;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     border: 1px solid var(--border);
     background: var(--paper-2);
   }
-  .qhero__media-side {
-    margin: 0;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: var(--paper-2);
+  /* Décalage de départ : le bloc ne se lit pas comme une rangée alignée. */
+  .qhero__frame--b { margin-top: 44px; }
+  .qhero__frame--c { margin-top: 18px; }
+
+  /* Au défilement, chaque colonne dérive à sa propre vitesse : celle du centre
+     avance, les deux autres reculent. Animation pilotée par le scroll, donc
+     aucun JavaScript et aucune saccade. Sans support, les colonnes restent
+     simplement décalées — la mise en page tient toute seule. */
+  @keyframes qheroDrift {
+    to { transform: translateY(var(--drift)); }
   }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .qhero__frame {
+        animation: qheroDrift linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 90vh;
+      }
+      .qhero__frame--a { --drift: 36px; }
+      .qhero__frame--b { --drift: -72px; }
+      .qhero__frame--c { --drift: 14px; }
+    }
+  }
+
   .qhero__img {
     width: 100%;
     height: 100%;
@@ -291,17 +286,29 @@ const stats = [
 
   @media (max-width: 900px) {
     .qhero { padding: 48px 20px 72px; }
+    /* Sous 900px les trois cadres deviennent un défilement tactile à accroche,
+       comme la liste des étapes sur les pages de visite. Ni décalage ni dérive :
+       sur une colonne étroite, ils ne feraient que désaligner la lecture. */
     .qhero__media {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
-      aspect-ratio: auto;
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 76%;
+      gap: 12px;
+      margin: 36px 0 48px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 8px;
     }
-    .qhero__media-main { grid-row: auto; grid-column: span 2; aspect-ratio: 4/3; }
-    .qhero__media-side { aspect-ratio: 1/1; }
+    .qhero__media::-webkit-scrollbar { display: none; }
+    .qhero__frame { scroll-snap-align: start; }
+    .qhero__frame--b,
+    .qhero__frame--c { margin-top: 0; }
+    .qhero__frame { animation: none; }
     .qhero__stats { grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .qhero__stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
     .qhero__stat:nth-child(n+3) { border-bottom: 0; }
     .qhero__lede { font-size: 17px; }
-    .qhero__lede::first-letter { font-size: 2.8em; }
   }
 </style>
