@@ -71,6 +71,22 @@ const prefix = isFr ? "/fr" : "";
         <div class="ag-monogram">P</div>
         <div class="ag-center__title">{copy.title}</div>
         <div>{copy.body}</div>
+        {state === "notOpen" && (
+          <div class="ag-start-now">
+            <button type="button" class="ag-btn-start" id="ag-start-now" data-token={token}
+              data-busy={isFr ? "Ouverture…" : "Opening…"}>
+              {isFr ? "Démarrer maintenant" : "Start now"}
+            </button>
+            <p class="ag-start-now__note">
+              {isFr
+                ? "Si vous préférez marcher aujourd’hui. Votre accès courra alors 7 jours à partir de maintenant."
+                : "If you would rather walk today. Your access then runs for 7 days from now."}
+            </p>
+            <p class="ag-start-now__error" id="ag-start-now-error" hidden>
+              {isFr ? "Impossible d’ouvrir la visite. Écrivez-moi et je m’en occupe." : "Could not open the tour. Write to me and I will sort it out."}
+            </p>
+          </div>
+        )}
         <div class="ag-center__actions">
           <a class="ag-btn-ghost" href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener">WhatsApp</a>
           <a class="ag-btn-ghost" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
@@ -88,3 +104,42 @@ const prefix = isFr ? "/fr" : "";
     </div>
   )}
 </SelfGuidedLayout>
+
+<script>
+  // "Start now": a buyer who booked for a later day and turns up early.
+  const btn = document.getElementById("ag-start-now") as HTMLButtonElement | null;
+  const err = document.getElementById("ag-start-now-error");
+  btn?.addEventListener("click", async () => {
+    const token = btn.dataset.token;
+    if (!token) return;
+    const label = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = btn.dataset.busy || "…";
+    if (err) err.hidden = true;
+    try {
+      const res = await fetch("/api/self-guided/start-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || "failed");
+      window.location.reload(); // the page now renders the tour itself
+    } catch {
+      if (err) err.hidden = false;
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+  });
+</script>
+
+<style>
+  .ag-start-now { margin: 24px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .ag-btn-start {
+    font: inherit; font-size: 16px; padding: 14px 28px; min-height: 52px; cursor: pointer;
+    border: 1px solid currentColor; border-radius: 2px; background: transparent; color: inherit;
+  }
+  .ag-btn-start[disabled] { opacity: .6; cursor: default; }
+  .ag-start-now__note { font-size: 13px; opacity: .75; margin: 0; max-width: 34ch; }
+  .ag-start-now__error { font-size: 13px; margin: 0; max-width: 34ch; }
+</style>

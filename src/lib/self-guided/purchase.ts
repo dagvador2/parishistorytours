@@ -254,6 +254,25 @@ export async function insertPurchase(p: NewPurchase): Promise<{ purchase: Digita
   return { purchase: data as DigitalPurchase, created: true };
 }
 
+/**
+ * Open the access right away, for a buyer who picked a later date and turns up
+ * early. The window is recomputed as if there had been no date at all, so they
+ * get their full `accessDays()` from the moment they start — never more, which
+ * is what buying months ahead would otherwise buy.
+ */
+export async function startAccessNow(p: DigitalPurchase, now: Date = new Date()): Promise<DigitalPurchase> {
+  if (p.id === "dev") return { ...p, access_starts_at: now.toISOString() };
+  const { startsAt, expiresAt } = accessWindow(null, now);
+  const { data, error } = await supabaseAdmin()
+    .from("digital_purchases")
+    .update({ access_starts_at: startsAt.toISOString(), access_expires_at: expiresAt.toISOString() })
+    .eq("id", p.id)
+    .select("*")
+    .single();
+  if (error) throw new Error(`digital_purchases start-now failed: ${error.message}`);
+  return data as DigitalPurchase;
+}
+
 export async function touchLastAccess(id: string): Promise<void> {
   if (id === "dev") return;
   await supabaseAdmin().from("digital_purchases").update({ last_accessed_at: new Date().toISOString() }).eq("id", id);
