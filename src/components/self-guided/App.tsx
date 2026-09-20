@@ -221,6 +221,21 @@ export default function App({ lang: urlLang }: Props) {
             <button type="button" className="ag-fab" aria-label="Recenter" onClick={() => setRecenterTick((n) => n + 1)}>
               <span className="ag-crosshair" />
             </button>
+            {/* The offline map only holds the Latin Quarter: getting there from
+                across Paris is a job for a real routing app. */}
+            <a
+              className="ag-fab ag-fab--directions"
+              href={`https://www.google.com/maps/dir/?api=1&destination=${stop.pos[0]},${stop.pos[1]}&travelmode=walking`}
+              target="_blank"
+              rel="noopener"
+              aria-label={t.openInMaps}
+              title={t.openInMaps}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21.4 11.1 12.9 2.6a1.3 1.3 0 0 0-1.8 0l-8.5 8.5a1.3 1.3 0 0 0 0 1.8l8.5 8.5a1.3 1.3 0 0 0 1.8 0l8.5-8.5a1.3 1.3 0 0 0 0-1.8Zm-7.6 3.3v-2.2h-3v2.7H9V11a1 1 0 0 1 1-1h3.8V7.8l3.1 3.3-3.1 3.3Z" fill="currentColor" />
+              </svg>
+              <span className="ag-fab__label">{t.directions}</span>
+            </a>
             {state.phase === "walking" && <NextStopCard lang={state.lang} stop={stop} gpsDenied={state.gpsDenied} distanceM={distanceM} arrowDeg={arrowDeg} />}
           </MapView>
 

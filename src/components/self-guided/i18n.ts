@@ -17,6 +17,7 @@ const T = {
     ctaTours: "Discover my in-person tours", restart: "Restart tour", language: "Language",
     pdf: "Download PDF map", support: "Contact Clément", location: "Location", on: "On", off: "Off",
     tapPin: "Tap a pin to start", min: "min",
+    directions: "Directions", openInMaps: "Walking directions to this stop, in Google Maps",
     // additions
     of: "of",
     lookAround: "No photo for this passage — look around you.",
@@ -60,6 +61,7 @@ const T = {
     ctaTours: "Découvrir mes visites guidées", restart: "Recommencer", language: "Langue",
     pdf: "Télécharger le plan PDF", support: "Contacter Clément", location: "Position", on: "Activée", off: "Désactivée",
     tapPin: "Touchez un repère", min: "min",
+    directions: "Itinéraire", openInMaps: "Itinéraire à pied vers cette étape, dans Google Maps",
     // additions
     of: "sur",
     lookAround: "Pas de photo pour ce passage — regardez autour de vous.",
