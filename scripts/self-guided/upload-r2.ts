@@ -6,7 +6,7 @@
  * Bucket layout (contract with the webapp):
  *   audio/left-bank-ww2/<lang>/<id>.mp3     manifest/left-bank-ww2/<lang>.json (+ .words.json)
  *   pdf/left-bank-ww2/<lang>/master.pdf     photos/left-bank-ww2/<name>.webp
- *   preview/left-bank-ww2/<lang>/intro-30s.mp3 | pdf-preview.pdf
+ *   preview/left-bank-ww2/<lang>/intro-30s.mp3 | itinerary.mp3 | pdf-preview.pdf
  *
  * `--only masters` is separate from all of the above: it copies the *sources*
  * the webapp never serves — voice masters, source PNGs, camera originals — so
@@ -74,6 +74,7 @@ function plan(langs: Lang[], only?: Group[]): Item[] {
     items.push({ group: "manifest", key: R2_KEYS.words(lang), file: wordsPath(lang) });
     items.push({ group: "pdf", key: R2_KEYS.pdf(lang), file: pdfMasterPath(lang) });
     items.push({ group: "preview", key: R2_KEYS.previewAudio(lang), file: resolve(PATHS.previewDir, lang, "intro-30s.mp3") });
+    items.push({ group: "preview", key: R2_KEYS.previewItinerary(lang), file: resolve(PATHS.previewDir, lang, "itinerary.mp3") });
     items.push({ group: "preview", key: R2_KEYS.previewPdf(lang), file: resolve(PATHS.previewDir, lang, "pdf-preview.pdf") });
   }
   for (const name of listPhotoNames()) {

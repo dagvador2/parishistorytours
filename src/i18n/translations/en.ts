@@ -1271,31 +1271,27 @@ export const en = {
     heroSubtitle: "The Second World War walk on the Left Bank, as a self-guided audio tour: my voice in your ears, a map that guides you, the archive photographs synchronised with the narration.",
     heroCta: "Get the self-guided tour",
     facts: { walk: "2 km · about 90 min", sections: "9 audio sections", access: "Yours for {days} days" },
-    honest: {
-      kicker: "Plan B, said plainly",
-      title: "Nothing beats walking with me.",
-      body: "The in-person tour is the real thing: questions, detours, the small human stories I only tell on foot. But if no date fits your trip, or you simply prefer to walk at your own pace, this version covers the whole historical arc, from the fall of Paris in 1940 to the Liberation of August 1944, at the exact places where it happened.",
-      link: "See the guided tour dates"
-    },
     includes: {
       kicker: "What you get",
       title: "The whole walk, in your pocket",
       items: [
-        { title: "9 narrated sections", body: "About 30 minutes of narration for 2 km: an introduction, four main stops and four short stops between them." },
-        { title: "A map that guides you", body: "Your position, the route, the next stop, its distance. The audio starts when you get there." },
-        { title: "Archive photographs, synchronised", body: "The photographs of the printed guide appear at the right moment of the narration, with their captions." },
-        { title: "Works without data", body: "Open it once on wifi and the whole tour is stored on your phone: audio, photos and map. No roaming needed on the walk." }
+        { title: "9 narrated sections", body: "About 30 minutes of narration over 2 km — four main stops, four short ones." },
+        { title: "A map that guides you", body: "Your position, the route, the next stop. The audio starts when you get there." },
+        { title: "Archive photographs", body: "The photographs of the printed guide appear as the story reaches them." },
+        { title: "Works without data", body: "Load it once on wifi: audio, photos and map stay on your phone." }
       ]
     },
     voice: {
       kicker: "Narrated in my own voice",
       title: "The same guide, the same research.",
       body: "I wrote the script from the same research as the guided tours, and the narration is my voice. Not a studio narrator, not a generic city audioguide: the same guide, at the same places, telling the same history.",
+      link: "See the guided tour dates",
       note: "The French narration is available today; the English narration is being recorded and will be added to every purchase at no cost."
     },
     preview: {
-      kicker: "Listen before buying",
-      title: "Thirty seconds of the introduction",
+      kicker: "Before you buy",
+      title: "Hear the walk before you take it",
+      body: "This is the moment of the introduction where I lay out the route: the four main stops, the short ones in between, and where it ends. The map draws itself as I name each place — the same map you hold on the day.",
       audioNote: "Preview in French — the English recording is in progress.",
       audioUnavailable: "Preview coming soon."
     },
@@ -1312,7 +1308,7 @@ export const en = {
       email: "Your email",
       emailHint: "The access link and the explanatory sheet are sent there.",
       language: "Narration language",
-      submit: "Pay {price} and get access",
+      submit: "Get my tour",
       submitting: "Redirecting to payment…",
       secure: "Secure payment by Stripe · Instant delivery by email",
       error: "The payment page could not be opened. Please try again or contact me on WhatsApp.",

@@ -1,0 +1,379 @@
+---
+/**
+ * The preview section of the product page: the passage of the narration where
+ * Clément walks through the itinerary, with the tour's own map drawing itself
+ * underneath — each place lighting up at the second he names it.
+ *
+ * Same material as the app: the basemap is the one the webapp animates, the
+ * geometry comes from `ROUTE`/`STOPS`, and the beat times are cut from the
+ * manifest by `make-previews.ts` (src/data/self-guided/route-preview.json), so
+ * a re-recorded intro moves the excerpt and the animation together.
+ *
+ * Before anyone presses play the map still reveals itself once, on its own
+ * clock, when it scrolls into view — a visitor who never clicks still sees the
+ * walk. Pressing play restarts it, in step with the voice.
+ */
+import { Picture } from "astro:assets";
+import { ROUTE, STOPS, type LatLng } from "../../data/self-guided/left-bank-ww2";
+import previews from "../../data/self-guided/route-preview.json";
+import basemap from "../../images/self-guided/route_map_base.webp";
+
+/**
+ * The page's basemap is not the app's: it is drawn in the neutral grey the rest
+ * of the site uses for its maps, by scripts/self-guided/tools/make-site-basemap.ts.
+ * Same frame, other paint — and its own attribution, which must be shown.
+ */
+const BASEMAP_CREDIT = "© Mapbox © OpenStreetMap";
+
+interface Props {
+  lang: "en" | "fr";
+  /**
+   * The signed preview: `lang` is the language actually recorded, and `synced`
+   * says whether it is the itinerary cut — the only one whose clock the map
+   * can follow. An older 30 s intro cut plays on its own; the map keeps to its
+   * own reveal rather than drawing to words that are not being said.
+   */
+  audio: { url: string; lang: "en" | "fr"; synced: boolean } | null;
+}
+const { lang, audio } = Astro.props;
+
+type Preview = (typeof previews)["fr"];
+// Beat times belong to the recording being played, not to the page's language.
+const data: Preview = (previews as Partial<Record<string, Preview>>)[audio?.lang ?? lang] ?? previews.fr;
+
+/**
+ * Where each place's name sits next to its dot, and how it reads.
+ * `side` moves a label off the drawn line; a "\n" breaks a long name over two
+ * lines, where the map has no room for it on one.
+ */
+interface LabelDef { en: string; fr: string; side?: "left" | "above" }
+const LABELS: Record<string, LabelDef> = {
+  "02-context-of-war": { en: "60 Bd Saint-Michel", fr: "60 bd Saint-Michel" },
+  // Left of its dot, where the drawn line does not cross it — and on two lines,
+  // because that side of the map is only some fifteen characters wide.
+  "03-fall-of-paris": { en: "Palais du\nLuxembourg", fr: "Palais du\nLuxembourg", side: "left" },
+  "04-odeon": { en: "Théâtre de l’Odéon", fr: "Théâtre de l’Odéon" },
+  "05-resistance": { en: "Rue Monsieur-le-Prince", fr: "Rue Monsieur-le-Prince" },
+  "06-sorbonne-facade": { en: "Sorbonne", fr: "Sorbonne", side: "above" },
+  "07-observatory": { en: "Observatory", fr: "Observatoire", side: "above" },
+  "08-saint-severin": { en: "Saint-Séverin", fr: "Saint-Séverin" },
+  // Left of its dot: the top-right corner has no room for it, and the line
+  // arrives from below, so nothing is crossed.
+  "09-liberation": { en: "Notre-Dame", fr: "Notre-Dame", side: "left" },
+};
+/** Offset and anchor of a label, by side. */
+const PLACE = {
+  right: { dx: 26, dy: 11, anchor: "start" },
+  left: { dx: -22, dy: 11, anchor: "end" },
+  above: { dx: 0, dy: -24, anchor: "middle" },
+} as const;
+
+const W = data.w;
+const H = data.h;
+const { x0, x1, y0, y1 } = data.proj;
+const mercX = (lon: number) => (lon + 180) / 360;
+const mercY = (lat: number) => (1 - Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) / 2;
+const px = ([lat, lon]: LatLng): [number, number] => [
+  ((mercX(lon) - x0) / (x1 - x0)) * W,
+  ((mercY(lat) - y0) / (y1 - y0)) * H,
+];
+
+const pts = ROUTE.map(px);
+const d = pts.map((p, i) => (i ? "L" : "M") + p.map((v) => v.toFixed(1)).join(" ")).join(" ");
+// Cumulative length along the drawn polyline, so a stop can be expressed as a
+// fraction of the path and the line dashed up to it.
+const cum = [0];
+for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+const total = cum[cum.length - 1];
+
+/** Index in ROUTE of the point nearest a stop, never going backwards. */
+let cursor = 0;
+const nearest = (pos: LatLng) => {
+  const [tx, ty] = px(pos);
+  let best = cursor;
+  let bestD = Infinity;
+  for (let i = cursor; i < pts.length; i++) {
+    const dd = (pts[i][0] - tx) ** 2 + (pts[i][1] - ty) ** 2;
+    if (dd < bestD) { bestD = dd; best = i; }
+  }
+  cursor = best;
+  return best;
+};
+
+/**
+ * The line leaves a place shortly after it has lit up and arrives at the next
+ * one exactly as it is named — so it is walking the whole time he is talking,
+ * rather than sitting still and then darting across at the last second.
+ */
+const LINGER = 0.35;
+/** Longest run-up, for the first leg, which has no place before it. */
+const TRAVEL = 1.1;
+let from = 0;
+const points = data.beats.map((beat, i) => {
+  const stop = STOPS.find((s) => s.sectionId === beat.stop)!;
+  const [x, y] = px(stop.pos);
+  const to = cum[nearest(stop.pos)] / total;
+  const prev = data.beats[i - 1];
+  const travel = prev ? Math.min(prev.at + LINGER, beat.at - 0.2) : Math.max(0, beat.at - TRAVEL);
+  const def = LABELS[beat.stop];
+  const place = PLACE[def?.side ?? "right"];
+  const lines = (def?.[lang] ?? stop.name[lang]).split("\n");
+  const p = { ...beat, x, y, main: stop.kind !== "inter", badge: stop.badge, lines, place, from, to, travel };
+  from = to;
+  return p;
+});
+const timeline = points.map((p) => ({ at: p.at, travel: p.travel, from: p.from, to: p.to }));
+
+const mmss = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+
+const alt = lang === "fr"
+  ? "Carte du parcours : les quatre arrêts principaux et les quatre courts arrêts, du boulevard Saint-Michel à Notre-Dame."
+  : "Map of the walk: the four main stops and the four short stops, from Boulevard Saint-Michel to Notre-Dame.";
+---
+
+<figure class="sgp-map" id="sgp-map">
+  <div class="sgp-map__frame">
+    <Picture
+      src={basemap}
+      alt={alt}
+      widths={[640, 960, 1200]}
+      sizes="(max-width: 900px) 100vw, 1000px"
+      formats={["avif", "webp"]}
+      fallbackFormat="webp"
+      quality={78}
+      loading="lazy"
+      class="sgp-map__img"
+    />
+    <svg class="sgp-map__svg" viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+      {/* The dotted ghost carries its own dash pattern, so it cannot also be
+          dashed into view: it is revealed through a mask that is. */}
+      <defs>
+        <mask id="sgp-ghost-reveal" maskUnits="userSpaceOnUse">
+          <path class="sgp-map__ghostmask" d={d} pathLength="1000" />
+        </mask>
+      </defs>
+      <path class="sgp-map__ghost" d={d} mask="url(#sgp-ghost-reveal)" />
+      <path class="sgp-map__halo" d={d} pathLength="1000" />
+      <path class="sgp-map__line" d={d} pathLength="1000" />
+      {points.map((p) => (
+        <g class:list={["sgp-map__pt", p.main ? "is-main" : "is-inter"]}>
+          <g class="sgp-map__pin" style={`transform-origin:${p.x.toFixed(1)}px ${p.y.toFixed(1)}px`}>
+            <circle class="sgp-map__dot" cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={p.main ? 17 : 9} />
+            {p.main && <text class="sgp-map__badge" x={p.x.toFixed(1)} y={(p.y + 7).toFixed(1)}>{p.badge}</text>}
+          </g>
+          {/* Line spacing is in `em` so it follows the font a phone is given. */}
+          <text class="sgp-map__label" text-anchor={p.place.anchor} x={(p.x + p.place.dx).toFixed(1)}>
+            {p.lines.map((line, n) => (
+              <tspan
+                x={(p.x + p.place.dx).toFixed(1)}
+                y={n === 0 ? (p.y + p.place.dy - (p.lines.length - 1) * 14).toFixed(1) : undefined}
+                dy={n === 0 ? undefined : "1.15em"}
+              >{line}</tspan>
+            ))}
+          </text>
+        </g>
+      ))}
+      <text class="sgp-map__credit" x={W - 16} y={H - 14}>{BASEMAP_CREDIT}</text>
+    </svg>
+  </div>
+
+  {audio && (
+    <div class="sgp-player" id="sgp-player">
+      <button type="button" class="sgp-player__btn" id="sgp-play" aria-label={lang === "fr" ? "Écouter l’extrait" : "Play the preview"}>
+        <svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor" /></svg>
+      </button>
+      <div class="sgp-player__track" id="sgp-track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax={Math.round(data.durationSec)} aria-valuenow="0" tabindex="0">
+        <div class="sgp-player__fill" id="sgp-fill"></div>
+      </div>
+      <span class="sgp-player__time" id="sgp-time">0:00 / {mmss(data.durationSec)}</span>
+      <audio id="sgp-audio" preload="none" src={audio.url} data-synced={audio.synced ? "yes" : "no"}></audio>
+    </div>
+  )}
+
+  <figcaption class="sgp-map__cap">
+    {lang === "fr"
+      ? "Chaque lieu s’allume au moment où je le nomme — exactement comme sur votre téléphone pendant la balade."
+      : "Each place lights up as I name it — exactly as it does on your phone during the walk."}
+  </figcaption>
+
+  <script is:inline type="application/json" id="sgp-map-data" set:html={JSON.stringify(timeline)}></script>
+</figure>
+
+<script>
+  import { track } from "../../scripts/track";
+
+  const root = document.getElementById("sgp-map");
+  const raw = document.getElementById("sgp-map-data")?.textContent;
+  if (root && raw) {
+    interface Beat { at: number; travel: number; from: number; to: number }
+    const beats: Beat[] = JSON.parse(raw);
+    const line = root.querySelector<SVGPathElement>(".sgp-map__line")!;
+    const halo = root.querySelector<SVGPathElement>(".sgp-map__halo")!;
+    const ghost = root.querySelector<SVGPathElement>(".sgp-map__ghostmask")!;
+    const pins = [...root.querySelectorAll<SVGGElement>(".sgp-map__pt")];
+    const LEN = 1000; // pathLength, so the dash maths is a plain fraction
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clamp = (x: number) => (x < 0 ? 0 : x > 1 ? 1 : x);
+    const ease = (x: number) => { const c = clamp(x); return c * c * (3 - 2 * c); };
+
+    // The excerpt opens on the shape of the whole walk — "about two kilometres"
+    // — and the ghost traces it while he says so, before the first place is named.
+    const GHOST_END = Math.max(1.5, beats[0].at * 0.85);
+
+    const render = (t: number) => {
+      ghost.style.strokeDashoffset = String(LEN * (1 - ease(t / GHOST_END)));
+      let frac = 0;
+      for (const b of beats) {
+        if (t <= b.travel) break;
+        frac = b.from + (b.to - b.from) * ease((t - b.travel) / Math.max(0.2, b.at - b.travel));
+      }
+      const off = String(LEN * (1 - frac));
+      line.style.strokeDashoffset = off;
+      halo.style.strokeDashoffset = off;
+      pins.forEach((el, i) => el.classList.toggle("is-on", t >= beats[i].at));
+    };
+
+    const END = beats[beats.length - 1].at + 1.4;
+    render(0);
+
+    // The reveal the map runs by itself, once, the first time it is seen.
+    let raf = 0;
+    const REVEAL_MS = 5200;
+    let revealed = false;
+    const reveal = () => {
+      revealed = true;
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const p = clamp((now - t0) / REVEAL_MS);
+        render(p * END);
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    if (still) {
+      render(END); // no animation: show the finished walk
+    } else if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && !revealed) { reveal(); io.disconnect(); }
+        }
+      }, { threshold: 0.45 });
+      io.observe(root);
+    } else {
+      reveal();
+    }
+
+    // The preview player, and with it the map: the drawing runs on the audio
+    // clock, so it pauses when the audio pauses and follows a seek.
+    const audio = document.getElementById("sgp-audio") as HTMLAudioElement | null;
+    if (audio) {
+      const btn = document.getElementById("sgp-play") as HTMLButtonElement;
+      const bar = document.getElementById("sgp-track") as HTMLElement; // not "track": that name is the analytics helper
+      const fill = document.getElementById("sgp-fill") as HTMLElement;
+      const time = document.getElementById("sgp-time") as HTMLElement;
+      const PLAY = '<svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>';
+      const PAUSE = '<svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></svg>';
+      const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+      const total = mmss(Number(bar.getAttribute("aria-valuemax")));
+      let played = false;
+      let follow = 0;
+
+      const followAudio = () => {
+        render(audio.currentTime);
+        follow = requestAnimationFrame(followAudio);
+      };
+
+      btn.addEventListener("click", () => {
+        if (audio.paused) {
+          void audio.play();
+          if (!played) { played = true; track("self_guided_preview_play", {}); }
+        } else audio.pause();
+      });
+      const synced = audio.dataset.synced === "yes";
+      audio.addEventListener("play", () => {
+        btn.innerHTML = PAUSE;
+        btn.setAttribute("aria-pressed", "true");
+        if (!synced) return; // this cut is not the itinerary passage: leave the map alone
+        cancelAnimationFrame(raf);
+        revealed = true;
+        if (!still) { cancelAnimationFrame(follow); followAudio(); }
+      });
+      audio.addEventListener("pause", () => {
+        btn.innerHTML = PLAY;
+        btn.setAttribute("aria-pressed", "false");
+        cancelAnimationFrame(follow);
+      });
+      audio.addEventListener("timeupdate", () => {
+        const dur = audio.duration || beats[beats.length - 1].at;
+        fill.style.width = `${Math.min(100, (audio.currentTime / dur) * 100)}%`;
+        time.textContent = `${mmss(audio.currentTime)} / ${total}`;
+        bar.setAttribute("aria-valuenow", String(Math.round(audio.currentTime)));
+      });
+      audio.addEventListener("ended", () => {
+        fill.style.width = "0%";
+        time.textContent = `0:00 / ${total}`;
+        cancelAnimationFrame(follow);
+        if (synced) render(END); // the map stays on the whole walk
+      });
+      const seek = (clientX: number) => {
+        const r = bar.getBoundingClientRect();
+        const dur = audio.duration;
+        if (!dur || !isFinite(dur)) return;
+        audio.currentTime = Math.min(dur - 0.05, Math.max(0, ((clientX - r.left) / r.width) * dur));
+        if (synced && audio.paused) render(audio.currentTime);
+      };
+      bar.addEventListener("click", (e) => seek((e as MouseEvent).clientX));
+    }
+  }
+</script>
+
+<style>
+  .sgp-map { margin: 0; }
+  .sgp-map__frame { position: relative; border: 1px solid var(--border); background: var(--paper-2); overflow: hidden; }
+  .sgp-map__img { display: block; width: 100%; height: auto; }
+  .sgp-map__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* The walk before it is drawn: enough to read the shape of the route. */
+  .sgp-map__ghost { fill: none; stroke: #a1998e; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 3 12; opacity: .8; }
+  .sgp-map__ghostmask { fill: none; stroke: #fff; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+  .sgp-map__halo { fill: none; stroke: var(--paper-3); stroke-width: 16; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; opacity: .9; }
+  .sgp-map__line { fill: none; stroke: var(--rouge); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+
+  .sgp-map__pin { transform: scale(.15); opacity: 0; transition: transform .36s cubic-bezier(.34, 1.5, .64, 1), opacity .18s linear; }
+  .sgp-map__pt.is-on .sgp-map__pin { transform: scale(1); opacity: 1; }
+  .sgp-map__dot { fill: var(--rouge); stroke: var(--paper-3); stroke-width: 3; }
+  .is-inter .sgp-map__dot { fill: var(--paper-3); stroke: var(--ink); stroke-width: 3; }
+  .sgp-map__badge { fill: var(--paper-3); font-family: var(--font-display); font-size: 21px; font-weight: 700; text-anchor: middle; }
+
+  .sgp-map__label {
+    font-family: var(--font-sans); font-size: 30px; font-weight: 600; fill: var(--ink);
+    paint-order: stroke fill; stroke: var(--paper-3); stroke-width: 7px; stroke-linejoin: round;
+    opacity: 0; transition: opacity .3s ease .1s;
+  }
+  .is-inter .sgp-map__label { font-size: 25px; font-weight: 400; fill: var(--ink-2); }
+  .sgp-map__pt.is-on .sgp-map__label { opacity: 1; }
+  .sgp-map__credit { fill: #8c7a6b; font-family: var(--font-sans); font-size: 17px; text-anchor: end; paint-order: stroke fill; stroke: var(--paper-3); stroke-width: 4px; stroke-linejoin: round; }
+
+  /* The preview player: the browser's default controls do not belong in this page. */
+  .sgp-player { display: flex; align-items: center; gap: 20px; width: 100%; margin-top: 26px; }
+  .sgp-player__btn { flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--rouge); color: var(--paper-3); display: grid; place-items: center; cursor: pointer; transition: background .2s; }
+  .sgp-player__btn:hover { background: var(--rouge-dark); }
+  .sgp-player__icon { display: block; margin-left: 1px; }
+  .sgp-player__track { position: relative; flex: 1; height: 22px; cursor: pointer; display: flex; align-items: center; }
+  .sgp-player__track::before { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--border); }
+  .sgp-player__fill { position: absolute; left: 0; width: 0%; height: 2px; background: var(--ink); transition: width .1s linear; }
+  .sgp-player__time { font-family: var(--font-sans); font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; min-width: 76px; text-align: right; }
+
+  .sgp-map__cap { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; color: var(--ink-2); margin: 14px 0 0; max-width: 56ch; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sgp-map__pin, .sgp-map__label { transition: none; }
+  }
+  /* On a phone the map is barely 350 px wide: the main places have to carry it. */
+  @media (max-width: 720px) {
+    .sgp-map__label { font-size: 36px; stroke-width: 8px; }
+    .is-inter .sgp-map__label { display: none; }
+    .sgp-map__credit { font-size: 24px; }
+  }
+</style>

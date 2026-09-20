@@ -10,6 +10,7 @@ import JsonLd from "../../components/JsonLd.astro";
 import Nav from "../../components/quiet/Nav.astro";
 import Reviews from "../../components/quiet/Reviews.astro";
 import FAQ from "../../components/quiet/FAQ.astro";
+import SelfGuidedRoutePreview from "../../components/quiet/SelfGuidedRoutePreview.astro";
 import { useTranslations } from "../../i18n/utils";
 import { GOOGLE_REVIEWS } from "../../data/site";
 import { formatEUR } from "../../lib/price";
@@ -52,19 +53,41 @@ const days = accessDays();
 const parisToday = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 const maxDate = new Date(Date.now() + 365 * 86400_000).toISOString().slice(0, 10);
 
-// Audio preview on R2 (private): signed for 2 h; the page is CDN-cached for 1 h at most.
-// The printed guide is never previewed or handed out — it is what the app protects.
-let audioPreview: { url: string; lang: "en" | "fr" } | null = null;
+// Audio preview on R2 (private): signed for 2 h; the page is CDN-cached for 1 h
+// at most. The printed guide is never previewed or handed out — it is what the
+// app protects.
+//
+// What plays is the itinerary passage, the one the map animates on; `synced`
+// marks it, because the older 30 s intro cut — the fallback until every
+// language has an itinerary of its own — must not drive the map.
+let audioPreview: { url: string; lang: "en" | "fr"; synced: boolean } | null = null;
 try {
-  const wanted = `preview/${PRODUCT_SLUG}/${lang}/intro-30s.mp3`;
-  const other = `preview/${PRODUCT_SLUG}/${lang === "fr" ? "en" : "fr"}/intro-30s.mp3`;
-  if (await objectExists(wanted)) audioPreview = { url: await sign(wanted), lang };
-  else if (await objectExists(other)) audioPreview = { url: await sign(other), lang: lang === "fr" ? "en" : "fr" };
+  const other = lang === "fr" ? "en" : "fr";
+  const candidates: { key: string; lang: "en" | "fr"; synced: boolean }[] = [
+    { key: `preview/${PRODUCT_SLUG}/${lang}/itinerary.mp3`, lang, synced: true },
+    { key: `preview/${PRODUCT_SLUG}/${other}/itinerary.mp3`, lang: other, synced: true },
+    { key: `preview/${PRODUCT_SLUG}/${lang}/intro-30s.mp3`, lang, synced: false },
+    { key: `preview/${PRODUCT_SLUG}/${other}/intro-30s.mp3`, lang: other, synced: false },
+  ];
+  for (const c of candidates) {
+    if (await objectExists(c.key)) { audioPreview = { url: await sign(c.key), lang: c.lang, synced: c.synced }; break; }
+  }
 } catch (e) {
   console.warn("[self-guided] preview unavailable:", e instanceof Error ? e.message : e);
 }
 
 const includes = t("selfGuided.includes.items") as { title: string; body: string }[];
+/** One hairline drawing per item of the list above, same order. */
+const INCLUDE_ICONS = [
+  // headphones: the narration
+  `<path d="M9 26v-5a11 11 0 0 1 22 0v5"/><rect x="5" y="24" width="8" height="11" rx="4"/><rect x="27" y="24" width="8" height="11" rx="4"/>`,
+  // a pin standing on the walk: the map
+  `<path d="M20 34c5.5-7 8.5-11 8.5-14.5a8.5 8.5 0 0 0-17 0C11.5 23 14.5 27 20 34Z"/><circle cx="20" cy="19.5" r="3.2"/><path d="M6 30c2.4 1.6 4.9 2.5 7.4 2.6"/><path d="M34 30c-2.4 1.6-4.9 2.5-7.4 2.6"/>`,
+  // one photograph in front of another: the archive images
+  `<rect x="12" y="6" width="23" height="18" rx="2"/><path d="m12 20 5.5-5 3.8 3.4 4.7-4.4L35 22"/><circle cx="20" cy="12" r="2"/><path d="M31 34H9a4 4 0 0 1-4-4V11"/>`,
+  // a cloud struck through: it works with no network at all
+  `<path d="M13 29h13.5a6 6 0 0 0 .6-12A9 9 0 0 0 10.4 20 5.5 5.5 0 0 0 11 29h2Z"/><path d="m8 8 24 24"/>`,
+];
 const waHref = waLink(lang === "fr" ? "Bonjour Clément, j’ai une question sur la visite libre Rive Gauche." : "Hi Clément, I have a question about the self-guided Left Bank tour.");
 
 const productJsonLd = {
@@ -115,16 +138,6 @@ const productJsonLd = {
       </div>
     </section>
 
-    <!-- Honest positioning -->
-    <section class="sgp-section sgp-honest">
-      <div class="sgp-inner sgp-inner--narrow">
-        <p class="sgp-kicker">{sg("honest.kicker")}</p>
-        <h2 class="sgp-h2">{sg("honest.title")}</h2>
-        <p class="sgp-body">{sg("honest.body")}</p>
-        <a href={`${prefix}/tours/left-bank/#book`} class="sgp-link">{sg("honest.link")} →</a>
-      </div>
-    </section>
-
     <!-- What you get -->
     <section class="sgp-section sgp-section--paper2">
       <div class="sgp-inner">
@@ -133,7 +146,7 @@ const productJsonLd = {
         <ol class="sgp-grid">
           {includes.map((item, i) => (
             <li class="sgp-card">
-              <span class="sgp-card__n">{String(i + 1).padStart(2, "0")}</span>
+              <svg class="sgp-card__icon" viewBox="0 0 40 40" width="44" height="44" aria-hidden="true" set:html={INCLUDE_ICONS[i]} />
               <h3 class="sgp-card__title">{item.title}</h3>
               <p class="sgp-card__body">{item.body}</p>
             </li>
@@ -152,39 +165,28 @@ const productJsonLd = {
           <p class="sgp-kicker">{sg("voice.kicker")}</p>
           <h2 class="sgp-h2">{sg("voice.title")}</h2>
           <p class="sgp-body">{sg("voice.body")}</p>
+          <a href={`${prefix}/tours/left-bank/#book`} class="sgp-link">{sg("voice.link")} →</a>
           <p class="sgp-note">{sg("voice.note")}</p>
         </div>
       </div>
     </section>
 
-    <!-- Previews -->
+    <!-- The walk, before you take it: the itinerary passage over the tour's own map -->
     <section class="sgp-section sgp-section--paper2">
-      <div class="sgp-inner sgp-inner--narrow">
+      <div class="sgp-inner">
         <p class="sgp-kicker">{sg("preview.kicker")}</p>
         <h2 class="sgp-h2">{sg("preview.title")}</h2>
-        {audioPreview ? (
-          <>
-            <div class="sgp-player" id="sgp-player">
-              <button type="button" class="sgp-player__btn" id="sgp-play" aria-label={lang === "fr" ? "Écouter l’extrait" : "Play the preview"}>
-                <svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor" /></svg>
-              </button>
-              <div class="sgp-player__track" id="sgp-track" role="slider" aria-label="Position" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" tabindex="0">
-                <div class="sgp-player__fill" id="sgp-fill"></div>
-              </div>
-              <span class="sgp-player__time" id="sgp-time">0:00</span>
-              <audio id="sgp-audio" preload="none" src={audioPreview.url}></audio>
-            </div>
-            {audioPreview.lang !== lang && <p class="sgp-note">{sg("preview.audioNote")}</p>}
-          </>
-        ) : (
-          <p class="sgp-note">{sg("preview.audioUnavailable")}</p>
-        )}
+        <p class="sgp-body sgp-preview__lede">{sg("preview.body")}</p>
+        <SelfGuidedRoutePreview lang={lang} audio={audioPreview} />
+        {audioPreview
+          ? audioPreview.lang !== lang && <p class="sgp-note">{sg("preview.audioNote")}</p>
+          : <p class="sgp-note">{sg("preview.audioUnavailable")}</p>}
       </div>
     </section>
 
     <!-- Buy -->
     <section id="buy" class="sgp-section sgp-buy">
-      <div class="sgp-inner sgp-inner--narrow">
+      <div class="sgp-inner sgp-buy__inner">
         {onSale ? (
           <>
           <p class="sgp-kicker">{sg("buy.kicker")}</p>
@@ -224,8 +226,8 @@ const productJsonLd = {
             ) : (
               <input type="hidden" name="language" value={ON_SALE_LANGS[0]} />
             )}
-            <button type="submit" class="sgp-btn sgp-btn--primary sgp-btn--wide" data-label={sg("buy.submit").replace("{price}", priceLabel)} data-busy={sg("buy.submitting")}>
-              {sg("buy.submit").replace("{price}", priceLabel)}
+            <button type="submit" class="sgp-btn sgp-btn--primary sgp-btn--wide" data-label={sg("buy.submit")} data-busy={sg("buy.submitting")}>
+              {sg("buy.submit")}
             </button>
             <p class="sgp-form__error" id="sgp-error" hidden>{sg("buy.error")} <a href={waHref} rel="noopener">WhatsApp</a></p>
             <p class="sgp-form__secure">{sg("buy.secure")}</p>
@@ -253,41 +255,6 @@ const productJsonLd = {
 
 <script>
   import { track } from "../../scripts/track";
-  // Preview player: the browser's default controls do not belong in this page.
-  const audio = document.getElementById("sgp-audio") as HTMLAudioElement | null;
-  if (audio) {
-    const btn = document.getElementById("sgp-play") as HTMLButtonElement;
-    const bar = document.getElementById("sgp-track") as HTMLElement; // not "track": that name is the analytics helper
-    const fill = document.getElementById("sgp-fill") as HTMLElement;
-    const time = document.getElementById("sgp-time") as HTMLElement;
-    const PLAY = '<svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z" fill="currentColor"/></svg>';
-    const PAUSE = '<svg class="sgp-player__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></svg>';
-    const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
-    let played = false;
-    btn.addEventListener("click", () => {
-      if (audio.paused) {
-        void audio.play();
-        if (!played) { played = true; track("self_guided_preview_play", {}); }
-      } else audio.pause();
-    });
-    audio.addEventListener("play", () => { btn.innerHTML = PAUSE; btn.setAttribute("aria-pressed", "true"); });
-    audio.addEventListener("pause", () => { btn.innerHTML = PLAY; btn.setAttribute("aria-pressed", "false"); });
-    audio.addEventListener("timeupdate", () => {
-      const d = audio.duration || 30;
-      const pct = Math.min(100, (audio.currentTime / d) * 100);
-      fill.style.width = `${pct}%`;
-      time.textContent = mmss(audio.currentTime);
-      bar.setAttribute("aria-valuenow", String(Math.round(audio.currentTime)));
-    });
-    audio.addEventListener("ended", () => { fill.style.width = "0%"; time.textContent = "0:00"; });
-    const seek = (clientX: number) => {
-      const r = bar.getBoundingClientRect();
-      const d = audio.duration;
-      if (!d || !isFinite(d)) return;
-      audio.currentTime = Math.min(d - 0.05, Math.max(0, ((clientX - r.left) / r.width) * d));
-    };
-    bar.addEventListener("click", (e) => seek((e as MouseEvent).clientX));
-  }
 
   const form = document.getElementById("sgp-form") as HTMLFormElement | null;
   const err = document.getElementById("sgp-error");
@@ -318,7 +285,6 @@ const productJsonLd = {
 <style>
   .sgp { background: var(--paper); color: var(--ink); }
   .sgp-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  .sgp-inner--narrow { max-width: 720px; }
   .sgp-section { padding: 88px 0; }
   .sgp-section--paper2 { background: var(--paper-2); }
   .sgp-kicker { font-family: var(--font-sans); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--rouge); margin: 0 0 14px; }
@@ -349,34 +315,33 @@ const productJsonLd = {
   .sgp-hero .sgp-btn--primary { background: var(--paper-3); color: var(--ink); border-color: var(--paper-3); }
   .sgp-hero .sgp-btn--primary:hover { background: var(--rouge); color: var(--paper-3); border-color: var(--rouge); }
 
-  .sgp-grid { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-  .sgp-card { background: var(--paper-3); padding: 28px 24px; }
-  .sgp-card__n { font-family: var(--font-display); font-size: 13px; color: var(--rouge); letter-spacing: .1em; }
-  .sgp-card__title { font-family: var(--font-display); font-weight: 500; font-size: 20px; margin: 10px 0 8px; }
+  /* What you get: a drawing carries each item, so the text can stay short. */
+  .sgp-grid { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px 36px; }
+  .sgp-card { display: flex; flex-direction: column; }
+  .sgp-card__icon { display: block; margin: 0 0 18px; fill: none; stroke: var(--rouge); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .sgp-card__title { font-family: var(--font-display); font-weight: 500; font-size: 21px; line-height: 1.2; margin: 0 0 10px; min-height: 2.4em; }
   .sgp-card__body { font-family: var(--font-sans); font-size: 15px; line-height: 1.6; color: var(--ink-2); margin: 0; }
+  .sgp-preview__lede { margin-bottom: 34px; }
 
   .sgp-voice { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: center; }
   .sgp-voice__img { width: 100%; height: auto; display: block; }
-  @media (max-width: 900px) { .sgp-voice { grid-template-columns: 1fr; gap: 28px; } .sgp-voice__photo { max-width: 420px; } }
+  /* Stacked, the photo takes the width of the text under it: capped and left
+     hanging, it read as a picture pushed into a corner. */
+  @media (max-width: 900px) { .sgp-voice { grid-template-columns: 1fr; gap: 28px; } }
 
-  .sgp-player { display: flex; align-items: center; gap: 16px; max-width: 460px; margin-top: 20px; }
-  .sgp-player__btn { flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--rouge); color: var(--paper-3); display: grid; place-items: center; cursor: pointer; transition: background .2s; }
-  .sgp-player__btn:hover { background: var(--rouge-dark); }
-  .sgp-player__icon { display: block; margin-left: 1px; }
-  .sgp-player__track { position: relative; flex: 1; height: 22px; cursor: pointer; display: flex; align-items: center; }
-  .sgp-player__track::before { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--border); }
-  .sgp-player__fill { position: absolute; left: 0; width: 0%; height: 2px; background: var(--ink); transition: width .1s linear; }
-  .sgp-player__time { font-family: var(--font-sans); font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; min-width: 34px; }
-
+  /* The buy box is one column, centred on itself: price, then form, then the
+     reassurance under it — nothing hanging off to one side. */
   .sgp-buy { background: var(--paper-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .sgp-price { margin: 8px 0 28px; }
-  .sgp-price__row { display: flex; align-items: baseline; gap: 14px; }
+  .sgp-buy__inner { max-width: 560px; }
+  .sgp-buy .sgp-kicker, .sgp-buy .sgp-h2 { text-align: center; }
+  .sgp-price { margin: 8px 0 28px; text-align: center; }
+  .sgp-price__row { display: flex; align-items: baseline; gap: 14px; justify-content: center; }
   .sgp-price__was { font-family: var(--font-display); font-size: 26px; color: var(--ink-2); text-decoration: line-through; text-decoration-thickness: 1px; }
   .sgp-price__amount { font-family: var(--font-display); font-weight: 500; font-size: 52px; line-height: 1; }
   .sgp-badge { display: inline-block; background: var(--rouge); color: var(--paper-3); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 6px 10px; border-radius: 2px; margin: 12px 0 0; }
   .sgp-price__per { font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); margin-top: 8px; }
-  .sgp-access { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 16px 0 0; max-width: 52ch; border-left: 2px solid var(--border); padding-left: 14px; }
-  .sgp-form { display: flex; flex-direction: column; gap: 18px; max-width: 480px; }
+  .sgp-access { font-family: var(--font-sans); font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 16px auto 0; max-width: 480px; border-left: 2px solid var(--border); padding-left: 14px; text-align: left; }
+  .sgp-form { display: flex; flex-direction: column; gap: 18px; max-width: 480px; margin: 0 auto; }
   .sgp-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-sans); font-size: 14px; color: var(--ink); border: 0; padding: 0; margin: 0; }
   .sgp-field input[type=email], .sgp-field input[type=date] { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--ink); border-radius: 2px; background: var(--paper-3); color: var(--ink); }
   .sgp-field input[type=date] { appearance: none; min-height: 48px; }
@@ -386,9 +351,9 @@ const productJsonLd = {
   .sgp-field--lang label { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; }
   .sgp-form__error { font-family: var(--font-sans); font-size: 14px; color: var(--rouge); margin: 0; }
   .sgp-form__error a { color: var(--rouge); }
-  .sgp-form__secure { font-family: var(--font-sans); font-size: 12px; color: var(--ink-2); margin: 0; }
+  .sgp-form__secure { font-family: var(--font-sans); font-size: 12px; color: var(--ink-2); margin: 0; text-align: center; }
   /* Buy box of a language whose narration is not recorded yet. */
-  .sgp-coming__body { max-width: 52ch; }
-  .sgp-coming__actions { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin-top: 24px; }
+  .sgp-coming__body { max-width: 52ch; margin: 0 auto; border-left: 0; padding-left: 0; text-align: center; }
+  .sgp-coming__actions { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 28px auto 0; }
   @media (max-width: 640px) { .sgp-section { padding: 64px 0; } .sgp-hero__content { padding-bottom: 40px; } }
 </style>

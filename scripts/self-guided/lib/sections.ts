@@ -74,6 +74,8 @@ export const R2_KEYS = {
   /** the MP4 of a cue that is a clip; its `photo` key is the poster */
   clip: (name: string) => `photos/${PRODUCT}/${name}.mp4`,
   previewAudio: (lang: Lang) => `preview/${PRODUCT}/${lang}/intro-30s.mp3`,
+  /** the itinerary passage of the intro, the one the product page animates its map on */
+  previewItinerary: (lang: Lang) => `preview/${PRODUCT}/${lang}/itinerary.mp3`,
   previewPdf: (lang: Lang) => `preview/${PRODUCT}/${lang}/pdf-preview.pdf`,
   /** off-site copy of a source file the webapp never serves (see `--only masters`) */
   master: (rel: string) => `masters/${PRODUCT}/${rel}`,

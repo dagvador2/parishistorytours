@@ -1,0 +1,48 @@
+{
+  "fr": {
+    "durationSec": 36.48,
+    "credit": "Fond de carte © OpenStreetMap contributors",
+    "w": 1200,
+    "h": 923,
+    "proj": {
+      "x0": 0.5064815907439898,
+      "x1": 0.5065322425893436,
+      "y0": 0.3440367200353932,
+      "y1": 0.34407568299335767
+    },
+    "beats": [
+      {
+        "stop": "02-context-of-war",
+        "at": 8.76
+      },
+      {
+        "stop": "03-fall-of-paris",
+        "at": 15.06
+      },
+      {
+        "stop": "04-odeon",
+        "at": 18.24
+      },
+      {
+        "stop": "05-resistance",
+        "at": 20.48
+      },
+      {
+        "stop": "06-sorbonne-facade",
+        "at": 25.38
+      },
+      {
+        "stop": "07-observatory",
+        "at": 26.08
+      },
+      {
+        "stop": "08-saint-severin",
+        "at": 26.78
+      },
+      {
+        "stop": "09-liberation",
+        "at": 27.94
+      }
+    ]
+  }
+}

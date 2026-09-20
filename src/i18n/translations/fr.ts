@@ -1271,31 +1271,27 @@ export const fr = {
     heroSubtitle: "La balade Seconde Guerre mondiale sur la Rive Gauche, en version audio autoguidée : ma voix dans vos écouteurs, une carte qui vous guide, les photographies d’archives synchronisées avec la narration.",
     heroCta: "Prendre la visite libre",
     facts: { walk: "2 km · environ 90 min", sections: "9 sections audio", access: "À vous pendant {days} jours" },
-    honest: {
-      kicker: "Un plan B, dit simplement",
-      title: "Rien ne vaut la balade avec moi.",
-      body: "La visite guidée, c’est le vrai tour : les questions, les détours, les petites histoires humaines que je ne raconte qu’à pied. Mais si aucune date ne colle avec votre séjour, ou si vous préférez marcher à votre rythme, cette version couvre tout l’arc historique, de la chute de Paris en 1940 à la Libération d’août 1944, aux endroits exacts où ça s’est passé.",
-      link: "Voir les dates des visites guidées"
-    },
     includes: {
       kicker: "Ce que vous obtenez",
       title: "Toute la balade, dans la poche",
       items: [
-        { title: "9 sections racontées", body: "Environ 30 minutes de narration pour 2 km : une introduction, quatre arrêts principaux et quatre courts arrêts entre eux." },
-        { title: "Une carte qui vous guide", body: "Votre position, le parcours, la prochaine étape, sa distance. L’audio démarre quand vous y êtes." },
-        { title: "Des photographies d’archives synchronisées", body: "Les photographies du guide imprimé apparaissent au bon moment de la narration, avec leurs légendes." },
-        { title: "Fonctionne sans données", body: "Ouvrez-la une fois en wifi et toute la visite est stockée sur votre téléphone : audio, photos et carte. Aucun forfait data nécessaire pendant la balade." }
+        { title: "9 sections racontées", body: "Environ 30 minutes de narration sur 2 km — quatre arrêts principaux, quatre courts." },
+        { title: "Une carte qui vous guide", body: "Votre position, le parcours, l’arrêt suivant. L’audio démarre quand vous y êtes." },
+        { title: "Des photographies d’archives", body: "Les photographies du guide imprimé apparaissent quand le récit les atteint." },
+        { title: "Fonctionne sans données", body: "Chargez-la une fois en wifi : audio, photos et carte restent sur votre téléphone." }
       ]
     },
     voice: {
       kicker: "Raconté de ma propre voix",
       title: "Le même guide, les mêmes recherches.",
       body: "J’ai écrit le script à partir des mêmes recherches que les visites guidées, et la narration est ma voix. Ni narrateur de studio, ni audioguide générique de la ville : le même guide, aux mêmes endroits, qui raconte la même histoire.",
+      link: "Voir les dates des visites guidées",
       note: "La narration française est disponible dès aujourd’hui ; la narration anglaise est en cours d’enregistrement et sera ajoutée à tous les achats sans frais."
     },
     preview: {
-      kicker: "Écoutez avant d’acheter",
-      title: "Trente secondes de l’introduction",
+      kicker: "Avant d’acheter",
+      title: "Écoutez le parcours avant de le marcher",
+      body: "C’est le moment de l’introduction où je détaille le trajet : les quatre arrêts principaux, les courts arrêts entre eux, et l’endroit où tout se termine. La carte se dessine à mesure que je nomme chaque lieu — la même que vous aurez en main le jour venu.",
       audioNote: "Extrait en français.",
       audioUnavailable: "Extrait bientôt disponible."
     },
@@ -1312,7 +1308,7 @@ export const fr = {
       email: "Votre email",
       emailHint: "Le lien d’accès et la fiche explicative y sont envoyés.",
       language: "Langue de la narration",
-      submit: "Payer {price} et accéder",
+      submit: "Obtenir ma visite",
       submitting: "Redirection vers le paiement…",
       secure: "Paiement sécurisé par Stripe · Envoi immédiat par email",
       error: "La page de paiement n’a pas pu s’ouvrir. Réessayez ou contactez-moi sur WhatsApp.",

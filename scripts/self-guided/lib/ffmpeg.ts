@@ -70,3 +70,18 @@ export async function excerptMp3(inputMp3: string, outMp3: string, seconds: numb
     outMp3,
   ]);
 }
+
+/** A window of an MP3, faded in and out so it neither clicks nor cuts a word dead. */
+export async function sliceMp3(inputMp3: string, outMp3: string, startSec: number, endSec: number, fadeInSec = 0.4, fadeOutSec = 1.6): Promise<void> {
+  const dur = endSec - startSec;
+  await execFileP("ffmpeg", [
+    "-hide_banner", "-nostats", "-y",
+    "-ss", startSec.toFixed(3),
+    "-i", inputMp3,
+    "-t", dur.toFixed(3),
+    "-af", `afade=t=in:st=0:d=${fadeInSec},afade=t=out:st=${(dur - fadeOutSec).toFixed(3)}:d=${fadeOutSec}`,
+    "-ar", "44100", "-ac", "1",
+    "-c:a", "libmp3lame", "-b:a", "128k",
+    outMp3,
+  ]);
+}
