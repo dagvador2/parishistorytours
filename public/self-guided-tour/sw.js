@@ -9,6 +9,11 @@
  *  ag-assets-v1 : R2 objects (MP3, photos, PDF) keyed by path, query string
  *                 (signature) ignored, plus the last /api/self-guided/assets answer
  *
+ * R2 objects are served cache-first and never revalidated, which is right for
+ * a walking tour on hotel wifi but wrong the moment the pipeline replaces a
+ * file at the same path. So the app sends the manifest's `generatedAt` with
+ * every precache request, and a new value empties the asset cache first.
+ *
  * Audio and PMTiles are requested with Range headers: cached full bodies are
  * sliced into 206 responses here (Safari refuses to play from a cache that
  * cannot answer ranges).
@@ -27,6 +32,25 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith("ag-") && k !== SHELL && k !== ASSETS).map((k) => caches.delete(k)))).then(() => self.clients.claim()),
   );
 });
+
+/** Sentinel entry holding the content version the asset cache was filled for. */
+const VERSION_KEY = "https://self-guided.local/__content-version";
+
+/**
+ * Empty the asset cache when the pipeline has regenerated the product. Without
+ * this, a re-trimmed MP3 or a recropped photo published at its usual path would
+ * never be picked up: the entry is already there and nothing revalidates it.
+ */
+async function ensureContentVersion(version) {
+  if (!version) return;
+  const cache = await caches.open(ASSETS);
+  const seen = await cache.match(VERSION_KEY);
+  const previous = seen ? await seen.text() : null;
+  if (previous === version) return;
+  await caches.delete(ASSETS);
+  const fresh = await caches.open(ASSETS);
+  await fresh.put(VERSION_KEY, new Response(version, { headers: { "Cache-Control": "no-store" } }));
+}
 
 /** Stable cache key: origin + path, no query. */
 function keyOf(url) {
@@ -142,7 +166,9 @@ self.addEventListener("message", (event) => {
   const data = event.data || {};
   if (data.type !== "precache") return;
   const client = event.source;
-  event.waitUntil(precache(data.urls || [], client));
+  event.waitUntil(
+    ensureContentVersion(data.version).then(() => precache(data.urls || [], client)),
+  );
 });
 
 /** One download with a time limit and one retry: a stalled hotel wifi must not block the whole precache. */

@@ -56,7 +56,24 @@ export async function buildAssets(product: string, requested: Lang, pdfUrl: stri
         subs: s.subs,
         audioKey: s.audio,
         audio: await sign(s.audio),
-        media: await Promise.all(s.media.map(async (m) => ({ ...m, key: m.img, img: await sign(m.img) }))),
+        media: await Promise.all(s.media.map(async (m) => ({
+          ...m,
+          key: m.img,
+          img: await sign(m.img),
+          // a clip cue carries an MP4 beside its poster
+          ...(m.video ? { video: await sign(m.video) } : {}),
+          // the route map's medallions are objects of their own and need signing too
+          ...(m.route
+            ? { route: { ...m.route, beats: await Promise.all(m.route.beats.map(async (b) => (b.img ? { ...b, img: await sign(b.img) } : b))) } }
+            : {}),
+          // same for a portrait pinned into one of the campaign maps
+          ...(m.offensive
+            ? { offensive: { ...m.offensive, beats: await Promise.all(m.offensive.beats.map(async (b) => (b.img ? { ...b, img: await sign(b.img) } : b))) } }
+            : {}),
+          ...(m.strategic
+            ? { strategic: { ...m.strategic, beats: await Promise.all(m.strategic.beats.map(async (b) => (b.img ? { ...b, img: await sign(b.img) } : b))) } }
+            : {}),
+        }))),
       })),
     ),
   ]);

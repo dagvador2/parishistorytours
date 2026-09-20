@@ -22,7 +22,7 @@ export default function PlayerWalking({ lang, idx, gpsDenied, distanceM, onArriv
         <div className="ag-player__title">{t.headTo} {stopLabel(idx, lang)}</div>
         <div className="ag-player__sub">{gpsDenied ? t.gpsOff : d.sub || "…"}</div>
       </div>
-      <button type="button" className="ag-btn-ghost" onClick={onArrive}>{t.imHere}</button>
+      <button type="button" className="ag-btn-here" onClick={onArrive}>{t.imHere}</button>
     </div>
   );
 }

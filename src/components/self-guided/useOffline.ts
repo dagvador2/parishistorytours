@@ -16,7 +16,15 @@ export function offlineUrls(assets: AssetsResponse): string[] {
   const urls = new Set<string>();
   for (const s of assets.sections) {
     urls.add(s.audio);
-    for (const m of s.media) urls.add(m.img);
+    for (const m of s.media) {
+      urls.add(m.img);
+      // a clip's MP4 is a separate object; its poster is `img` above
+      if (m.video) urls.add(m.video);
+      // the route map's medallions are separate objects
+      for (const b of m.route?.beats ?? []) if (b.img) urls.add(b.img);
+      for (const b of m.offensive?.beats ?? []) if (b.img) urls.add(b.img);
+      for (const b of m.strategic?.beats ?? []) if (b.img) urls.add(b.img);
+    }
   }
   if (assets.pdf) urls.add(assets.pdf);
   // The API answer for this language (served from cache when offline) and the app pages (both locales).
@@ -76,7 +84,10 @@ export function useOffline(assets: AssetsResponse | null, scope: string): Offlin
       const sw = r.active ?? navigator.serviceWorker.controller;
       if (!sw) return;
       setStatus((s) => (s.state === "ready" ? s : { state: "preparing", done: 0, total: assets.sections.length }));
-      sw.postMessage({ type: "precache", urls: offlineUrls(assets) });
+      // `generatedAt` doubles as the content version: R2 objects are served
+      // cache-first, so the worker has to be told when the pipeline has
+      // republished them at the same paths.
+      sw.postMessage({ type: "precache", version: assets.generatedAt, urls: offlineUrls(assets) });
     }).catch(() => {});
     return () => { cancelled = true; };
   }, [assets]);

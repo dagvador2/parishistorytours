@@ -18,6 +18,7 @@ src/components/self-guided/
   i18n.ts            T object of the prototype (verbatim) + extra strings
   MapView.tsx        MapLibre map, pins, route, user dot, fit; mapStyle.ts = sepia Protomaps flavor
   NextStopCard / PlayerWalking / PlayerArrived / PlayerMini / PlayerExpanded / CompleteSheet / Menu
+  ClipWell.tsx       a cue that is a clip (manifest `video`): muted looping <video> on the audio clock
   SeekBar / Transport / Header / Progress
   useAudioEngine.ts  single <audio>, timeupdate → sync, ended → next stop
   sync.ts            subtitle/photo = last entry with t ≤ currentTime
@@ -86,8 +87,9 @@ EN | FR" selector only when both manifests exist. Nothing to deploy when
 
 ## Offline
 
-On first load the service worker precaches the 9 MP3, the photos, the PDF,
-the basemap and the glyphs (~40 MB) and reports progress in the menu.
+On first load the service worker precaches the 9 MP3, the photos (and the one
+clip), the PDF, the basemap and the glyphs (~40 MB) and reports progress in the
+menu.
 Signed URLs change at every API call, so R2 objects are cached by path and
 served with synthesised `206` answers to Range requests (Safari needs
 that). The API answer is cached network-first so the app starts offline.

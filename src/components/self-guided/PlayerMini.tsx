@@ -9,7 +9,7 @@ export default function PlayerMini({ lang, idx, stop, section, elapsed, playing,
   return (
     <div className="ag-player ag-player--mini">
       <div className="ag-mini__head" onClick={onExpand} role="button" aria-label="Expand player">
-        {photo && <img src={photo.img} alt="" className="ag-mini__thumb" />}
+        {photo && <img src={photo.img} alt="" className="ag-mini__thumb" style={photo.pos ? { objectPosition: photo.pos } : undefined} />}
         <div className="ag-player__text">
           <div className="ag-mini__eyebrow">{nowPlayingEyebrow(lang, stop)}</div>
           <div className="ag-mini__name">{stop.name[lang]}</div>

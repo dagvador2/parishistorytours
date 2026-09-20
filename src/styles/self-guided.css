@@ -104,6 +104,10 @@ a { color: var(--ag-red); }
 .ag-center__actions a { display: flex; align-items: center; justify-content: center; text-decoration: none; }
 .ag-btn-ghost { border: 1px solid var(--ag-hairline); background: var(--ag-paper); color: var(--ag-red); font-size: 12px; font-weight: 600; border-radius: 10px; padding: 0 12px; min-height: 44px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 .ag-btn-ghost:active { background: var(--ag-hairline); }
+/* Walking bar: the fallback for "the GPS has not noticed yet". It is the only
+   way forward when geolocation is off, so it is a solid button, not a ghost. */
+.ag-btn-here { border: 0; background: var(--ag-red); color: var(--ag-paper); font-size: 15px; font-weight: 700; border-radius: 12px; padding: 0 18px; min-height: 48px; cursor: pointer; white-space: nowrap; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.ag-btn-here:active { background: var(--ag-dark); }
 
 /* Map */
 .ag-map { position: relative; flex: 1; min-height: 0; background: var(--ag-paper-2); }
@@ -116,7 +120,6 @@ a { color: var(--ag-red); }
 .ag-user b { position: absolute; inset: 0; border-radius: 50%; background: rgba(26,115,232,.45); animation: ag-dot 1.8s ease-out infinite; }
 @keyframes ag-dot { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(2.4); opacity: 0; } }
 @keyframes ag-pulse { 0% { transform: scale(1); opacity: .85; } 100% { transform: scale(1.14); opacity: 0; } }
-@keyframes ag-fade { 0% { opacity: 0; transform: scale(1.03); } 100% { opacity: 1; transform: scale(1); } }
 
 /* Map overlays */
 .ag-fab { position: absolute; right: 12px; bottom: 12px; z-index: 5; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ag-hairline); background: #fff; box-shadow: var(--ag-shadow-fab); display: grid; place-items: center; cursor: pointer; padding: 0; }
@@ -202,7 +205,42 @@ a { color: var(--ag-red); }
 .ag-expanded__handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(247,243,236,.35); margin: 0 auto 6px; }
 .ag-expanded__eyebrow { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ag-ink-on-dark-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ag-well { position: relative; flex: 0 0 44%; min-height: 0; margin: 6px 16px 0; border-radius: 14px; overflow: hidden; background: var(--ag-well); }
-.ag-well__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: ag-fade .7s ease-out both; }
+.ag-well__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Photos cut, they do not cross-fade. A fade dips the well towards its own
+   background halfway through, and over a run of cues a few seconds apart that
+   dip reads as flicker — worse on the animated maps, which start again from
+   frame one under it. An undecoded photo is simply absent and the outgoing one
+   underneath is what the eye sees, so the cut lands on a finished image. */
+.ag-well__img--wait { opacity: 0; }
+.ag-well__img--in { opacity: 1; }
+/* The outgoing photo, held under the incoming one until it has decoded, so the
+   well never shows through between two cues. */
+.ag-well__img--under { z-index: 0; }
+
+/* The live maps — the walk and the May 1940 offensive — are a basemap photo
+   with their drawing over it, advanced by the audio clock. A baked animation
+   runs on its own clock: it keeps playing when the audio is paused, ignores a
+   seek, and starts wherever it happens to be. The SVG uses `slice`, which is
+   object-fit: cover, so the overlay and the photo are cropped identically
+   whatever the handset. No fade, to match the cut. */
+.ag-livemap { position: absolute; inset: 0; }
+.ag-livemap__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The walk's own furniture; the 1940 map carries its styling in its shapes,
+   because the preview renderer draws the same list without a stylesheet. */
+.ag-routemap__ghost { fill: none; stroke: #B9A892; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 3 12; opacity: .75; }
+.ag-routemap__ghostdot { fill: none; stroke: #B9A892; stroke-width: 3; }
+.ag-routemap__halo { fill: none; stroke: var(--ag-paper); stroke-width: 15; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.ag-routemap__line { fill: none; stroke: var(--ag-red); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.ag-routemap__dot { fill: var(--ag-red); stroke: var(--ag-paper); stroke-width: 3; }
+.ag-routemap__dot--inter { fill: var(--ag-paper); stroke: var(--ag-dark); stroke-width: 3; }
+.ag-routemap__badge { fill: var(--ag-paper); font-family: var(--ag-serif); font-size: 19px; font-weight: 700; text-anchor: middle; }
+.ag-routemap__card { fill: var(--ag-paper); stroke: var(--ag-red); stroke-width: 3; }
+.ag-routemap__card--inter { fill: var(--ag-paper); stroke: #C9BCA8; stroke-width: 2; }
+.ag-routemap__label { fill: var(--ag-red); font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; text-anchor: middle; }
+.ag-routemap__label--inter { fill: #6B5A4E; font-family: Helvetica, Arial, sans-serif; font-size: 16px; text-anchor: middle; }
+/* Ties a medallion to its dot when packing has pushed it away. */
+.ag-routemap__leader { stroke: var(--ag-red); stroke-width: 2.5; opacity: .55; }
+.ag-routemap__credit { fill: #9C8A7B; font-family: Helvetica, Arial, sans-serif; font-size: 14px; text-anchor: end; }
 .ag-well__empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: repeating-linear-gradient(135deg, var(--ag-well) 0 10px, var(--ag-well-stripe) 10px 20px); }
 .ag-well__badge { width: 48px; height: 48px; border-radius: 50%; background: var(--ag-red); color: var(--ag-paper); font-family: var(--ag-serif); display: grid; place-items: center; font-size: 24px; }
 .ag-well__hint { font-family: var(--ag-serif); font-size: 15px; color: var(--ag-ink-on-dark-muted); text-align: center; padding: 0 24px; }
