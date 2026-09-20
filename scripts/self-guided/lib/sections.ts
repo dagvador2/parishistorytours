@@ -75,4 +75,6 @@ export const R2_KEYS = {
   clip: (name: string) => `photos/${PRODUCT}/${name}.mp4`,
   previewAudio: (lang: Lang) => `preview/${PRODUCT}/${lang}/intro-30s.mp3`,
   previewPdf: (lang: Lang) => `preview/${PRODUCT}/${lang}/pdf-preview.pdf`,
+  /** off-site copy of a source file the webapp never serves (see `--only masters`) */
+  master: (rel: string) => `masters/${PRODUCT}/${rel}`,
 };

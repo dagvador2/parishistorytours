@@ -38,3 +38,11 @@ scripts/audio-source/voice-samples/
 
 # Supabase CLI local cache
 supabase/.temp/
+
+# Sources of the self-guided tour: voice masters, source PNGs, camera originals.
+# They stay on disk (the build reads them) and are backed up to R2 under
+# masters/left-bank-ww2/ — see `pnpm self-guided:upload --only masters`.
+scripts/audio-source/*/recordings/
+design/audioguide-handoff/originals/
+design/audioguide-handoff/video/
+design/audioguide-handoff/photos/
