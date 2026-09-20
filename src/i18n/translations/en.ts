@@ -319,6 +319,7 @@ export const en = {
       showingTour: "Showing dates for",
       showAll: "Show all tours",
       loading: "Loading dates…",
+      parisTime: "All times are Paris time (CET/CEST).",
     },
     // Mode selector
     modeSelector: {
@@ -788,6 +789,7 @@ export const en = {
       type: "Type:",
       date: "Date:",
       time: "Time:",
+      timeZoneNote: "(Paris time)",
       total: "Total:",
       person: "person",
       people: "people",
@@ -1310,7 +1312,11 @@ export const en = {
       submit: "Pay {price} and get access",
       submitting: "Redirecting to payment…",
       secure: "Secure payment by Stripe · Instant delivery by email",
-      error: "The payment page could not be opened. Please try again or contact me on WhatsApp."
+      error: "The payment page could not be opened. Please try again or contact me on WhatsApp.",
+      comingSoonTitle: "The English edition is being recorded",
+      comingSoonBody: "The walk exists and is finished — in French. I narrate every stop myself rather than hand it to a machine, so the English recording is being made now. Leave me a message and you will be the first to know when it opens.",
+      comingSoonFrCta: "Available now in French",
+      comingSoonAsk: "Tell me when it is ready"
     },
     success: {
       kicker: "Payment received",

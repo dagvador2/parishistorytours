@@ -319,6 +319,7 @@ export const fr = {
       showingTour: "Dates pour",
       showAll: "Toutes les visites",
       loading: "Chargement des dates…",
+      parisTime: "Tous les horaires sont à l'heure de Paris.",
     },
     // Mode selector
     modeSelector: {
@@ -788,6 +789,7 @@ export const fr = {
       type: "Type :",
       date: "Date :",
       time: "Heure :",
+      timeZoneNote: "(heure de Paris)",
       total: "Total :",
       person: "personne",
       people: "personnes",
@@ -1310,7 +1312,11 @@ export const fr = {
       submit: "Payer {price} et accéder",
       submitting: "Redirection vers le paiement…",
       secure: "Paiement sécurisé par Stripe · Envoi immédiat par email",
-      error: "La page de paiement n’a pas pu s’ouvrir. Réessayez ou contactez-moi sur WhatsApp."
+      error: "La page de paiement n’a pas pu s’ouvrir. Réessayez ou contactez-moi sur WhatsApp.",
+      comingSoonTitle: "L’édition anglaise est en cours d’enregistrement",
+      comingSoonBody: "La balade existe et elle est terminée — en français. J’enregistre moi-même chaque arrêt plutôt que de le confier à une machine : la version anglaise est en cours. Laissez-moi un message, vous serez prévenu dès son ouverture.",
+      comingSoonFrCta: "Disponible dès maintenant en français",
+      comingSoonAsk: "Prévenez-moi quand c’est prêt"
     },
     success: {
       kicker: "Paiement reçu",

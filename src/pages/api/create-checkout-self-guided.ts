@@ -4,7 +4,7 @@
  * at the active price (early bird / normal) and returns its URL.
  */
 import type { APIRoute } from "astro";
-import { getActivePriceId, isVisitDate, PRODUCT_SLUG, stripe } from "../../lib/self-guided/purchase";
+import { getActivePriceId, isOnSale, isVisitDate, PRODUCT_SLUG, stripe } from "../../lib/self-guided/purchase";
 
 export const prerender = false;
 
@@ -16,6 +16,10 @@ export const POST: APIRoute = async ({ request }) => {
     const email = (body.email ?? "").trim().toLowerCase();
     const language = body.language === "fr" ? "fr" : "en";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return json({ error: "Invalid email" }, 400);
+
+    // A language only sells once its narration exists; the page hides the option,
+    // this refuses a hand-made request for it.
+    if (!isOnSale(language)) return json({ error: "This language is not on sale yet" }, 409);
 
     // The day the buyer plans to walk. Optional; a past date or none means "start now".
     const raw = (body.visitDate ?? "").trim();

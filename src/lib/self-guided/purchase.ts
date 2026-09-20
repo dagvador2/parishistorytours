@@ -19,6 +19,17 @@ export const SUPPORT_EMAIL = "clement@parishistorytours.com";
 
 export type PurchaseLang = "en" | "fr";
 
+/**
+ * Languages the tour is actually on sale in. The narration is recorded language
+ * by language: a language only opens once its own recordings, manifest and R2
+ * media are in place. English joins when its narration is recorded.
+ */
+export const ON_SALE_LANGS: readonly PurchaseLang[] = ["fr"] as const;
+
+export function isOnSale(lang: PurchaseLang): boolean {
+  return ON_SALE_LANGS.includes(lang);
+}
+
 export interface DigitalPurchase {
   id: string;
   email: string;

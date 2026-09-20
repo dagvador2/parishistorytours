@@ -14,7 +14,7 @@ import { useTranslations } from "../../i18n/utils";
 import { GOOGLE_REVIEWS } from "../../data/site";
 import { formatEUR } from "../../lib/price";
 import { waLink } from "../../lib/whatsapp";
-import { accessDays, fetchPriceInfo, PRODUCT_SLUG } from "../../lib/self-guided/purchase";
+import { accessDays, fetchPriceInfo, isOnSale, ON_SALE_LANGS, PRODUCT_SLUG } from "../../lib/self-guided/purchase";
 import { objectExists, sign } from "../../lib/self-guided/r2";
 import pantheon from "../../images/pantheon_de_Paris.webp";
 import guidePhoto from "../../images/guide-photo.webp";
@@ -27,10 +27,14 @@ const prefix = lang === "fr" ? "/fr" : "";
 const sg = (k: string) => t(`selfGuided.${k}`) as string;
 
 // Price: live from Stripe, fallback to the public list prices if Stripe is not configured yet.
-const FALLBACK = { amountCents: 1400, normalAmountCents: 1400, earlyBird: false, daysLeft: 0, earlyBirdEndsAt: null as string | null };
+// This language sells only once its narration is recorded; otherwise the page
+// stays up and the buy box becomes a "being recorded" note.
+const onSale = isOnSale(lang);
+const FALLBACK = { amountCents: 1900, normalAmountCents: 1900, earlyBird: false, daysLeft: 0, earlyBirdEndsAt: null as string | null };
 let price = FALLBACK;
 let priceLive = false;
 try {
+  if (!onSale) throw new Error(`${lang} not on sale yet`);
   const p = await fetchPriceInfo(lang);
   price = { amountCents: p.amountCents, normalAmountCents: p.normalAmountCents, earlyBird: p.earlyBird, daysLeft: p.daysLeft, earlyBirdEndsAt: p.earlyBirdEndsAt };
   priceLive = true;
@@ -76,7 +80,7 @@ const productJsonLd = {
     url: `${Astro.url.origin}${prefix}/self-guided-tour/`,
     price: (price.amountCents / 100).toFixed(2),
     priceCurrency: "EUR",
-    availability: "https://schema.org/InStock",
+    availability: onSale ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
     itemCondition: "https://schema.org/NewCondition",
   },
   aggregateRating: {
@@ -181,46 +185,64 @@ const productJsonLd = {
     <!-- Buy -->
     <section id="buy" class="sgp-section sgp-buy">
       <div class="sgp-inner sgp-inner--narrow">
-        <p class="sgp-kicker">{sg("buy.kicker")}</p>
-        <h2 class="sgp-h2">{sg("buy.title")}</h2>
-        <div class="sgp-price">
-          <div class="sgp-price__row">
-            {price.earlyBird && price.normalAmountCents !== price.amountCents && (
-              <span class="sgp-price__was" aria-label={sg("buy.wasPrice").replace("{price}", eur(price.normalAmountCents))}>
-                {eur(price.normalAmountCents)}
-              </span>
+        {onSale ? (
+          <>
+          <p class="sgp-kicker">{sg("buy.kicker")}</p>
+          <h2 class="sgp-h2">{sg("buy.title")}</h2>
+          <div class="sgp-price">
+            <div class="sgp-price__row">
+              {price.earlyBird && price.normalAmountCents !== price.amountCents && (
+                <span class="sgp-price__was" aria-label={sg("buy.wasPrice").replace("{price}", eur(price.normalAmountCents))}>
+                  {eur(price.normalAmountCents)}
+                </span>
+              )}
+              <span class="sgp-price__amount">{priceLabel}</span>
+            </div>
+            {price.earlyBird && launchEnds && (
+              <p class="sgp-badge">{sg("buy.earlyBirdUntil").replace("{date}", launchEnds)}</p>
             )}
-            <span class="sgp-price__amount">{priceLabel}</span>
+            <p class="sgp-price__per">{sg("buy.perPack")}</p>
+            <p class="sgp-access">{sg("buy.accessNote").replace("{days}", String(days))}</p>
           </div>
-          {price.earlyBird && launchEnds && (
-            <p class="sgp-badge">{sg("buy.earlyBirdUntil").replace("{date}", launchEnds)}</p>
-          )}
-          <p class="sgp-price__per">{sg("buy.perPack")}</p>
-          <p class="sgp-access">{sg("buy.accessNote").replace("{days}", String(days))}</p>
-        </div>
-        <form class="sgp-form" id="sgp-form" novalidate>
-          <label class="sgp-field">
-            <span>{sg("buy.email")}</span>
-            <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="name@example.com" />
-            <small>{sg("buy.emailHint")}</small>
-          </label>
-          <label class="sgp-field">
-            <span>{sg("buy.visitDate")}</span>
-            <input type="date" name="visitDate" min={parisToday} max={maxDate} />
-            <small>{sg("buy.visitDateHint").replace("{days}", String(days))}</small>
-          </label>
-          <fieldset class="sgp-field sgp-field--lang">
-            <legend>{sg("buy.language")}</legend>
-            <label><input type="radio" name="language" value="en" checked={lang === "en"} /> English</label>
-            <label><input type="radio" name="language" value="fr" checked={lang === "fr"} /> Français</label>
-          </fieldset>
-          <button type="submit" class="sgp-btn sgp-btn--primary sgp-btn--wide" data-label={sg("buy.submit").replace("{price}", priceLabel)} data-busy={sg("buy.submitting")}>
-            {sg("buy.submit").replace("{price}", priceLabel)}
-          </button>
-          <p class="sgp-form__error" id="sgp-error" hidden>{sg("buy.error")} <a href={waHref} rel="noopener">WhatsApp</a></p>
-          <p class="sgp-form__secure">{sg("buy.secure")}</p>
-        </form>
-        {!priceLive && <p class="sgp-note" data-price-fallback>{lang === "fr" ? "Prix affiché : tarif public." : "Price shown is the list price."}</p>}
+          <form class="sgp-form" id="sgp-form" novalidate>
+            <label class="sgp-field">
+              <span>{sg("buy.email")}</span>
+              <input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="name@example.com" />
+              <small>{sg("buy.emailHint")}</small>
+            </label>
+            <label class="sgp-field">
+              <span>{sg("buy.visitDate")}</span>
+              <input type="date" name="visitDate" min={parisToday} max={maxDate} />
+              <small>{sg("buy.visitDateHint").replace("{days}", String(days))}</small>
+            </label>
+            {ON_SALE_LANGS.length > 1 ? (
+              <fieldset class="sgp-field sgp-field--lang">
+                <legend>{sg("buy.language")}</legend>
+                {ON_SALE_LANGS.includes("en") && <label><input type="radio" name="language" value="en" checked={lang === "en"} /> English</label>}
+                {ON_SALE_LANGS.includes("fr") && <label><input type="radio" name="language" value="fr" checked={lang === "fr"} /> Français</label>}
+              </fieldset>
+            ) : (
+              <input type="hidden" name="language" value={ON_SALE_LANGS[0]} />
+            )}
+            <button type="submit" class="sgp-btn sgp-btn--primary sgp-btn--wide" data-label={sg("buy.submit").replace("{price}", priceLabel)} data-busy={sg("buy.submitting")}>
+              {sg("buy.submit").replace("{price}", priceLabel)}
+            </button>
+            <p class="sgp-form__error" id="sgp-error" hidden>{sg("buy.error")} <a href={waHref} rel="noopener">WhatsApp</a></p>
+            <p class="sgp-form__secure">{sg("buy.secure")}</p>
+          </form>
+          {!priceLive && <p class="sgp-note" data-price-fallback>{lang === "fr" ? "Prix affiché : tarif public." : "Price shown is the list price."}</p>}
+          </>
+        ) : (
+          <>
+            <p class="sgp-kicker">{sg("buy.kicker")}</p>
+            <h2 class="sgp-h2">{sg("buy.comingSoonTitle")}</h2>
+            <p class="sgp-access sgp-coming__body">{sg("buy.comingSoonBody")}</p>
+            <div class="sgp-coming__actions">
+              <a class="sgp-btn sgp-btn--primary sgp-btn--wide" href="/fr/self-guided-tour">{sg("buy.comingSoonFrCta")}</a>
+              <a class="sgp-btn sgp-btn--wide" href={waHref} rel="noopener">{sg("buy.comingSoonAsk")}</a>
+            </div>
+          </>
+        )}
       </div>
     </section>
 
@@ -365,5 +387,8 @@ const productJsonLd = {
   .sgp-form__error { font-family: var(--font-sans); font-size: 14px; color: var(--rouge); margin: 0; }
   .sgp-form__error a { color: var(--rouge); }
   .sgp-form__secure { font-family: var(--font-sans); font-size: 12px; color: var(--ink-2); margin: 0; }
+  /* Buy box of a language whose narration is not recorded yet. */
+  .sgp-coming__body { max-width: 52ch; }
+  .sgp-coming__actions { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin-top: 24px; }
   @media (max-width: 640px) { .sgp-section { padding: 64px 0; } .sgp-hero__content { padding-bottom: 40px; } }
 </style>
