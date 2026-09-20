@@ -13,10 +13,14 @@
  * clock, when it scrolls into view — a visitor who never clicks still sees the
  * walk. Pressing play restarts it, in step with the voice.
  */
-import { Picture } from "astro:assets";
+import { Picture, getImage } from "astro:assets";
 import { ROUTE, STOPS, type LatLng } from "../../data/self-guided/left-bank-ww2";
 import previews from "../../data/self-guided/route-preview.json";
 import basemap from "../../images/self-guided/route_map_base.webp";
+import mSaintMichel from "../../images/self-guided/medallion_saint_michel.webp";
+import mLuxembourg from "../../images/self-guided/medallion_luxembourg.webp";
+import mSorbonne from "../../images/self-guided/medallion_sorbonne.webp";
+import mNotreDame from "../../images/self-guided/medallion_notre_dame.webp";
 
 /**
  * The page's basemap is not the app's: it is drawn in the neutral grey the rest
@@ -61,6 +65,31 @@ const LABELS: Record<string, LabelDef> = {
   // arrives from below, so nothing is crossed.
   "09-liberation": { en: "Notre-Dame", fr: "Notre-Dame", side: "left" },
 };
+/**
+ * Four places open a photograph as they are named, where the map has room for
+ * one. `box` is its top-left corner in the frame's own units, chosen by hand
+ * against the drawn walk: packing them automatically, as the app does, is worth
+ * it for eight medallions that come and go, not for four that stay put.
+ * A leader ties each one back to its dot.
+ */
+const MEDALLIONS: Record<string, { src: ImageMetadata; box: [number, number] }> = {
+  "02-context-of-war": { src: mSaintMichel, box: [46, 694] },
+  "03-fall-of-paris": { src: mLuxembourg, box: [40, 240] },
+  "06-sorbonne-facade": { src: mSorbonne, box: [872, 646] },
+  "09-liberation": { src: mNotreDame, box: [958, 44] },
+};
+/** Card geometry, in frame units: padding, photo, then the name under it. */
+const CARD = { w: 230, h: 198, pad: 6, photoH: 156, capBaseline: 186 };
+
+const medallionSrc = Object.fromEntries(
+  await Promise.all(
+    Object.entries(MEDALLIONS).map(async ([id, m]) => [
+      id,
+      (await getImage({ src: m.src, width: 460, format: "webp", quality: 74 })).src,
+    ]),
+  ),
+) as Record<string, string>;
+
 /** Offset and anchor of a label, by side. */
 const PLACE = {
   right: { dx: 26, dy: 11, anchor: "start" },
@@ -118,7 +147,19 @@ const points = data.beats.map((beat, i) => {
   const def = LABELS[beat.stop];
   const place = PLACE[def?.side ?? "right"];
   const lines = (def?.[lang] ?? stop.name[lang]).split("\n");
-  const p = { ...beat, x, y, main: stop.kind !== "inter", badge: stop.badge, lines, place, from, to, travel };
+  const med = MEDALLIONS[beat.stop];
+  const card = med && {
+    src: medallionSrc[beat.stop],
+    left: med.box[0],
+    top: med.box[1],
+    // the leader leaves the card at the edge facing the dot, and is dropped
+    // when the two already touch
+    leader: {
+      x: x > med.box[0] + CARD.w ? med.box[0] + CARD.w : x < med.box[0] ? med.box[0] : x,
+      y: y > med.box[1] + CARD.h ? med.box[1] + CARD.h : y < med.box[1] ? med.box[1] : y,
+    },
+  };
+  const p = { ...beat, x, y, main: stop.kind !== "inter", badge: stop.badge, lines, place, card, from, to, travel };
   from = to;
   return p;
 });
@@ -156,7 +197,31 @@ const alt = lang === "fr"
       <path class="sgp-map__halo" d={d} pathLength="1000" />
       <path class="sgp-map__line" d={d} pathLength="1000" />
       {points.map((p) => (
-        <g class:list={["sgp-map__pt", p.main ? "is-main" : "is-inter"]}>
+        <g class:list={["sgp-map__pt", p.main ? "is-main" : "is-inter", p.card && "has-card"]}>
+          {p.card && (
+            <g class="sgp-map__medallion" style={`transform-origin:${(p.card.left + CARD.w / 2).toFixed(1)}px ${(p.card.top + CARD.h / 2).toFixed(1)}px`}>
+              {Math.hypot(p.card.leader.x - p.x, p.card.leader.y - p.y) > 40 && (
+                <line class="sgp-map__leader" x1={p.card.leader.x} y1={p.card.leader.y} x2={p.x.toFixed(1)} y2={p.y.toFixed(1)} />
+              )}
+              <rect class="sgp-map__card" x={p.card.left} y={p.card.top} width={CARD.w} height={CARD.h} rx="2" />
+              <image
+                href={p.card.src}
+                x={p.card.left + CARD.pad}
+                y={p.card.top + CARD.pad}
+                width={CARD.w - CARD.pad * 2}
+                height={CARD.photoH}
+                preserveAspectRatio="xMidYMid slice"
+              />
+              {/* A long name is squeezed to the card rather than hanging off it. */}
+              <text
+                class="sgp-map__cardlabel"
+                x={p.card.left + CARD.w / 2}
+                y={p.card.top + CARD.capBaseline}
+                textLength={p.lines.join(" ").length * 12.6 > CARD.w - 20 ? CARD.w - 20 : undefined}
+                lengthAdjust="spacingAndGlyphs"
+              >{p.lines.join(" ")}</text>
+            </g>
+          )}
           <g class="sgp-map__pin" style={`transform-origin:${p.x.toFixed(1)}px ${p.y.toFixed(1)}px`}>
             <circle class="sgp-map__dot" cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r={p.main ? 17 : 9} />
             {p.main && <text class="sgp-map__badge" x={p.x.toFixed(1)} y={(p.y + 7).toFixed(1)}>{p.badge}</text>}
@@ -353,6 +418,16 @@ const alt = lang === "fr"
   }
   .is-inter .sgp-map__label { font-size: 25px; font-weight: 400; fill: var(--ink-2); }
   .sgp-map__pt.is-on .sgp-map__label { opacity: 1; }
+
+  /* The photograph that opens with the place. It pops with its dot, and gives
+     way to the plain name on a screen too narrow to read a caption. */
+  .sgp-map__medallion { opacity: 0; transform: scale(.4); transition: transform .42s cubic-bezier(.34, 1.4, .64, 1), opacity .24s linear; filter: drop-shadow(0 3px 10px rgba(26, 26, 26, .22)); }
+  .sgp-map__pt.is-on .sgp-map__medallion { opacity: 1; transform: scale(1); }
+  .sgp-map__card { fill: var(--paper-3); stroke: rgba(26, 26, 26, .18); stroke-width: 1.5; }
+  .sgp-map__cardlabel { font-family: var(--font-sans); font-size: 23px; font-weight: 600; fill: var(--ink); text-anchor: middle; }
+  .sgp-map__leader { stroke: var(--rouge); stroke-width: 2; stroke-dasharray: 5 7; opacity: .55; }
+  /* Where a card carries the name, the loose label beside the dot would repeat it. */
+  .sgp-map__pt.has-card .sgp-map__label { display: none; }
   .sgp-map__credit { fill: #8c7a6b; font-family: var(--font-sans); font-size: 17px; text-anchor: end; paint-order: stroke fill; stroke: var(--paper-3); stroke-width: 4px; stroke-linejoin: round; }
 
   /* The preview player: the browser's default controls do not belong in this page. */
@@ -373,6 +448,8 @@ const alt = lang === "fr"
   /* On a phone the map is barely 350 px wide: the main places have to carry it. */
   @media (max-width: 720px) {
     .sgp-map__label { font-size: 36px; stroke-width: 8px; }
+    .sgp-map__medallion { display: none; }
+    .sgp-map__pt.has-card .sgp-map__label { display: block; }
     .is-inter .sgp-map__label { display: none; }
     .sgp-map__credit { font-size: 24px; }
   }

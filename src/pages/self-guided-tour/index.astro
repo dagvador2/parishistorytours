@@ -76,6 +76,9 @@ try {
   console.warn("[self-guided] preview unavailable:", e instanceof Error ? e.message : e);
 }
 
+/** Shared by the link preview and the structured data: the walk, with people on it. */
+const OG_IMAGE = "/photos/og-self-guided.jpg";
+
 const includes = t("selfGuided.includes.items") as { title: string; body: string }[];
 /** One hairline drawing per item of the list above, same order. */
 const INCLUDE_ICONS = [
@@ -95,7 +98,7 @@ const productJsonLd = {
   "@type": "Product",
   name: lang === "fr" ? "Visite libre WW2 Rive Gauche — audioguide" : "WWII Left Bank Self-Guided Audio Tour",
   description: t("meta.selfGuided.description"),
-  image: `${Astro.url.origin}/photos/og-default.jpg`,
+  image: `${Astro.url.origin}${OG_IMAGE}`,
   brand: { "@type": "Brand", name: "Paris History Tours" },
   category: "Audio tour",
   offers: {
@@ -115,7 +118,7 @@ const productJsonLd = {
 };
 ---
 
-<BaseLayout title={t("meta.selfGuided.title")} description={t("meta.selfGuided.description")} theme="quiet">
+<BaseLayout title={t("meta.selfGuided.title")} description={t("meta.selfGuided.description")} ogImage={OG_IMAGE} theme="quiet">
   <JsonLd data={productJsonLd} />
   <Nav context="tour" book="#buy" />
 
