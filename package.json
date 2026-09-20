@@ -13,6 +13,7 @@
     "self-guided:previews": "tsx scripts/self-guided/make-previews.ts",
     "self-guided:review": "tsx scripts/self-guided/tools/review-server.ts",
     "self-guided:stripe": "tsx scripts/self-guided/tools/create-stripe-product.ts",
+    "self-guided:promo": "tsx scripts/self-guided/tools/create-promo-code.ts",
     "self-guided:test": "node --import tsx --test 'scripts/self-guided/**/*.test.ts'",
     "tracking:import": "tsx scripts/tracking/import-workbook.ts",
     "tracking:test": "node --import tsx --test 'scripts/tracking/**/*.test.ts'"

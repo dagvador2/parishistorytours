@@ -12,6 +12,15 @@ export function isDigitalProductSession(session: Stripe.Checkout.Session): boole
   return session.mode === "payment" && session.metadata?.product_slug === PRODUCT_SLUG;
 }
 
+/**
+ * Only a settled session is delivered. "no_payment_required" is the 100%-off
+ * invitation; "unpaid" is a deferred method that has not cleared, and must not
+ * open the tour just because Checkout completed.
+ */
+export function isSettled(session: Stripe.Checkout.Session): boolean {
+  return session.payment_status === "paid" || session.payment_status === "no_payment_required";
+}
+
 export function siteOrigin(): string {
   const meta = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
   return meta?.PUBLIC_SITE_URL ?? process.env.PUBLIC_SITE_URL ?? "https://www.parishistorytours.com";

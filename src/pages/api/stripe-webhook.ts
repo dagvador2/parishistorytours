@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import Stripe from "stripe";
 import { finalizeBooking } from "../../lib/booking";
-import { fulfillDigitalPurchase, isDigitalProductSession } from "../../lib/self-guided/fulfill";
+import { fulfillDigitalPurchase, isDigitalProductSession, isSettled } from "../../lib/self-guided/fulfill";
 
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-07-30.basil",
@@ -29,6 +29,11 @@ export const POST: APIRoute = async ({ request }) => {
     // Digital product (self-guided tour): separate fulfilment, additive to the
     // tour bookings below. Idempotent on the session id.
     if (isDigitalProductSession(session)) {
+      // A deferred payment that has not cleared must not open the tour.
+      if (!isSettled(session)) {
+        console.log("[self-guided] session not settled yet, skipping:", session.id, session.payment_status);
+        return new Response("Success", { status: 200 });
+      }
       try {
         const origin = new URL(request.url).origin;
         const r = await fulfillDigitalPurchase(session, origin.includes("localhost") ? origin : undefined);

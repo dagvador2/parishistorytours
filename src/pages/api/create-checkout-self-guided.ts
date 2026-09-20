@@ -38,6 +38,9 @@ export const POST: APIRoute = async ({ request }) => {
     const session = await stripe().checkout.sessions.create({
       mode: "payment",
       line_items: [{ price: active.priceId, quantity: 1 }],
+      // Invitations: a 100%-off promotion code turns the same funnel into a free
+      // access, so guests are delivered and counted exactly like buyers.
+      allow_promotion_codes: true,
       customer_email: email,
       locale: language,
       metadata: { product_slug: PRODUCT_SLUG, language, early_bird: active.earlyBird ? "1" : "0", ...(visitDate ? { visit_date: visitDate } : {}) },
