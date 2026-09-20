@@ -17,7 +17,7 @@ import { resolve } from "node:path";
 import { parseArgs } from "./lib/args.ts";
 import { fmtBytes, log } from "./lib/log.ts";
 import { manifestPath, wordsPath } from "./lib/manifest.ts";
-import { listPhotoNames, photoOutputPath } from "./lib/photos.ts";
+import { clipOutputPath, isClip, listPhotoNames, photoOutputPath } from "./lib/photos.ts";
 import { assertBucket, cacheControlFor, contentTypeFor, md5Hex, putFile, r2Client, r2ConfigFromEnv, remoteEtag } from "./lib/r2.ts";
 import { PATHS, R2_KEYS, SECTIONS, parseLangs, pdfMasterPath, type Lang } from "./lib/sections.ts";
 
@@ -38,7 +38,11 @@ function plan(langs: Lang[]): Item[] {
     items.push({ group: "preview", key: R2_KEYS.previewAudio(lang), file: resolve(PATHS.previewDir, lang, "intro-30s.mp3") });
     items.push({ group: "preview", key: R2_KEYS.previewPdf(lang), file: resolve(PATHS.previewDir, lang, "pdf-preview.pdf") });
   }
-  for (const name of listPhotoNames()) items.push({ group: "photos", key: R2_KEYS.photo(name), file: photoOutputPath(name) });
+  for (const name of listPhotoNames()) {
+    items.push({ group: "photos", key: R2_KEYS.photo(name), file: photoOutputPath(name) });
+    // a clip goes up beside its poster, under the same name
+    if (isClip(name)) items.push({ group: "photos", key: R2_KEYS.clip(name), file: clipOutputPath(name) });
+  }
   return items;
 }
 

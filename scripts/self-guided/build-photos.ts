@@ -1,5 +1,6 @@
 /**
- * Convert the 33 handoff photos (PNG, extracted from the PDF) to WebP for R2.
+ * Convert the handoff photos (PNG from the printed guide, JPEG from the
+ * archives) to WebP for R2.
  *
  *   pnpm self-guided:photos [--force]
  *
@@ -9,12 +10,12 @@
  * the manifest reference them. Writes output/photos/<name>.webp and an index
  * output/photos/photos.json with the final dimensions and sizes.
  */
-import { existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import sharp from "sharp";
 import { parseArgs } from "./lib/args.ts";
 import { fmtBytes, log } from "./lib/log.ts";
-import { PHOTO_MAX_WIDTH, PHOTO_WEBP_QUALITY, listPhotoNames, photoOutputDims, photoOutputPath, photoSourcePath } from "./lib/photos.ts";
+import { PHOTO_MAX_WIDTH, PHOTO_WEBP_QUALITY, clipOutputPath, clipSourcePath, listClipNames, listPhotoNames, photoOutputDims, photoOutputPath, photoSourcePath } from "./lib/photos.ts";
 import { PATHS, R2_KEYS } from "./lib/sections.ts";
 
 async function main() {
@@ -22,7 +23,12 @@ async function main() {
   const force = args.has("force");
   mkdirSync(PATHS.photosDir, { recursive: true });
   const names = listPhotoNames();
-  log.step(`build-photos: ${names.length} PNG -> WebP (max ${PHOTO_MAX_WIDTH} px, q${PHOTO_WEBP_QUALITY})`);
+  // A clip is found through its poster: without one it would be missing from
+  // the contact sheet, the well preview and the review DOCX, and the manifest
+  // would have no size to reserve for it.
+  const orphans = listClipNames().filter((n) => !names.includes(n));
+  if (orphans.length) throw new Error(`clip without a poster: ${orphans.join(", ")} — re-run tools/make-video-loop.ts, which writes both`);
+  log.step(`build-photos: ${names.length} images -> WebP (max ${PHOTO_MAX_WIDTH} px, q${PHOTO_WEBP_QUALITY}; the MP4 of a clip is copied through beside its poster)`);
 
   const index: Record<string, { key: string; w: number; h: number; bytes: number }> = {};
   let inBytes = 0;
@@ -51,10 +57,25 @@ async function main() {
     outBytes += size;
     index[name] = { key: R2_KEYS.photo(name), w: meta.width!, h: meta.height!, bytes: size };
     log.info("photo", `${name.padEnd(7)} ${String(meta.width).padStart(4)}x${String(meta.height).padEnd(4)} ${fmtBytes(srcSize).padStart(9)} -> ${fmtBytes(size).padStart(9)}${upToDate ? " (up to date)" : ""}`);
+
+    // A clip travels beside its poster, encoded already: copied, never touched.
+    const clip = clipSourcePath(name);
+    if (clip) {
+      const clipOut = clipOutputPath(name);
+      const clipSize = statSync(clip).size;
+      inBytes += clipSize;
+      outBytes += clipSize;
+      if (force || !existsSync(clipOut) || statSync(clipOut).mtimeMs < statSync(clip).mtimeMs) {
+        copyFileSync(clip, clipOut);
+        converted++;
+      }
+      index[`${name}.mp4`] = { key: R2_KEYS.clip(name), w: meta.width!, h: meta.height!, bytes: clipSize };
+      log.info("clip", `${name.padEnd(7)} ${fmtBytes(clipSize).padStart(9)} (mp4, copied through)`);
+    }
   }
   writeFileSync(resolve(PATHS.photosDir, "photos.json"), JSON.stringify(index, null, 2) + "\n");
   log.step(`done: ${converted} converted, ${names.length - converted} unchanged, ${fmtBytes(inBytes)} PNG -> ${fmtBytes(outBytes)} WebP (${Math.round((1 - outBytes / inBytes) * 100)} % smaller)`);
-  const heavy = Object.entries(index).filter(([, v]) => v.bytes > 200 * 1024);
+  const heavy = Object.entries(index).filter(([k, v]) => !k.endsWith(".mp4") && v.bytes > 200 * 1024);
   if (heavy.length) log.warn("photo", `${heavy.length} file(s) above 200 KB: ${heavy.map(([k, v]) => `${k} ${fmtBytes(v.bytes)}`).join(", ")}`);
 }
 
