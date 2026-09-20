@@ -35,3 +35,6 @@ scripts/self-guided/output/*
 
 # Personal voice recordings used to clone the narration voice (never committed)
 scripts/audio-source/voice-samples/
+
+# Supabase CLI local cache
+supabase/.temp/
