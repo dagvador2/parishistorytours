@@ -24,7 +24,73 @@ export interface ManifestMedia {
   /** intrinsic pixel size of the WebP, to reserve layout space */
   w: number;
   h: number;
+  /**
+   * Present when the cue is a clip: the R2 key of an MP4 the player runs in a
+   * <video>, `img` being its poster. Same box, same `pos`; the player plays it
+   * with the narration and pauses it with it.
+   */
+  video?: string;
+  /**
+   * CSS `object-position` for the player's image well, when the default
+   * centre crop cuts the subject (a tall portrait loses its head, a newspaper
+   * loses its masthead). Omitted means "50% 50%".
+   */
+  pos?: string;
+  /** present on the route map: the player animates it on the audio clock */
+  route?: ManifestRoute;
+  /** present on the May 1940 map: likewise, arrow by arrow */
+  offensive?: ManifestCampaign;
+  /** present on the 1944 map of the Allied advance: same drawing, other geography */
+  strategic?: ManifestCampaign;
 }
+/**
+ * A cue the player animates itself rather than showing as a still: the route
+ * map. `img` is the bare basemap; the walk is drawn over it from the webapp's
+ * own `ROUTE`/`STOPS`, projected with `proj`, and advanced by the audio clock —
+ * so it pauses with the audio and follows a seek.
+ */
+export interface ManifestRouteBeat {
+  /** section id of the stop that lights up */
+  stop: string;
+  /** seconds from the start of this cue */
+  at: number;
+  /** medallion photo (R2 key, then a signed URL); absent = the dot only */
+  img?: string;
+  cap?: string;
+  w?: number;
+  h?: number;
+}
+export interface ManifestRoute {
+  /** normalised Web Mercator bounds of the basemap image */
+  proj: { x0: number; x1: number; y0: number; y1: number };
+  credit: string;
+  beats: ManifestRouteBeat[];
+}
+
+/**
+ * A campaign map — May 1940 (`offensive`) or 1944 (`strategic`) — in the same
+ * arrangement as the route map: `img` is the bare basemap, the arrows come from
+ * the webapp's own move tables, projected with `proj`, and each one is drawn at
+ * the second it is spoken. It replaced four pre-rendered WebP loops that ran on
+ * their own clock and had to restart from nothing at every step.
+ */
+export interface ManifestCampaignBeat {
+  /** move id in the map's own table (offensive-1940.ts, strategic-1944.ts) */
+  move: string;
+  /** seconds from the start of this cue */
+  at: number;
+  /** photo pinned into the frame by this move (R2 key, then a signed URL) */
+  img?: string;
+  w?: number;
+  h?: number;
+}
+export interface ManifestCampaign {
+  /** normalised Web Mercator bounds of the basemap image */
+  proj: { x0: number; x1: number; y0: number; y1: number };
+  credit: string;
+  beats: ManifestCampaignBeat[];
+}
+
 export interface ManifestSection {
   id: string;
   index: number;

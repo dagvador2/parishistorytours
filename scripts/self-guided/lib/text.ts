@@ -53,7 +53,13 @@ export function splitSentences(paragraph: string): Sentence[] {
       continue;
     }
     let first = paragraph[k]!;
-    if (OPENERS.has(first) && k + 1 < n) first = paragraph[k + 1]!;
+    if (OPENERS.has(first)) {
+      // French typography puts a space inside the quote — « Comme ceci » — so
+      // the letter that decides the split sits two characters on, not one.
+      let m = k + 1;
+      while (m < n && /\s/.test(paragraph[m]!)) m++;
+      first = paragraph[m] ?? "";
+    }
     if (/\p{Lu}/u.test(first)) {
       const text = paragraph.slice(start, j).trim();
       if (text) out.push({ text, offset: start });

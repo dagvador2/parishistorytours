@@ -71,6 +71,8 @@ export const R2_KEYS = {
   words: (lang: Lang) => `manifest/${PRODUCT}/${lang}.words.json`,
   pdf: (lang: Lang) => `pdf/${PRODUCT}/${lang}/master.pdf`,
   photo: (name: string) => `photos/${PRODUCT}/${name}.webp`,
+  /** the MP4 of a cue that is a clip; its `photo` key is the poster */
+  clip: (name: string) => `photos/${PRODUCT}/${name}.mp4`,
   previewAudio: (lang: Lang) => `preview/${PRODUCT}/${lang}/intro-30s.mp3`,
   previewPdf: (lang: Lang) => `preview/${PRODUCT}/${lang}/pdf-preview.pdf`,
 };

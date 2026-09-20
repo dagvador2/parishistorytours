@@ -19,6 +19,56 @@ export interface MediaCue {
     /** first words of the target sentence, matched case/punctuation-insensitively */
     startsWith: string;
   };
+  /**
+   * Seconds added to the anchored sentence's own time. Sentences are the
+   * finest anchor the scripts offer, so a run of photos meant to change every
+   * few seconds inside one long sentence is placed with +2, +4, +6…
+   * A negative value pulls a cue earlier (−99 on the first cue of a section
+   * means "from the first frame"); the result is clamped to 0.
+   */
+  offsetSec?: number;
+  /** CSS `object-position` for the image well; omitted means "50% 50%". */
+  pos?: string;
+  /**
+   * Turns this cue into the live route map: the player draws the walk over the
+   * photo itself, on the audio clock. Each beat names the stop that lights up
+   * and the phrase, in this section's narration, at which it does.
+   */
+  route?: MediaCueRouteBeat[];
+  /**
+   * Turns this cue into the live map of the May 1940 offensive: the player
+   * draws the arrows over the photo itself, on the audio clock. Each beat
+   * names a move of `src/data/self-guided/offensive-1940.ts` and the phrase,
+   * in this section's narration, at which it happens.
+   */
+  offensive?: MediaCueCampaignBeat[];
+  /**
+   * The same, for the 1944 map of the Allied advance — Normandy, Paris, Berlin
+   * — whose moves are in `src/data/self-guided/strategic-1944.ts`.
+   */
+  strategic?: MediaCueCampaignBeat[];
+}
+
+export interface MediaCueRouteBeat {
+  /** section id of the stop, e.g. "03-fall-of-paris" */
+  stop: string;
+  /** phrase in the narration at which that point lights up */
+  find: string;
+  /** seconds added to the phrase, to spread points named in one breath */
+  offset?: number;
+  /** medallion photo; omitted means the dot lights without one */
+  img?: string;
+  cap?: string;
+}
+export interface MediaCueCampaignBeat {
+  /** move id in that map's table, e.g. "ard" (1940) or "bypass" (1944) */
+  move: string;
+  /** phrase in the narration at which that move happens */
+  find: string;
+  /** seconds added to the phrase, to spread moves named in one breath */
+  offset?: number;
+  /** photo for a move that pins one into the frame (the Gamelin portrait) */
+  img?: string;
 }
 export type MediaCuesFile = Record<string, MediaCue[]>;
 

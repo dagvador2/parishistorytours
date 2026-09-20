@@ -450,8 +450,25 @@ export function toDisplayText(spoken: string, lang: Lang): { text: string; rewri
         if (convert) replacement = fmtRun(run, lang);
       }
       if (convert) {
-        emit(i, i + run.count, replacement);
-        i += run.count;
+        // "deux millions huit cent mille Parisiens" is correct French, but its
+        // digit form is not: collapsing the tail into a scale word makes "de"
+        // mandatory ("2,8 millions DE Parisiens"). Add it, elided before a
+        // vowel, when a bare noun follows.
+        let extra = 0;
+        if (lang === "fr" && /(?:millions?|milliards?)$/.test(replacement)) {
+          const lastTok = toks[i + run.count - 1]!;
+          const next = toks[i + run.count];
+          if (!lastTok.trail && next && /^\p{L}/u.test(next.core) && !/^(de|d'|des|du|et)$/.test(next.core)) {
+            if (/^(?:[aeiouyàâéèêëîïôöûü]|h[aeiouyàâéèêëîïôöûü])/i.test(next.core)) {
+              replacement = `${replacement} d'${next.raw.slice(next.lead.length, next.raw.length - next.trail.length)}`;
+              extra = 1;
+            } else {
+              replacement = `${replacement} de`;
+            }
+          }
+        }
+        emit(i, i + run.count + extra, replacement);
+        i += run.count + extra;
         continue;
       }
     }

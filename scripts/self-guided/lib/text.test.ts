@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { groupParagraphs, splitLongSentence, splitParagraphs, splitSentences } from "./text.ts";
 import { toDisplayText } from "./numbers.ts";
-import { letterOffsetAt, timeAtLetterOffset, wordLetterOffsets } from "./align.ts";
+import { firstLetterIndex, letterOffsetAt, timeAtLetterOffset, wordLetterOffsets } from "./align.ts";
 
 test("splitParagraphs: blank-line blocks, whitespace collapsed", () => {
   assert.deepEqual(splitParagraphs("A b.\n\n\nC d.\r\n\r\nE"), ["A b.", "C d.", "E"]);
@@ -23,6 +23,12 @@ test("splitSentences: terminal punctuation + quotes, EN and FR", () => {
   for (const s of en) assert.ok(en[0]!.text && 'She wrote: "It\'s as if we were rats in a trap." She had decided. What to do about it? Go on... Yes.'.startsWith(s.text, s.offset));
   // lower-case after a period does not split ("St. michel" style)
   assert.equal(splitSentences("Look up. all the way up. Then stop.").length, 2);
+  // a quote closing and reopening splits, despite the space French puts inside
+  // the guillemets — the letter that decides is two characters on, not one
+  assert.deepEqual(
+    splitSentences("Ses mots : « Tout est perdu. » « La route est ouverte. » Puis plus rien.").map((s) => s.text),
+    ["Ses mots : « Tout est perdu. »", "« La route est ouverte. »", "Puis plus rien."],
+  );
 });
 
 test("splitLongSentence: prefers em dash / semicolon / colon near the middle, recursive", () => {
@@ -103,7 +109,9 @@ test("toDisplayText FR: années, dates, heures, échelles, ordinaux, pourcentage
     [`Quatre-vingt-cinq pour cent de la ville`, `85${NB}% de la ville`],
     ["cent trente-deux milliards de marks-or", "132 milliards de marks-or"],
     [`une armée plafonnée à cent mille hommes.`, `une armée plafonnée à 100${NB}000 hommes.`],
-    ["Sur les deux millions huit cent mille Parisiens, seuls sept cent mille environ", `Sur les 2,8 millions Parisiens, seuls 700${NB}000 environ`],
+    // Collapsing the tail into a scale word makes "de" mandatory in French.
+    ["Sur les deux millions huit cent mille Parisiens, seuls sept cent mille environ", `Sur les 2,8 millions de Parisiens, seuls 700${NB}000 environ`],
+    ["deux millions huit cent mille habitants", "2,8 millions d'habitants"],
     ["Il déplace un million d'hommes", "Il déplace un million d'hommes"],
     [`environ vingt-deux mille hommes et cent chars`, `environ 22${NB}000 hommes et 100 chars`],
     [`dix-huit mille soldats polonais et cent soixante-dix mille civils`, `18${NB}000 soldats polonais et 170${NB}000 civils`],
@@ -160,4 +168,12 @@ test("align: letter offsets map sentence starts to word times", () => {
   // offset inside "hand" (second half) snaps to next word
   assert.equal(timeAtLetterOffset(words, offsets, 16), 1.5);
   assert.equal(timeAtLetterOffset(words, offsets, 13), 0.9);
+});
+
+test("firstLetterIndex skips the punctuation a quoted sentence opens on", () => {
+  assert.equal(firstLetterIndex("« Ici est tombé"), 2);
+  assert.equal(firstLetterIndex("Ici est tombé"), 0);
+  assert.equal(firstLetterIndex("\u201CAll is lost"), 1);
+  assert.equal(firstLetterIndex("... 1944"), 4);
+  assert.equal(firstLetterIndex("«»"), 0); // nothing to aim at
 });

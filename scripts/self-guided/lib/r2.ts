@@ -84,6 +84,7 @@ export function contentTypeFor(key: string): string {
   if (key.endsWith(".json")) return "application/json";
   if (key.endsWith(".pdf")) return "application/pdf";
   if (key.endsWith(".webp")) return "image/webp";
+  if (key.endsWith(".mp4")) return "video/mp4";
   return "application/octet-stream";
 }
 

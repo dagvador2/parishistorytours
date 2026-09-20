@@ -133,9 +133,20 @@ export function letterStream(s: string): string {
   return s.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 }
 
-/** Lexical tokens only: French typography leaves dashes, colons and guillemets as standalone tokens. */
+/**
+ * Lexical tokens, counted the way Fish's aligner counts them: French
+ * typography leaves dashes, colons and guillemets as standalone tokens (not
+ * words), and Fish splits hyphenated compounds — "Saint-Michel", "ceux-là",
+ * "quatre-vingt-dix" — into one aligned word per part. Counting the parts is
+ * what makes the two sides comparable: measured on every cached take, EN and
+ * FR, this matches Fish exactly, where counting compounds as one word drifted
+ * up to 5.6 % and tripped the guard on hyphen-dense passages.
+ */
 export function countWords(s: string): number {
-  return s.split(/\s+/).filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
+  return s
+    .split(/\s+/)
+    .flatMap((t) => t.split(/[-\u2010\u2011]/))
+    .filter((t) => /[\p{L}\p{N}]/u.test(t)).length;
 }
 
 /**
