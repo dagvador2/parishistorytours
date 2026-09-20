@@ -1,0 +1,12 @@
+{
+  "width": 1400,
+  "height": 1079,
+  "zoom": 5,
+  "credit": "Fond de carte © OpenStreetMap contributors",
+  "proj": {
+    "x0": 0.485,
+    "x1": 0.5516666666666666,
+    "y0": 0.31056795461377806,
+    "y1": 0.3619368339894017
+  }
+}

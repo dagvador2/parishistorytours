@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "product": "left-bank-ww2",
   "lang": "en",
-  "generatedAt": "2026-09-05T11:43:36.609Z",
+  "generatedAt": "2026-09-18T21:28:17.854Z",
   "voice": {
     "provider": "fish-audio",
     "voiceId": "c1daa68c20e24ec9a918effa663093e8",
     "model": "s2.1-pro-free"
   },
-  "totalDurationSec": 60.9,
+  "totalDurationSec": 104,
   "sections": [
     {
       "id": "04-odeon",
@@ -79,6 +79,80 @@
         }
       ],
       "media": []
+    },
+    {
+      "id": "06-sorbonne-facade",
+      "index": 5,
+      "audio": "audio/left-bank-ww2/en/06-sorbonne-facade.mp3",
+      "durationSec": 43.16,
+      "sourceHash": "761db1135bad",
+      "subs": [
+        {
+          "t": 0,
+          "text": "You're now in front of the Sorbonne's main entrance."
+        },
+        {
+          "t": 3.04,
+          "text": "Pay close attention to the right-hand column at the entrance."
+        },
+        {
+          "t": 6.64,
+          "text": "The bullet holes are still there."
+        },
+        {
+          "t": 8.64,
+          "text": "Liberation-week scars that the university has chosen never to repair."
+        },
+        {
+          "t": 13.15,
+          "text": "The Latin Quarter — and the Sorbonne in particular —"
+        },
+        {
+          "t": 16.43,
+          "text": "became one of the most important pockets of fighting on the Left Bank during the August 1944 insurrection."
+        },
+        {
+          "t": 23.39,
+          "text": "Students, FFI fighters, and ordinary Parisians made these streets some of the fiercest battlegrounds of the week."
+        },
+        {
+          "t": 30.93,
+          "text": "The bullet holes on this column are a direct reminder of that."
+        },
+        {
+          "t": 34.37,
+          "text": "From here, walk around the Sorbonne to the other side of the building."
+        },
+        {
+          "t": 38.21,
+          "text": "Find the observatory tower, and start the next audio as soon as you catch sight of it."
+        }
+      ],
+      "media": [
+        {
+          "t": 0,
+          "img": "photos/left-bank-ww2/anim_sorbonne_impacts.webp",
+          "cap": "The bullet marks on the right-hand column, at the Sorbonne's main entrance.",
+          "w": 720,
+          "h": 554,
+          "video": "photos/left-bank-ww2/anim_sorbonne_impacts.mp4"
+        },
+        {
+          "t": 13.15,
+          "img": "photos/left-bank-ww2/g05_sorbonne_groupe.webp",
+          "cap": "The Latin Quarter in front of the Sorbonne, one of the pockets of fighting of August 1944.",
+          "w": 1200,
+          "h": 900
+        },
+        {
+          "t": 30.93,
+          "img": "photos/left-bank-ww2/anim_sorbonne_impacts.webp",
+          "cap": "The marks on this column — a direct reminder of that week in August 1944.",
+          "w": 720,
+          "h": 554,
+          "video": "photos/left-bank-ww2/anim_sorbonne_impacts.mp4"
+        }
+      ]
     }
   ]
 }

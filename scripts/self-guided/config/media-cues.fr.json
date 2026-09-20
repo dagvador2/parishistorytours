@@ -1,6 +1,130 @@
 {
-  "01-intro": [],
+  "01-intro": [
+    {
+      "img": "g01_guide_intro",
+      "cap": "Clément au soixante boulevard Saint-Michel, devant les plaques et le mur criblé d'impacts.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Bienvenue sur le tour de la"
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "map_base",
+      "cap": "Le parcours — chaque lieu s'allume au moment où il est nommé.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Voilà comment ça fonctionne."
+      },
+      "route": [
+        {
+          "stop": "02-context-of-war",
+          "find": "on va commencer au",
+          "img": "n01_mur_saint_michel"
+        },
+        {
+          "stop": "03-fall-of-paris",
+          "find": "pour arriver au palais du luxembourg",
+          "img": "n05_palais_luxembourg"
+        },
+        {
+          "stop": "04-odeon",
+          "find": "nous irons au théâtre de l'odéon",
+          "img": "n09_plaque_guierre"
+        },
+        {
+          "stop": "05-resistance",
+          "find": "au croisement de la rue monsieur",
+          "img": "n27_rue_monsieur_le_prince"
+        },
+        {
+          "stop": "06-sorbonne-facade",
+          "find": "ensuite trois courts arrêts"
+        },
+        {
+          "stop": "07-observatory",
+          "find": "ensuite trois courts arrêts",
+          "offset": 0.7
+        },
+        {
+          "stop": "08-saint-severin",
+          "find": "ensuite trois courts arrêts",
+          "offset": 1.4
+        },
+        {
+          "stop": "09-liberation",
+          "find": "pour enfin terminer à notre",
+          "img": "n47_notre_dame"
+        }
+      ]
+    },
+    {
+      "img": "g08_guide_physique",
+      "cap": "Le tour en personne, devant Notre-Dame — les petites histoires que je garde pour la visite guidée.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "Cette version autoguidée couvre l'arc historique"
+      }
+    }
+  ],
   "02-context-of-war": [
+    {
+      "img": "n01_mur_saint_michel",
+      "cap": "Le soixante boulevard Saint-Michel — la façade de l'École des mines, criblée d'impacts depuis août 1944.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Bienvenue au premier arrêt, au soixante"
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "n02_pantheon",
+      "cap": "Le Panthéon, à quelques centaines de mètres derrière vous.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "À quelques centaines de mètres aussi"
+      }
+    },
+    {
+      "img": "n53_jean_moulin",
+      "cap": "Jean Moulin — la figure la plus importante de la Résistance française, au Panthéon depuis 1964.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "À quelques centaines de mètres aussi"
+      },
+      "offsetSec": 4.2,
+      "pos": "50% 20%"
+    },
+    {
+      "img": "map_base",
+      "cap": "Le parcours — les quatre arrêts principaux, dans l'ordre annoncé.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Mais tout d'abord, voici comment va"
+      },
+      "route": [
+        {
+          "stop": "02-context-of-war",
+          "find": "ce premier arrêt ici",
+          "img": "n01_mur_saint_michel"
+        },
+        {
+          "stop": "03-fall-of-paris",
+          "find": "couvrira la chute de paris",
+          "img": "n05_palais_luxembourg"
+        },
+        {
+          "stop": "05-resistance",
+          "find": "du premier réseau de résistance",
+          "img": "n27_rue_monsieur_le_prince"
+        },
+        {
+          "stop": "09-liberation",
+          "find": "on terminera à notre",
+          "img": "n47_notre_dame"
+        }
+      ]
+    },
     {
       "img": "p05_0",
       "cap": "Le wagon en forêt de Compiègne où l'armistice de 1918 a été signé.",
@@ -10,12 +134,63 @@
       }
     },
     {
+      "img": "n16_traite_versailles",
+      "cap": "La galerie des Glaces de Versailles le 28 juin 1919, jour de la signature du traité.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "L'année suivante, ils sont forcés de"
+      }
+    },
+    {
+      "img": "n54_versailles_le_matin",
+      "cap": "« La paix est conclue » — Le Matin du 29 juin 1919, au lendemain de la signature.",
+      "anchor": {
+        "paragraph": 6,
+        "startsWith": "Le traité a frappé l'Allemagne sur"
+      }
+    },
+    {
+      "img": "n55_krach_1929",
+      "cap": "Le parquet de la Bourse pendant le krach de 1929.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Le krach de mille neuf cent"
+      }
+    },
+    {
+      "img": "n04_hitler_1933",
+      "cap": "Berlin, 1er mai 1933 — Hitler debout dans sa voiture devant la foule, quelques mois après son arrivée au pouvoir.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Et Hitler a pris le pouvoir"
+      }
+    },
+    {
       "img": "p06_1",
       "cap": "Neville Chamberlain — Premier ministre britannique, figure de l'apaisement d'avant-guerre.",
       "anchor": {
         "paragraph": 8,
         "startsWith": "La figure centrale, c'est le Premier"
-      }
+      },
+      "pos": "50% 22%"
+    },
+    {
+      "img": "n56_chamberlain_chapeau",
+      "cap": "Chamberlain — préserver la paix à presque n'importe quel prix.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Il voulait préserver la paix à"
+      },
+      "pos": "50% 10%"
+    },
+    {
+      "img": "n57_chamberlain_portrait",
+      "cap": "« On ne va pas entrer en guerre pour ça. » — l'apaisement, clause après clause.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "À chaque fois qu'Hitler enfreignait une"
+      },
+      "pos": "50% 0%"
     },
     {
       "img": "p07_2",
@@ -34,206 +209,1137 @@
       }
     },
     {
+      "img": "n58_invasion_tchecoslovaquie",
+      "cap": "Les troupes allemandes entrent en Tchécoslovaquie, mars 1939 — six mois après Munich.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Six mois plus tard, Hitler enfreint"
+      }
+    },
+    {
       "img": "p08_4",
-      "cap": "Les troupes allemandes franchissent la frontière polonaise, 1er septembre 1939 — début de la Seconde Guerre mondiale.",
+      "cap": "Les troupes allemandes franchissent la frontière polonaise, 1er septembre 1939.",
       "anchor": {
         "paragraph": 10,
         "startsWith": "Et quand Hitler envahit la Pologne"
       }
+    },
+    {
+      "img": "n59_invasion_pologne_2",
+      "cap": "Les blindés allemands en Pologne — la France et le Royaume-Uni déclarent la guerre le 3 septembre.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "Et quand Hitler envahit la Pologne"
+      },
+      "offsetSec": 4.7
+    },
+    {
+      "img": "g10_guide_boulevard",
+      "cap": "Vingt ans d'histoire en quelques minutes — Clément au premier arrêt du tour en personne.",
+      "anchor": {
+        "paragraph": 11,
+        "startsWith": "Voilà, vous venez d'écouter vingt ans"
+      },
+      "pos": "50% 15%"
     }
   ],
   "03-fall-of-paris": [
+    {
+      "img": "n05_palais_luxembourg",
+      "cap": "Le Palais du Luxembourg, siège du Sénat, vu depuis la terrasse du jardin.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous êtes maintenant devant le Palais"
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "p10_5",
+      "cap": "Paul Reynaud — c'est son discours du 21 mai 1940, ici même, qui a dit la vérité au Sénat.",
+      "anchor": {
+        "paragraph": 1,
+        "startsWith": "C'est ici, le vingt-et-un mai mille"
+      },
+      "offsetSec": 4.1
+    },
+    {
+      "img": "n05_palais_luxembourg",
+      "cap": "Le Palais du Luxembourg — gardez-le devant vous, on remonte cinq ans en arrière.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "D'abord, plantons le décor."
+      }
+    },
+    {
+      "img": "n60_theatre_odeon",
+      "cap": "Le Théâtre de l'Odéon — théâtres, cinémas et music-halls ferment le 3 septembre 1939.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Les théâtres, les cinémas et les"
+      }
+    },
+    {
+      "img": "n15_notre_dame_1939",
+      "cap": "Notre-Dame protégée par des sacs de sable, 1939 — Paris se prépare aux bombardements.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Des sacs de sable sont apparus"
+      }
+    },
+    {
+      "img": "n19_pologne_chars",
+      "cap": "Les blindés allemands et l'infanterie en Pologne, septembre 1939.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "La Pologne est écrasée en à"
+      }
+    },
+    {
+      "img": "n61_ligne_maginot",
+      "cap": "Un ouvrage de la ligne Maginot — c'est derrière elle que la France attend une attaque qui ne vient pas.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "Mais sur le front ouest, à"
+      }
+    },
+    {
+      "img": "n62_brasserie_dome",
+      "cap": "Une terrasse de Montparnasse — cinémas, théâtres et restaurants ont rouvert.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "La vie à Paris est doucement"
+      }
+    },
+    {
+      "img": "n20_drole_de_guerre",
+      "cap": "La drôle de guerre — distribution de la soupe dans un ouvrage de la ligne Maginot, hiver 1939-1940.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "Les Français ont appelé cette période"
+      }
+    },
     {
       "img": "p10_5",
       "cap": "Paul Reynaud, Premier ministre de France à partir de mars 1940.",
       "anchor": {
         "paragraph": 5,
-        "startsWith": "Le nouveau Premier ministre Paul Reynaud,"
+        "startsWith": "Mais au cours de cette drôle"
       }
     },
     {
-      "img": "p11_6",
-      "cap": "L'offensive allemande de mai 1940.",
+      "img": "n21_boulangerie_1940",
+      "cap": "Une boulangerie parisienne de l'époque — à partir du 1er avril 1940, les pains spéciaux sont interdits.",
+      "anchor": {
+        "paragraph": 6,
+        "startsWith": "À partir du premier avril mille"
+      }
+    },
+    {
+      "img": "n63_attaque_10_mai",
+      "cap": "La colonne allemande en marche, 10 mai 1940 — le chronomètre des trente-cinq jours démarre.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Et le dix mai mille neuf"
+      }
+    },
+    {
+      "img": "map_1940",
+      "cap": "Les trente-cinq jours de mai 1940 — chaque flèche part au moment où elle est racontée.",
       "anchor": {
         "paragraph": 8,
         "startsWith": "Phase un : les Allemands attaquent"
-      }
-    },
-    {
-      "img": "p11_7",
-      "cap": "Le général Maurice Gamelin — commandant en chef de l'armée française en mai 1940.",
-      "anchor": {
-        "paragraph": 8,
-        "startsWith": "Phase deux : le treize mai,"
-      }
+      },
+      "offensive": [
+        {
+          "move": "nl",
+          "find": "les allemands attaquent en belgique"
+        },
+        {
+          "move": "be",
+          "find": "les allemands attaquent en belgique",
+          "offset": 0.5
+        },
+        {
+          "move": "gamelin",
+          "find": "le général maurice gamelin",
+          "img": "p11_7"
+        },
+        {
+          "move": "fr_n",
+          "find": "vers le nord pour les arrêter"
+        },
+        {
+          "move": "gamelin_out",
+          "find": "les allemands attaquent plus bas"
+        },
+        {
+          "move": "ard",
+          "find": "les allemands attaquent plus bas",
+          "offset": 0.3
+        },
+        {
+          "move": "meuse",
+          "find": "traversent les ardennes et la rivière"
+        },
+        {
+          "move": "break",
+          "find": "et passent à travers la forêt"
+        },
+        {
+          "move": "to_paris",
+          "find": "la route de paris est ouverte"
+        },
+        {
+          "move": "call",
+          "find": "le ministre de la défense appelle"
+        },
+        {
+          "move": "quote",
+          "find": "tout est perdu"
+        },
+        {
+          "move": "quote_out",
+          "find": "avait parlé un peu vite"
+        },
+        {
+          "move": "coast",
+          "find": "ils foncent d'abord vers la côte"
+        }
+      ]
     },
     {
       "img": "p13_8",
       "cap": "Le Petit Parisien, 16 mai 1940.",
       "anchor": {
-        "paragraph": 15,
+        "paragraph": 12,
         "startsWith": "Les unes de journaux du seize"
       }
+    },
+    {
+      "img": "n05_palais_luxembourg",
+      "cap": "Le Palais du Luxembourg — c'est ici que Paul Reynaud s'adresse au Sénat le 21 mai 1940.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Maintenant, revenons au palais devant vous."
+      }
+    },
+    {
+      "img": "p10_5",
+      "cap": "Paul Reynaud au Sénat, 21 mai 1940 — le discours où il parle ouvertement de déroute.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Le vingt-et-un mai mille neuf cent"
+      }
+    },
+    {
+      "img": "n64_arras_1940",
+      "cap": "Arras sous le feu, mai 1940 — les habitants quittent la ville.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Il a annoncé aux sénateurs que"
+      }
+    },
+    {
+      "img": "n65_amiens_allemands",
+      "cap": "L'arrivée des Allemands à Amiens, mai 1940 — à cent cinquante kilomètres au nord de Paris.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Il a annoncé aux sénateurs que"
+      },
+      "offsetSec": 4.5
+    },
+    {
+      "img": "n66_churchill_1940",
+      "cap": "Winston Churchill, Premier ministre britannique depuis le 10 mai 1940.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Pendant ce temps, la coopération entre"
+      }
+    },
+    {
+      "img": "n07_dunkerque",
+      "cap": "Les plages de Dunkerque pendant l'évacuation, 26 mai – 3 juin 1940.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Les Britanniques se rendent compte que"
+      }
+    },
+    {
+      "img": "n67_dunkerque_2",
+      "cap": "L'embarquement depuis la plage — les hommes rejoignent les navires par petites embarcations.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Le résultat, c'est Dunkerque : entre"
+      }
+    },
+    {
+      "img": "n68_dunkerque_3",
+      "cap": "Dunkerque — trois cent trente mille hommes évacués à travers la Manche en neuf jours.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Le résultat, c'est Dunkerque : entre"
+      },
+      "offsetSec": 6
     },
     {
       "img": "p14_9",
       "cap": "Après le bombardement de Paris, 3 juin 1940.",
       "anchor": {
-        "paragraph": 18,
-        "startsWith": "Le trois juin mille neuf cent"
+        "paragraph": 15,
+        "startsWith": "Ensuite, début juin, Paris est bombardé."
+      }
+    },
+    {
+      "img": "n22_mussolini",
+      "cap": "Mussolini annonce l'entrée en guerre de l'Italie, 10 juin 1940.",
+      "anchor": {
+        "paragraph": 16,
+        "startsWith": "Et le dix juin, quatre jours"
+      }
+    },
+    {
+      "img": "n08_exode",
+      "cap": "L'exode de juin 1940 — près de trois Parisiens sur quatre quittent la ville.",
+      "anchor": {
+        "paragraph": 16,
+        "startsWith": "Et les Parisiens non plus."
+      }
+    },
+    {
+      "img": "n23_exode_2",
+      "cap": "Sur les routes de France, juin 1940 — les réfugiés emportent ce qu'ils peuvent.",
+      "anchor": {
+        "paragraph": 16,
+        "startsWith": "Aucune instruction claire n'avait été donnée"
+      }
+    },
+    {
+      "img": "n69_exode_paris",
+      "cap": "L'exode — une famille quitte la ville avec ce qu'elle peut pousser, juin 1940.",
+      "anchor": {
+        "paragraph": 16,
+        "startsWith": "Sur les deux millions huit cent"
+      }
+    },
+    {
+      "img": "n70_entree_allemands",
+      "cap": "Les Allemands entrent dans Paris au petit matin du 14 juin 1940, vers l'Arc de Triomphe.",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "Les Allemands entrent dans la capitale"
       }
     },
     {
       "img": "p15_10",
       "cap": "Le drapeau nazi flottant sur l'Arc de Triomphe, juin 1940.",
       "anchor": {
-        "paragraph": 20,
+        "paragraph": 17,
         "startsWith": "Le drapeau nazi est hissé partout"
+      }
+    },
+    {
+      "img": "n71_defile_15_juin",
+      "cap": "Le défilé allemand sur les Champs-Élysées, 15 juin 1940 — montrer au monde que Paris est tombée.",
+      "anchor": {
+        "paragraph": 17,
+        "startsWith": "Au matin du quinze juin, chaque"
       }
     },
     {
       "img": "p16_11",
       "cap": "Hitler au Trocadéro, 23 juin 1940 — l'image la plus reproduite de sa seule visite à Paris.",
       "anchor": {
-        "paragraph": 21,
+        "paragraph": 18,
         "startsWith": "Une semaine plus tard, Hitler fait"
+      },
+      "pos": "33% 58%"
+    },
+    {
+      "img": "g11_guide_marche_sorbonne",
+      "cap": "On repart — la suite du tour, vers l'Occupation et la Résistance.",
+      "anchor": {
+        "paragraph": 19,
+        "startsWith": "D'ici, on va vers l'Occupation et"
+      },
+      "pos": "50% 20%"
+    }
+  ],
+  "04-odeon": [
+    {
+      "img": "n72_odeon_aujourdhui",
+      "cap": "Le Théâtre de l'Odéon — le bâtiment devant vous.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous êtes maintenant devant le Théâtre"
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "g13_groupe_odeon",
+      "cap": "Le même arrêt en visite guidée — au pied du Théâtre de l'Odéon.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Ce petit arrêt que nous allons"
+      },
+      "pos": "50% 65%"
+    },
+    {
+      "img": "n09_plaque_guierre",
+      "cap": "La plaque de Jacques Guierre, rue Corneille, contre le Théâtre de l'Odéon.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous devriez voir une petite plaque"
       }
     },
     {
-      "img": "p17_13",
-      "cap": "La France divisée après l'armistice : zone occupée (nord et ouest), zone « libre » sous Vichy (sud), et l'Alsace-Moselle annexée.",
+      "img": "n73_voiture_ffi",
+      "cap": "Les Forces Françaises de l'Intérieur — un groupe FFI sur sa voiture, Paris, août 1944.",
       "anchor": {
-        "paragraph": 22,
-        "startsWith": "Et enfin, le vingt-deux juin mille"
+        "paragraph": 1,
+        "startsWith": "Cet acronyme désignait les Forces Françaises"
+      }
+    },
+    {
+      "img": "n74_ffi_barricade",
+      "cap": "Des FFI derrière une barricade de barbelés, Paris, août 1944.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Leur rôle pendant l'insurrection, qui mènera"
+      },
+      "offsetSec": 6
+    },
+    {
+      "img": "n43_combats_rues",
+      "cap": "Des combattants FFI au sol dans une rue de Paris, août 1944.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Leur rôle pendant l'insurrection, qui mènera"
+      },
+      "offsetSec": 9.4
+    },
+    {
+      "img": "n75_jacques_guierre",
+      "cap": "Jacques Guierre — étudiant FFI, tué ici le 25 août 1944, à vingt ans.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Ce matin-là, Jacques Guierre avait pour"
+      },
+      "pos": "50% 30%"
+    },
+    {
+      "img": "n76_tanks_luxembourg",
+      "cap": "Les blindés allemands retranchés au Jardin du Luxembourg — l'objectif de sa mission.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Ce matin-là, Jacques Guierre avait pour"
+      },
+      "offsetSec": 5.3
+    },
+    {
+      "img": "g12_guide_odeon",
+      "cap": "On repart vers la Rue Monsieur-le-Prince — le troisième arrêt.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "Très bien, d'ici, continuez la Rue"
       }
     }
   ],
-  "04-odeon": [],
   "05-resistance": [
+    {
+      "img": "n52_plaque_monsieur_le_prince",
+      "cap": "La plaque de la rue, sixième arrondissement — « de l'ancien hôtel des Princes de Condé ».",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Bienvenue au troisième arrêt."
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "n27_rue_monsieur_le_prince",
+      "cap": "La Rue Monsieur-le-Prince aujourd'hui — une rue ordinaire, et c'est en partie le sujet.",
+      "anchor": {
+        "paragraph": 1,
+        "startsWith": "Rien ici ne marque l'endroit —"
+      }
+    },
+    {
+      "img": "n10_agnes_humbert",
+      "cap": "Agnès Humbert — historienne de l'art, cofondatrice du réseau du Musée de l'Homme.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Elle s'appelait Agnès Humbert."
+      },
+      "pos": "50% 22%"
+    },
+    {
+      "img": "p17_13",
+      "cap": "La France divisée après l'armistice : zone occupée, zone « libre » sous Vichy, et l'Alsace-Moselle annexée.",
+      "anchor": {
+        "paragraph": 4,
+        "startsWith": "Huit jours plus tard, le vingt-deux"
+      }
+    },
     {
       "img": "p20_14",
       "cap": "Le Musée de l'Homme au Trocadéro — le musée qui a donné son nom au réseau.",
       "anchor": {
-        "paragraph": 7,
-        "startsWith": "De l'autre côté de la ville,"
+        "paragraph": 4,
+        "startsWith": "Le personnel des grands musées parisiens"
+      }
+    },
+    {
+      "img": "n28_panneaux_allemands",
+      "cap": "Les panneaux allemands plantés dans Paris — « Kommandant von Gross-Paris ».",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "Très vite, elle remarque ce qui"
+      }
+    },
+    {
+      "img": "n29_soldats_allemands_paris",
+      "cap": "Des soldats allemands en visite dans Paris, 1940.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "Les musées sont gratuits pour les"
+      }
+    },
+    {
+      "img": "n30_soldats_cafe_paris",
+      "cap": "Une terrasse parisienne sous l'Occupation — l'occupant est partout, dans le quotidien.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "L'Occupation s'est infiltrée dans chaque institution."
       }
     },
     {
       "img": "p21_15",
       "cap": "Jean Cassou — écrivain, historien de l'art, cofondateur du réseau du Musée de l'Homme.",
       "anchor": {
-        "paragraph": 9,
+        "paragraph": 7,
         "startsWith": "Son allié le plus proche était"
+      },
+      "pos": "50% 30%"
+    },
+    {
+      "img": "n31_horloge",
+      "cap": "Une horloge de l'armée allemande — dans leur lieu de réunion, la leur restait à l'heure française.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Ils se réunissaient chaque semaine dans"
+      }
+    },
+    {
+      "img": "n34_tract_resistance",
+      "cap": "Un tract clandestin — au début, quelques mots sur un bout de papier.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "Ils ont commencé petit : de"
+      }
+    },
+    {
+      "img": "n39_journal_resistance",
+      "cap": "Le premier numéro de Résistance, 15 décembre 1940.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "Et enfin, le quinze décembre mille"
       }
     },
     {
       "img": "p22_16",
-      "cap": "Le premier numéro de Résistance, décembre 1940.",
+      "cap": "Quatre pages, sans la moindre image — le journal du réseau du Musée de l'Homme.",
       "anchor": {
         "paragraph": 12,
-        "startsWith": "Le quinze décembre mille neuf cent"
+        "startsWith": "Ce journal, que vous voyez, était"
+      },
+      "pos": "50% 6%"
+    },
+    {
+      "img": "n32_gestapo_paris",
+      "cap": "La police allemande s'installe à Paris — Carl Oberg, chef de la SS et de la police en France, aux côtés de Pierre Laval.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Début mille neuf cent quarante-et-un, la"
       }
+    },
+    {
+      "img": "n50_albert_gaveau",
+      "cap": "Albert Gaveau — entré dans le réseau en février 1941, il travaillait pour la Gestapo.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Et en février mille neuf cent"
+      }
+    },
+    {
+      "img": "n10_agnes_humbert",
+      "cap": "Agnès Humbert — arrêtée le 13 avril 1941, déportée, condamnée aux travaux forcés.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "Les Allemands sont venus la chercher"
+      },
+      "pos": "50% 22%"
     },
     {
       "img": "p23_17",
       "cap": "Notre Guerre — le journal d'Agnès Humbert, publié en 1946.",
       "anchor": {
-        "paragraph": 17,
-        "startsWith": "Elle a survécu aux camps, est"
+        "paragraph": 16,
+        "startsWith": "Mais elle a survécu au camp."
+      }
+    },
+    {
+      "img": "n47_notre_dame",
+      "cap": "Notre-Dame de Paris — le dernier arrêt du parcours.",
+      "anchor": {
+        "paragraph": 19,
+        "startsWith": "Allez, pour finir notre tour sur"
       }
     }
   ],
-  "06-sorbonne-facade": [],
-  "07-observatory": [],
+  "06-sorbonne-facade": [
+    {
+      "img": "n84_sorbonne_facade",
+      "cap": "La Sorbonne, place de la Sorbonne — la chapelle et l'entrée principale.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous êtes maintenant devant l'entrée principale"
+      },
+      "offsetSec": -99,
+      "pos": "50% 35%"
+    },
+    {
+      "img": "anim_sorbonne_impacts",
+      "cap": "Les impacts de balles sur la colonne de droite, à l'entrée de la Sorbonne.",
+      "anchor": {
+        "paragraph": 1,
+        "startsWith": "Les impacts de balles sont toujours"
+      },
+      "offsetSec": -0.6
+    },
+    {
+      "img": "g15_groupe_quartier_latin",
+      "cap": "Une visite dans les rues du Quartier latin, l'un des foyers de combats d'août 1944.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Le Quartier latin — et la"
+      }
+    },
+    {
+      "img": "anim_sorbonne_impacts",
+      "cap": "Les impacts sur cette colonne — un rappel direct de la semaine d'août 1944.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "Les impacts sur cette colonne sont"
+      }
+    }
+  ],
+  "07-observatory": [
+    {
+      "img": "n11_observatoire",
+      "cap": "La tour de l'observatoire de la Sorbonne, criblée d'impacts des combats d'août 1944.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Levez les yeux vers la tour"
+      },
+      "offsetSec": -99
+    }
+  ],
   "08-saint-severin": [
+    {
+      "img": "n49_saint_severin",
+      "cap": "L'église Saint-Séverin, l'une des plus anciennes de la Rive Gauche.",
+      "anchor": {
+        "paragraph": 0,
+        "startsWith": "Vous êtes maintenant devant l'Église Saint-Séverin,"
+      },
+      "offsetSec": -99
+    },
     {
       "img": "p25_18",
       "cap": "Barricade sur la Rue du Petit-Pont, devant Saint-Séverin — août 1944.",
       "anchor": {
         "paragraph": 1,
-        "startsWith": "Dans le PDF, vous trouverez une"
+        "startsWith": "Regardez l'image qui s'affiche maintenant à"
       }
     },
     {
       "img": "p26_19",
-      "cap": "Barricade au 30 Rue Saint-Jacques, à quelques rues d'ici.",
+      "cap": "La seconde barricade, au 30 rue Saint-Jacques — portraits des dirigeants allemands accrochés dessus.",
       "anchor": {
         "paragraph": 2,
-        "startsWith": "Plus de six cents barricades ont"
+        "startsWith": "C'est celle qui s'affiche maintenant à"
       }
     }
   ],
   "09-liberation": [
     {
-      "img": "p28_20",
-      "cap": "Le général Dietrich von Choltitz — commandant allemand du « Grand Paris », août 1944.",
+      "img": "n85_notre_dame_face",
+      "cap": "Notre-Dame de Paris, depuis le quai — vous y êtes.",
       "anchor": {
-        "paragraph": 9,
-        "startsWith": "Côté allemand : le général Dietrich"
+        "paragraph": 0,
+        "startsWith": "Vous êtes face à Notre-Dame de"
+      },
+      "offsetSec": -99
+    },
+    {
+      "img": "n12_prefecture",
+      "cap": "La Préfecture de Police de Paris, île de la Cité — juste en face de Notre-Dame.",
+      "anchor": {
+        "paragraph": 1,
+        "startsWith": "Mais le bâtiment dont parle vraiment"
       }
     },
     {
-      "img": "p29_22",
-      "cap": "Le général Philippe Leclerc — commandant de la 2e Division Blindée française, qui mènera la poussée alliée dans Paris.",
+      "img": "n86_ffi_prefecture_feu",
+      "cap": "Des FFI au fusil-mitrailleur à une fenêtre de la Préfecture, août 1944.",
       "anchor": {
-        "paragraph": 10,
-        "startsWith": "Ils contrôlaient l'essentiel des forces de"
+        "paragraph": 2,
+        "startsWith": "La Préfecture de Police est la"
       }
+    },
+    {
+      "img": "p33_27",
+      "cap": "Un Piper Cub — l'avion de la mission du 24 août 1944.",
+      "anchor": {
+        "paragraph": 2,
+        "startsWith": "C'est là que la Libération de"
+      },
+      "offsetSec": 6.7
+    },
+    {
+      "img": "n87_prisonniers_stalingrad",
+      "cap": "Prisonniers allemands à Stalingrad — sur le front de l'Est, l'avantage a changé de camp.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Sur le théâtre global de la"
+      }
+    },
+    {
+      "img": "n13_debarquement",
+      "cap": "Le débarquement allié en Normandie, juin 1944.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Cela se matérialise par le débarquement"
+      }
+    },
+    {
+      "img": "n35_debarquement_2",
+      "cap": "Omaha Beach, 6 juin 1944 — la rampe s'abaisse.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Cela se matérialise par le débarquement"
+      },
+      "offsetSec": 1.8
+    },
+    {
+      "img": "n36_debarquement_3",
+      "cap": "Les renforts débarquent sur la plage dans les jours qui suivent.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "Cela se matérialise par le débarquement"
+      },
+      "offsetSec": 3.5
+    },
+    {
+      "img": "map_1944",
+      "cap": "De la Normandie à Berlin — et Paris sur le chemin.",
+      "anchor": {
+        "paragraph": 3,
+        "startsWith": "A partir de là, l'objectif est"
+      },
+      "strategic": [
+        {
+          "move": "landed",
+          "find": "A partir de là, l'objectif est clair"
+        },
+        {
+          "move": "berlin",
+          "find": "atteindre Berlin et mettre fin"
+        },
+        {
+          "move": "paris",
+          "find": "Mais entre la Normandie et Berlin se trouve Paris"
+        },
+        {
+          "move": "question",
+          "find": "faut-il libérer Paris tout de suite"
+        },
+        {
+          "move": "question_out",
+          "find": "il faudra approvisionner la capitale"
+        },
+        {
+          "move": "supply_men",
+          "find": "ce qui demandera des hommes"
+        },
+        {
+          "move": "supply_fuel",
+          "find": "de l'essence"
+        },
+        {
+          "move": "supply_food",
+          "find": "de la nourriture"
+        },
+        {
+          "move": "bypass",
+          "find": "ils souhaitent contourner Paris"
+        }
+      ]
+    },
+    {
+      "img": "n43_combats_rues",
+      "cap": "L'insurrection parisienne — des combattants au sol dans une rue de la capitale, août 1944.",
+      "anchor": {
+        "paragraph": 5,
+        "startsWith": "Mais l'insurrection parisienne démarre le dix-neuf"
+      }
+    },
+    {
+      "img": "p28_20",
+      "cap": "Le général Dietrich von Choltitz — commandant allemand du « Grand Paris », août 1944.",
+      "anchor": {
+        "paragraph": 6,
+        "startsWith": "Côté allemand : le général Dietrich"
+      },
+      "pos": "50% 15%"
+    },
+    {
+      "img": "n88_insurrection_drapeau",
+      "cap": "L'insurrection dans Paris, drapeau français à la main — août 1944.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Côté français, et c'est un petit"
+      }
+    },
+    {
+      "img": "p29_21",
+      "cap": "Le colonel Henri Rol-Tanguy — chef régional communiste des FFI, qui va imposer l'insurrection.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Les communistes, qui dirigeaient l'essentiel des"
+      },
+      "pos": "50% 12%"
+    },
+    {
+      "img": "n37_de_gaulle",
+      "cap": "Le général Charles de Gaulle — chef de la France libre.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Et de l'autre côté les gaullistes,"
+      },
+      "pos": "50% 0%"
+    },
+    {
+      "img": "p29_22",
+      "cap": "Le général Philippe Leclerc — commandant de la 2e Division Blindée française.",
+      "anchor": {
+        "paragraph": 7,
+        "startsWith": "Ils contrôlaient l'essentiel des forces de"
+      },
+      "offsetSec": 4
+    },
+    {
+      "img": "n74_ffi_barricade",
+      "cap": "Des FFI derrière une barricade parisienne — l'insurrection que les deux camps voulaient.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "L'insurrection était nécessaire pour les deux"
+      }
+    },
+    {
+      "img": "n37_de_gaulle",
+      "cap": "Les gaullistes veulent attendre les Alliés — de Gaulle jouera son entrée.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Les gaullistes voulaient retarder l'insurrection —"
+      },
+      "pos": "50% 0%"
+    },
+    {
+      "img": "p29_21",
+      "cap": "Rol-Tanguy veut lancer l'insurrection tout de suite, sans les Américains.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "De leur côté les communistes dirigés"
+      },
+      "pos": "50% 12%"
     },
     {
       "img": "p30_23",
       "cap": "L'appel à l'insurrection placardé sur les murs de Paris, août 1944.",
       "anchor": {
-        "paragraph": 12,
-        "startsWith": "L'insurrection commence le dix-neuf août mille"
+        "paragraph": 8,
+        "startsWith": "Elle démarre le dix-neuf août mille"
       }
     },
     {
-      "img": "p31_24",
-      "cap": "La presse clandestine de ces jours-là — appelant les Parisiens « Aux barricades ! »",
+      "img": "n42_prefecture_ffi",
+      "cap": "Le portail de la Préfecture de Police, la première place forte saisie par la Résistance.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Les deux mille policiers parisiens se"
+      }
+    },
+    {
+      "img": "n86_ffi_prefecture_feu",
+      "cap": "Les policiers tirent depuis les fenêtres de la Préfecture sur tout véhicule allemand qui passe.",
+      "anchor": {
+        "paragraph": 8,
+        "startsWith": "Les deux mille policiers parisiens se"
+      },
+      "offsetSec": 4.1
+    },
+    {
+      "img": "n14_panther_paris",
+      "cap": "Un Panther dans Paris, devant l'Arc de Triomphe — le type de char envoyé sur le parvis.",
+      "anchor": {
+        "paragraph": 9,
+        "startsWith": "À quinze heures trente, les Allemands"
+      }
+    },
+    {
+      "img": "n38_luftwaffe",
+      "cap": "Un bombardier allemand Heinkel He 111 au-dessus de Paris.",
+      "anchor": {
+        "paragraph": 10,
+        "startsWith": "Son plan : une frappe aérienne"
+      }
+    },
+    {
+      "img": "n90_voiture_treve",
+      "cap": "Une voiture à haut-parleur annonce la trêve dans les rues de Paris, août 1944.",
+      "anchor": {
+        "paragraph": 11,
+        "startsWith": "Une trêve entre français et allemands"
+      }
+    },
+    {
+      "img": "p29_21",
+      "cap": "Rol-Tanguy — « Paris libre vaut bien deux cent mille morts. »",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "Rol-Tanguy, ce jour-là, a prononcé la"
+      },
+      "pos": "50% 12%"
+    },
+    {
+      "img": "p25_18",
+      "cap": "Une barricade rue du Petit-Pont, devant Saint-Séverin — elles s'élèvent partout à partir du 22 août.",
+      "anchor": {
+        "paragraph": 12,
+        "startsWith": "Les combats reprennent le vingt-deux août"
+      }
+    },
+    {
+      "img": "n91_eisenhower_bradley_portraits",
+      "cap": "Eisenhower et Bradley, à qui revient la décision de foncer sur Paris.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "Dans la nuit du vingt-deux août,"
+      }
+    },
+    {
+      "img": "p29_22",
+      "cap": "Le général Leclerc met le cap sur Paris avec la 2e Division Blindée.",
+      "anchor": {
+        "paragraph": 13,
+        "startsWith": "La deuxième Division Blindée française du"
+      }
+    },
+    {
+      "img": "p28_20",
+      "cap": "L'ordre d'Hitler à Von Choltitz : les Alliés ne devront trouver que des ruines.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Le vingt-trois août, Von Choltitz reçoit"
+      },
+      "pos": "50% 15%"
+    },
+    {
+      "img": "n92_luxembourg_senat_tank",
+      "cap": "Le Palais du Luxembourg, siège du Sénat — comme les ponts et les grands bâtiments de Paris, il était piégé, prêt à sauter.",
+      "anchor": {
+        "paragraph": 14,
+        "startsWith": "Partout dans la ville, les explosifs"
+      }
+    },
+    {
+      "img": "n89_ffi_prefecture_cour",
+      "cap": "Les hommes retranchés dans la cour de la Préfecture — presque à court de munitions.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "Au matin du vingt-quatre août, la"
+      }
+    },
+    {
+      "img": "n86_ffi_prefecture_feu",
+      "cap": "Aux fenêtres, on tient la position en attendant les Alliés.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "Ils appelaient désespérément les commissariats au"
+      }
+    },
+    {
+      "img": "n93_2edb_route_paris",
+      "cap": "La 2e Division Blindée en route vers Paris — si proche, et pourtant si loin.",
+      "anchor": {
+        "paragraph": 15,
+        "startsWith": "Les armées alliées étaient si proches,"
+      }
+    },
+    {
+      "img": "p29_22",
+      "cap": "Le général Leclerc — c'est lui qui décide de lancer la mission aérienne.",
       "anchor": {
         "paragraph": 17,
-        "startsWith": "Rol-Tanguy, ce jour-là, a prononcé la"
+        "startsWith": "Dans l'après-midi du vingt-quatre août, Leclerc"
+      }
+    },
+    {
+      "img": "n18_callet_mantoux",
+      "cap": "L'équipage de la mission : le capitaine Jean Callet et le lieutenant Étienne Mantoux.",
+      "anchor": {
+        "paragraph": 18,
+        "startsWith": "Le capitaine Jean Callet était aux"
       }
     },
     {
       "img": "p33_27",
-      "cap": "Un Piper Cub — le type d'avion léger utilisé pour la mission.",
+      "cap": "Un Piper Cub — l'avion de reconnaissance léger utilisé pour la mission.",
       "anchor": {
-        "paragraph": 24,
-        "startsWith": "Le lieutenant Étienne Mantoux était à"
+        "paragraph": 18,
+        "startsWith": "Ils décollent vers dix-sept heures à"
       }
     },
     {
       "img": "p34_28",
       "cap": "Le trajet de la mission — au-dessus de Paris, jusqu'à la Préfecture, et retour.",
       "anchor": {
-        "paragraph": 25,
-        "startsWith": "À huit cents mètres de la"
+        "paragraph": 18,
+        "startsWith": "Il s'approche de Paris, et le"
+      }
+    },
+    {
+      "img": "n94_prefecture_vue_haut",
+      "cap": "La Préfecture de Police vue d'en haut — la cour visée depuis l'avion.",
+      "anchor": {
+        "paragraph": 18,
+        "startsWith": "A l'approche du bâtiment, le pilote"
       }
     },
     {
       "img": "p35_29",
-      "cap": "Le message largué par Mantoux dans la cour de la Préfecture, signé Leclerc.",
+      "cap": "Le message largué dans la cour : « Le Général Leclerc vous fait dire : Tenez bon, nous arrivons. »",
       "anchor": {
-        "paragraph": 27,
-        "startsWith": "Étienne Mantoux n'a pas eu cette"
+        "paragraph": 18,
+        "startsWith": "Sur ce message signé par le"
+      }
+    },
+    {
+      "img": "p36_30",
+      "cap": "Le rapport officiel de la mission, rédigé après le retour des pilotes.",
+      "anchor": {
+        "paragraph": 19,
+        "startsWith": "Malgré treize impacts de balle dans"
+      },
+      "pos": "50% 0%"
+    },
+    {
+      "img": "n89_ffi_prefecture_cour",
+      "cap": "Les policiers de la Préfecture tiendront le bâtiment jusqu'à l'arrivée des Alliés.",
+      "anchor": {
+        "paragraph": 19,
+        "startsWith": "Les policiers de la préfecture, après"
+      }
+    },
+    {
+      "img": "n44_2edb_paris",
+      "cap": "La 2e Division Blindée dans Paris, 25 août 1944.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "Enfin, au matin du vingt-cinq août,"
+      }
+    },
+    {
+      "img": "n43_combats_rues",
+      "cap": "Les combats font rage dans toute la ville.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "Les combats font rage dans tout"
+      }
+    },
+    {
+      "img": "n46_reddition_choltitz",
+      "cap": "Von Choltitz fait prisonnier, 25 août 1944.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "Mais vers quinze heures, Von Choltitz,"
       }
     },
     {
       "img": "p37_31",
       "cap": "Soldats allemands escortés à l'extérieur de l'Hôtel Meurice, QG de Von Choltitz, le 25 août 1944.",
       "anchor": {
-        "paragraph": 29,
-        "startsWith": "Au matin du vingt-cinq août, la"
+        "paragraph": 20,
+        "startsWith": "Et ensuite, un à un, les"
+      }
+    },
+    {
+      "img": "n45_paris_libere",
+      "cap": "Rue de Rivoli au soir du 25 août — Paris est libéré.",
+      "anchor": {
+        "paragraph": 20,
+        "startsWith": "Au soir du vingt-cinq août, Paris"
       }
     },
     {
       "img": "p38_32",
       "cap": "Le général de Gaulle descendant les Champs-Élysées, 26 août 1944.",
       "anchor": {
-        "paragraph": 30,
-        "startsWith": "Et c'est ici que se termine"
+        "paragraph": 21,
+        "startsWith": "Le vingt-six août, De Gaulle affirmera"
+      }
+    },
+    {
+      "img": "g01_guide_intro",
+      "cap": "Le 60 boulevard Saint-Michel — là où le tour a commencé.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "D'un Boulevard Saint-Michel tranquille d'avant-guerre, à"
+      }
+    },
+    {
+      "img": "n95_hitler_tour_eiffel",
+      "cap": "Hitler devant la tour Eiffel, 23 juin 1940 — Paris est tombé en trente-cinq jours.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "D'un Boulevard Saint-Michel tranquille d'avant-guerre, à"
+      },
+      "offsetSec": 2.7
+    },
+    {
+      "img": "n10_agnes_humbert",
+      "cap": "Agnès Humbert — le travail patient des réseaux de résistance.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "D'un Boulevard Saint-Michel tranquille d'avant-guerre, à"
+      },
+      "offsetSec": 5.2
+    },
+    {
+      "img": "p38_32",
+      "cap": "Les Champs-Élysées, 26 août 1944 — la Libération de Paris.",
+      "anchor": {
+        "paragraph": 22,
+        "startsWith": "D'un Boulevard Saint-Michel tranquille d'avant-guerre, à"
+      },
+      "offsetSec": 8.1
+    },
+    {
+      "img": "n96_groupe_tour_luxembourg",
+      "cap": "Un groupe du tour en personne — à refaire avec moi, pour les histoires que je garde pour la visite.",
+      "anchor": {
+        "paragraph": 23,
+        "startsWith": "Si vous avez apprécié ce tour,"
       }
     }
   ]
