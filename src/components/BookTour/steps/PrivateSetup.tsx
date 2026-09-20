@@ -85,8 +85,8 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
     }
   };
 
-  const tourOptions: { id: Tour; label: string; desc: string; img: string }[] = [
-    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: "/photos/thumbnails/pantheon_thumb.webp" },
+  const tourOptions: { id: Tour; label: string; desc: string; img: string; featured?: boolean }[] = [
+    { id: "left-bank", label: t.leftBank, desc: t.leftBankDesc, img: "/photos/thumbnails/pantheon_thumb.webp", featured: true },
     { id: "right-bank", label: t.rightBank, desc: t.rightBankDesc, img: "/photos/thumbnails/vendome_thumb.webp" },
     { id: "general-history", label: t.generalHistory, desc: t.generalHistoryDesc, img: "/photos/general_history/stop2_ile_cite.webp" },
     { id: "food-wine", label: t.foodWineTour || "Nourritour · Food & Wine", desc: t.foodWineDesc, img: "/photos/food_and_wine/nourritour-fromages-tomme-chevre-fromagerie.webp" },
@@ -107,8 +107,11 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
           {t.step1Setup.chooseTour}
         </h4>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          {tourOptions.map(({ id, label, desc, img }) => {
+          {tourOptions.map(({ id, label, desc, img, featured }) => {
             const isSelected = booking.tour === id;
+            // The left bank outsells the rest, so it stays visible even when
+            // another card is hovered and carries a "best seller" ribbon.
+            const isHighlighted = featured && !booking.tour;
             return (
               <div
                 key={id}
@@ -118,10 +121,29 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
               >
                 <div
                   className={`relative overflow-hidden border ${
-                    isSelected ? "border-[var(--ink)]" : "border-[var(--border)] hover:border-[var(--ink)]"
+                    isSelected
+                      ? "border-[var(--ink)]"
+                      : isHighlighted
+                        ? "border-[var(--rouge)]"
+                        : "border-[var(--border)] hover:border-[var(--ink)]"
                   }`}
-                  style={{ ...r2, outline: isSelected ? "1.5px solid var(--ink)" : "none" }}
+                  style={{
+                    ...r2,
+                    outline: isSelected
+                      ? "1.5px solid var(--ink)"
+                      : isHighlighted
+                        ? "1.5px solid var(--rouge)"
+                        : "none",
+                  }}
                 >
+                  {featured && !isSelected && (
+                    <span
+                      className="absolute top-0 left-0 z-10 bg-[var(--rouge)] text-white text-[10px] font-semibold uppercase px-2.5 py-1"
+                      style={{ letterSpacing: "0.12em", borderBottomRightRadius: 2 }}
+                    >
+                      {t.privateSetup?.bestSeller || "Best seller"}
+                    </span>
+                  )}
                   <img
                     src={img}
                     alt={label}

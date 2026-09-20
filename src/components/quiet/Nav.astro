@@ -29,9 +29,7 @@ const anchor = (hash: string) => context === 'home' ? `#${hash}` : `${homeRoot}#
 const links = [
   { key: 'tours',   href: anchor('tours'),   label: t('quiet.nav.tours') },
   { key: 'route',   href: anchor('route'),   label: t('quiet.nav.route') },
-  { key: 'compare', href: anchor('compare'), label: t('quiet.nav.compare') },
   { key: 'about',   href: anchor('about'),   label: t('quiet.nav.about') },
-  { key: 'faq',     href: anchor('faq'),     label: t('quiet.nav.faq') },
   { key: 'self-guided', href: `${langPrefix}/self-guided-tour/`, label: t('quiet.nav.selfGuided') },
 ];
 

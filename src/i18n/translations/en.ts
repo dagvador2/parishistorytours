@@ -356,6 +356,7 @@ export const en = {
       messagePlaceholder: "Any specific requests or questions...",
     },
     privateSetup: {
+      bestSeller: "Best seller",
       title: "Configure your private tour",
       validation: "Please select a tour, date, and time.",
     },

@@ -356,6 +356,7 @@ export const fr = {
       messagePlaceholder: "Toute demande spécifique ou question...",
     },
     privateSetup: {
+      bestSeller: "Le plus réservé",
       title: "Configurez votre visite privée",
       validation: "Veuillez sélectionner une visite, une date et une heure.",
     },
