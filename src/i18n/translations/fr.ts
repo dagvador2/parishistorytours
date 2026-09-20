@@ -831,6 +831,7 @@ export const fr = {
       compare: "Comparer",
       about: "À propos",
       faq: "FAQ",
+      selfGuided: "Audioguide",
       bookTour: "Réserver",
       menuLabel: "Menu"
     },

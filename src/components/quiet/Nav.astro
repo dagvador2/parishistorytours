@@ -32,6 +32,7 @@ const links = [
   { key: 'compare', href: anchor('compare'), label: t('quiet.nav.compare') },
   { key: 'about',   href: anchor('about'),   label: t('quiet.nav.about') },
   { key: 'faq',     href: anchor('faq'),     label: t('quiet.nav.faq') },
+  { key: 'self-guided', href: `${langPrefix}/self-guided-tour/`, label: t('quiet.nav.selfGuided') },
 ];
 
 const bookHref = book ?? (context === 'home' ? '#book' : `${homeRoot}#book`);

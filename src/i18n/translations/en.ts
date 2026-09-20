@@ -831,6 +831,7 @@ export const en = {
       compare: "Compare",
       about: "About",
       faq: "FAQ",
+      selfGuided: "Audio guide",
       bookTour: "Book a Tour",
       menuLabel: "Menu"
     },
