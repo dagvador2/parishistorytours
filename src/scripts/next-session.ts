@@ -1,11 +1,14 @@
 /**
  * Fills every [data-next-session="<tour-slug>"] placeholder with the next
  * available session for that tour: "Next date: Sat, Sep 5 · 10:30 AM · 6 spots left".
+ * The hour is always the Paris one — see src/lib/paris-time.ts.
  *
  * Honest urgency — real dates and real remaining spots straight from the DB.
  * Elements stay hidden when the API fails or a tour has no upcoming session,
  * so the page never shows a broken or empty line.
  */
+import { formatParisDate, formatParisTime } from '../lib/paris-time';
+
 interface UpcomingSlot {
   start_time: string;
   free: number;
@@ -40,13 +43,12 @@ export async function initNextSessions(): Promise<void> {
     const slot = slug ? firstBySlug[slug] : undefined;
     if (!slot) continue;
 
-    const d = new Date(slot.start_time);
-    const dateStr = d.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
-    const timeStr = d.toLocaleTimeString(locale, {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: lang !== 'fr',
+    const dateStr = formatParisDate(slot.start_time, locale, {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
     });
+    const timeStr = formatParisTime(slot.start_time, locale, { hour12: lang !== 'fr' });
     const spotsTpl =
       el.dataset.spotsTemplate || (lang === 'fr' ? '{n} places restantes' : '{n} spots left');
     const label = el.dataset.nextLabel || (lang === 'fr' ? 'Prochaine date :' : 'Next date:');

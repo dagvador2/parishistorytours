@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
+import { parisDateKey, parisWallClockToUTC } from '../../../lib/paris-time';
 
 // POST /api/admin/generate-sessions
 // Generates sessions for the next N weeks based on a weekly schedule.
@@ -8,6 +9,10 @@ import { supabase } from '../../../lib/supabase';
 //   schedule: Array<{ dayOfWeek: number (0=Sun..6=Sat), times: string[], tour: string }>,
 //   maxSpots: number (default 10)
 // }
+//
+// Days and times are read as Paris wall clock, never as the server's own —
+// deployed, that server runs on UTC, which would turn a "10:30" schedule into
+// a 12:30 session all summer.
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   // Verify admin auth
@@ -41,7 +46,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }> = [];
 
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const DAY_MS = 24 * 60 * 60 * 1000;
+    // Calendar arithmetic runs on a UTC-noon anchor of today's *Paris* date, so
+    // adding days never lands on a DST switch, and the weekday is the Paris one.
+    const [ty, tm, td] = parisDateKey(now).split('-').map(Number);
+    const anchor = Date.UTC(ty, tm - 1, td, 12);
 
     // Generate dates for each week
     for (let week = 0; week < weeksAhead; week++) {
@@ -52,30 +61,26 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         if (dayOfWeek < 0 || dayOfWeek > 6) continue;
 
         // Find the next occurrence of this dayOfWeek in this week
-        const weekStart = new Date(today);
-        weekStart.setDate(weekStart.getDate() + week * 7);
+        const weekStart = anchor + week * 7 * DAY_MS;
 
         // Move to the correct day of the week
-        const currentDay = weekStart.getDay();
+        const currentDay = new Date(weekStart).getUTCDay();
         let daysToAdd = dayOfWeek - currentDay;
         if (daysToAdd < 0) daysToAdd += 7;
-        // For week 0, skip days that are already past
-        if (week === 0 && daysToAdd === 0) {
-          // Today: still valid if there are future time slots
-        } else if (week === 0 && daysToAdd < 0) {
-          continue; // Skip past days in the current week
-        }
 
-        const targetDate = new Date(weekStart);
-        targetDate.setDate(targetDate.getDate() + daysToAdd);
-
-        // Skip dates in the past
-        if (targetDate < today) continue;
+        const targetDate = new Date(weekStart + daysToAdd * DAY_MS);
+        const targetKey = `${targetDate.getUTCFullYear()}-${String(targetDate.getUTCMonth() + 1).padStart(2, '0')}-${String(targetDate.getUTCDate()).padStart(2, '0')}`;
 
         for (const time of times) {
           const [hours, minutes] = time.split(':').map(Number);
-          const startTime = new Date(targetDate);
-          startTime.setHours(hours, minutes, 0, 0);
+          if (!Number.isFinite(hours) || !Number.isFinite(minutes)) continue;
+          if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) continue;
+
+          // "10:30" means 10:30 in Paris, whatever the server's own clock says.
+          const startTime = parisWallClockToUTC(
+            targetKey,
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00.000`
+          );
 
           // Skip times in the past (for today)
           if (startTime <= now) continue;
@@ -109,9 +114,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       )
     );
 
-    const newSessions = sessionsToCreate.filter(
-      (s) => !existingSet.has(`${s.tour_type}_${s.start_time}`)
-    );
+    // Filter against what is already stored *and* against this run's own list —
+    // the sessions table has no unique key, so a slot repeated here would land
+    // twice and show the customer the same 10:30 tour two rows running.
+    const seen = new Set<string>();
+    const newSessions = sessionsToCreate.filter((s) => {
+      const key = `${s.tour_type}_${s.start_time}`;
+      if (existingSet.has(key) || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
     const skipped = sessionsToCreate.length - newSessions.length;
 

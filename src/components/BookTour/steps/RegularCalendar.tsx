@@ -5,6 +5,7 @@ import { useBooking } from "../BookingContext";
 import { getTourName, getTourStops, tourInfo } from "../../../data/tour-info";
 import { track } from "../../../scripts/track";
 import type { SessionSlot, Tour } from "../types";
+import { formatParisTime, parisDateKey, parisTimeKey } from "../../../lib/paris-time";
 
 const TOUR_SLUGS: Tour[] = ["left-bank", "right-bank", "general-history", "food-wine"];
 
@@ -20,8 +21,10 @@ const display: React.CSSProperties = { fontFamily: "var(--font-display)", fontWe
 
 const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }) => {
   const { booking, setBooking, t, lang } = useBooking();
+  // The picker works in bare calendar days; the slot's day is the one it falls
+  // on in Paris, which is not always the visitor's own.
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(
-    initialSlot ? new Date(initialSlot.start_time) : undefined
+    initialSlot ? new Date(parisDateKey(initialSlot.start_time) + "T00:00:00") : undefined
   );
   const [slots, setSlots] = useState<SessionSlot[]>(initialSlot ? [initialSlot] : []);
   const [availableDays, setAvailableDays] = useState<Record<string, number>>({});
@@ -154,9 +157,12 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
     setAttempted(true);
     if (!isValid || !selectedSlot) return;
 
-    const slotDate = new Date(selectedSlot.start_time);
-    const date = `${slotDate.getFullYear()}-${String(slotDate.getMonth() + 1).padStart(2, "0")}-${String(slotDate.getDate()).padStart(2, "0")}`;
-    const time = slotDate.toTimeString().split(" ")[0].substring(0, 5);
+    // What goes to Stripe, to the booking row and to both confirmation emails
+    // is the Paris date and hour of the session — never the visitor's reading
+    // of it, which would put a London customer on a 09:30 tour that has no
+    // 09:30.
+    const date = parisDateKey(selectedSlot.start_time);
+    const time = parisTimeKey(selectedSlot.start_time);
 
     setBooking({
       ...booking,
@@ -171,13 +177,8 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
     onNext();
   };
 
-  const formatTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleTimeString(locale, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: lang !== "fr",
-    });
-  };
+  const formatTime = (dateTime: string) =>
+    formatParisTime(dateTime, locale, { hour12: lang !== "fr" });
 
   const modifiers = {
     available: Object.keys(availableDays).map((d) => new Date(d + "T00:00:00")),
@@ -191,8 +192,11 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
       <h3 className="text-xl mb-2 text-center text-[var(--ink)]" style={display}>
         {t.regularCalendar?.title || "Choose a session"}
       </h3>
-      <p className="text-sm text-[var(--ink-2)] text-center mb-4">
+      <p className="text-sm text-[var(--ink-2)] text-center mb-1">
         {t.regularCalendar?.subtitle || "Select a date to see available tours"}
+      </p>
+      <p className="text-xs text-[var(--ink-2)] text-center mb-4">
+        {tu.parisTime || "All times are Paris time (CET/CEST)."}
       </p>
 
       {tourFilter && (

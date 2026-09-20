@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
+import { parisDayRangeUTC } from '../../../lib/paris-time';
 
 export const GET: APIRoute = async ({ params, url }) => {
   const date = params.date;
@@ -14,9 +15,9 @@ export const GET: APIRoute = async ({ params, url }) => {
   }
 
   try {
-    // Use explicit UTC strings — no Date objects, no timezone ambiguity
-    const beginISO = `${date}T00:00:00.000Z`;
-    const endISO = `${date}T23:59:59.999Z`;
+    // `date` is a Paris calendar day, so the window is that day's Paris
+    // midnight-to-midnight expressed in UTC — DST shifts included.
+    const { beginISO, endISO } = parisDayRangeUTC(date);
 
     let query = supabase
       .from('sessions')

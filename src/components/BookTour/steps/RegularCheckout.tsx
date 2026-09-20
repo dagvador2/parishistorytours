@@ -152,8 +152,11 @@ const RegularCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--ink-2)]">{t.summary.dateTime}</span>
-                <span className="text-[var(--ink)]">
+                <span className="text-[var(--ink)] text-right">
                   {booking.date && formatDate(booking.date)} {t.calendar.at} {booking.time}
+                  <span className="block text-xs text-[var(--ink-2)]">
+                    {t.upcoming?.parisTime || "All times are Paris time (CET/CEST)."}
+                  </span>
                 </span>
               </div>
               <div className="flex justify-between">
@@ -215,6 +218,9 @@ const RegularCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
             {booking.date && formatDate(booking.date)}
             <br />
             {t.calendar.at} {booking.time}
+            <span className="block text-xs text-[var(--ink-2)]">
+              {t.upcoming?.parisTime || "All times are Paris time (CET/CEST)."}
+            </span>
           </span>
           <span className="text-[var(--ink-2)]">{t.summary.participants}</span>
           <span className="text-[var(--ink)] text-right">{participantsLabel}</span>

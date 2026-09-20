@@ -3,6 +3,7 @@ import { useBooking } from "../BookingContext";
 import { getTourName, getTourStops } from "../../../data/tour-info";
 import { track } from "../../../scripts/track";
 import type { SessionSlot, Tour } from "../types";
+import { formatParisDate, formatParisTime } from "../../../lib/paris-time";
 
 const TOUR_SLUGS: Tour[] = ["left-bank", "right-bank", "general-history", "food-wine"];
 
@@ -78,9 +79,9 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
   }, []);
 
   const fmtDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(locale, { weekday: "short", day: "numeric", month: "short" });
+    formatParisDate(iso, locale, { weekday: "short", day: "numeric", month: "short" });
   const fmtTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit", hour12: lang !== "fr" });
+    formatParisTime(iso, locale, { hour12: lang !== "fr" });
   const fmtPrice = (n: number) => (lang === "fr" ? `${n} €` : `€${n}`);
 
   const clearFilter = () => setBooking({ ...booking, tour: undefined as unknown as Tour });
@@ -93,8 +94,11 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
       >
         {tu.title || "Next available dates"}
       </h3>
-      <p className="text-sm text-[var(--ink-2)] mb-5">
+      <p className="text-sm text-[var(--ink-2)] mb-1">
         {tu.subtitle || "Pick a session and book in under a minute — or choose another option below."}
+      </p>
+      <p className="text-xs text-[var(--ink-2)] mb-5">
+        {tu.parisTime || "All times are Paris time (CET/CEST)."}
       </p>
 
       {booking.tour && (

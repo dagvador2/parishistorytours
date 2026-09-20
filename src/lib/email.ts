@@ -73,7 +73,7 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
         <p><strong>${t.participants}</strong> ${bookingData.participants} ${bookingData.participants === 1 ? t.person : t.people}</p>
         <p><strong>${t.type}</strong> ${typeName}</p>
         <p><strong>${t.date}</strong> ${new Date(bookingData.date + "T00:00:00").toLocaleDateString(dateLocale)}</p>
-        <p><strong>${t.time}</strong> ${bookingData.time}</p>
+        <p><strong>${t.time}</strong> ${bookingData.time} <span style="color: #6b7280;">${t.timeZoneNote}</span></p>
         ${bookingData.price ? `<p><strong>${t.total}</strong> €${bookingData.price}</p>` : ''}
         ${paymentMethod === 'on_site' ? `<p style="color: #d97706; font-weight: bold;">${t.onSitePaymentNote}</p>` : ''}
       </div>
@@ -130,7 +130,7 @@ export async function sendBookingEmails(bookingData: BookingEmailPayload): Promi
         <p><strong>Participants:</strong> ${bookingData.participants}</p>
         <p><strong>Type:</strong> ${bookingData.tourType}</p>
         <p><strong>Date:</strong> ${new Date(bookingData.date + "T00:00:00").toLocaleDateString('en-GB')}</p>
-        <p><strong>Time:</strong> ${bookingData.time}</p>
+        <p><strong>Time:</strong> ${bookingData.time} (Paris time)</p>
         ${bookingData.price ? `<p><strong>Amount:</strong> €${bookingData.price}</p>` : ''}
         ${paymentMethod === 'on_site' ? '<p style="color: #d97706; font-weight: bold; font-size: 16px;">⚠️ PAYMENT ON SITE - Client will pay on the day of the tour</p>' : ''}
         ${bookingData.message ? `<p><strong>Message:</strong> ${bookingData.message}</p>` : ''}

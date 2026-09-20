@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../lib/supabase';
+import { parisDateKey } from '../../lib/paris-time';
 
 export const GET: APIRoute = async ({ url }) => {
   const tour = url.searchParams.get('tour'); // optional — omit to get all tours
@@ -46,9 +47,11 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     // Group available days
+    // Keyed on the Paris calendar day, not the UTC one — an evening slot must
+    // light up the day the walk actually happens in Paris.
     const availableDays: Record<string, number> = {};
     data?.forEach((slot) => {
-      const date = new Date(slot.start_time).toISOString().split('T')[0];
+      const date = parisDateKey(slot.start_time);
       if (slot.available_spots >= participants) {
         availableDays[date] = (availableDays[date] || 0) + 1;
       }

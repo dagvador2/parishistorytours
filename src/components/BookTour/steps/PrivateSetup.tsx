@@ -221,7 +221,10 @@ const PrivateSetup: React.FC<Props> = ({ onNext, onBack }) => {
         <div className="space-y-5">
           <div>
             <label htmlFor="private-time" className="block text-sm font-medium text-[var(--ink)] mb-2">
-              {t.private.preferredTime}
+              {t.private.preferredTime}{" "}
+              <span className="font-normal text-xs text-[var(--ink-2)]">
+                {t.upcoming?.parisTime || "All times are Paris time (CET/CEST)."}
+              </span>
             </label>
             <select
               id="private-time"
