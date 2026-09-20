@@ -42,6 +42,11 @@ const partnerLinks = {
   parisjetaime: links.parisjetaime,
 };
 const hasPartners = Object.values(partnerLinks).some(Boolean);
+
+// Mêmes textes que le bloc de réservation de l'accueil : les deux pages
+// proposent le même choix, dans le même ordre — privé d'abord.
+const b = (k: string) => t(`quiet.home.booking.${k}`) as string;
+const privatePoints = [b('privatePoint1'), b('privatePoint2'), b('privatePoint3')];
 ---
 
 <section id="book" class="qbc">
@@ -71,19 +76,44 @@ const hasPartners = Object.values(partnerLinks).some(Boolean);
         </div>
       </dl>
 
-      <div class="qbc__ctas">
-        <a href={waHref} class="qbc__primary" target="_blank" rel="noopener">{t('quiet.tour.booking.primaryCta')} <span aria-hidden="true">→</span></a>
-        <a href="#book-tour" class="qbc__secondary">{t('quiet.tour.booking.secondaryCta')}</a>
+    </div>
+
+    {/* Option 1 — la visite privée d'abord, comme sur l'accueil. */}
+    <div class="qbc__block qbc__block--private">
+      <div class="qbc__private">
+        <div class="qbc__private-copy">
+          <span class="qbc__step qbc__step--invert">{b('privateStep')}</span>
+          <h3 class="qbc__private-title">{b('privateHeading')}</h3>
+          <p class="qbc__private-desc">{b('privateDescription')}</p>
+          <ul class="qbc__private-points">
+            {privatePoints.map((point) => <li>{point}</li>)}
+          </ul>
+        </div>
+        <div class="qbc__private-actions">
+          <button type="button" class="qbc__private-cta" data-private-tour={tour.slug} data-track="book_private">
+            {b('privateCta')} <span aria-hidden="true">→</span>
+          </button>
+          <a href={waHref} class="qbc__private-wa" target="_blank" rel="noopener">{b('privateWhatsapp')}</a>
+        </div>
       </div>
     </div>
 
-    <div class="qbc__direct">
-      <div class="qbc__direct-head">
-        <p class="qbc__direct-heading">{t('quiet.tour.booking.directHeading')}</p>
-        <p class="qbc__direct-desc">{t('quiet.tour.booking.directDescription')}</p>
+    {/* Option 2 — les dates déjà programmées. */}
+    <div class="qbc__block">
+      <div class="qbc__block-head qbc__block-head--scheduled">
+        <span class="qbc__step">{b('scheduledStep')}</span>
+        <h3 class="qbc__block-title">{b('scheduledHeading')}</h3>
+        <p class="qbc__block-desc">{b('scheduledDescription')}</p>
+      </div>
+      {/* Permuté quand l'assistant bascule en privé, pour que le formulaire
+          ne reste pas sous un titre « visites programmées ». */}
+      <div class="qbc__block-head qbc__block-head--private">
+        <span class="qbc__step">{b('privateStep')}</span>
+        <h3 class="qbc__block-title">{b('privateHeading')}</h3>
+        <p class="qbc__block-desc">{b('privateDescription')}</p>
       </div>
       <div class="qbc__wizard">
-        <BookTour tourFilter={tour.slug} hideChrome={true} />
+        <BookTour tourFilter={tour.slug} hideChrome={true} hidePrivateLink={true} />
       </div>
     </div>
 
@@ -94,6 +124,29 @@ const hasPartners = Object.values(partnerLinks).some(Boolean);
     )}
   </div>
 </section>
+
+<script>
+  // Même mécanique que le bloc de réservation de l'accueil : le bouton du
+  // panneau fait basculer l'assistant en visite privée, puis le ramène à
+  // l'écran — le formulaire qu'il affiche est plus haut que le bouton.
+  const bookingSection = document.querySelector<HTMLElement>('section.qbc');
+
+  document.querySelectorAll<HTMLElement>('.qbc [data-private-tour]').forEach((el) => {
+    el.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('pht:private-tour', { detail: el.dataset.privateTour || undefined }));
+      const target = document.getElementById('book-tour');
+      if (!target) return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  // Les titres des blocs suivent ce que l'assistant affiche réellement.
+  window.addEventListener('pht:booking-mode', (e) => {
+    if (!bookingSection) return;
+    bookingSection.dataset.bookingMode = (e as CustomEvent<string>).detail;
+  });
+</script>
 
 <script>
   // Refresh any element marked [data-stripe-price="<tour-slug>"] with the live
@@ -188,69 +241,142 @@ const hasPartners = Object.values(partnerLinks).some(Boolean);
     color: var(--ink-2);
   }
 
-  .qbc__ctas {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  /* --- les deux options, dans le même ordre que sur l'accueil --- */
+  .qbc__block + .qbc__block { margin-top: 40px; }
+  .qbc__block:not(.qbc__block--private) {
+    background: var(--paper-3);
+    border: 1px solid var(--border);
+    padding: 32px;
   }
-  .qbc__primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 16px 24px;
-    background: var(--ink);
-    color: var(--paper-3);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    border: 1px solid var(--ink);
-    border-radius: 2px;
-    text-decoration: none;
-    transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
-  }
-  .qbc__primary:hover { background: var(--rouge); border-color: var(--rouge); }
-  .qbc__secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 24px;
-    background: transparent;
-    color: var(--ink);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
-    border: 1px solid var(--ink);
-    border-radius: 2px;
-    text-decoration: none;
-    transition: background 120ms ease, color 120ms ease;
-  }
-  .qbc__secondary:hover { background: var(--ink); color: var(--paper-3); }
+  .qbc__block-head { margin-bottom: 24px; }
+  .qbc__block-head--private { display: none; }
+  .qbc[data-booking-mode="private"] .qbc__block-head--scheduled { display: none; }
+  .qbc[data-booking-mode="private"] .qbc__block-head--private { display: block; }
+  /* Le panneau a fait son travail une fois le formulaire privé ouvert. */
+  .qbc[data-booking-mode="private"] .qbc__block--private { display: none; }
+  .qbc[data-booking-mode="private"] .qbc__block--private + .qbc__block { margin-top: 0; }
 
-  .qbc__direct {
-    margin-top: 56px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
-  .qbc__direct-head { margin-bottom: 24px; }
-  .qbc__direct-heading {
+  .qbc__step {
+    display: inline-block;
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ink);
-    margin: 0 0 8px;
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 5px 10px;
+    margin-bottom: 14px;
   }
-  .qbc__direct-desc {
+  .qbc__step--invert {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .qbc__block-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .qbc__block-desc {
     font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 15px;
+    line-height: 1.6;
     color: var(--ink-2);
     margin: 0;
-    max-width: 560px;
+    max-width: 620px;
   }
+
+  .qbc__block--private { padding: 0; }
+  .qbc__private {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 40px;
+    align-items: center;
+    background: var(--ink);
+    color: var(--paper-3);
+    padding: 40px;
+    border-radius: 2px;
+  }
+  .qbc__private-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.1;
+    color: var(--paper-3);
+    margin: 0 0 12px;
+  }
+  .qbc__private-desc {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 0 20px;
+    max-width: 52ch;
+  }
+  .qbc__private-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .qbc__private-points li { position: relative; padding-left: 20px; }
+  .qbc__private-points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .qbc__private-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .qbc__private-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 28px;
+    background: var(--paper-3);
+    color: var(--ink);
+    border: 1px solid var(--paper-3);
+    border-radius: 2px;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+  .qbc__private-cta:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--paper-3);
+  }
+  .qbc__private-wa {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .qbc__private-wa:hover { color: var(--paper-3); }
+
   .qbc__wizard { margin-top: 8px; }
   .qbc__wizard :global(#book-tour) { margin-bottom: 0; }
   .qbc__wizard :global(#book-tour > div) { max-width: none; padding: 0; }
@@ -262,5 +388,9 @@ const hasPartners = Object.values(partnerLinks).some(Boolean);
     .qbc { padding: 64px 20px; }
     .qbc__card { grid-template-columns: 1fr; gap: 32px; padding: 32px 0; }
     .qbc__facts { grid-template-columns: 1fr 1fr; }
+    .qbc__block:not(.qbc__block--private) { padding: 24px 18px; }
+    .qbc__private { grid-template-columns: 1fr; gap: 28px; padding: 28px 20px; }
+    .qbc__private-title { font-size: 26px; }
+    .qbc__block-title { font-size: 24px; }
   }
 </style>

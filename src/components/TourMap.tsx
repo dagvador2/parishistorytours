@@ -1,7 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+/** Un arrêt tel que la page le décrit : la carte n'en connaît que les
+ *  coordonnées, le texte et la photo viennent de la section qui l'affiche. */
+export type StopDetail = {
+  photo?: string;
+  title?: string;
+  /** Nom court affiché à côté du médaillon ; à défaut, le nom interne. */
+  label?: string;
+  blurb?: string;
+  time?: string;
+};
+
 interface TourMapProps {
   tour: 'left-bank' | 'right-bank' | 'general-history' | 'food-wine';
+  /** Dans l'ordre des arrêts. Sans photo, les repères restent numérotés. */
+  details?: StopDetail[];
 }
 
 const MAPBOX_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN;
@@ -172,7 +185,7 @@ async function fetchWalkingRoute(path: [number, number][], signal: AbortSignal) 
   };
 }
 
-const TourMap: React.FC<TourMapProps> = ({ tour }) => {
+const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const data = TOUR_DATA[tour];
@@ -217,34 +230,90 @@ const TourMap: React.FC<TourMapProps> = ({ tour }) => {
       instance.on('load', async () => {
         if (disposed) return;
 
-        // Quiet numbered markers: 28px circle, cream fill, 1px ink border, Playfair numeral.
-        // Inline styles keep this independent of the page's Tailwind layer.
+        // Les arrêts portent leur propre photo en médaillon : sur mobile, la
+        // carte remplace à elle seule la longue liste qui la suivait.
+        // Styles en ligne : indépendants de la couche Tailwind de la page.
         data.stops.forEach((stop, index) => {
+          const detail = details[index] ?? {};
+          const title = detail.title || stop.name;
+
           const el = document.createElement('div');
           el.className = 'quiet-marker';
-          el.innerHTML = `
-            <div style="
-              width:28px;height:28px;
-              display:grid;place-items:center;
-              background:#fafaf7;
-              color:#1a1a1a;
-              border:1px solid #1a1a1a;
-              border-radius:50%;
-              font-family:'Playfair Display Variable', Georgia, serif;
-              font-weight:500;
-              font-size:13px;
-              line-height:1;
-              box-shadow:0 1px 2px rgba(0,0,0,0.06);
-            ">${index + 1}</div>
-          `;
+          // Le nom est posé à côté du médaillon, hors de la boîte de 52px :
+          // le repère reste ainsi centré sur ses coordonnées exactes.
+          const label = detail.label || stop.name;
 
-          new mapboxgl.Marker(el)
+          el.innerHTML = detail.photo
+            ? `
+              <div style="position:relative;width:52px;height:52px;">
+                <div style="
+                  width:52px;height:52px;
+                  border-radius:50%;
+                  overflow:hidden;
+                  border:2px solid #fafaf7;
+                  box-shadow:0 2px 6px rgba(0,0,0,0.22);
+                  background:#efeee9;
+                ">
+                  <img src="${detail.photo}" alt="" loading="lazy" decoding="async"
+                       style="width:100%;height:100%;object-fit:cover;display:block;" />
+                </div>
+                <div style="
+                  position:absolute;right:-3px;bottom:-3px;
+                  width:20px;height:20px;
+                  display:grid;place-items:center;
+                  background:#fafaf7;
+                  color:#1a1a1a;
+                  border:1px solid #1a1a1a;
+                  border-radius:50%;
+                  font-family:'Playfair Display Variable', Georgia, serif;
+                  font-weight:500;
+                  font-size:11px;
+                  line-height:1;
+                ">${index + 1}</div>
+                <div style="
+                  position:absolute;left:60px;top:50%;
+                  transform:translateY(-50%);
+                  white-space:nowrap;
+                  padding:3px 9px;
+                  background:rgba(250,250,247,0.94);
+                  border:1px solid rgba(26,26,26,0.12);
+                  border-radius:2px;
+                  box-shadow:0 1px 3px rgba(0,0,0,0.10);
+                  font-family:'Playfair Display Variable', Georgia, serif;
+                  font-weight:500;
+                  font-size:13px;
+                  line-height:1.2;
+                  color:#1a1a1a;
+                ">${label}</div>
+              </div>
+            `
+            : `
+              <div style="
+                width:28px;height:28px;
+                display:grid;place-items:center;
+                background:#fafaf7;
+                color:#1a1a1a;
+                border:1px solid #1a1a1a;
+                border-radius:50%;
+                font-family:'Playfair Display Variable', Georgia, serif;
+                font-weight:500;
+                font-size:13px;
+                line-height:1;
+                box-shadow:0 1px 2px rgba(0,0,0,0.06);
+              ">${index + 1}</div>
+            `;
+          el.style.cursor = 'pointer';
+
+          const meta = [`${index + 1}`, detail.time, stop.theme].filter(Boolean).join(' · ');
+
+          new mapboxgl.Marker(el, { offset: detail.photo ? [0, -6] : [0, 0] })
             .setLngLat(stop.coords)
             .setPopup(
-              new mapboxgl.Popup({ offset: 18, className: 'quiet-popup' }).setHTML(`
-                <div style="padding:4px 2px;font-family:'Inter Variable',system-ui,sans-serif;">
-                  <div style="font-family:'Playfair Display Variable',Georgia,serif;font-weight:500;font-size:15px;color:#1a1a1a;margin-bottom:4px;">${stop.name}</div>
-                  <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#4a4a4a;">Stop ${index + 1}${stop.theme ? ' · ' + stop.theme : ''}</div>
+              new mapboxgl.Popup({ offset: detail.photo ? 30 : 18, className: 'quiet-popup' }).setHTML(`
+                <div style="padding:4px 2px;font-family:'Inter Variable',system-ui,sans-serif;max-width:220px;">
+                  <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#4a4a4a;margin-bottom:4px;">${meta}</div>
+                  <div style="font-family:'Playfair Display Variable',Georgia,serif;font-weight:500;font-size:15px;line-height:1.25;color:#1a1a1a;">${title}</div>
+                  ${detail.blurb ? `<div style="font-size:12px;line-height:1.45;color:#4a4a4a;margin-top:6px;">${detail.blurb}</div>` : ''}
                 </div>
               `)
             )

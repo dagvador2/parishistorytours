@@ -98,26 +98,33 @@ const items = ORDER.flatMap((key) => {
 
 <div class:list={['qlogos', className]}>
   {label && <span class="qlogos__label">{label}</span>}
-  <div class="qlogos__row">
-    {items.map((item) => (
-      <a
-        href={item.href}
-        class="qlogos__item"
-        target="_blank"
-        rel="noopener"
-        aria-label={item.name}
-        style={`--logo-h:${item.h}px;--logo-op:${item.op}`}
-      >
-        <img
-          src={item.src}
-          alt={item.name}
-          width={item.width}
-          height={item.h}
-          loading="lazy"
-          decoding="async"
-        />
-      </a>
-    ))}
+  <div class="qlogos__viewport">
+    <div class="qlogos__row">
+      {[false, true].map((isClone) => (
+        <div class:list={['qlogos__group', { 'qlogos__group--clone': isClone }]} aria-hidden={isClone ? 'true' : undefined}>
+          {items.map((item) => (
+            <a
+              href={item.href}
+              class="qlogos__item"
+              target="_blank"
+              rel="noopener"
+              aria-label={item.name}
+              tabindex={isClone ? -1 : undefined}
+              style={`--logo-h:${item.h}px;--logo-op:${item.op}`}
+            >
+              <img
+                src={item.src}
+                alt={isClone ? '' : item.name}
+                width={item.width}
+                height={item.h}
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          ))}
+        </div>
+      ))}
+    </div>
   </div>
 </div>
 
@@ -137,13 +144,19 @@ const items = ORDER.flatMap((key) => {
     text-transform: uppercase;
     color: var(--ink-2);
   }
+  .qlogos__viewport { width: 100%; }
   .qlogos__row {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px 44px;
+    gap: 20px var(--qlogos-gap, 44px);
   }
+  /* Sur grand écran la rangée s'aligne et passe à la ligne comme avant : les
+     groupes s'effacent pour que les logos y participent directement, et la
+     copie de bouclage ne sert à rien. */
+  .qlogos__group { display: contents; }
+  .qlogos__group--clone { display: none; }
   .qlogos__item {
     display: inline-flex;
     align-items: center;
@@ -165,10 +178,47 @@ const items = ORDER.flatMap((key) => {
   }
 
   @media (max-width: 760px) {
-    .qlogos__row { gap: 18px 28px; }
     /* Scale the whole row down proportionally rather than per-logo, so the
        optical balance tuned above survives on small screens. */
     .qlogos__item { height: 28px; }
     .qlogos__item img { height: calc(var(--logo-h, 22px) * 0.82); }
+
+    /* Sept logos passaient à la ligne en 5 + 2, la seconde rangée centrée sur
+       rien. Ils défilent maintenant en continu. */
+    .qlogos { --qlogos-gap: 40px; }
+    .qlogos__viewport {
+      overflow: hidden;
+      /* Les logos s'effacent aux deux bords au lieu d'être tranchés net. */
+      mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+    }
+    .qlogos__row {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      width: max-content;
+      gap: var(--qlogos-gap);
+    }
+    .qlogos__group,
+    .qlogos__group--clone {
+      display: flex;
+      align-items: center;
+      gap: var(--qlogos-gap);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .qlogos__row {
+        animation: qlogosDrift 32s linear infinite;
+      }
+      /* Au toucher comme au survol, on immobilise la bande pour pouvoir viser. */
+      .qlogos__viewport:hover .qlogos__row,
+      .qlogos__row:focus-within { animation-play-state: paused; }
+    }
+  }
+
+  /* La piste contient deux groupes identiques séparés du même écart que les
+     logos entre eux : décaler d'un groupe plus un écart replace exactement la
+     copie sur l'original, d'où la demi-valeur d'écart ajoutée aux 50 %. */
+  @keyframes qlogosDrift {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-50% - var(--qlogos-gap) / 2)); }
   }
 </style>

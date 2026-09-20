@@ -981,6 +981,7 @@ export const en = {
       route: {
         kicker: "The route",
         title: "See where we walk.",
+        mapHint: "Tap a medallion to open the stop",
         tabLeftBank: "Left Bank",
         tabRightBank: "Right Bank",
         tabGeneral: "General",

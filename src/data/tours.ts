@@ -8,6 +8,10 @@ export interface StopImage {
   src: string;
   alt: string;
   objectPosition?: string;
+  /** Photo du médaillon sur la carte. Dans un rond de 52 px, un lieu se
+   *  reconnaît, une scène de guide qui parle non — d'où cette surcharge
+   *  quand `src` montre le guide plutôt que l'endroit. */
+  mapPhoto?: string;
 }
 
 export interface GalleryImage {
@@ -96,10 +100,10 @@ export const tours: Record<string, TourConfig> = {
       { src: '/photos/paris_ww2_liberation_1944_de_gaulle.webp', alt: 'Liberation of Paris 1944' },
     ],
     stops: [
-      { src: '/photos/left_bank/Paris_WW2_guide_boulevard_explains.webp', alt: 'Clément introducing the WWII tour on Boulevard Saint-Michel' },
+      { src: '/photos/left_bank/Paris_WW2_guide_boulevard_explains.webp', alt: 'Clément introducing the WWII tour on Boulevard Saint-Michel', mapPhoto: '/photos/left_bank/Paris_WW2_bullet_holes_2.webp' },
       { src: '/photos/left_bank/luxembourg_garden_palace_paris.webp', alt: 'Palais du Luxembourg seen from the garden, Luftwaffe headquarters during the occupation' },
-      { src: '/photos/left_bank/Paris_WW2_guide_walk_sorbonne.webp', alt: 'Walking with the group towards the Sorbonne, heart of student Resistance' },
-      { src: '/photos/left_bank/Paris_WW2_guide_liberation_archive.webp', alt: 'Clément showing a Liberation archive photograph in front of Notre-Dame' },
+      { src: '/photos/left_bank/Paris_WW2_guide_walk_sorbonne.webp', alt: 'Walking with the group towards the Sorbonne, heart of student Resistance', mapPhoto: '/photos/left_bank/sorbonne_paris.webp' },
+      { src: '/photos/left_bank/Paris_WW2_guide_liberation_archive.webp', alt: 'Clément showing a Liberation archive photograph in front of Notre-Dame', mapPhoto: '/photos/left_bank/notre_dame_paris_quai.webp' },
     ],
     galleryDesktop: [
       { src: '/photos/left_bank/Paris_WW2_group_photo_luxembourg.webp', alt: 'Tour group in the Luxembourg Garden at the end of the walk' },

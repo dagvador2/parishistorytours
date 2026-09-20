@@ -981,6 +981,7 @@ export const fr = {
       route: {
         kicker: "Le parcours",
         title: "Voyez où l'on marche.",
+        mapHint: "Touchez un médaillon pour découvrir l'arrêt",
         tabLeftBank: "Rive Gauche",
         tabRightBank: "Rive Droite",
         tabGeneral: "Histoire générale",

@@ -90,7 +90,7 @@ const price = (slug: string) => formatEUR(lang, TOUR_PRICES[slug]);
 
 <section id="compare" class="qcompare">
   <div class="qcompare__inner">
-    <header class="qcompare__header">
+    <header class="qcompare__header qreveal">
       <p class="qcompare__kicker">{t('quiet.home.compare.kicker')}</p>
       <h2 class="qcompare__title">{t('quiet.home.compare.title')}</h2>
       <p class="qcompare__lead">{t('quiet.home.compare.lead')}</p>
@@ -162,49 +162,6 @@ const price = (slug: string) => formatEUR(lang, TOUR_PRICES[slug]);
       </table>
     </div>
 
-    <!-- Small screens: one swipeable card per tour, each carrying its own labels -->
-    <div class="qcompare__cards">
-      {tours.map((tour) => (
-        <article class="qcompare__card">
-          <a href={tour.href} class="qcompare__headlink">
-            <span class="qcompare__thumb">
-              <Picture
-                src={tour.img}
-                alt=""
-                width={520}
-                height={Math.round((520 / tour.img.width) * tour.img.height)}
-                widths={[260, 520]}
-                sizes="84vw"
-                formats={["avif", "webp"]}
-                fallbackFormat="webp"
-                quality={78}
-                loading="lazy"
-              />
-              <span class="qcompare__numeral" aria-hidden="true">{tour.numeral}</span>
-            </span>
-            <span class="qcompare__name">{tour.title}</span>
-          </a>
-          <dl class="qcompare__list">
-            <div>
-              <dt>{priceLabel}</dt>
-              <dd><span class="qcompare__price"><i>{fromLabel}</i><b>{price(tour.slug)}</b></span></dd>
-            </div>
-            {axes.map((axis) => (
-              <div>
-                <dt>{axis.label}</dt>
-                <dd class:list={[{ 'is-emphasis': axis.emphasis }]}>{tour[axis.key]}</dd>
-              </div>
-            ))}
-          </dl>
-          <div class="qcompare__cell--actions">
-            <div class="qcompare__actions">
-              <a href="#book" class="qcompare__book" data-select-tour={tour.slug} data-track="compare_book">{bookCta}</a>
-              <a href={tour.href} class="qcompare__view">{viewCta} <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
   </div>
 </section>
 
@@ -395,8 +352,6 @@ const price = (slug: string) => formatEUR(lang, TOUR_PRICES[slug]);
   }
   .qcompare__view:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
-  /* --- small-screen cards --- */
-  .qcompare__cards { display: none; }
 
   @media (max-width: 1100px) {
     .qcompare__col-rail { width: 104px; }
@@ -407,66 +362,12 @@ const price = (slug: string) => formatEUR(lang, TOUR_PRICES[slug]);
     .qcompare__price b { font-size: 22px; }
   }
 
+  /* Sous 900px la section ne s'affiche pas du tout. Les cartes de visite
+     juste au-dessus portent déjà la photo, le tarif, la durée, le parcours et
+     le nombre d'arrêts : comparer n'y ajoutait qu'un rail horizontal de plus,
+     le quatrième de la page. */
   @media (max-width: 900px) {
-    .qcompare { padding: 72px 0; }
-    .qcompare__header { padding: 0 20px; margin-bottom: 32px; }
-    .qcompare__tablewrap { display: none; }
-    .qcompare__cards {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: 84%;
-      gap: 14px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 0 20px 14px;
-      scroll-padding: 0 20px;
-    }
-    .qcompare__cards::-webkit-scrollbar { display: none; }
-    .qcompare__card {
-      scroll-snap-align: start;
-      display: flex;
-      flex-direction: column;
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      padding: 16px 16px 20px;
-    }
-    .qcompare__list {
-      margin: 16px 0 0;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .qcompare__list > div {
-      padding: 12px 0;
-      border-top: 1px solid var(--border);
-    }
-    .qcompare__list dt {
-      font-family: var(--font-sans);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-2);
-      margin-bottom: 4px;
-    }
-    .qcompare__list dd {
-      margin: 0;
-      font-family: var(--font-sans);
-      font-size: 14px;
-      line-height: 1.45;
-      color: var(--ink-2);
-    }
-    .qcompare__list dd.is-emphasis {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--ink);
-    }
-    .qcompare__cell--actions {
-      padding: 16px 0 0;
-      border-top: 1px solid var(--border);
-    }
+    .qcompare { display: none; }
   }
 </style>
 

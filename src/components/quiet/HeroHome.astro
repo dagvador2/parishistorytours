@@ -56,7 +56,7 @@ const stats = [
     <div class="qhero__media">
       {columns.map((col) => (
         <figure class:list={['qhero__frame', `qhero__frame--${col.modifier}`]}>
-          <Picture src={col.src} alt={t(`quiet.home.hero.${col.key}Alt`)} widths={[360, 540, 720, 900]} sizes="(max-width:900px) 76vw, 33vw" formats={["webp"]} fallbackFormat="webp" quality={72} loading={col.eager ? 'eager' : 'lazy'} class="qhero__img" />
+          <Picture src={col.src} alt={t(`quiet.home.hero.${col.key}Alt`)} widths={[360, 540, 720, 900]} sizes="(max-width:900px) 85vw, 33vw" formats={["webp"]} fallbackFormat="webp" quality={72} loading={col.eager ? 'eager' : 'lazy'} class="qhero__img" />
           <figcaption><b>{t(`quiet.home.hero.${col.key}Label`)}</b>{t(`quiet.home.hero.${col.key}Caption`)}</figcaption>
         </figure>
       ))}
@@ -292,7 +292,9 @@ const stats = [
     .qhero__media {
       grid-template-columns: none;
       grid-auto-flow: column;
-      grid-auto-columns: 76%;
+      /* Même largeur de débord que les cartes de visite et les avis : les
+         rails successifs doivent se balayer du même geste. */
+      grid-auto-columns: 85%;
       gap: 12px;
       margin: 36px 0 48px;
       overflow-x: auto;
@@ -306,9 +308,27 @@ const stats = [
     .qhero__frame--b,
     .qhero__frame--c { margin-top: 0; }
     .qhero__frame { animation: none; }
-    .qhero__stats { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .qhero__stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
-    .qhero__stat:nth-child(n+3) { border-bottom: 0; }
+    /* Cinq chiffres ne se répartissent proprement ni en 2 ni en 3 colonnes :
+       il reste toujours un orphelin. On les laisse donc se placer librement et
+       se centrer, la dernière ligne comprise. Pas de rail horizontal ici — la
+       page en aligne déjà quatre, et un chiffre se lit, il ne se balaie pas. */
+    .qhero__stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px 0;
+      padding-top: 24px;
+    }
+    .qhero__stat {
+      flex: 0 0 50%;
+      border-right: none;
+      border-bottom: none;
+      padding: 0 12px;
+    }
+    /* Le séparateur vertical ne subsiste qu'entre deux chiffres d'une même
+       paire : sur la ligne seule, il n'aurait rien à séparer. */
+    .qhero__stat:nth-child(odd):not(:last-child) { border-right: 1px solid var(--border); }
+    .qhero__stat:last-child:nth-child(odd) { flex-basis: 100%; }
     .qhero__lede { font-size: 17px; }
   }
 </style>

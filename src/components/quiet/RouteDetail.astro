@@ -1,6 +1,7 @@
 ---
 import { useTranslations } from '../../i18n/utils';
 import TourMap from '../TourMap.tsx';
+import { buildStopDetails } from '../../lib/stopDetails';
 import type { TourConfig } from '../../data/tours';
 
 interface Props {
@@ -22,6 +23,18 @@ const subtitle =
   variant === 'foodWine' ? t('quiet.tour.route.subtitleFoodWine') :
                            t('quiet.tour.route.subtitleWW2');
 
+// Mêmes médaillons photo et mêmes noms que sur la carte de l'accueil : les
+// titres d'arrêts viennent des traductions de la visite affichée.
+const tp = tour.translationPrefix;
+const stopDetails = buildStopDetails(
+  tour.slug as Parameters<typeof buildStopDetails>[0],
+  Array.from({ length: tour.stopCount }, (_, i) => ({
+    title: t(`tours.${tp}.stops.stop${i + 1}.title`) as string,
+    // Les phrases courtes de la carte d'accueil, pas les descriptions
+    // complètes de la page : une bulle ne tient pas un paragraphe.
+    blurb: t(`quiet.home.route.blurbs.${tp}.s${i + 1}`) as string,
+  })),
+);
 ---
 
 <section id="route" class="qrd">
@@ -33,7 +46,11 @@ const subtitle =
     </header>
 
     <div class="qrd__map">
-      <TourMap tour={tour.slug as 'left-bank' | 'right-bank' | 'general-history'} client:visible />
+      <TourMap
+        tour={tour.slug as 'left-bank' | 'right-bank' | 'general-history'}
+        details={stopDetails}
+        client:visible
+      />
     </div>
   </div>
 </section>

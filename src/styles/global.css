@@ -132,3 +132,25 @@
 [data-theme="quiet"] .pht-next--dark .pht-next__spots { color: rgba(255, 255, 255, 0.82); }
 [data-theme="quiet"] .pht-next--dark b { color: #fff; font-weight: 600; }
 [data-theme="quiet"] .pht-next--dark .pht-next__spots.is-low { color: #ffb9a6; }
+
+/* --- Apparition des en-têtes de section au défilement ---------------------
+   Chaque section porte `qreveal` sur son en-tête : il monte de quelques pixels
+   en se révélant quand il entre dans l'écran. Piloté par le défilement, donc
+   sans JavaScript ni observateur, et l'état final est celui par défaut — sans
+   le support de `animation-timeline`, ou si le visiteur a demandé moins
+   d'animations, tout reste simplement visible. */
+@keyframes qreveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-theme="quiet"] .qreveal {
+      animation: qreveal linear both;
+      animation-timeline: view();
+      /* Se joue pendant que l'élément entre dans l'écran, et se termine bien
+         avant d'en atteindre le milieu : on lit un titre déjà stabilisé. */
+      animation-range: entry 5% entry 45%;
+    }
+  }
+}

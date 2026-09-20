@@ -1,6 +1,7 @@
 ---
 import { useTranslations } from '../../i18n/utils';
 import TourMap from '../TourMap.tsx';
+import { buildStopDetails } from '../../lib/stopDetails';
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -57,7 +58,7 @@ const tours = [
 
 <section id="route" class="qroute">
   <div class="qroute__inner">
-    <header class="qroute__header">
+    <header class="qroute__header qreveal">
       <p class="qroute__kicker">{t('quiet.home.route.kicker')}</p>
       <h2 class="qroute__title">{t('quiet.home.route.title')}</h2>
     </header>
@@ -92,10 +93,20 @@ const tours = [
         ))}
       </div>
 
+      <p class="qroute__hint">{t('quiet.home.route.mapHint')}</p>
+
       <div class="qroute__map">
         {tours.map((tour, i) => (
           <div class:list={["qroute__map-pane", { 'is-active': i === 0 }]} data-tour-map={tour.key}>
-            <TourMap tour={tour.key} client:visible />
+            <TourMap
+              tour={tour.key}
+              details={buildStopDetails(tour.key, tour.stops.map((stop) => ({
+                title: stop.title as string,
+                blurb: stop.blurb as string,
+                time: stop.time,
+              })))}
+              client:visible
+            />
           </div>
         ))}
       </div>
@@ -260,10 +271,26 @@ const tours = [
   /* TourMap renders its own container; ensure it fills this box */
   .qroute__map-pane > * { width: 100% !important; height: 100% !important; }
 
+  .qroute__hint {
+    display: none;
+    order: -2;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+    text-align: center;
+  }
+
   @media (max-width: 900px) {
     .qroute { padding: 64px 20px; }
     .qroute__title { font-size: 34px; }
-    .qroute__body { grid-template-columns: 1fr; gap: 40px; }
-    .qroute__map { aspect-ratio: 1 / 1; order: -1; }
+    .qroute__body { grid-template-columns: 1fr; gap: 24px; }
+    /* Les arrêts sont des médaillons photo sur la carte : la liste sous elle
+       répéterait la même chose sur un écran et demi. On la retire et on rend
+       à la carte la hauteur qu'elle occupait. */
+    .qroute__stops { display: none; }
+    .qroute__map { aspect-ratio: 4 / 5; order: -1; }
+    .qroute__hint { display: block; }
   }
 </style>
