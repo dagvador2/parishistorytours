@@ -54,6 +54,10 @@ export function loadState(lang: Lang): TourState {
       lang: s.lang === "fr" || s.lang === "en" ? s.lang : lang,
       audioLang: s.audioLang === "fr" || s.audioLang === "en" ? s.audioLang : null,
       phase: (["walking", "arrived", "playing", "complete"] as Phase[]).includes(s.phase as Phase) ? (s.phase as Phase) : "walking",
+      // Never restored: whether the browser grants the position is the browser's
+      // business, and it changes outside the app. Persisting a refusal left the
+      // GPS off for good, even once the walker had allowed it in their settings.
+      gpsDenied: false,
     };
   } catch {
     return base;
