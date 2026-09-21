@@ -9,6 +9,8 @@ export type StopDetail = {
   label?: string;
   blurb?: string;
   time?: string;
+  /** Deux phrases sur le lieu, dépliées au survol du médaillon (desktop). */
+  description?: string;
 };
 
 interface TourMapProps {
@@ -185,6 +187,147 @@ async function fetchWalkingRoute(path: [number, number][], signal: AbortSignal) 
   };
 }
 
+/** Fiche de survol : largeur, air autour du médaillon, marge au bord du cadre. */
+const CARD_WIDTH = 272;
+const CARD_GAP = 10;
+const CARD_MARGIN = 12;
+
+/**
+ * Déplie une fiche au survol d'un médaillon : la photo en grand, le nom du
+ * lieu et deux phrases sur ce qu'on y raconte.
+ *
+ * La fiche est un enfant du repère, donc elle suit la carte quand on la
+ * déplace. Elle bascule à gauche du médaillon quand elle déborderait du cadre,
+ * et se décale verticalement plutôt que de se faire couper en haut ou en bas.
+ */
+function attachHoverCard({
+  el,
+  instance,
+  stop,
+  detail,
+  meta,
+  title,
+}: {
+  el: HTMLElement;
+  instance: any;
+  stop: Stop;
+  detail: StopDetail;
+  meta: string;
+  title: string;
+}) {
+  const body = detail.description || detail.blurb;
+
+  const card = document.createElement('div');
+  // La liste d'arrêts dit déjà tout ça à côté de la carte : la fiche est un
+  // agrément visuel, elle n'a pas à être relue par un lecteur d'écran.
+  card.setAttribute('aria-hidden', 'true');
+  card.style.cssText = [
+    'position:absolute',
+    'top:50%',
+    `width:${CARD_WIDTH}px`,
+    'background:#fafaf7',
+    'border:1px solid rgba(26,26,26,0.12)',
+    'border-radius:2px',
+    'box-shadow:0 12px 32px -14px rgba(0,0,0,0.45)',
+    'overflow:hidden',
+    'opacity:0',
+    'transform:translateY(-50%) scale(0.96)',
+    'transform-origin:left center',
+    'transition:opacity 200ms ease, transform 280ms cubic-bezier(0.32,0.72,0,1)',
+    'pointer-events:none',
+    'will-change:opacity, transform',
+  ].join(';');
+
+  card.innerHTML = `
+    ${detail.photo
+      ? `<img src="${detail.photo}" alt="" loading="lazy" decoding="async"
+             style="width:100%;height:148px;object-fit:cover;display:block;background:#efeee9;" />`
+      : ''}
+    <div style="padding:12px 14px 14px;font-family:'Inter Variable',system-ui,sans-serif;">
+      <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#4a4a4a;margin-bottom:5px;">${meta}</div>
+      <div style="font-family:'Playfair Display Variable',Georgia,serif;font-weight:500;font-size:17px;line-height:1.2;color:#1a1a1a;">${title}</div>
+      ${body
+        ? `<p style="font-size:12.5px;line-height:1.5;color:#4a4a4a;margin:7px 0 0;">${body}</p>`
+        : ''}
+    </div>
+  `;
+  el.appendChild(card);
+
+  const label = el.querySelector<HTMLElement>('[data-stop-label]');
+  const medallion = el.querySelector<HTMLElement>('[data-stop-medallion]');
+
+  let shift = 0;
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const place = () => {
+    const container = instance.getContainer() as HTMLElement;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const point = instance.project(stop.coords);
+    const halfMarker = el.offsetWidth / 2;
+
+    // Positions possibles du bord gauche de la fiche, en pixels du conteneur :
+    // à droite du médaillon, puis à sa gauche. Si aucune ne tient, la fiche se
+    // centre sur le repère et rentre de force dans le cadre.
+    const right = point.x + halfMarker + CARD_GAP;
+    const left = point.x - halfMarker - CARD_GAP - CARD_WIDTH;
+    const x =
+      right + CARD_WIDTH <= width - CARD_MARGIN ? right
+      : left >= CARD_MARGIN ? left
+      : Math.min(
+          Math.max(CARD_MARGIN, point.x - CARD_WIDTH / 2),
+          width - CARD_MARGIN - CARD_WIDTH,
+        );
+
+    const half = card.offsetHeight / 2;
+    shift = 0;
+    if (point.y - half < CARD_MARGIN) shift = CARD_MARGIN - (point.y - half);
+    else if (point.y + half > height - CARD_MARGIN) shift = height - CARD_MARGIN - (point.y + half);
+
+    // `el` est posé par Mapbox, centré sur les coordonnées : on repasse en
+    // coordonnées locales pour que la fiche suive le repère sans recalcul.
+    card.style.left = `${x - (point.x - halfMarker)}px`;
+    card.style.transformOrigin = x < point.x ? 'right center' : 'left center';
+  };
+
+  const render = (visible: boolean) => {
+    place();
+    card.style.transform = `translateY(calc(-50% + ${shift}px)) scale(${visible ? 1 : 0.96})`;
+    card.style.opacity = visible ? '1' : '0';
+  };
+
+  const follow = () => render(true);
+
+  const show = () => {
+    if (hideTimer) clearTimeout(hideTimer);
+    el.style.zIndex = '4';
+    render(true);
+    if (label) label.style.opacity = '0';
+    if (medallion) {
+      medallion.style.transform = 'scale(1.08)';
+      medallion.style.boxShadow = '0 6px 16px rgba(0,0,0,0.28)';
+    }
+    instance.on('move', follow);
+  };
+
+  const hide = () => {
+    instance.off('move', follow);
+    card.style.transform = `translateY(calc(-50% + ${shift}px)) scale(0.96)`;
+    card.style.opacity = '0';
+    if (label) label.style.opacity = '';
+    if (medallion) {
+      medallion.style.transform = '';
+      medallion.style.boxShadow = '';
+    }
+    // Rendre sa place dans la pile une fois la fiche effacée, sinon elle
+    // passerait derrière ses voisines en plein fondu.
+    hideTimer = setTimeout(() => { el.style.zIndex = ''; }, 300);
+  };
+
+  el.addEventListener('mouseenter', show);
+  el.addEventListener('mouseleave', hide);
+}
+
 const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
@@ -233,6 +376,14 @@ const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
         // Les arrêts portent leur propre photo en médaillon : sur mobile, la
         // carte remplace à elle seule la longue liste qui la suivait.
         // Styles en ligne : indépendants de la couche Tailwind de la page.
+
+        // Au-dessus de 900px et avec une souris, le médaillon se déplie en
+        // fiche au survol. Un doigt ne survole pas : sur mobile la bulle au
+        // tap reste la seule fiche, et la liste d'arrêts est juste au-dessus.
+        const canHover =
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(hover: hover) and (min-width: 900px)').matches;
+
         data.stops.forEach((stop, index) => {
           const detail = details[index] ?? {};
           const title = detail.title || stop.name;
@@ -246,13 +397,14 @@ const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
           el.innerHTML = detail.photo
             ? `
               <div style="position:relative;width:52px;height:52px;">
-                <div style="
+                <div data-stop-medallion style="
                   width:52px;height:52px;
                   border-radius:50%;
                   overflow:hidden;
                   border:2px solid #fafaf7;
                   box-shadow:0 2px 6px rgba(0,0,0,0.22);
                   background:#efeee9;
+                  transition:transform 260ms cubic-bezier(0.32,0.72,0,1), box-shadow 260ms ease;
                 ">
                   <img src="${detail.photo}" alt="" loading="lazy" decoding="async"
                        style="width:100%;height:100%;object-fit:cover;display:block;" />
@@ -270,9 +422,10 @@ const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
                   font-size:11px;
                   line-height:1;
                 ">${index + 1}</div>
-                <div style="
+                <div data-stop-label style="
                   position:absolute;left:60px;top:50%;
                   transform:translateY(-50%);
+                  transition:opacity 160ms ease;
                   white-space:nowrap;
                   padding:3px 9px;
                   background:rgba(250,250,247,0.94);
@@ -306,9 +459,22 @@ const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
 
           const meta = [`${index + 1}`, detail.time, stop.theme].filter(Boolean).join(' · ');
 
-          new mapboxgl.Marker(el, { offset: detail.photo ? [0, -6] : [0, 0] })
-            .setLngLat(stop.coords)
-            .setPopup(
+          const marker = new mapboxgl.Marker(el, { offset: detail.photo ? [0, -6] : [0, 0] })
+            .setLngLat(stop.coords);
+
+          if (canHover) {
+            // Pas le thème de l'arrêt ici : il n'existe qu'en anglais, et le
+            // titre traduit le porte déjà (« Palais du Luxembourg - La Chute »).
+            attachHoverCard({
+              el,
+              instance,
+              stop,
+              detail,
+              meta: [`${index + 1}`, detail.time].filter(Boolean).join(' · '),
+              title,
+            });
+          } else {
+            marker.setPopup(
               new mapboxgl.Popup({ offset: detail.photo ? 30 : 18, className: 'quiet-popup' }).setHTML(`
                 <div style="padding:4px 2px;font-family:'Inter Variable',system-ui,sans-serif;max-width:220px;">
                   <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#4a4a4a;margin-bottom:4px;">${meta}</div>
@@ -316,8 +482,10 @@ const TourMap: React.FC<TourMapProps> = ({ tour, details = [] }) => {
                   ${detail.blurb ? `<div style="font-size:12px;line-height:1.45;color:#4a4a4a;margin-top:6px;">${detail.blurb}</div>` : ''}
                 </div>
               `)
-            )
-            .addTo(instance);
+            );
+          }
+
+          marker.addTo(instance);
         });
 
         // Waypoints: small teal dots, no border.

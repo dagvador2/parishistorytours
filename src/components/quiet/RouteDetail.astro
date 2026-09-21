@@ -33,6 +33,8 @@ const stopDetails = buildStopDetails(
     // Les phrases courtes de la carte d'accueil, pas les descriptions
     // complètes de la page : une bulle ne tient pas un paragraphe.
     blurb: t(`quiet.home.route.blurbs.${tp}.s${i + 1}`) as string,
+    // La fiche de survol, elle, a la place d'en dire deux phrases.
+    description: t(`tours.${tp}.stops.stop${i + 1}.description`) as string,
   })),
 );
 ---
