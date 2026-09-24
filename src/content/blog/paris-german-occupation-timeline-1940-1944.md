@@ -56,6 +56,8 @@ A massive black market emerged. Prices on the *marche noir* were often ten times
 
 Fuel was almost nonexistent for civilian use. The Metro became the primary means of transport, though several stations were closed during the occupation -- some of which remain **ghost stations** to this day. Bicycles and *velo-taxis* replaced automobiles on the boulevards.
 
+This year-by-year account stays at the level of events. If you want to know what those years actually felt like -- the queues, the curfew, the cold apartments, the cinemas that were full every night -- I have written a separate piece on [daily life in occupied Paris](/blog/daily-life-occupied-paris-1940-1944).
+
 ### The Resistance Takes Shape
 
 The earliest resistance networks were small, fragmented, and extraordinarily dangerous. **Agnes Humbert**, an art historian at the Musee de l'Homme, helped found one of the first organized resistance groups in Paris. They produced an underground newspaper, *Resistance*, and gathered intelligence on German troop movements. The group was infiltrated and dismantled by early 1941; Humbert was arrested in April and eventually deported to Germany.

@@ -56,6 +56,8 @@ Un vaste marché noir se développe. Les prix y sont souvent dix fois supérieur
 
 Le combustible est quasi introuvable pour les civils. Le Métro devient le principal moyen de transport, même si plusieurs stations sont fermées pendant l'Occupation -- certaines sont restées des **stations fantômes** jusqu'à aujourd'hui. Les vélos et les vélo-taxis remplacent les automobiles sur les boulevards.
 
+Ce récit année par année reste au niveau des événements. Pour savoir à quoi ces années ressemblaient vraiment — les files d'attente, le couvre-feu, les appartements glacés, les cinémas pleins tous les soirs — j'ai consacré un article à part à [la vie quotidienne dans Paris occupé](/fr/blog/vie-quotidienne-paris-occupe-1940-1944).
+
 ### La Résistance s'organise
 
 Les premiers réseaux de résistance sont petits, fragmentés et extraordinairement dangereux. **Agnès Humbert**, historienne de l'art au Musée de l'Homme, participe à la création de l'un des premiers groupes organisés de Paris. Ils publient un journal clandestin, *Résistance*, et collectent des renseignements sur les mouvements de troupes allemands. Le réseau est infiltré et démantelé début 1941. Humbert est arrêtée en avril puis déportée en Allemagne.
