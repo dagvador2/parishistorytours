@@ -14,9 +14,18 @@ interface Props {
    * homepage (which would lose the pre-selected tour).
    */
   book?: string;
+  /**
+   * Explicit language-switcher targets, for pages whose two locales do not
+   * share a path (blog articles: /blog/<en-slug> vs /fr/blog/<fr-slug>).
+   * Pass null when no translation exists — the switcher then falls back to a
+   * sensible page in that language rather than a mirrored URL that 404s.
+   */
+  enHref?: string | null;
+  frHref?: string | null;
 }
 
-const { context = 'home', book } = Astro.props;
+const { context = 'home', book, enHref, frHref } = Astro.props;
+const hasExplicitAlternates = enHref !== undefined || frHref !== undefined;
 
 const lang = Astro.locals.lang;
 const t = useTranslations(lang);
@@ -42,8 +51,13 @@ const waHref = waLink(t('quiet.wa.generic') as string);
 const pathname = Astro.url.pathname;
 const stripped = pathname.startsWith('/fr') ? (pathname.replace(/^\/fr/, '') || '/') : pathname;
 const basePath = stripped.endsWith('/') ? stripped : `${stripped}/`;
-const enUrl = basePath;
-const frUrl = `/fr${basePath}`;
+const withSlash = (href: string) => (href.endsWith('/') ? href : `${href}/`);
+// Untranslated page: send the visitor to the section root in the language they
+// asked for. Better than mirroring a path that only exists in one locale.
+const fallback = (prefix: string) =>
+  `${prefix}${stripped.startsWith('/blog') ? 'blog/' : ''}`;
+const enUrl = hasExplicitAlternates ? (enHref ? withSlash(enHref) : fallback('/')) : basePath;
+const frUrl = hasExplicitAlternates ? (frHref ? withSlash(frHref) : fallback('/fr/')) : `/fr${basePath}`;
 ---
 
 <nav class="quiet-nav" data-quiet-nav>
