@@ -46,3 +46,9 @@ scripts/audio-source/*/recordings/
 design/audioguide-handoff/originals/
 design/audioguide-handoff/video/
 design/audioguide-handoff/photos/
+
+# iCloud sync conflicts. ~/Desktop is synced, so iCloud forks a " 2" copy of any
+# file it sees written twice (typically during a build). They are stale snapshots,
+# never work in progress — `pnpm clean:dups` deletes them.
+* 2
+* 2.*

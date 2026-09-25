@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "rm -rf node_modules/.vite node_modules/.astro .astro dist .vercel/output && astro build",
     "preview": "astro preview",
+    "clean:dups": "bash scripts/clean-dups.sh",
     "astro": "astro",
     "self-guided:generate": "tsx scripts/self-guided/generate-audio.ts",
     "self-guided:photos": "tsx scripts/self-guided/build-photos.ts",
