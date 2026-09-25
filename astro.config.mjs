@@ -30,6 +30,24 @@ const blogRedirects = Object.fromEntries(
   )
 );
 
+// URLs that were served at some point and no longer have a file behind them.
+// `blogRedirects` above is generated from the articles that exist, so a retired
+// slug would otherwise fall through to a 404 and lose whatever it had accrued.
+const retiredUrls = {
+  // iCloud left a duplicate of the article on disk ("… 2.md"), which Astro
+  // happily turned into a second, indexable page. Removed 2026-09-24.
+  "/blog/ww2-sites-paris-walking-itinerary-2": "/blog/ww2-sites-paris-walking-itinerary",
+  "/fr/blog/sites-seconde-guerre-mondiale-paris-itineraire-a-pied-2":
+    "/fr/blog/sites-seconde-guerre-mondiale-paris-itineraire-a-pied",
+};
+
+const retiredRedirects = Object.fromEntries(
+  Object.entries(retiredUrls).map(([from, to]) => [
+    from,
+    { status: /** @type {301} */ (301), destination: to },
+  ])
+);
+
 const blogLastmod = new Map(blogMeta.map((m) => [m.slug, m.lastmod]));
 
 // https://astro.build/config
@@ -67,7 +85,7 @@ export default defineConfig({
     }),
   ],
 
-  redirects: blogRedirects,
+  redirects: { ...blogRedirects, ...retiredRedirects },
 
   // Needed for API routes later
   output: "server",
