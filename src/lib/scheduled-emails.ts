@@ -9,7 +9,7 @@
  *
  * Vercel crons fire on UTC, and Paris is one or two hours ahead of it
  * depending on the season; on the Hobby plan a cron may also run up to an
- * hour late, and only once a day. So the schedule fires once (17:00 UTC for
+ * hour late, and only once a day. So the schedule fires once (16:00 UTC for
  * the reminder, 08:00 for the thank-you) and `withinParisHours()` only
  * checks that the clock is somewhere sensible — it is a guard against a
  * misconfigured schedule, not a way of picking the minute.
@@ -140,9 +140,11 @@ async function run(
 const idle = (reason: string): RunReport => ({ ran: false, reason, considered: 0, sent: 0, skipped: [], failed: [] });
 
 /**
- * The evening before: 17:00 UTC lands at 18:00 Paris in winter and 19:00 in
- * summer, plus up to an hour of Hobby-plan delay. `force` is for a manual run
- * from the admin session, whatever the clock says.
+ * The evening before: 16:00 UTC lands at 18:00 Paris in summer and 17:00 in
+ * winter, plus up to an hour of Hobby-plan delay. A fixed UTC cron cannot hold
+ * 18:00 Paris all year; the summer half is the one that was chosen, because
+ * that is when the walks are. `force` is for a manual run from the admin
+ * session, whatever the clock says.
  */
 export async function runReminders(now = new Date(), force = false): Promise<RunReport> {
   if (!force && !withinParisHours(17, 21, now)) return idle(`outside the evening window (${parisTimeKey(now)} Paris)`);
