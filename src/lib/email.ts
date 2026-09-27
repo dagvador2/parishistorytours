@@ -63,11 +63,13 @@ export interface BookingEmailPayload {
   phone?: string | null;
   message?: string | null;
   sessionId?: string;
-  paymentMethod?: 'on_site' | 'stripe' | null;
+  paymentMethod?: 'on_site' | 'cash' | 'stripe' | null;
   locale?: 'en' | 'fr' | string;
   /** Language the tour itself is guided in, once sessions carry one. */
   tourLanguage?: 'en' | 'fr' | string | null;
   source?: string | null;
+  /** Private tours only: true once confirmed from the admin. */
+  confirmed?: boolean;
 }
 
 export interface BookingEmailResult {
@@ -94,6 +96,8 @@ function normalise(p: BookingEmailPayload): EmailBooking {
     lang: asLang(p.locale),
     tourLanguage: p.tourLanguage ? asLang(p.tourLanguage) : null,
     source: p.source ?? null,
+    // A regular booking is confirmed by construction; a private one by hand.
+    confirmed: p.confirmed ?? p.tourType !== 'private',
   };
 }
 

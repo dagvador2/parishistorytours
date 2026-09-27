@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
 import { parisDateKey, parisWallClockToUTC } from '../../../lib/paris-time';
+import { isAdmin, unauthorized } from '../../../lib/admin-auth';
 
 // POST /api/admin/generate-sessions
 // Generates sessions for the next N weeks based on a weekly schedule.
@@ -15,11 +16,7 @@ import { parisDateKey, parisWallClockToUTC } from '../../../lib/paris-time';
 // a 12:30 session all summer.
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  // Verify admin auth
-  const adminToken = cookies.get('admin_token')?.value;
-  if (!adminToken || adminToken !== import.meta.env.ADMIN_PASSWORD) {
-    return new Response('Unauthorized', { status: 401 });
-  }
+  if (!isAdmin(cookies)) return unauthorized();
 
   try {
     const { weeksAhead = 4, schedule, maxSpots = 10 } = await request.json();

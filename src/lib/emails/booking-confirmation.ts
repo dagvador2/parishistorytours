@@ -34,13 +34,13 @@ import {
 } from './layout';
 import { firstName, longDate, money, people, shortDate, weekday, weekdayBefore, type Lang } from './format';
 import { tourFacts } from './tours';
-import type { BuiltEmail, EmailBooking } from './types';
+import { cashOnly, paysOnTheDay, type BuiltEmail, type EmailBooking } from './types';
 
 export type ConfirmationState = 'paid' | 'on_site' | 'request';
 
 export function confirmationState(b: EmailBooking): ConfirmationState {
-  if (b.paymentMethod === 'on_site') return 'on_site';
-  if (b.tourType === 'private') return 'request';
+  if (paysOnTheDay(b.paymentMethod)) return 'on_site';
+  if (b.tourType === 'private' && !b.confirmed) return 'request';
   return 'paid';
 }
 
@@ -48,6 +48,7 @@ const COPY = {
   en: {
     eyebrowTour: (t: string) => `${t} · walking tour`,
     eyebrowRequest: (t: string) => `${t} · private tour request`,
+    eyebrowPrivate: (t: string) => `${t} · private tour`,
     subjectConfirmed: (t: string, d: string, h: string) => `Confirmed · ${t}, ${d} at ${h}`,
     subjectRequest: (d: string) => `Received · your private tour request for ${d}`,
     preheaderOnSite: (a: string, where: string | null) =>
@@ -83,7 +84,7 @@ const COPY = {
     requested: (d: string) => `requested · ${d}`,
     awaiting: 'awaiting my reply',
     toPay: 'To pay on the day',
-    toPayNote: 'cash or card, I carry a reader',
+    toPayNote: (cash: boolean) => (cash ? 'cash, at the end' : 'cash or card, I carry a reader'),
     paid: 'Paid in full',
     calendar: 'Add to your calendar',
     calendarNote: 'The .ics file is attached to this email',
@@ -129,6 +130,7 @@ const COPY = {
   fr: {
     eyebrowTour: (t: string) => `${t} · visite guidée`,
     eyebrowRequest: (t: string) => `${t} · demande de visite privée`,
+    eyebrowPrivate: (t: string) => `${t} · visite privée`,
     subjectConfirmed: (t: string, d: string, h: string) => `Confirmé · ${t}, ${d} à ${h}`,
     subjectRequest: (d: string) => `Bien reçu · votre demande de visite privée du ${d}`,
     preheaderOnSite: (a: string, where: string | null) =>
@@ -164,7 +166,7 @@ const COPY = {
     requested: (d: string) => `souhaité · ${d}`,
     awaiting: 'en attente de ma réponse',
     toPay: 'À régler le jour même',
-    toPayNote: 'espèces ou carte, j’ai un lecteur',
+    toPayNote: (cash: boolean) => (cash ? 'espèces, à la fin' : 'espèces ou carte, j’ai un lecteur'),
     paid: 'Payé en totalité',
     calendar: 'Ajouter à mon agenda',
     calendarNote: 'Le fichier .ics est joint à ce mail',
@@ -232,7 +234,7 @@ export function buildConfirmationEmail(
     { label: t.rowTour, value: esc(state === 'request' ? `${tour} · ${lang === 'fr' ? 'privée' : 'private'}` : tour) },
     {
       label: t.rowGroup,
-      value: esc(`${people(b.participants, lang)} · ${state === 'request' ? t.yourPartyOnly : t.smallGroup}`),
+      value: esc(`${people(b.participants, lang)} · ${b.tourType === 'private' ? t.yourPartyOnly : t.smallGroup}`),
     },
   ];
   if (state !== 'request') rows.push({ label: t.rowOnFoot, value: esc(facts.onFoot[lang]) });
@@ -269,7 +271,7 @@ export function buildConfirmationEmail(
   const cancelDay = state === 'paid' ? weekdayBefore(b.dateKey, lang) : null;
 
   const rowsHtml = [
-    masthead(isRequest ? t.eyebrowRequest(tour) : t.eyebrowTour(tour)),
+    masthead(isRequest ? t.eyebrowRequest(tour) : b.tourType === 'private' ? t.eyebrowPrivate(tour) : t.eyebrowTour(tour)),
     heading(isRequest ? t.titleRequest(name) : t.titleBooked(name)),
     paragraph(esc(isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite(where) : t.leadPaid(where))),
     ticket({
@@ -281,7 +283,7 @@ export function buildConfirmationEmail(
       status: isRequest ? t.awaiting : undefined,
     }),
     !isRequest && state === 'on_site' && amount
-      ? notice({ label: t.toPay, value: `<strong>${amount}</strong> <span style="font-size:14px;color:${C.muted}">· ${esc(t.toPayNote)}</span>`, tone: 'gold' })
+      ? notice({ label: t.toPay, value: `<strong>${amount}</strong> <span style="font-size:14px;color:${C.muted}">· ${esc(t.toPayNote(cashOnly(b.paymentMethod)))}</span>`, tone: 'gold' })
       : '',
     !isRequest && state === 'paid' && amount
       ? notice({ label: t.paid, value: `<strong>${amount}</strong>`, tone: 'teal' })
@@ -315,7 +317,7 @@ export function buildConfirmationEmail(
     `${dateLong} — ${b.time} (${isRequest ? t.timeNoteRequest : t.timeNote})`,
     ...rows.map((r) => `${r.label}: ${strip(r.value.replace(/<[^>]+>/g, ''))}`),
     '',
-    ...(state === 'on_site' && amount ? [`${t.toPay}: ${strip(amount)} (${t.toPayNote})`, ''] : []),
+    ...(state === 'on_site' && amount ? [`${t.toPay}: ${strip(amount)} (${t.toPayNote(cashOnly(b.paymentMethod))})`, ''] : []),
     ...(state === 'paid' && amount ? [`${t.paid}: ${strip(amount)}`, ''] : []),
     t.nextTitle,
     ...stepList.map((s, i) => `${i + 1}. ${s.lead} ${s.rest}`),

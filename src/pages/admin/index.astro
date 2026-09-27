@@ -1,337 +1,600 @@
 ---
-// Admin dashboard — password-protected via cookie
-// Not prerendered: requires server-side cookie check
+// Tableau de bord — protégé par cookie, jamais prérendu.
+//
+// Une seule page, lue de haut en bas dans l'ordre où un guide s'en sert :
+// ce qui attend une réponse, puis les visites à venir avec les gens dessus,
+// puis les outils. Tout est rendu côté client à partir de /api/admin/overview.
+import "../../styles/global.css";
+import { isAdmin } from "../../lib/admin-auth";
+
 export const prerender = false;
 
 const adminPassword = import.meta.env.ADMIN_PASSWORD;
-const adminToken = Astro.cookies.get('admin_token')?.value;
-const isAuthenticated = adminToken && adminToken === adminPassword;
+let loginError = false;
 
-// Handle login POST
-if (Astro.request.method === 'POST') {
+if (Astro.request.method === "POST") {
   const formData = await Astro.request.formData();
-  const password = formData.get('password')?.toString();
-  if (password === adminPassword) {
-    // Scoped to the whole site, not just /admin: the same cookie is what lets
-    // an admin trigger /api/cron/* by hand (see src/lib/cron-auth.ts).
-    Astro.cookies.set('admin_token', password, {
-      path: '/',
+  const password = formData.get("password")?.toString();
+  if (adminPassword && password === adminPassword) {
+    // Valable sur tout le site : le même cookie autorise les déclenchements
+    // manuels de /api/cron/* (voir src/lib/cron-auth.ts).
+    Astro.cookies.set("admin_token", password, {
+      path: "/",
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 24h
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24,
     });
-    return Astro.redirect('/admin');
+    return Astro.redirect("/admin");
   }
+  loginError = true;
 }
+
+const authed = isAdmin(Astro.cookies);
+const today = new Date().toLocaleDateString("fr-FR", {
+  timeZone: "Europe/Paris",
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+});
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
-  <title>Admin - Paris History Tours</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, system-ui, sans-serif; background: #f3f4f6; color: #111827; }
-    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
-    h1 { font-size: 1.5rem; margin-bottom: 24px; }
-    h2 { font-size: 1.25rem; margin-bottom: 16px; color: #374151; }
-    .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.875rem; margin-bottom: 12px; }
-    button { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.875rem; }
-    button:hover { background: #1d4ed8; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-secondary { background: #6b7280; }
-    .btn-secondary:hover { background: #4b5563; }
-    .sessions-grid { display: grid; gap: 12px; }
-    .session-card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .session-card .info { font-size: 0.875rem; }
-    .session-card .spots { font-weight: 600; }
-    .spots-good { color: #059669; }
-    .spots-low { color: #d97706; }
-    .spots-full { color: #dc2626; }
-    .login-container { max-width: 400px; margin: 100px auto; }
-    .msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.875rem; }
-    .msg-success { background: #d1fae5; color: #065f46; }
-    .msg-error { background: #fee2e2; color: #991b1b; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .tab { padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; border: 1px solid #d1d5db; background: white; }
-    .tab.active { background: #2563eb; color: white; border-color: #2563eb; }
-  </style>
-</head>
-<body>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin — Paris History Tours</title>
+    <style>
+      /* Ink on paper, comme le site. Les seules couleurs sémantiques sont
+         l'or (attend quelque chose, argent à encaisser) et la sarcelle (réglé). */
+      html { background: var(--paper); }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--font-sans);
+        font-size: 15px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      button { font: inherit; }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+      @media (max-width: 640px) { .wrap { padding: 0 14px 64px; } }
 
-{!isAuthenticated ? (
-  <div class="login-container">
-    <div class="card">
-      <h1>Admin Login</h1>
-      <form method="POST">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required autofocus />
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  </div>
-) : (
-  <div class="container">
-    <h1>Admin Dashboard — Paris History Tours</h1>
+      /* ── en-tête ── */
+      .top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 36px 0 20px; border-bottom: 1px solid var(--border); }
+      .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--rouge); }
+      .top h1 { font-family: var(--font-display); font-weight: 500; font-size: 30px; line-height: 1.1; margin: 8px 0 0; letter-spacing: -.01em; }
+      .top .date { color: var(--ink-2); font-size: 14px; }
+      .nav { display: flex; gap: 4px; flex-wrap: wrap; padding: 12px 0; position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
+      .nav a { font-size: 13px; font-weight: 500; color: var(--ink-2); text-decoration: none; padding: 6px 10px; border-radius: 2px; }
+      .nav a:hover { color: var(--ink); background: var(--paper-2); }
+      .nav .count { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 9px; background: var(--gold); color: #fff; font-size: 11px; font-weight: 600; text-align: center; line-height: 18px; }
+      .nav .count:empty { display: none; }
 
-    <!-- Upcoming sessions -->
-    <div class="card">
-      <h2>Upcoming Sessions</h2>
-      <div id="sessions-loading">Loading sessions...</div>
-      <div id="sessions-grid" class="sessions-grid" style="display:none;"></div>
-      <div id="sessions-empty" style="display:none; color:#6b7280; font-size:0.875rem;">No upcoming sessions found.</div>
-    </div>
+      /* ── sections ── */
+      section { padding-top: 40px; scroll-margin-top: 64px; }
+      .shead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+      .shead h2 { font-family: var(--font-display); font-weight: 500; font-size: 22px; margin: 0; letter-spacing: -.01em; }
+      .shead .hint { font-size: 13px; color: var(--ink-2); }
+      .empty { padding: 22px 0; color: var(--ink-2); font-size: 14px; }
+      .loading { color: var(--ink-2); font-size: 14px; padding: 18px 0; }
 
-    <!-- Add OTA Booking -->
-    <div class="card">
-      <h2>Add OTA Booking</h2>
-      <div id="ota-message"></div>
-      <form id="ota-form">
-        <label for="ota-source">Source</label>
-        <select id="ota-source" required>
-          <option value="">Select source...</option>
-          <option value="gyg">GetYourGuide</option>
-          <option value="viator">Viator</option>
-          <option value="tripadvisor">TripAdvisor</option>
-          <option value="tourist">Tourist.com</option>
-          <option value="parisjetaime">Paris je t'aime</option>
-          <option value="other">Other</option>
-        </select>
+      /* ── cartes ── */
+      .card { background: var(--paper-3); border: 1px solid var(--border); border-radius: 2px; }
+      .card + .card { margin-top: 10px; }
 
-        <label for="ota-session">Session</label>
-        <select id="ota-session" required>
-          <option value="">Select a session...</option>
-        </select>
+      /* demande privée */
+      .req { padding: 18px 20px; border-left: 3px solid var(--gold); }
+      .req .when { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+      .req .when b { font-family: var(--font-display); font-weight: 500; font-size: 20px; }
+      .req .meta { color: var(--ink-2); font-size: 14px; margin-top: 2px; }
+      .req .contact { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; margin-top: 8px; }
+      .req .contact a { color: var(--rouge); text-decoration: none; font-weight: 500; }
+      .req .contact a:hover { text-decoration: underline; }
+      .req .msg { margin: 12px 0 0; padding: 10px 14px; background: var(--paper-2); border-left: 2px solid var(--border); font-size: 14px; color: var(--ink-2); }
+      .req .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+      .req .actions label { font-size: 12px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+      .req .actions select, .req .actions input { font: inherit; font-size: 14px; padding: 7px 9px; border: 1px solid var(--border); border-radius: 2px; background: var(--paper-3); color: var(--ink); }
+      .req .actions input { width: 90px; }
+      .req .spacer { flex: 1; }
 
-        <label for="ota-participants">Participants</label>
-        <input type="number" id="ota-participants" min="1" max="10" value="1" required />
+      /* jour + sessions */
+      .day { margin-top: 22px; }
+      .day h3 { font-family: var(--font-display); font-weight: 500; font-size: 17px; margin: 0 0 8px; display: flex; align-items: baseline; gap: 10px; }
+      .day h3 small { font-family: var(--font-sans); font-size: 12px; color: var(--ink-2); font-weight: 400; }
+      .session { padding: 14px 18px; }
+      .session.private { border-left: 3px solid var(--gold); }
+      .session .head { display: grid; grid-template-columns: 56px 1fr auto; gap: 14px; align-items: center; }
+      .session .time { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1; }
+      .session .tour { font-size: 15px; font-weight: 500; }
+      .session .tour .lang { display: inline-block; margin-left: 8px; font-size: 10.5px; font-weight: 700; letter-spacing: .1em; padding: 2px 6px; border-radius: 2px; background: var(--paper-2); color: var(--ink-2); vertical-align: 2px; }
+      .session .tour .lang.fr { background: var(--rouge); color: #fff; }
+      .session .tour .private-tag { font-size: 12px; color: var(--gold); font-weight: 600; margin-left: 8px; }
+      .session .fill { text-align: right; font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+      .session .fill b { color: var(--ink); font-weight: 600; }
+      .session .bar { height: 3px; width: 96px; background: var(--paper-2); margin-top: 6px; margin-left: auto; overflow: hidden; }
+      .session .bar i { display: block; height: 100%; background: var(--teal); }
+      .session .bar i.hot { background: var(--rouge); }
+      .people { margin: 10px 0 0 70px; border-top: 1px solid var(--border); }
+      .nobody { padding: 8px 0 0 70px; font-size: 13px; color: var(--ink-2); }
+      @media (max-width: 640px) { .people, .nobody { margin-left: 0; padding-left: 0; } .session .head { grid-template-columns: 48px 1fr auto; } }
+      .person { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+      .person:last-child { border-bottom: 0; }
+      .person .name { font-weight: 500; }
+      .person .pax { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+      .person .links { display: flex; gap: 8px; margin-left: auto; }
+      .person .links a, .person .links button { font-size: 12px; font-weight: 500; color: var(--ink-2); text-decoration: none; padding: 3px 8px; border: 1px solid var(--border); border-radius: 2px; background: transparent; cursor: pointer; }
+      .person .links a:hover, .person .links button:hover { color: var(--ink); border-color: var(--ink); }
+      .person .links button.danger:hover { color: var(--rouge); border-color: var(--rouge); }
 
-        <label for="ota-customer">Customer Name (optional)</label>
-        <input type="text" id="ota-customer" placeholder="OTA customer name" />
+      /* chips d'état */
+      .chip { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+      .chip.gold { background: #f3ecd8; color: var(--gold-dark); }
+      .chip.teal { background: #e4ebe9; color: var(--teal-dark); }
+      .chip.grey { background: var(--paper-2); color: var(--ink-2); }
+      .chip.sent { background: transparent; color: var(--ink-2); border: 1px solid var(--border); font-weight: 500; letter-spacing: .04em; text-transform: none; }
 
-        <label for="ota-reference">OTA Reference (optional)</label>
-        <input type="text" id="ota-reference" placeholder="Booking reference number" />
+      /* outils */
+      .tools { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width: 800px) { .tools { grid-template-columns: 1fr; } }
+      .tool { padding: 20px; }
+      .tool h3 { font-family: var(--font-display); font-weight: 500; font-size: 17px; margin: 0 0 14px; }
+      .tool label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-2); margin: 10px 0 4px; }
+      .tool input, .tool select { width: 100%; box-sizing: border-box; font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 2px; background: var(--paper-3); color: var(--ink); }
+      .tool .days { display: flex; flex-wrap: wrap; gap: 6px; }
+      .tool .days label { margin: 0; display: inline-flex; align-items: center; gap: 5px; padding: 6px 9px; border: 1px solid var(--border); border-radius: 2px; cursor: pointer; font-size: 13px; color: var(--ink); }
+      .tool .days input { width: auto; margin: 0; }
+      .tool .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        <button type="submit">Add OTA Booking</button>
-      </form>
-    </div>
+      /* boutons */
+      .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border: 1px solid var(--ink); border-radius: 2px; background: var(--ink); color: var(--paper-3); font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; }
+      .btn:hover { background: var(--rouge); border-color: var(--rouge); }
+      .btn:disabled { opacity: .45; cursor: not-allowed; }
+      .btn.ghost { background: transparent; color: var(--ink); }
+      .btn.ghost:hover { background: var(--paper-2); border-color: var(--ink); color: var(--ink); }
+      .btn.ghost.danger:hover { color: var(--rouge); border-color: var(--rouge); }
+      .tool .btn { margin-top: 14px; }
 
-    <!-- Generate Sessions -->
-    <div class="card">
-      <h2>Generate Sessions</h2>
-      <div id="gen-message"></div>
-      <form id="gen-form">
-        <label for="gen-tour">Tour</label>
-        <select id="gen-tour" required>
-          <option value="">Select tour...</option>
-          <option value="left-bank">WW2 Left Bank</option>
-          <option value="right-bank">WW2 Right Bank</option>
-          <option value="general-history">General History</option>
-          <option value="food-wine">Nourritour (Food &amp; Wine)</option>
-          <option value="both-ww2">Both WW2 Tours (LB + RB)</option>
-        </select>
+      /* messages */
+      .note { margin-top: 10px; padding: 10px 12px; border-radius: 2px; font-size: 13px; }
+      .note.ok { background: #e4ebe9; color: var(--teal-dark); }
+      .note.err { background: #f0e0dc; color: var(--rouge-dark); }
+      .note:empty { display: none; }
+      .report { font-size: 13px; color: var(--ink-2); margin-top: 10px; white-space: pre-line; }
 
-        <label for="gen-language">Language the tour is guided in</label>
-        <select id="gen-language" required>
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-        </select>
-
-        <label>Days of the week</label>
-        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="1" /> Mon</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="2" /> Tue</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="3" /> Wed</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="4" /> Thu</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="5" /> Fri</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="6" /> Sat</label>
-          <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="0" /> Sun</label>
+      /* connexion */
+      .login { max-width: 380px; margin: 14vh auto 0; padding: 0 20px; }
+      .login .card { padding: 28px; }
+      .login h1 { font-family: var(--font-display); font-weight: 500; font-size: 24px; margin: 6px 0 18px; }
+      .login label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+      .login input { width: 100%; box-sizing: border-box; font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 2px; margin-bottom: 14px; background: var(--paper-3); }
+      .login .btn { width: 100%; justify-content: center; }
+    </style>
+  </head>
+  <body>
+    {!authed ? (
+      <div class="login">
+        <div class="card">
+          <div class="eyebrow">Paris History Tours</div>
+          <h1>Administration</h1>
+          <form method="POST">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required autofocus autocomplete="current-password" />
+            {loginError && <div class="note err" style="margin:0 0 14px">Mot de passe refusé.</div>}
+            <button type="submit" class="btn">Entrer</button>
+          </form>
         </div>
+      </div>
+    ) : (
+      <div class="wrap">
+        <header class="top">
+          <div>
+            <div class="eyebrow">Paris History Tours</div>
+            <h1>Tableau de bord</h1>
+          </div>
+          <div class="date">{today}</div>
+        </header>
+        <nav class="nav" aria-label="Sections">
+          <a href="#pending">À traiter<span class="count" id="pending-count"></span></a>
+          <a href="#upcoming">Prochaines visites</a>
+          <a href="#tools">Outils</a>
+          <a href="#mails">Mails automatiques</a>
+        </nav>
 
-        <label for="gen-times">Start times in Paris time (comma-separated, e.g. 10:30,14:30)</label>
-        <input type="text" id="gen-times" placeholder="10:30,14:30" required />
+        <section id="pending">
+          <div class="shead">
+            <h2>À traiter</h2>
+            <span class="hint">Demandes de visite privée en attente de ta réponse</span>
+          </div>
+          <div id="pending-list" class="loading">Chargement…</div>
+        </section>
 
-        <label for="gen-weeks">Weeks ahead</label>
-        <input type="number" id="gen-weeks" min="1" max="8" value="4" required />
+        <section id="upcoming">
+          <div class="shead">
+            <h2>Prochaines visites</h2>
+            <span class="hint">30 jours · heure de Paris</span>
+          </div>
+          <div id="days" class="loading">Chargement…</div>
+        </section>
 
-        <label for="gen-spots">Max spots per session</label>
-        <input type="number" id="gen-spots" min="1" max="20" value="10" required />
+        <section id="tools">
+          <div class="shead"><h2>Outils</h2></div>
+          <div class="tools">
+            <form class="card tool" id="ota-form">
+              <h3>Ajouter une réservation OTA</h3>
+              <label for="ota-source">Plateforme</label>
+              <select id="ota-source" required>
+                <option value="">Choisir…</option>
+                <option value="gyg">GetYourGuide</option>
+                <option value="viator">Viator</option>
+                <option value="tripadvisor">TripAdvisor</option>
+                <option value="tourist">Tourist.com</option>
+                <option value="parisjetaime">Paris je t'aime</option>
+                <option value="other">Autre</option>
+              </select>
+              <label for="ota-session">Session</label>
+              <select id="ota-session" required><option value="">Choisir une session…</option></select>
+              <div class="row">
+                <div>
+                  <label for="ota-participants">Participants</label>
+                  <input type="number" id="ota-participants" min="1" max="10" value="1" required />
+                </div>
+                <div>
+                  <label for="ota-reference">Référence OTA</label>
+                  <input type="text" id="ota-reference" placeholder="optionnel" />
+                </div>
+              </div>
+              <label for="ota-customer">Nom du client</label>
+              <input type="text" id="ota-customer" placeholder="optionnel" />
+              <button type="submit" class="btn">Ajouter</button>
+              <div class="note" id="ota-message"></div>
+            </form>
 
-        <button type="submit">Generate Sessions</button>
-      </form>
-    </div>
-  </div>
+            <form class="card tool" id="gen-form">
+              <h3>Générer des sessions</h3>
+              <div class="row">
+                <div>
+                  <label for="gen-tour">Visite</label>
+                  <select id="gen-tour" required>
+                    <option value="">Choisir…</option>
+                    <option value="left-bank">WW2 Rive Gauche</option>
+                    <option value="right-bank">WW2 Rive Droite</option>
+                    <option value="general-history">Histoire générale</option>
+                    <option value="food-wine">Nourritour</option>
+                    <option value="both-ww2">Les deux WW2 (RG + RD)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="gen-language">Guidée en</label>
+                  <select id="gen-language" required>
+                    <option value="en">Anglais</option>
+                    <option value="fr">Français</option>
+                  </select>
+                </div>
+              </div>
+              <label>Jours</label>
+              <div class="days">
+                <label><input type="checkbox" name="gen-day" value="1" /> Lun</label>
+                <label><input type="checkbox" name="gen-day" value="2" /> Mar</label>
+                <label><input type="checkbox" name="gen-day" value="3" /> Mer</label>
+                <label><input type="checkbox" name="gen-day" value="4" /> Jeu</label>
+                <label><input type="checkbox" name="gen-day" value="5" /> Ven</label>
+                <label><input type="checkbox" name="gen-day" value="6" /> Sam</label>
+                <label><input type="checkbox" name="gen-day" value="0" /> Dim</label>
+              </div>
+              <label for="gen-times">Heures de départ (heure de Paris, séparées par des virgules)</label>
+              <input type="text" id="gen-times" placeholder="10:30, 14:30" required />
+              <div class="row">
+                <div>
+                  <label for="gen-weeks">Semaines à l'avance</label>
+                  <input type="number" id="gen-weeks" min="1" max="8" value="4" required />
+                </div>
+                <div>
+                  <label for="gen-spots">Places par session</label>
+                  <input type="number" id="gen-spots" min="1" max="20" value="10" required />
+                </div>
+              </div>
+              <button type="submit" class="btn">Générer</button>
+              <div class="note" id="gen-message"></div>
+            </form>
+          </div>
+        </section>
 
-  <script is:inline>
-    // Fetch and display upcoming sessions
-    async function loadSessions() {
-      try {
-        const res = await fetch('/api/admin/sessions-list');
-        if (!res.ok) throw new Error('Failed to load sessions');
-        const { sessions } = await res.json();
+        <section id="mails">
+          <div class="shead">
+            <h2>Mails automatiques</h2>
+            <span class="hint">Partent seuls chaque jour · ici pour forcer un envoi ou vérifier</span>
+          </div>
+          <div class="card tool">
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <button type="button" class="btn ghost" data-cron="reminders">Envoyer les rappels de demain</button>
+              <button type="button" class="btn ghost" data-cron="thanks">Envoyer les mercis d'hier</button>
+            </div>
+            <div class="report" id="cron-report">Rappel la veille en fin d'après-midi · merci le lendemain matin. Chaque réservation ne reçoit chacun qu'une fois.</div>
+          </div>
+        </section>
+      </div>
+    )}
 
-        const grid = document.getElementById('sessions-grid');
-        const loading = document.getElementById('sessions-loading');
-        const empty = document.getElementById('sessions-empty');
-        const sessionSelect = document.getElementById('ota-session');
-        loading.style.display = 'none';
+    <script is:inline>
+      (function () {
+        if (!document.getElementById('days')) return;
 
-        if (!sessions || sessions.length === 0) {
-          empty.style.display = 'block';
-          return;
-        }
+        var TOURS = { 'left-bank': 'Rive Gauche', 'right-bank': 'Rive Droite', 'general-history': 'Histoire générale', 'food-wine': 'Nourritour' };
+        var SHORT = { 'left-bank': 'RG', 'right-bank': 'RD', 'general-history': 'HG', 'food-wine': 'NT' };
+        var SOURCES = { gyg: 'GetYourGuide', viator: 'Viator', tripadvisor: 'TripAdvisor', tourist: 'Tourist.com', parisjetaime: 'Paris je t’aime', other: 'OTA' };
+        var TZ = 'Europe/Paris';
 
-        grid.style.display = 'grid';
-        grid.innerHTML = '';
-
-        const tourLabels = {
-          'left-bank': 'Left Bank',
-          'right-bank': 'Right Bank',
-          'general-history': 'General History',
-          'food-wine': 'Nourritour',
-        };
-        const tourShort = {
-          'left-bank': 'LB',
-          'right-bank': 'RB',
-          'general-history': 'GH',
-          'food-wine': 'NT',
-        };
-
-        sessions.forEach(function(s) {
-          // Paris time, whichever timezone the admin happens to be browsing from.
-          const date = new Date(s.start_time);
-          const dateStr = date.toLocaleDateString('en-GB', { timeZone: 'Europe/Paris', weekday: 'short', day: 'numeric', month: 'short' });
-          const timeStr = date.toLocaleTimeString('en-GB', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit' });
-          const spotsClass = s.available_spots >= 5 ? 'spots-good' : s.available_spots > 0 ? 'spots-low' : 'spots-full';
-          const fullLabel = tourLabels[s.tour_type] || s.tour_type;
-          const shortLabel = tourShort[s.tour_type] || s.tour_type;
-          const langLabel = (s.language || 'en').toUpperCase();
-
-          const card = document.createElement('div');
-          card.className = 'session-card';
-          card.innerHTML =
-            '<div class="info">' +
-              '<strong>' + fullLabel + '</strong>' +
-              ' <span style="font-size:0.75rem;font-weight:600;color:' + (langLabel === 'FR' ? '#8a3b2e' : '#6b7280') + '">' + langLabel + '</span>' +
-              ' — ' + dateStr + ' at ' + timeStr +
-            '</div>' +
-            '<div class="spots ' + spotsClass + '">' + s.available_spots + '/' + s.max_spots + ' spots</div>';
-          grid.appendChild(card);
-
-          // Also populate the session select
-          if (s.available_spots > 0) {
-            const opt = document.createElement('option');
-            opt.value = s.id;
-            opt.textContent = shortLabel + ' ' + langLabel + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
-            opt.dataset.tour = s.tour_type;
-            sessionSelect.appendChild(opt);
+        // ── petits utilitaires DOM : jamais d'innerHTML avec des données ──
+        function el(tag, attrs, children) {
+          var n = document.createElement(tag);
+          if (attrs) for (var k in attrs) {
+            if (k === 'class') n.className = attrs[k];
+            else if (k === 'text') n.textContent = attrs[k];
+            else if (k.indexOf('on') === 0) n.addEventListener(k.slice(2), attrs[k]);
+            else n.setAttribute(k, attrs[k]);
           }
-        });
-      } catch (err) {
-        document.getElementById('sessions-loading').textContent = 'Error loading sessions: ' + err.message;
-      }
-    }
+          (children || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+          return n;
+        }
+        function dayKey(iso) { return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(iso)); }
+        function dayLabel(key) { return new Date(key + 'T12:00:00Z').toLocaleDateString('fr-FR', { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' }); }
+        function timeOf(iso) { return new Date(iso).toLocaleTimeString('fr-FR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' }); }
+        function relTime(iso) {
+          var h = Math.round((Date.now() - new Date(iso).getTime()) / 36e5);
+          if (h < 1) return 'à l’instant';
+          if (h < 24) return 'il y a ' + h + ' h';
+          return 'il y a ' + Math.round(h / 24) + ' j';
+        }
+        function digits(phone) { var d = (phone || '').replace(/\D/g, ''); return d.length >= 8 ? d : null; }
+        function plural(n, one, many) { return n + ' ' + (n > 1 ? many : one); }
 
-    // Handle OTA form submission
-    document.getElementById('ota-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      var msgEl = document.getElementById('ota-message');
-      var sessionSelect = document.getElementById('ota-session');
-      var selectedOption = sessionSelect.options[sessionSelect.selectedIndex];
-
-      var body = {
-        sessionId: sessionSelect.value,
-        participants: parseInt(document.getElementById('ota-participants').value),
-        source: document.getElementById('ota-source').value,
-        customerName: document.getElementById('ota-customer').value || null,
-        otaReference: document.getElementById('ota-reference').value || null,
-        tour: selectedOption.dataset ? selectedOption.dataset.tour : null,
-      };
-
-      try {
-        var res = await fetch('/api/admin/add-ota-booking', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        });
-
-        if (!res.ok) {
-          var err = await res.json();
-          throw new Error(err.error || 'Failed');
+        function stateChip(b) {
+          if (b.status === 'pending') return el('span', { class: 'chip gold', text: 'à confirmer' });
+          if (b.source && b.source !== 'direct') return el('span', { class: 'chip grey', text: SOURCES[b.source] || b.source });
+          var amount = b.total_price != null ? ' · ' + b.total_price + ' €' : '';
+          if (b.payment_method === 'on_site' || b.payment_method === 'cash') return el('span', { class: 'chip gold', text: 'sur place' + amount });
+          return el('span', { class: 'chip teal', text: 'payé' + amount });
         }
 
-        msgEl.innerHTML = '<div class="msg msg-success">OTA booking added successfully!</div>';
-        document.getElementById('ota-form').reset();
-        loadSessions(); // Refresh
-      } catch (err) {
-        msgEl.innerHTML = '<div class="msg msg-error">Error: ' + err.message + '</div>';
-      }
-    });
-
-    // Handle session generation form
-    document.getElementById('gen-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      var msgEl = document.getElementById('gen-message');
-      var tourValue = document.getElementById('gen-tour').value;
-      var timesStr = document.getElementById('gen-times').value;
-      var weeksAhead = parseInt(document.getElementById('gen-weeks').value);
-      var maxSpots = parseInt(document.getElementById('gen-spots').value);
-      var language = document.getElementById('gen-language').value === 'fr' ? 'fr' : 'en';
-
-      var checkedDays = [];
-      document.querySelectorAll('input[name="gen-day"]:checked').forEach(function(cb) {
-        checkedDays.push(parseInt(cb.value));
-      });
-
-      if (checkedDays.length === 0) {
-        msgEl.innerHTML = '<div class="msg msg-error">Please select at least one day</div>';
-        return;
-      }
-
-      var times = timesStr.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
-      if (times.length === 0) {
-        msgEl.innerHTML = '<div class="msg msg-error">Please enter at least one time</div>';
-        return;
-      }
-
-      var tours = tourValue === 'both-ww2' ? ['left-bank', 'right-bank'] : [tourValue];
-      var schedule = [];
-      tours.forEach(function(tour) {
-        checkedDays.forEach(function(day) {
-          schedule.push({ dayOfWeek: day, times: times, tour: tour, language: language });
-        });
-      });
-
-      try {
-        var res = await fetch('/api/admin/generate-sessions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ weeksAhead: weeksAhead, schedule: schedule, maxSpots: maxSpots }),
-        });
-
-        if (!res.ok) {
-          var err = await res.json();
-          throw new Error(err.error || 'Failed');
+        function contactLinks(b, extra) {
+          var links = [];
+          var d = digits(b.customer_phone);
+          if (d) links.push(el('a', { href: 'https://wa.me/' + d, target: '_blank', rel: 'noopener', text: 'WhatsApp' }));
+          if (b.customer_email) links.push(el('a', { href: 'mailto:' + b.customer_email, text: 'Mail' }));
+          (extra || []).forEach(function (x) { links.push(x); });
+          return el('span', { class: 'links' }, links);
         }
 
-        var result = await res.json();
-        msgEl.innerHTML = '<div class="msg msg-success">' + result.created + ' sessions created, ' + result.skipped + ' skipped (already exist)</div>';
-        document.getElementById('gen-form').reset();
-        loadSessions(); // Refresh
-      } catch (err) {
-        msgEl.innerHTML = '<div class="msg msg-error">Error: ' + err.message + '</div>';
-      }
-    });
+        function post(url, body) {
+          return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+            .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || r.statusText); return j; }); });
+        }
 
-    loadSessions();
-  </script>
-)}
+        function cancelButton(b) {
+          return el('button', {
+            type: 'button', class: 'danger', text: 'Annuler',
+            onclick: function () {
+              if (!confirm('Annuler la réservation de ' + (b.customer_name || 'ce client') + ' ? Les places sont remises en vente. Aucun mail n’est envoyé.')) return;
+              post('/api/admin/cancel-booking', { bookingId: b.id }).then(load).catch(function (e) { alert('Échec : ' + e.message); });
+            }
+          });
+        }
 
-</body>
+        // ── demandes privées ──
+        function renderPending(list) {
+          var box = document.getElementById('pending-list');
+          var count = document.getElementById('pending-count');
+          box.className = ''; box.textContent = '';
+          count.textContent = list.length ? String(list.length) : '';
+          if (!list.length) { box.appendChild(el('div', { class: 'empty', text: 'Rien en attente.' })); return; }
+
+          list.forEach(function (b) {
+            var pay = el('select', {}, [
+              el('option', { value: 'on_site', text: 'Paiement sur place' }),
+              el('option', { value: 'paid', text: 'Déjà payé (virement, lien…)' }),
+            ]);
+            var price = el('input', { type: 'number', min: '0', step: '1', placeholder: '€', value: b.total_price != null ? String(b.total_price) : '' });
+            var note = el('div', { class: 'note' });
+            var confirmBtn = el('button', {
+              type: 'button', class: 'btn', text: 'Confirmer et envoyer le mail',
+              onclick: function () {
+                confirmBtn.disabled = true; note.className = 'note'; note.textContent = '';
+                post('/api/admin/confirm-private', { bookingId: b.id, paymentMethod: pay.value, price: price.value === '' ? null : Number(price.value) })
+                  .then(function (r) {
+                    note.className = 'note ' + (r.emailSent ? 'ok' : 'err');
+                    note.textContent = r.emailSent
+                      ? 'Confirmée — mail envoyé à ' + b.customer_email + '.'
+                      : 'Confirmée, mais le mail n’est pas parti : ' + (r.emailError || 'erreur inconnue');
+                    setTimeout(load, 1500);
+                  })
+                  .catch(function (e) { confirmBtn.disabled = false; note.className = 'note err'; note.textContent = 'Échec : ' + e.message; });
+              }
+            });
+            var refuse = el('button', { type: 'button', class: 'btn ghost danger', text: 'Refuser', onclick: function () {
+              if (!confirm('Refuser la demande de ' + (b.customer_name || 'ce client') + ' ? Aucun mail n’est envoyé — écris-lui toi-même.')) return;
+              post('/api/admin/cancel-booking', { bookingId: b.id }).then(load).catch(function (e) { alert('Échec : ' + e.message); });
+            }});
+
+            box.appendChild(el('div', { class: 'card req' }, [
+              el('div', { class: 'when' }, [
+                el('b', { text: dayLabel(b.booking_date) + ' · ' + (b.booking_time || '').slice(0, 5) }),
+                el('span', { class: 'chip gold', text: 'privée' }),
+                b.tour_language ? el('span', { class: 'chip grey', text: b.tour_language.toUpperCase() }) : null,
+              ]),
+              el('div', { class: 'meta', text: (TOURS[b.tour_type] || b.tour_type) + ' · ' + plural(b.participants_count, 'personne', 'personnes') + ' · ' + (b.customer_name || '—') + ' · reçue ' + relTime(b.created_at) + ' · mail en ' + (b.email_locale === 'fr' ? 'français' : 'anglais') }),
+              el('div', { class: 'contact' }, [
+                b.customer_email ? el('a', { href: 'mailto:' + b.customer_email, text: b.customer_email }) : null,
+                b.customer_phone
+                  ? (digits(b.customer_phone)
+                      ? el('a', { href: 'https://wa.me/' + digits(b.customer_phone), target: '_blank', rel: 'noopener', text: b.customer_phone })
+                      : el('span', { text: b.customer_phone }))
+                  : el('span', { text: 'pas de téléphone' }),
+              ]),
+              b.customer_message ? el('p', { class: 'msg', text: '« ' + b.customer_message + ' »' }) : null,
+              el('div', { class: 'actions' }, [
+                el('label', {}, ['Paiement', pay]),
+                el('label', {}, ['Montant', price]),
+                el('span', { class: 'spacer' }),
+                refuse, confirmBtn,
+              ]),
+              note,
+            ]));
+          });
+        }
+
+        // ── visites à venir, par jour ──
+        function renderDays(sessions, privates) {
+          var box = document.getElementById('days');
+          var select = document.getElementById('ota-session');
+          box.className = ''; box.textContent = '';
+          while (select.options.length > 1) select.remove(1);
+
+          var byDay = {};
+          sessions.forEach(function (s) { var k = dayKey(s.start_time); (byDay[k] = byDay[k] || []).push({ kind: 'session', s: s, t: timeOf(s.start_time) }); });
+          privates.forEach(function (b) { var k = b.booking_date; (byDay[k] = byDay[k] || []).push({ kind: 'private', b: b, t: (b.booking_time || '').slice(0, 5) }); });
+          var keys = Object.keys(byDay).sort();
+          if (!keys.length) { box.appendChild(el('div', { class: 'empty', text: 'Aucune session dans les 30 prochains jours. Génère-en ci-dessous.' })); return; }
+
+          keys.forEach(function (k) {
+            var items = byDay[k].sort(function (a, b) { return a.t < b.t ? -1 : 1; });
+            var pax = items.reduce(function (n, it) {
+              return n + (it.kind === 'session'
+                ? it.s.bookings.reduce(function (m, b) { return m + (b.participants_count || 0); }, 0)
+                : (it.b.participants_count || 0));
+            }, 0);
+            var day = el('div', { class: 'day' }, [el('h3', {}, [dayLabel(k), el('small', { text: pax ? plural(pax, 'personne attendue', 'personnes attendues') : 'personne encore' })])]);
+            items.forEach(function (it) { day.appendChild(it.kind === 'session' ? sessionCard(it.s) : privateCard(it.b)); });
+            box.appendChild(day);
+          });
+
+          sessions.forEach(function (s) {
+            if (s.available_spots <= 0) return;
+            var o = el('option', { value: s.id, text: (SHORT[s.tour_type] || s.tour_type) + ' ' + (s.language || 'en').toUpperCase() + ' — ' + dayLabel(dayKey(s.start_time)) + ' ' + timeOf(s.start_time) + ' (' + s.available_spots + ' places)' });
+            o.dataset.tour = s.tour_type;
+            select.appendChild(o);
+          });
+        }
+
+        function personRow(b) {
+          return el('div', { class: 'person' }, [
+            el('span', { class: 'name', text: b.customer_name || '—' }),
+            el('span', { class: 'pax', text: plural(b.participants_count, 'pers.', 'pers.') }),
+            stateChip(b),
+            b.reminder_sent_at ? el('span', { class: 'chip sent', text: 'rappel envoyé' }) : null,
+            contactLinks(b, [cancelButton(b)]),
+          ]);
+        }
+
+        function sessionCard(s) {
+          var booked = s.max_spots - s.available_spots;
+          var ratio = s.max_spots ? booked / s.max_spots : 0;
+          var lang = s.language || 'en';
+          return el('div', { class: 'card session' }, [
+            el('div', { class: 'head' }, [
+              el('div', { class: 'time', text: timeOf(s.start_time) }),
+              el('div', { class: 'tour' }, [TOURS[s.tour_type] || s.tour_type, el('span', { class: 'lang ' + lang, text: lang.toUpperCase() })]),
+              el('div', { class: 'fill' }, [
+                el('b', { text: String(booked) }), ' / ' + s.max_spots,
+                el('div', { class: 'bar' }, [el('i', { class: ratio >= 0.8 ? 'hot' : '', style: 'width:' + Math.round(ratio * 100) + '%' })]),
+              ]),
+            ]),
+            s.bookings.length ? el('div', { class: 'people' }, s.bookings.map(personRow)) : el('div', { class: 'nobody', text: 'Personne encore.' }),
+          ]);
+        }
+
+        function privateCard(b) {
+          return el('div', { class: 'card session private' }, [
+            el('div', { class: 'head' }, [
+              el('div', { class: 'time', text: (b.booking_time || '').slice(0, 5) }),
+              el('div', { class: 'tour' }, [
+                TOURS[b.tour_type] || b.tour_type,
+                el('span', { class: 'private-tag', text: 'privée' }),
+                b.tour_language ? el('span', { class: 'lang ' + b.tour_language, text: b.tour_language.toUpperCase() }) : null,
+              ]),
+              el('div', { class: 'fill' }, [el('b', { text: String(b.participants_count) }), ' pers.']),
+            ]),
+            el('div', { class: 'people' }, [personRow(b)]),
+          ]);
+        }
+
+        // ── chargement ──
+        function load() {
+          return fetch('/api/admin/overview')
+            .then(function (r) { if (!r.ok) throw new Error(r.status === 401 ? 'session expirée — recharge la page' : 'HTTP ' + r.status); return r.json(); })
+            .then(function (d) { renderPending(d.pending || []); renderDays(d.sessions || [], d.privateConfirmed || []); })
+            .catch(function (e) {
+              ['pending-list', 'days'].forEach(function (id) { var n = document.getElementById(id); n.className = 'note err'; n.textContent = 'Chargement impossible : ' + e.message; });
+            });
+        }
+
+        // ── OTA ──
+        document.getElementById('ota-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var msg = document.getElementById('ota-message');
+          var sel = document.getElementById('ota-session');
+          var opt = sel.options[sel.selectedIndex];
+          post('/api/admin/add-ota-booking', {
+            sessionId: sel.value,
+            participants: parseInt(document.getElementById('ota-participants').value, 10),
+            source: document.getElementById('ota-source').value,
+            customerName: document.getElementById('ota-customer').value || null,
+            otaReference: document.getElementById('ota-reference').value || null,
+            tour: opt && opt.dataset ? opt.dataset.tour : null,
+          }).then(function () { msg.className = 'note ok'; msg.textContent = 'Réservation ajoutée.'; e.target.reset(); load(); })
+            .catch(function (err) { msg.className = 'note err'; msg.textContent = 'Échec : ' + err.message; });
+        });
+
+        // ── génération ──
+        document.getElementById('gen-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var msg = document.getElementById('gen-message');
+          var tour = document.getElementById('gen-tour').value;
+          var language = document.getElementById('gen-language').value === 'fr' ? 'fr' : 'en';
+          var days = Array.prototype.map.call(document.querySelectorAll('input[name="gen-day"]:checked'), function (c) { return parseInt(c.value, 10); });
+          var times = document.getElementById('gen-times').value.split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+          if (!days.length) { msg.className = 'note err'; msg.textContent = 'Coche au moins un jour.'; return; }
+          if (!times.length) { msg.className = 'note err'; msg.textContent = 'Indique au moins une heure.'; return; }
+          var schedule = [];
+          (tour === 'both-ww2' ? ['left-bank', 'right-bank'] : [tour]).forEach(function (t) {
+            days.forEach(function (d) { schedule.push({ dayOfWeek: d, times: times, tour: t, language: language }); });
+          });
+          post('/api/admin/generate-sessions', { weeksAhead: parseInt(document.getElementById('gen-weeks').value, 10), schedule: schedule, maxSpots: parseInt(document.getElementById('gen-spots').value, 10) })
+            .then(function (r) {
+              msg.className = 'note ok';
+              msg.textContent = plural(r.created, 'session créée', 'sessions créées') + (r.skipped ? ', ' + plural(r.skipped, 'déjà existante', 'déjà existantes') : '') + '.';
+              e.target.reset(); load();
+            })
+            .catch(function (err) { msg.className = 'note err'; msg.textContent = 'Échec : ' + err.message; });
+        });
+
+        // ── crons ──
+        document.querySelectorAll('[data-cron]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var out = document.getElementById('cron-report');
+            btn.disabled = true; out.textContent = 'Envoi en cours…';
+            fetch('/api/cron/' + btn.dataset.cron + '?force=1')
+              .then(function (r) { return r.json(); })
+              .then(function (rep) {
+                var lines = rep.ran === false
+                  ? ['Rien envoyé : ' + rep.reason]
+                  : [plural(rep.considered, 'réservation concernée', 'réservations concernées') + ' · ' + plural(rep.sent, 'envoyée', 'envoyées')];
+                (rep.skipped || []).forEach(function (s) { lines.push('sautée ' + s.ref + ' — ' + s.why); });
+                (rep.failed || []).forEach(function (f) { lines.push('échec ' + f.ref + ' — ' + f.why); });
+                out.textContent = lines.join('\n');
+                load();
+              })
+              .catch(function (e) { out.textContent = 'Échec : ' + e.message; })
+              .finally(function () { btn.disabled = false; });
+          });
+        });
+
+        load();
+      })();
+    </script>
+  </body>
 </html>

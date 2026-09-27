@@ -61,6 +61,7 @@ export const POST: APIRoute = async ({ request }) => {
         session_id: sessionId,
         customer_name: name,
         customer_email: email,
+        customer_phone: phone || null,
         participants_count: participants,
         total_price: price || null,
         stripe_payment_intent_id: null,

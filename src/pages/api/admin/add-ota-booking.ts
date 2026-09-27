@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 import { supabase } from '../../../lib/supabase';
+import { isAdmin, unauthorized } from '../../../lib/admin-auth';
+import { parisDateKey, parisTimeKey } from '../../../lib/paris-time';
 
 // ⚠️ Supabase migrations needed (DO NOT execute automatically):
 // ALTER TABLE bookings ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'direct';
@@ -7,11 +9,7 @@ import { supabase } from '../../../lib/supabase';
 // ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_method TEXT DEFAULT 'stripe';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  // Verify admin auth via cookie
-  const adminToken = cookies.get('admin_token')?.value;
-  if (!adminToken || adminToken !== import.meta.env.ADMIN_PASSWORD) {
-    return new Response('Unauthorized', { status: 401 });
-  }
+  if (!isAdmin(cookies)) return unauthorized();
 
   try {
     const { sessionId, participants, source, customerName, otaReference, tour } = await request.json();
@@ -58,8 +56,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     // 3. Create the OTA booking record
-    const bookingDate = new Date(session.start_time).toISOString().split('T')[0];
-    const bookingTime = new Date(session.start_time).toTimeString().split(' ')[0].substring(0, 5);
+    // Paris wall clock, like every other booking row. The previous version
+    // used the server's own clock — on Vercel that is UTC, which put every
+    // summer 10:30 down as 08:30 and, for an evening slot, on the wrong day.
+    const bookingDate = parisDateKey(session.start_time);
+    const bookingTime = parisTimeKey(session.start_time);
 
     const { error: bookingError } = await supabase
       .from('bookings')
