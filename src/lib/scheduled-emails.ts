@@ -8,9 +8,11 @@
  * run never writes to the same person twice.
  *
  * Vercel crons fire on UTC, and Paris is one or two hours ahead of it
- * depending on the season. Rather than let the reminder drift to 7 pm every
- * summer, the schedule fires on both candidate hours and `atParisHour()`
- * lets exactly one of them through.
+ * depending on the season; on the Hobby plan a cron may also run up to an
+ * hour late, and only once a day. So the schedule fires once (17:00 UTC for
+ * the reminder, 08:00 for the thank-you) and `withinParisHours()` only
+ * checks that the clock is somewhere sensible — it is a guard against a
+ * misconfigured schedule, not a way of picking the minute.
  */
 import { supabase } from './supabase';
 import { sendReminderEmail, sendThanksEmail, type BookingEmailPayload } from './email';
@@ -26,9 +28,10 @@ export interface RunReport {
   failed: Array<{ ref: string; why: string }>;
 }
 
-/** True when the Paris clock is inside the given hour right now. */
-export function atParisHour(hour: number, now = new Date()): boolean {
-  return Number(parisTimeKey(now).slice(0, 2)) === hour;
+/** True when the Paris clock reads between `from` and `to` inclusive, in hours. */
+export function withinParisHours(from: number, to: number, now = new Date()): boolean {
+  const hour = Number(parisTimeKey(now).slice(0, 2));
+  return hour >= from && hour <= to;
 }
 
 /** Paris calendar day, `offset` days from today. */
@@ -134,18 +137,20 @@ async function run(
   return report;
 }
 
-/** Runs at 6 pm Paris, for every confirmed booking of the following day. */
-export async function runReminders(now = new Date()): Promise<RunReport> {
-  if (!atParisHour(18, now)) {
-    return { ran: false, reason: `not 18:00 in Paris (${parisTimeKey(now)})`, considered: 0, sent: 0, skipped: [], failed: [] };
-  }
+const idle = (reason: string): RunReport => ({ ran: false, reason, considered: 0, sent: 0, skipped: [], failed: [] });
+
+/**
+ * The evening before: 17:00 UTC lands at 18:00 Paris in winter and 19:00 in
+ * summer, plus up to an hour of Hobby-plan delay. `force` is for a manual run
+ * from the admin session, whatever the clock says.
+ */
+export async function runReminders(now = new Date(), force = false): Promise<RunReport> {
+  if (!force && !withinParisHours(17, 21, now)) return idle(`outside the evening window (${parisTimeKey(now)} Paris)`);
   return run(parisDayOffset(1, now), 'reminder_sent_at', sendReminderEmail);
 }
 
-/** Runs at 9 am Paris, for every confirmed booking of the previous day. */
-export async function runThanks(now = new Date()): Promise<RunReport> {
-  if (!atParisHour(9, now)) {
-    return { ran: false, reason: `not 09:00 in Paris (${parisTimeKey(now)})`, considered: 0, sent: 0, skipped: [], failed: [] };
-  }
+/** The morning after: 08:00 UTC is 09:00 or 10:00 Paris, plus the same delay. */
+export async function runThanks(now = new Date(), force = false): Promise<RunReport> {
+  if (!force && !withinParisHours(8, 12, now)) return idle(`outside the morning window (${parisTimeKey(now)} Paris)`);
   return run(parisDayOffset(-1, now), 'thanks_sent_at', sendThanksEmail);
 }

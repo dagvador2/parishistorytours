@@ -2,18 +2,13 @@ import type { APIRoute } from 'astro';
 import { runThanks } from '../../../lib/scheduled-emails';
 import { authorizeCron, cronResponse } from '../../../lib/cron-auth';
 
-// GET /api/cron/thanks — Vercel cron, "0 7,8 * * *" (UTC).
-// Same two-hour trick as the reminder: the run proceeds only at 09:00 Paris.
+// GET /api/cron/thanks — Vercel cron, "0 8 * * *" (UTC, once a day: Hobby plan).
+// Same idea: 08:00 UTC, checked against a morning window in Paris.
+// `?force=1` runs it now regardless of the clock — admin cookie required, the
+// bearer secret alone is not enough to force.
 export const GET: APIRoute = async ({ request, cookies, url }) => {
   const denied = authorizeCron(request, cookies);
   if (denied) return denied;
-  return cronResponse(await runThanks(forcedNow(url)));
+  const force = url.searchParams.get('force') === '1' && Boolean(cookies.get('admin_token')?.value);
+  return cronResponse(await runThanks(new Date(), force));
 };
-
-/** `?force=1`, admin-only, runs the job whatever the clock says. */
-function forcedNow(url: URL): Date {
-  if (url.searchParams.get('force') !== '1') return new Date();
-  const now = new Date();
-  now.setUTCHours(now.getUTCHours() + (9 - Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', hour: '2-digit', hourCycle: 'h23' }).format(now))));
-  return now;
-}
