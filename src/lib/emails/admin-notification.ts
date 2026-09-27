@@ -12,7 +12,7 @@ import { C, SANS, SERIF, esc, shell } from './layout';
 import { longDate, money, people, shortDate } from './format';
 import { tourFacts } from './tours';
 import { googleCalendarUrl } from './ics';
-import type { BuiltEmail, EmailBooking } from './types';
+import { paysOnTheDay, type BuiltEmail, type EmailBooking } from './types';
 
 /** Other people already on the same session — the context a solo guide needs. */
 export interface SessionContext {
@@ -120,7 +120,7 @@ export function buildAdminEmail(
         .map(
           (o) => `<tr>
         <td style="padding:5px 0;border-bottom:1px solid ${C.hair}">${esc(o.name)} · ${o.participants} pax</td>
-        <td align="right" style="padding:5px 0;border-bottom:1px solid ${C.hair};color:${o.paymentMethod === 'on_site' ? C.gold : C.teal}">${o.paymentMethod === 'on_site' ? 'sur place' : 'payé'}</td>
+        <td align="right" style="padding:5px 0;border-bottom:1px solid ${C.hair};color:${paysOnTheDay(o.paymentMethod) ? C.gold : C.teal}">${paysOnTheDay(o.paymentMethod) ? 'sur place' : 'payé'}</td>
       </tr>`,
         )
         .join('')}

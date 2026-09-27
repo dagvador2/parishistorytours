@@ -165,3 +165,23 @@ test('every email carries a text part and a preheader', () => {
     assert.ok(!m.html.includes('undefined'), 'no undefined leaked into the markup');
   }
 });
+
+test('a cash booking is still settled on the day, without the card offer', () => {
+  const cash: EmailBooking = { ...booking, paymentMethod: 'cash', price: 250 };
+
+  // 'cash' is 'on_site' as far as the money is concerned: the amount is still
+  // announced, in the same gold notice, and nothing says it has been paid.
+  const confirmation = buildConfirmationEmail(cash, { whatsappUrl: 'https://wa.me/x' });
+  assert.match(confirmation.text, /To pay on the day: €250/);
+  assert.match(confirmation.text, /cash, at the end/);
+  assert.doesNotMatch(confirmation.text, /cash or card/);
+  assert.doesNotMatch(confirmation.text, /Paid in full/);
+
+  const reminder = buildReminderEmail(cash, { whatsappUrl: 'https://wa.me/x' })!;
+  assert.match(reminder.text, /To pay: €250 · cash, at the end/);
+  assert.doesNotMatch(reminder.text, /cash or card/);
+
+  // The card is only ruled out for the booking that asked for it.
+  const onSite = buildReminderEmail({ ...booking, price: 250 }, { whatsappUrl: 'https://wa.me/x' })!;
+  assert.match(onSite.text, /cash or card, at the end/);
+});

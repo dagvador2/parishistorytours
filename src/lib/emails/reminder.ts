@@ -28,7 +28,7 @@ import {
 import { addMinutes, longDate, money, type Lang } from './format';
 import { tourFacts } from './tours';
 import type { Forecast } from './weather';
-import type { BuiltEmail, EmailBooking } from './types';
+import { cashOnly, paysOnTheDay, type BuiltEmail, type EmailBooking } from './types';
 
 const COPY = {
   en: {
@@ -50,7 +50,7 @@ const COPY = {
     spotBody:
       'I arrive ten minutes early. If you can’t see me, or you’re running late, send a WhatsApp — my phone is in my hand until we start.',
     rowPay: 'To pay',
-    rowPayValue: (a: string) => `<strong>${a}</strong> · cash or card, at the end`,
+    rowPayValue: (a: string, cash: boolean) => `<strong>${a}</strong> · ${cash ? 'cash' : 'cash or card'}, at the end`,
     rowFinish: 'We finish',
     rowFinishValue: (time: string, place: string) => `around ${time}, ${place}`,
     rowBring: 'Bring',
@@ -78,7 +78,7 @@ const COPY = {
     spotBody:
       'J’arrive dix minutes en avance. Si vous ne me voyez pas, ou si vous êtes en retard, envoyez un WhatsApp — j’ai mon téléphone en main jusqu’au départ.',
     rowPay: 'À régler',
-    rowPayValue: (a: string) => `<strong>${a}</strong> · espèces ou carte, à la fin`,
+    rowPayValue: (a: string, cash: boolean) => `<strong>${a}</strong> · ${cash ? 'espèces' : 'espèces ou carte'}, à la fin`,
     rowFinish: 'On termine',
     rowFinishValue: (time: string, place: string) => `vers ${time}, ${place}`,
     rowBring: 'À prendre',
@@ -106,7 +106,7 @@ export function buildReminderEmail(
   const mp = facts.meetingPoint;
   if (!mp) return null;
 
-  const amount = b.price != null && b.paymentMethod === 'on_site' ? money(b.price, lang) : null;
+  const amount = b.price != null && paysOnTheDay(b.paymentMethod) ? money(b.price, lang) : null;
   const endTime = addMinutes(b.time, facts.durationMinutes);
 
   const weatherRow = opts.forecast
@@ -129,7 +129,7 @@ export function buildReminderEmail(
     : paragraph(`<span style="font-size:13px;color:${C.faint}">${esc(mp.transit[lang])}</span>`, 10);
 
   const facts2 = [
-    ...(amount ? [{ label: t.rowPay, value: t.rowPayValue(amount) }] : []),
+    ...(amount ? [{ label: t.rowPay, value: t.rowPayValue(amount, cashOnly(b.paymentMethod)) }] : []),
     { label: t.rowFinish, value: esc(t.rowFinishValue(endTime, facts.endsAt[lang])) },
     { label: t.rowBring, value: esc(t.rowBringValue) },
   ];

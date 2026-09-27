@@ -72,7 +72,7 @@ function toPayload(r: BookingRow): BookingEmailPayload {
     date: r.booking_date!,
     time: r.booking_time!,
     price: r.total_price,
-    paymentMethod: r.payment_method === 'on_site' ? 'on_site' : 'stripe',
+    paymentMethod: r.payment_method === 'on_site' || r.payment_method === 'cash' ? r.payment_method : 'stripe',
     locale: r.email_locale ?? 'en',
     tourLanguage: r.tour_language,
     sessionId: r.session_id ?? undefined,
