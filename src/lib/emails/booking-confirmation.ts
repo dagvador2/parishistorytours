@@ -312,7 +312,7 @@ export function buildConfirmationEmail(
     '',
     isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite(where) : t.leadPaid(where),
     '',
-    `${dateLong} — ${b.time} (${t.timeNote})`,
+    `${dateLong} — ${b.time} (${isRequest ? t.timeNoteRequest : t.timeNote})`,
     ...rows.map((r) => `${r.label}: ${strip(r.value.replace(/<[^>]+>/g, ''))}`),
     '',
     ...(state === 'on_site' && amount ? [`${t.toPay}: ${strip(amount)} (${t.toPayNote})`, ''] : []),
