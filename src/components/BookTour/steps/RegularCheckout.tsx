@@ -3,6 +3,8 @@ import { useBooking } from "../BookingContext";
 import { getTourName } from "../../../data/tour-info";
 import { track } from "../../../scripts/track";
 import type { PaymentMethod } from "../types";
+import ConfirmationPanel, { stripColon } from "./ConfirmationPanel";
+import type { ConfirmationRow } from "./ConfirmationPanel";
 
 interface Props {
   onBack: () => void;
@@ -129,85 +131,45 @@ const RegularCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
   // --- Confirmed state ---
   if (confirmed) {
     const isOnSite = paymentMethod === "on_site";
+    const rows: ConfirmationRow[] = [
+      { label: stripColon(t.summary.tour), value: tourName },
+      {
+        label: stripColon(t.summary.dateTime),
+        value: `${booking.date ? formatDate(booking.date) : ""} ${t.calendar.at} ${booking.time}`,
+        note: t.upcoming?.parisTime || "All times are Paris time (CET/CEST).",
+      },
+      { label: stripColon(t.summary.participants), value: participantsLabel },
+    ];
+    if (booking.price) {
+      rows.push({
+        label: stripColon(t.summary.totalPrice),
+        value: `€${booking.price}`,
+        note: isOnSite ? t.checkout.payOnSiteLabel : undefined,
+        strong: true,
+      });
+    }
     return (
-      <div
-        className="bg-[var(--paper-3)] border border-[var(--border)] p-8"
-        style={{ ...r2, fontFamily: "var(--font-sans)" }}
-      >
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 border border-[var(--ink)] rounded-full flex items-center justify-center text-[var(--ink)]">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h3 className="text-2xl text-[var(--ink)] mb-4" style={display}>{t.success.title}</h3>
-          <p className="text-[var(--ink-2)] mb-6 max-w-md mx-auto">
-            {isOnSite ? t.checkout.onSiteConfirmMessage : t.success.message}
-          </p>
-          <div className="bg-[var(--paper-2)] border border-[var(--border)] p-5 mb-6 max-w-sm mx-auto" style={r2}>
-            <h4 className="text-[var(--ink)] font-medium mb-3">{t.summary.yourRequestDetails}</h4>
-            <div className="space-y-2 text-sm text-left">
-              <div className="flex justify-between">
-                <span className="text-[var(--ink-2)]">{t.summary.tour}</span>
-                <span className="text-[var(--ink)] font-medium">{tourName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--ink-2)]">{t.summary.dateTime}</span>
-                <span className="text-[var(--ink)] text-right">
-                  {booking.date && formatDate(booking.date)} {t.calendar.at} {booking.time}
-                  <span className="block text-xs text-[var(--ink-2)]">
-                    {t.upcoming?.parisTime || "All times are Paris time (CET/CEST)."}
-                  </span>
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[var(--ink-2)]">{t.summary.participants}</span>
-                <span className="text-[var(--ink)]">{participantsLabel}</span>
-              </div>
-              {booking.price && (
-                <div className="flex justify-between">
-                  <span className="text-[var(--ink-2)]">{t.summary.totalPrice}</span>
-                  <span className="text-[var(--ink)] font-semibold">
-                    €{booking.price}
-                    {isOnSite && (
-                      <span className="text-xs font-normal text-[var(--ink-2)] ml-1">
-                        ({t.checkout.payOnSiteLabel})
-                      </span>
-                    )}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="space-y-3 max-w-sm mx-auto">
-            <button
-              onClick={handleNewBooking}
-              className="w-full py-3 px-4 bg-[var(--ink)] text-[var(--paper-3)] border border-[var(--ink)] hover:bg-[var(--rouge)] hover:border-[var(--rouge)] transition-colors font-medium cursor-pointer"
-              style={r2}
-            >
-              {t.summary.makeNewBooking}
-            </button>
-            <a
-              href={`${langPrefix}/`}
-              className="block w-full py-3 px-4 border border-[var(--border)] text-[var(--ink-2)] hover:border-[var(--ink)] hover:text-[var(--ink)] transition-colors font-medium"
-              style={r2}
-            >
-              {t.success.returnHome}
-            </a>
-          </div>
-        </div>
-      </div>
+      <ConfirmationPanel
+        title={t.success.title}
+        message={isOnSite ? t.checkout.onSiteConfirmMessage : t.success.message}
+        detailsTitle={t.summary.yourRequestDetails}
+        rows={rows}
+        newBookingLabel={t.summary.makeNewBooking}
+        onNewBooking={handleNewBooking}
+        homeHref={`${langPrefix}/`}
+        homeLabel={t.success.returnHome}
+      />
     );
   }
 
   // --- Checkout form ---
   return (
     <div
-      className="bg-[var(--paper-3)] border border-[var(--border)] p-6 md:p-8"
+      className="bg-[var(--paper-3)] border border-[var(--border)] p-4 sm:p-6 md:p-8"
       style={{ ...r2, fontFamily: "var(--font-sans)" }}
     >
       {/* Summary recap */}
-      <div className="bg-[var(--paper-2)] border border-[var(--border)] p-5 mb-8" style={r2}>
+      <div className="bg-[var(--paper-2)] border border-[var(--border)] p-4 sm:p-5 mb-6 sm:mb-8" style={r2}>
         <h4 className="text-base text-[var(--ink)] mb-3 text-center" style={display}>
           {t.checkout.summaryTitle}
         </h4>

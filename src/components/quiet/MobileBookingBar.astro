@@ -53,7 +53,11 @@ const metaKey =
     justify-content: space-between;
     gap: 12px;
     font-family: var(--font-sans);
+    transition: transform 220ms ease;
   }
+  /* Glissée hors écran tant que la section de réservation est à l'écran :
+     son bouton n'y mène nulle part et elle masquait le bas du calendrier. */
+  .quiet-mbb.is-away { transform: translateY(110%); }
   .quiet-mbb__price { line-height: 1.15; }
   .quiet-mbb__price b {
     display: block;
@@ -91,3 +95,18 @@ const metaKey =
     .quiet-mbb { display: flex; }
   }
 </style>
+
+<script>
+  // Hide the bar while the section its CTA points to is on screen — the
+  // visitor is already there, and the bar was covering the booking form.
+  const bar = document.querySelector<HTMLElement>('.quiet-mbb');
+  const cta = bar?.querySelector<HTMLAnchorElement>('.quiet-mbb__cta');
+  const targetId = cta?.hash.slice(1);
+  const target = targetId ? document.getElementById(targetId) : null;
+  if (bar && target && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => bar.classList.toggle('is-away', entry.isIntersecting),
+      { rootMargin: '0px 0px -35% 0px' }
+    ).observe(target);
+  }
+</script>

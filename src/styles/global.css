@@ -106,19 +106,76 @@
 
 /* ---------- Conversion UI additions (quiet theme) ---------- */
 
-/* react-day-picker v9 — ink-on-paper theming for the booking wizard */
+/* react-day-picker v9 — ink-on-paper theming for the booking wizard.
+   Le calendrier est fluide : les sept colonnes se partagent la largeur de
+   leur colonne au lieu d'imposer 7 × 44 px, ce qui faisait déborder la grille
+   du cadre sur mobile. Les cases restent bornées par --rdp-day_button-width. */
 [data-theme="quiet"] .rdp-root {
   --rdp-accent-color: var(--ink);
   --rdp-accent-background-color: var(--paper-2);
+  --rdp-day-height: 40px;
+  --rdp-day_button-width: 40px;
+  --rdp-day_button-height: 38px;
+  --rdp-day_button-border: 1.5px solid transparent;
   --rdp-day_button-border-radius: 2px;
   --rdp-selected-border: 1.5px solid var(--ink);
   --rdp-today-color: var(--rouge);
+  --rdp-nav-height: 40px;
+  --rdp-nav_button-height: 36px;
+  --rdp-nav_button-width: 36px;
+  --rdp-weekday-padding: 6px 0;
+  --rdp-disabled-opacity: 0.3;
+  width: 100%;
   font-family: var(--font-sans);
+  color: var(--ink);
+}
+[data-theme="quiet"] .rdp-months { max-width: none; width: 100%; }
+[data-theme="quiet"] .rdp-month { width: 100%; }
+[data-theme="quiet"] .rdp-month_grid { width: 100%; table-layout: fixed; }
+[data-theme="quiet"] .rdp-day { width: auto; padding: 1px 0; }
+[data-theme="quiet"] .rdp-day_button {
+  width: 100%;
+  max-width: var(--rdp-day_button-width);
+  margin: 0 auto;
+  font-size: 15px;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+[data-theme="quiet"] .rdp-month_caption {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+}
+[data-theme="quiet"] .rdp-weekday {
+  opacity: 1;
+  color: var(--ink-2);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* Les jours sans session s'effacent pour que les dates ouvertes ressortent. */
+[data-theme="quiet"] .rdp-day:not(.pht-day-available):not(.rdp-selected):not(.rdp-disabled) .rdp-day_button {
+  color: var(--ink-2);
+  opacity: 0.55;
 }
 [data-theme="quiet"] .pht-day-available:not(.rdp-selected) .rdp-day_button {
   background: rgba(138, 59, 46, 0.08);
   color: var(--rouge-dark);
   font-weight: 600;
+}
+[data-theme="quiet"] .pht-day-available:not(.rdp-selected) .rdp-day_button:hover {
+  background: rgba(138, 59, 46, 0.16);
+}
+[data-theme="quiet"] .rdp-selected { font-size: inherit; font-weight: 600; }
+[data-theme="quiet"] .rdp-selected .rdp-day_button {
+  background: var(--ink);
+  color: var(--paper-3);
+  border-color: var(--ink);
+}
+[data-theme="quiet"] .rdp-selected.rdp-today .rdp-day_button { color: var(--paper-3); }
+[data-theme="quiet"] .rdp-day_button:focus-visible {
+  outline: 2px solid var(--rouge);
+  outline-offset: 1px;
 }
 
 /* "Next date · spots left" lines filled client-side by next-session.ts.

@@ -6,6 +6,7 @@ import { getTourName, getTourStops, tourInfo } from "../../../data/tour-info";
 import { track } from "../../../scripts/track";
 import type { SessionSlot, Tour } from "../types";
 import { formatParisTime, parisDateKey, parisTimeKey } from "../../../lib/paris-time";
+import { stripColon } from "./ConfirmationPanel";
 
 const TOUR_SLUGS: Tour[] = ["left-bank", "right-bank", "general-history", "food-wine"];
 
@@ -28,6 +29,11 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
   );
   const [slots, setSlots] = useState<SessionSlot[]>(initialSlot ? [initialSlot] : []);
   const [availableDays, setAvailableDays] = useState<Record<string, number>>({});
+  // Month on display. Opens on the first month that has a session rather than
+  // on today's, which is often already sold out or over.
+  const [month, setMonth] = useState<Date | undefined>(
+    initialSlot ? new Date(parisDateKey(initialSlot.start_time) + "T00:00:00") : undefined
+  );
   const [priceByTour, setPriceByTour] = useState<Record<string, number>>({});
   const [priceLoading, setPriceLoading] = useState(true);
   const [selectedSlot, setSelectedSlot] = useState<SessionSlot | null>(initialSlot);
@@ -43,6 +49,22 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
   const [participantError, setParticipantError] = useState("");
   const [attempted, setAttempted] = useState(false);
   const firstRun = useRef(true);
+  // On a phone the slot list sits under the calendar, out of sight: once the
+  // visitor picks a day, bring it up so the choice is seen at once.
+  const slotsRef = useRef<HTMLDivElement>(null);
+  const userPicked = useRef(false);
+  const handleDaySelect = (day: Date | undefined) => {
+    userPicked.current = true;
+    setSelectedDay(day);
+  };
+  useEffect(() => {
+    if (!selectedDay || !userPicked.current) return;
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+    const el = slotsRef.current;
+    if (!el) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }, [selectedDay]);
 
   const locale = lang === "fr" ? "fr-FR" : "en-US";
   // When a tour is pre-selected (tour page or homepage card click), the
@@ -100,6 +122,10 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
         if (!res.ok) return;
         const { availableDays: days } = await res.json();
         setAvailableDays(days || {});
+        const first = Object.keys(days || {}).sort()[0];
+        if (first) {
+          setMonth((m) => m ?? new Date(first + "T00:00:00"));
+        }
       } catch (err) {
         console.error("Error fetching sessions:", err);
       }
@@ -197,23 +223,26 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
     available: Object.keys(availableDays).map((d) => new Date(d + "T00:00:00")),
   };
 
+  const dayLabel = selectedDay?.toLocaleDateString(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
   return (
     <div
-      className="bg-[var(--paper-3)] border border-[var(--border)] p-6 md:p-8"
+      className="bg-[var(--paper-3)] border border-[var(--border)] p-4 sm:p-6 md:p-8"
       style={{ ...r2, fontFamily: "var(--font-sans)" }}
     >
-      <h3 className="text-xl mb-2 text-center text-[var(--ink)]" style={display}>
+      <h3 className="text-xl mb-1 text-center text-[var(--ink)]" style={display}>
         {t.regularCalendar?.title || "Choose a session"}
       </h3>
-      <p className="text-sm text-[var(--ink-2)] text-center mb-1">
+      <p className="text-sm text-[var(--ink-2)] text-center mb-4">
         {t.regularCalendar?.subtitle || "Select a date to see available tours"}
-      </p>
-      <p className="text-xs text-[var(--ink-2)] text-center mb-4">
-        {tu.parisTime || "All times are Paris time (CET/CEST)."}
       </p>
 
       {tourFilter && (
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-5 text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mb-4 text-sm">
           <span className="text-[var(--ink-2)]">
             {tu.showingTour || "Showing dates for"}{" "}
             <b className="text-[var(--ink)] font-medium">{getTourName(tourFilter, lang)}</b>
@@ -228,19 +257,21 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Calendar */}
-        <div className="flex flex-col items-center">
+      <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+        {/* Calendar — fluid, capped so the cells stay square on wide screens */}
+        <div className="w-full max-w-[360px] mx-auto md:max-w-none">
           <DayPicker
             mode="single"
             selected={selectedDay}
-            onSelect={setSelectedDay}
+            onSelect={handleDaySelect}
+            month={month}
+            onMonthChange={setMonth}
             weekStartsOn={1}
             modifiers={modifiers}
             modifiersClassNames={{ available: "pht-day-available" }}
             disabled={[{ before: new Date() }]}
             footer={
-              <p className="mt-2 text-sm text-[var(--ink-2)] text-center">
+              <p className="mt-2 text-xs text-[var(--ink-2)] text-center">
                 {t.regularCalendar?.highlightedDates || "Highlighted dates have available sessions."}
               </p>
             }
@@ -248,21 +279,19 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
         </div>
 
         {/* Slots */}
-        <div>
+        <div ref={slotsRef} className="scroll-mt-[84px]">
           {selectedDay && (
             <div>
-              <h4 className="text-[var(--ink)] mb-4 text-center md:text-left text-lg" style={display}>
-                {selectedDay.toLocaleDateString(locale, {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                })}
+              <h4 className="text-[var(--ink)] text-lg leading-tight" style={display}>
+                {dayLabel}
               </h4>
+              <p className="text-xs text-[var(--ink-2)] mt-1 mb-3">
+                {tu.parisTime || "All times are Paris time (CET/CEST)."}
+              </p>
               {slots.length > 0 ? (
-                <div className="space-y-3">
-                  {orderedSlots.map((slot) => {
+                <div className="space-y-2.5">
+                  {slots.map((slot) => {
                     const isSelected = selectedSlot?.id === slot.id;
-                    const spoken = guidedIn(slot);
                     const tourName = getTourName(slot.tour_type, lang);
                     const tourStops = getTourStops(slot.tour_type, lang);
                     const low = slot.free <= 3;
@@ -273,6 +302,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                       <button
                         key={slot.id}
                         onClick={() => selectSlot(slot)}
+                        aria-pressed={isSelected}
                         className={`w-full border text-left transition-colors duration-150 overflow-hidden cursor-pointer ${
                           isSelected
                             ? "border-[var(--ink)] bg-[var(--paper-2)]"
@@ -285,7 +315,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                           {tourThumb && (
                             <img
                               src={tourThumb}
-                              alt={tourName}
+                              alt=""
                               width={120}
                               height={90}
                               loading="lazy"
@@ -293,47 +323,44 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                               className="w-24 h-auto object-cover flex-shrink-0 hidden sm:block"
                             />
                           )}
-                          <div className="flex justify-between items-start flex-1 p-4">
-                            <div className="flex-1">
-                              <div className="text-lg text-[var(--ink)]" style={display}>
+                          <div className="flex-1 min-w-0 flex items-start gap-3 p-3 sm:p-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="text-lg leading-none text-[var(--ink)]" style={display}>
                                 {formatTime(slot.start_time)}
                               </div>
-                              <div className="text-sm font-medium text-[var(--ink)] mt-0.5">
+                              <div className="text-sm font-medium text-[var(--ink)] mt-1.5">
                                 {tourName}
                               </div>
                               <div className="text-xs text-[var(--ink-2)] mt-0.5">{tourStops}</div>
                               <div
-                                className={`text-xs mt-1 ${
-                                  spoken.foreign ? "text-[var(--rouge)] font-semibold" : "text-[var(--ink-2)]"
-                                }`}
-                              >
-                                {spoken.text}
-                              </div>
-                              <div
-                                className={`text-sm mt-1 ${
+                                className={`text-xs mt-1.5 ${
                                   low ? "text-[var(--rouge)] font-semibold" : "text-[var(--ink-2)]"
                                 }`}
                               >
                                 {slot.free} {t.calendar.spotsAvailable}
-                                {!priceLoading && slotPrice > 0 && (
-                                  <span className="text-[var(--ink-2)] font-normal">
-                                    {" "}
-                                    · €{slotPrice} {t.calendar.perPerson}
-                                  </span>
-                                )}
                               </div>
                             </div>
-                            {isSelected && (
-                              <div className="ml-3 w-6 h-6 bg-[var(--ink)] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </div>
-                            )}
+                            <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                              {!priceLoading && slotPrice > 0 && (
+                                <div className="text-right leading-tight">
+                                  <div className="text-base text-[var(--ink)]" style={display}>
+                                    €{slotPrice}
+                                  </div>
+                                  <div className="text-[11px] text-[var(--ink-2)]">{t.calendar.perPerson}</div>
+                                </div>
+                              )}
+                              {isSelected && (
+                                <div className="w-5 h-5 bg-[var(--ink)] rounded-full flex items-center justify-center">
+                                  <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -341,7 +368,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                   })}
                 </div>
               ) : (
-                <div className="text-center py-8">
+                <div className="text-center py-6 border border-dashed border-[var(--border)]" style={r2}>
                   <p className="text-[var(--ink-2)] text-sm">
                     {t.calendar.noSessions} {t.calendar.onThisDate}
                   </p>
@@ -350,7 +377,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
             </div>
           )}
           {!selectedDay && (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="hidden md:flex flex-col items-center justify-center py-12 text-center">
               <div
                 className="w-12 h-12 border border-[var(--border)] flex items-center justify-center mb-3"
                 style={r2}
@@ -361,6 +388,7 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                   stroke="currentColor"
                   strokeWidth="1.5"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -378,11 +406,11 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
       {/* Selected session summary + participants */}
       {selectedSlot && (
         <div
-          className="mt-6 p-5 bg-[var(--paper-2)] border border-[var(--border)]"
+          className="mt-5 p-4 sm:p-5 bg-[var(--paper-2)] border border-[var(--border)]"
           style={{ ...r2, borderLeft: "2px solid var(--rouge)" }}
         >
-          <div className="flex items-center gap-2 mb-3">
-            <svg className="w-5 h-5 text-[var(--ink)]" fill="currentColor" viewBox="0 0 20 20">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-5 h-5 text-[var(--ink)]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -391,59 +419,54 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
             </svg>
             <span className="text-[var(--ink)] font-medium">{t.calendar.sessionSelected}</span>
           </div>
-          <p className="text-sm text-[var(--ink-2)] mb-1">
-            {selectedDay?.toLocaleDateString(locale, {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}{" "}
-            · {formatTime(selectedSlot.start_time)}
+          <p className="text-sm text-[var(--ink-2)]">
+            {dayLabel} · {formatTime(selectedSlot.start_time)}
           </p>
           <p className="text-sm text-[var(--ink-2)] mb-4">
             {getTourName(selectedSlot.tour_type, lang)}
-            {" · "}
-            <span className={guidedIn(selectedSlot).foreign ? "text-[var(--rouge)] font-semibold" : ""}>
-              {guidedIn(selectedSlot).text}
-            </span>
           </p>
 
-          {/* Participants counter */}
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium text-[var(--ink)]">
-                {t.step1Setup.participants}
+          {/* Participants counter — label on its own line so the counter and
+              the total always share one row, even on a narrow phone */}
+          <p className="text-sm font-medium text-[var(--ink)] mb-2">
+            {t.step1Setup.participants}
+          </p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => changeParticipants(-1)}
+                disabled={participants <= 1}
+                aria-label="−1"
+                className="w-10 h-10 border border-[var(--ink)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--ink)] hover:text-[var(--paper-3)] transition-colors disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                style={r2}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+                </svg>
+              </button>
+              <span className="text-2xl text-[var(--ink)] w-8 text-center" style={display}>
+                {participants}
               </span>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => changeParticipants(-1)}
-                  disabled={participants <= 1}
-                  className="w-9 h-9 border border-[var(--ink)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--ink)] hover:text-[var(--paper-3)] transition-colors disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
-                  style={r2}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-                  </svg>
-                </button>
-                <span className="text-2xl text-[var(--ink)] w-8 text-center" style={display}>
-                  {participants}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => changeParticipants(1)}
-                  disabled={participants >= 10}
-                  className="w-9 h-9 border border-[var(--ink)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--ink)] hover:text-[var(--paper-3)] transition-colors disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
-                  style={r2}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => changeParticipants(1)}
+                disabled={participants >= 10}
+                aria-label="+1"
+                className="w-10 h-10 border border-[var(--ink)] flex items-center justify-center text-[var(--ink)] hover:bg-[var(--ink)] hover:text-[var(--paper-3)] transition-colors disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer"
+                style={r2}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+              </button>
             </div>
-            <div className="text-right">
-              <div className="text-xl text-[var(--ink)]" style={display}>
-                {t.calendar.total} €{selectedPrice * participants}
+            <div className="text-right whitespace-nowrap">
+              <div className="text-[11px] uppercase tracking-[0.15em] text-[var(--ink-2)]">
+                {stripColon(t.calendar.total)}
+              </div>
+              <div className="text-xl text-[var(--ink)] leading-tight" style={display}>
+                €{selectedPrice * participants}
               </div>
               <div className="text-xs text-[var(--ink-2)]">
                 {participants} × €{selectedPrice}
@@ -464,8 +487,26 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
         </p>
       )}
 
+      {/* Navigation — on a phone the main action spans the width, the way back sits under it */}
+      <div className="mt-6 flex flex-col-reverse sm:flex-row items-center justify-center gap-3 sm:gap-4">
+        <button
+          onClick={onBack}
+          className="w-full sm:w-auto px-5 py-2.5 border border-[var(--border)] text-[var(--ink-2)] hover:border-[var(--ink)] hover:text-[var(--ink)] transition-colors text-sm font-medium cursor-pointer"
+          style={r2}
+        >
+          {t.back}
+        </button>
+        <button
+          onClick={handleNext}
+          className="w-full sm:w-auto px-8 py-3.5 font-medium transition-colors cursor-pointer bg-[var(--ink)] text-[var(--paper-3)] border border-[var(--ink)] hover:bg-[var(--rouge)] hover:border-[var(--rouge)] text-base"
+          style={r2}
+        >
+          {t.next}
+        </button>
+      </div>
+
       {/* Self-guided fallback: the main capture point for visitors who find no date */}
-      <div className="mt-8 border border-[var(--border)] bg-[var(--paper-2)] px-4 py-3 text-center" style={r2}>
+      <div className="mt-6 border border-[var(--border)] bg-[var(--paper-2)] px-4 py-3 text-center" style={r2}>
         <div className="text-sm text-[var(--ink-2)]">{t.regularCalendar?.selfGuidedTitle || "No date works for you?"}</div>
         <a
           href={`${lang === "fr" ? "/fr" : ""}/self-guided-tour`}
@@ -476,24 +517,6 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
             ? (t.regularCalendar?.selfGuidedCta || "Get the self-guided Left Bank version — {price}").replace("{price}", selfGuidedPrice)
             : (t.regularCalendar?.selfGuidedCtaNoPrice || "Get the self-guided Left Bank version")}
         </a>
-      </div>
-
-      {/* Navigation */}
-      <div className="mt-8 flex items-center gap-4 justify-center">
-        <button
-          onClick={onBack}
-          className="px-5 py-2.5 border border-[var(--border)] text-[var(--ink-2)] hover:border-[var(--ink)] hover:text-[var(--ink)] transition-colors text-sm font-medium cursor-pointer"
-          style={r2}
-        >
-          {t.back}
-        </button>
-        <button
-          onClick={handleNext}
-          className="px-8 py-3 font-medium transition-colors cursor-pointer bg-[var(--ink)] text-[var(--paper-3)] border border-[var(--ink)] hover:bg-[var(--rouge)] hover:border-[var(--rouge)] text-base"
-          style={r2}
-        >
-          {t.next}
-        </button>
       </div>
     </div>
   );
