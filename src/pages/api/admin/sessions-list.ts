@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ cookies }) => {
 
     const { data: sessions, error } = await supabase
       .from('sessions')
-      .select('id, start_time, tour_type, available_spots, max_spots')
+      .select('id, start_time, tour_type, language, available_spots, max_spots')
       .gte('start_time', now)
       .lte('start_time', thirtyDaysLater)
       .order('start_time', { ascending: true });

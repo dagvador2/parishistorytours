@@ -13,6 +13,7 @@ interface UpcomingSlot {
   start_time: string;
   free: number;
   tour_type: string;
+  language?: 'en' | 'fr';
 }
 
 export async function initNextSessions(): Promise<void> {
@@ -64,6 +65,14 @@ export async function initNextSessions(): Promise<void> {
     spotsEl.className = 'pht-next__spots' + (slot.free <= 3 ? ' is-low' : '');
     spotsEl.textContent = spotsTpl.replace('{n}', String(slot.free));
     el.append(labelEl, strong, document.createTextNode(' · '), spotsEl);
+    // Only worth a word when the walk is not in the language of the page.
+    const spoken = slot.language ?? 'en';
+    if (spoken !== lang) {
+      const langEl = document.createElement('span');
+      langEl.className = 'pht-next__lang';
+      langEl.textContent = lang === 'fr' ? 'en anglais' : 'in French';
+      el.append(document.createTextNode(' · '), langEl);
+    }
     el.hidden = false;
   }
 }

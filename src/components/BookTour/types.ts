@@ -8,6 +8,8 @@ export interface SessionSlot {
   start_time: string;
   free: number;
   tour_type: string;
+  /** Language the walk is narrated in. */
+  language?: "en" | "fr";
 }
 
 export interface BookingData {

@@ -97,6 +97,15 @@ function normalise(p: BookingEmailPayload): EmailBooking {
   };
 }
 
+async function sessionLanguage(sessionId: string): Promise<Lang | null> {
+  try {
+    const { data } = await supabase.from('sessions').select('language').eq('id', sessionId).single();
+    return data?.language ? asLang(data.language) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Who else is on this slot. Never fatal: the admin email is more useful with
  * it and perfectly usable without, so any failure returns null.
@@ -200,6 +209,9 @@ export async function sendBookingEmails(payload: BookingEmailPayload): Promise<B
   if (!resend) return { success: false, error: 'RESEND_API_KEY missing' };
 
   const b = normalise(payload);
+  // The on-site path posts the wizard's own state, which does not carry the
+  // session's language; the row does.
+  if (!b.tourLanguage && payload.sessionId) b.tourLanguage = await sessionLanguage(payload.sessionId);
   const state = confirmationState(b);
   const cal = state === 'request' ? null : calendar(b);
 

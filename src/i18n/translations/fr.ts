@@ -320,6 +320,9 @@ export const fr = {
       showAll: "Toutes les visites",
       loading: "Chargement des dates…",
       parisTime: "Tous les horaires sont à l'heure de Paris.",
+      guidedIn: "Guidée en {lang}",
+      langEn: "anglais",
+      langFr: "français",
     },
     // Mode selector
     modeSelector: {

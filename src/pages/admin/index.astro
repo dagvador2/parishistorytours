@@ -135,6 +135,12 @@ if (Astro.request.method === 'POST') {
           <option value="both-ww2">Both WW2 Tours (LB + RB)</option>
         </select>
 
+        <label for="gen-language">Language the tour is guided in</label>
+        <select id="gen-language" required>
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </select>
+
         <label>Days of the week</label>
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
           <label style="display:flex; align-items:center; gap:4px; margin:0;"><input type="checkbox" name="gen-day" value="1" /> Mon</label>
@@ -203,12 +209,14 @@ if (Astro.request.method === 'POST') {
           const spotsClass = s.available_spots >= 5 ? 'spots-good' : s.available_spots > 0 ? 'spots-low' : 'spots-full';
           const fullLabel = tourLabels[s.tour_type] || s.tour_type;
           const shortLabel = tourShort[s.tour_type] || s.tour_type;
+          const langLabel = (s.language || 'en').toUpperCase();
 
           const card = document.createElement('div');
           card.className = 'session-card';
           card.innerHTML =
             '<div class="info">' +
               '<strong>' + fullLabel + '</strong>' +
+              ' <span style="font-size:0.75rem;font-weight:600;color:' + (langLabel === 'FR' ? '#8a3b2e' : '#6b7280') + '">' + langLabel + '</span>' +
               ' — ' + dateStr + ' at ' + timeStr +
             '</div>' +
             '<div class="spots ' + spotsClass + '">' + s.available_spots + '/' + s.max_spots + ' spots</div>';
@@ -218,7 +226,7 @@ if (Astro.request.method === 'POST') {
           if (s.available_spots > 0) {
             const opt = document.createElement('option');
             opt.value = s.id;
-            opt.textContent = shortLabel + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
+            opt.textContent = shortLabel + ' ' + langLabel + ' — ' + dateStr + ' ' + timeStr + ' (' + s.available_spots + ' spots)';
             opt.dataset.tour = s.tour_type;
             sessionSelect.appendChild(opt);
           }
@@ -272,6 +280,7 @@ if (Astro.request.method === 'POST') {
       var timesStr = document.getElementById('gen-times').value;
       var weeksAhead = parseInt(document.getElementById('gen-weeks').value);
       var maxSpots = parseInt(document.getElementById('gen-spots').value);
+      var language = document.getElementById('gen-language').value === 'fr' ? 'fr' : 'en';
 
       var checkedDays = [];
       document.querySelectorAll('input[name="gen-day"]:checked').forEach(function(cb) {
@@ -293,7 +302,7 @@ if (Astro.request.method === 'POST') {
       var schedule = [];
       tours.forEach(function(tour) {
         checkedDays.forEach(function(day) {
-          schedule.push({ dayOfWeek: day, times: times, tour: tour });
+          schedule.push({ dayOfWeek: day, times: times, tour: tour, language: language });
         });
       });
 

@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ url }) => {
   try {
     let query = supabase
       .from('sessions')
-      .select('id, start_time, available_spots, tour_type')
+      .select('id, start_time, available_spots, tour_type, language')
       .gte('start_time', new Date().toISOString())
       .order('start_time', { ascending: true });
 
@@ -39,6 +39,7 @@ export const GET: APIRoute = async ({ url }) => {
           start_time: slot.start_time,
           free: slot.available_spots,
           tour_type: slot.tour_type,
+          language: slot.language ?? 'en',
         }));
       return new Response(JSON.stringify({ slots }), {
         status: 200,

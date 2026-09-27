@@ -22,7 +22,7 @@ export async function finalizeBooking(bookingData: BookingData) {
     // 1. Vérifier la session
     const { data: session, error: sessionError } = await supabase
       .from('sessions')
-      .select('available_spots, max_spots, tour_type')
+      .select('available_spots, max_spots, tour_type, language')
       .eq('id', bookingData.sessionId)
       .single();
 
@@ -62,6 +62,7 @@ export async function finalizeBooking(bookingData: BookingData) {
       booking_time: bookingData.time,
       status: 'confirmed',
       email_locale: bookingData.locale === 'fr' ? 'fr' : 'en',
+      tour_language: session.language ?? 'en',
       created_at: new Date().toISOString()
     };
 
@@ -99,6 +100,7 @@ export async function finalizeBooking(bookingData: BookingData) {
         price: bookingData.price,
         sessionId: bookingData.sessionId,
         locale: bookingData.locale,
+        tourLanguage: session.language ?? 'en',
       });
       if (!emailResult.success) {
         console.error('Confirmation email failed (booking saved):', emailResult.error, 'bookingId=', booking.id);

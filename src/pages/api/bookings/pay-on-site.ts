@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
     // 1. Verify session and available spots
     const { data: session, error: sessionError } = await supabase
       .from('sessions')
-      .select('available_spots')
+      .select('available_spots, language')
       .eq('id', sessionId)
       .single();
 
@@ -72,6 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
         source: 'direct',
         // The language the day-before reminder will be written in.
         email_locale: locale === 'fr' ? 'fr' : 'en',
+        tour_language: session.language ?? 'en',
         created_at: new Date().toISOString(),
       })
       .select()

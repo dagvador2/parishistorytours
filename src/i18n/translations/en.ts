@@ -320,6 +320,9 @@ export const en = {
       showAll: "Show all tours",
       loading: "Loading dates…",
       parisTime: "All times are Paris time (CET/CEST).",
+      guidedIn: "Guided in {lang}",
+      langEn: "English",
+      langFr: "French",
     },
     // Mode selector
     modeSelector: {

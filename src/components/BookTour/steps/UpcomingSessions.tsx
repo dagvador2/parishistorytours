@@ -86,6 +86,13 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
 
   const clearFilter = () => setBooking({ ...booking, tour: undefined as unknown as Tour });
 
+  const siteLang = lang === "fr" ? "fr" : "en";
+  const guidedIn = (slot: SessionSlot) => {
+    const l = slot.language ?? "en";
+    const name = l === "fr" ? tu.langFr || "French" : tu.langEn || "English";
+    return { text: (tu.guidedIn || "Guided in {lang}").replace("{lang}", name), foreign: l !== siteLang };
+  };
+
   return (
     <div style={{ fontFamily: "var(--font-sans)" }}>
       <h3
@@ -129,6 +136,7 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
           {slots.map((slot) => {
             const price = prices[slot.tour_type];
             const low = slot.free <= 3;
+            const spoken = guidedIn(slot);
             return (
               <button
                 key={slot.id}
@@ -154,6 +162,13 @@ const UpcomingSessions: React.FC<Props> = ({ onSelectSlot, onSeeCalendar, onSele
                   </span>
                   <span className="block text-[12px] text-[var(--ink-2)]">
                     {getTourStops(slot.tour_type, lang)}
+                  </span>
+                  <span
+                    className={`block text-[12px] ${
+                      spoken.foreign ? "text-[var(--rouge)] font-semibold" : "text-[var(--ink-2)]"
+                    }`}
+                  >
+                    {spoken.text}
                   </span>
                 </span>
                 <span

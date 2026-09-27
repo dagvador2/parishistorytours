@@ -75,6 +75,19 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
   }, []);
 
   const priceFor = (tourType: string): number => priceByTour[tourType] ?? 0;
+
+  // "Guided in English" — in the accent colour when it is not the language
+  // of the page the visitor is reading, since that is the case that surprises.
+  const siteLang = lang === "fr" ? "fr" : "en";
+  const guidedIn = (slot: SessionSlot) => {
+    const l = slot.language ?? "en";
+    const name = l === "fr" ? tu.langFr || "French" : tu.langEn || "English";
+    return { text: (tu.guidedIn || "Guided in {lang}").replace("{lang}", name), foreign: l !== siteLang };
+  };
+  // Same-language sessions first; the API already orders by hour within.
+  const orderedSlots = [...slots].sort(
+    (a, b) => Number((a.language ?? "en") !== siteLang) - Number((b.language ?? "en") !== siteLang)
+  );
   const selectedPrice = selectedSlot ? priceFor(selectedSlot.tour_type) : 0;
 
   // Fetch available days (respecting the tour filter).
@@ -247,8 +260,9 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
               </h4>
               {slots.length > 0 ? (
                 <div className="space-y-3">
-                  {slots.map((slot) => {
+                  {orderedSlots.map((slot) => {
                     const isSelected = selectedSlot?.id === slot.id;
+                    const spoken = guidedIn(slot);
                     const tourName = getTourName(slot.tour_type, lang);
                     const tourStops = getTourStops(slot.tour_type, lang);
                     const low = slot.free <= 3;
@@ -288,6 +302,13 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
                                 {tourName}
                               </div>
                               <div className="text-xs text-[var(--ink-2)] mt-0.5">{tourStops}</div>
+                              <div
+                                className={`text-xs mt-1 ${
+                                  spoken.foreign ? "text-[var(--rouge)] font-semibold" : "text-[var(--ink-2)]"
+                                }`}
+                              >
+                                {spoken.text}
+                              </div>
                               <div
                                 className={`text-sm mt-1 ${
                                   low ? "text-[var(--rouge)] font-semibold" : "text-[var(--ink-2)]"
@@ -380,6 +401,10 @@ const RegularCalendar: React.FC<Props> = ({ onNext, onBack, initialSlot = null }
           </p>
           <p className="text-sm text-[var(--ink-2)] mb-4">
             {getTourName(selectedSlot.tour_type, lang)}
+            {" · "}
+            <span className={guidedIn(selectedSlot).foreign ? "text-[var(--rouge)] font-semibold" : ""}>
+              {guidedIn(selectedSlot).text}
+            </span>
           </p>
 
           {/* Participants counter */}

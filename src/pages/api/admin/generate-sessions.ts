@@ -6,7 +6,7 @@ import { parisDateKey, parisWallClockToUTC } from '../../../lib/paris-time';
 // Generates sessions for the next N weeks based on a weekly schedule.
 // Body: {
 //   weeksAhead: number (1-8),
-//   schedule: Array<{ dayOfWeek: number (0=Sun..6=Sat), times: string[], tour: string }>,
+//   schedule: Array<{ dayOfWeek: number (0=Sun..6=Sat), times: string[], tour: string, language?: 'en' | 'fr' }>,
 //   maxSpots: number (default 10)
 // }
 //
@@ -41,6 +41,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     const sessionsToCreate: Array<{
       start_time: string;
       tour_type: string;
+      language: 'en' | 'fr';
       max_spots: number;
       available_spots: number;
     }> = [];
@@ -56,6 +57,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     for (let week = 0; week < weeksAhead; week++) {
       for (const entry of schedule) {
         const { dayOfWeek, times, tour } = entry;
+        // The language the walk is narrated in. Unset means English — the
+        // only language every session had before the column existed.
+        const language: 'en' | 'fr' = entry.language === 'fr' ? 'fr' : 'en';
 
         if (!times || !Array.isArray(times) || !tour) continue;
         if (dayOfWeek < 0 || dayOfWeek > 6) continue;
@@ -88,6 +92,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           sessionsToCreate.push({
             start_time: startTime.toISOString(),
             tour_type: tour,
+            language,
             max_spots: maxSpots,
             available_spots: maxSpots,
           });
@@ -105,12 +110,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Check for existing sessions to avoid duplicates
     const existingCheck = await supabase
       .from('sessions')
-      .select('start_time, tour_type')
+      .select('start_time, tour_type, language')
       .gte('start_time', now.toISOString());
 
+    // A slot is the same slot only in the same language: a 10:30 in French
+    // next to a 10:30 in English is two sessions, not a duplicate.
     const existingSet = new Set(
       (existingCheck.data || []).map(
-        (s: any) => `${s.tour_type}_${new Date(s.start_time).toISOString()}`
+        (s: any) => `${s.tour_type}_${s.language ?? 'en'}_${new Date(s.start_time).toISOString()}`
       )
     );
 
@@ -119,7 +126,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // twice and show the customer the same 10:30 tour two rows running.
     const seen = new Set<string>();
     const newSessions = sessionsToCreate.filter((s) => {
-      const key = `${s.tour_type}_${s.start_time}`;
+      const key = `${s.tour_type}_${s.language}_${s.start_time}`;
       if (existingSet.has(key) || seen.has(key)) return false;
       seen.add(key);
       return true;
