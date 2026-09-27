@@ -24,7 +24,9 @@ import { parisForecast } from './emails/weather';
 import { waLink } from './whatsapp';
 import { SUPPORT_EMAIL } from './emails/layout';
 
-const FROM = 'Clément · Paris History Tours <bookings@parishistorytours.com>';
+// Gmail's list view shows about twenty characters of the sender name; the
+// brand has to survive the cut, and the first name is in the signature anyway.
+const FROM = 'Paris History Tours <bookings@parishistorytours.com>';
 const ADMIN_TO = 'clement@parishistorytours.com';
 
 function env(key: string): string | undefined {
@@ -135,11 +137,14 @@ async function fetchSessionContext(
 function calendar(b: EmailBooking): { ics: string; url: string } {
   const facts = tourFacts(b.tour);
   const summary = `${facts.name[b.lang]} — Paris History Tours`;
-  const description =
-    b.lang === 'fr'
+  const location = facts.meetingPoint?.address ?? 'Paris, France';
+  const description = facts.meetingPoint
+    ? b.lang === 'fr'
+      ? `Réservation ${b.ref}. Rendez-vous au ${location}.`
+      : `Booking ${b.ref}. We meet at ${location}.`
+    : b.lang === 'fr'
       ? `Réservation ${b.ref}. Le point de rendez-vous exact vous est envoyé la veille au soir.`
       : `Booking ${b.ref}. The exact meeting point is emailed to you the evening before.`;
-  const location = facts.meetingPoint?.address ?? 'Paris, France';
   const shared = {
     dateKey: b.dateKey,
     time: b.time,

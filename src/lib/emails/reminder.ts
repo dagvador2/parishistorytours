@@ -46,9 +46,9 @@ const COPY = {
       'Bring a jacket and something for your head. We walk anyway — much of the route is sheltered, and rain suits the story.',
     weatherAdviceCold: 'Dress warmly: two hours outdoors in November is colder than two hours feel indoors.',
     weatherAdviceFine: 'Comfortable shoes and water are all you need.',
-    spotTitle: 'How to spot me',
+    spotTitle: 'On the day',
     spotBody:
-      'I arrive ten minutes early and carry a small burgundy sign with the tour name. If you are late, or the crowd swallows me, send a WhatsApp — my phone is in my hand until we start.',
+      'I arrive ten minutes early. If you can’t see me, or you’re running late, send a WhatsApp — my phone is in my hand until we start.',
     rowPay: 'To pay',
     rowPayValue: (a: string) => `<strong>${a}</strong> · cash or card, at the end`,
     rowFinish: 'We finish',
@@ -74,9 +74,9 @@ const COPY = {
       'Prenez une veste et de quoi vous couvrir la tête. On marche quand même — une bonne partie du parcours est abritée, et la pluie va bien à l’histoire.',
     weatherAdviceCold: 'Couvrez-vous : deux heures dehors en novembre, c’est plus froid que deux heures ne le laissent croire.',
     weatherAdviceFine: 'Des chaussures confortables et de l’eau suffisent.',
-    spotTitle: 'Comment me reconnaître',
+    spotTitle: 'Le jour J',
     spotBody:
-      'J’arrive dix minutes en avance, avec une petite pancarte bordeaux au nom de la visite. Si vous êtes en retard, ou si la foule m’avale, envoyez un WhatsApp — j’ai mon téléphone en main jusqu’au départ.',
+      'J’arrive dix minutes en avance. Si vous ne me voyez pas, ou si vous êtes en retard, envoyez un WhatsApp — j’ai mon téléphone en main jusqu’au départ.',
     rowPay: 'À régler',
     rowPayValue: (a: string) => `<strong>${a}</strong> · espèces ou carte, à la fin`,
     rowFinish: 'On termine',

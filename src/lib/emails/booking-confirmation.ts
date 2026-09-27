@@ -50,20 +50,27 @@ const COPY = {
     eyebrowRequest: (t: string) => `${t} · private tour request`,
     subjectConfirmed: (t: string, d: string, h: string) => `Confirmed · ${t}, ${d} at ${h}`,
     subjectRequest: (d: string) => `Received · your private tour request for ${d}`,
-    preheaderOnSite: (a: string) => `The exact meeting point reaches you the evening before. ${a} to settle on the day.`,
-    preheaderPaid: 'Paid and settled. The exact meeting point reaches you the evening before.',
+    preheaderOnSite: (a: string, where: string | null) =>
+      `${where ? `We meet at ${where}.` : 'The exact meeting point reaches you the evening before.'} ${a} to settle on the day.`,
+    preheaderPaid: (where: string | null) =>
+      `Paid and settled. ${where ? `We meet at ${where}.` : 'The exact meeting point reaches you the evening before.'}`,
     preheaderRequest: 'I check the slot and come back to you within 24 hours, usually sooner.',
     titleBooked: (n: string) => (n ? `You’re booked, ${n}.` : 'You’re booked.'),
     titleRequest: (n: string) => (n ? `Got it, ${n}.` : 'Got it.'),
-    leadOnSite:
-      'Your place is held. I’ll send the exact meeting point the evening before the walk, with a photo of the spot so you can’t miss it.',
-    leadPaid:
-      'Paid and confirmed — nothing left to do. I’ll send the exact meeting point the evening before the walk, with a photo of the spot so you can’t miss it.',
+    leadOnSite: (where: string | null) =>
+      where
+        ? `Your place is held. We meet at ${where} — the evening before, I’ll send a reminder with the map and the weather.`
+        : 'Your place is held. I’ll send the exact meeting point the evening before the walk, with a photo of the spot so you can’t miss it.',
+    leadPaid: (where: string | null) =>
+      where
+        ? `Paid and confirmed — nothing left to do. We meet at ${where}; the evening before, I’ll send a reminder with the map and the weather.`
+        : 'Paid and confirmed — nothing left to do. I’ll send the exact meeting point the evening before the walk, with a photo of the spot so you can’t miss it.',
     leadRequest:
       'Your request has reached me. I guide every tour myself, so I check the slot against my own diary before I answer — within 24 hours, usually the same evening.',
     rowTour: 'Tour',
     rowGroup: 'Group',
     rowOnFoot: 'On foot',
+    rowMeeting: 'Meeting point',
     rowLanguage: 'Language',
     rowEstimate: 'Estimate',
     rowReference: 'Reference',
@@ -81,13 +88,15 @@ const COPY = {
     calendar: 'Add to your calendar',
     calendarNote: 'The .ics file is attached to this email',
     nextTitle: 'What happens next',
-    stepBefore: (day: string) => ({
+    stepBefore: (day: string, known: boolean) => ({
       lead: `${day}, 6 pm.`,
-      rest: 'I email you the exact meeting point, with a photo and a map link.',
+      rest: known
+        ? 'A reminder lands in your inbox — the map, a photo of the spot, and tomorrow’s weather.'
+        : 'I email you the exact meeting point, with a photo and a map link.',
     }),
     stepArrive: (day: string, time: string) => ({
       lead: `${day}, ${time}.`,
-      rest: 'I’m there before you are. Look for the man with the small burgundy sign.',
+      rest: 'I’ll be there, waiting for you.',
     }),
     stepEndPay: (place: string, amount: string) => ({
       lead: 'At the end,',
@@ -101,13 +110,10 @@ const COPY = {
       rest: 'you get the meeting point with a photo and a map link.',
     },
     beforeTitle: 'Before you come',
-    before: (day: string, time: string, refundable: boolean) => [
-      'Shoes you can walk in, on cobbles.',
-      'We walk in any weather — only lightning cancels a tour.',
-      refundable
-        ? `Free cancellation and full refund until ${day} ${time}.`
-        : `Free cancellation until ${day} ${time}. Just reply to this email.`,
-      'Children are welcome; the walk suits ages 10 and up.',
+    before: (day: string, refundable: boolean) => [
+      'Comfortable shoes are all you need.',
+      'Children are welcome.',
+      ...(refundable ? [`Free cancellation until ${day}. Cancelled on the day itself, half the amount is refunded.`] : []),
     ],
     privateNote:
       'A private walk bends to you: we can slow down at one stop, add another, or start an hour later. Tell me what matters to your group and I’ll shape it.',
@@ -116,8 +122,8 @@ const COPY = {
     guideBody: 'Anything at all before the walk — a question, a delay, a change of plan — write to me. I answer myself.',
     guideBodyRequest: 'In a hurry, or travelling tomorrow? WhatsApp is faster than email.',
     whatsapp: 'Message me on WhatsApp',
-    footerCancel: (ref: string, day: string, time: string) =>
-      `Booking ${ref} · free cancellation until ${day}, ${time}`,
+    footerBooking: (ref: string, day: string | null) =>
+      day ? `Booking ${ref} · free cancellation until ${day}` : `Booking ${ref}`,
     footerRequest: (ref: string) => `Request ${ref} · no payment taken at this stage`,
   },
   fr: {
@@ -125,20 +131,27 @@ const COPY = {
     eyebrowRequest: (t: string) => `${t} · demande de visite privée`,
     subjectConfirmed: (t: string, d: string, h: string) => `Confirmé · ${t}, ${d} à ${h}`,
     subjectRequest: (d: string) => `Bien reçu · votre demande de visite privée du ${d}`,
-    preheaderOnSite: (a: string) => `Le point de rendez-vous exact vous arrive la veille. ${a} à régler sur place.`,
-    preheaderPaid: 'Payé, c’est réglé. Le point de rendez-vous exact vous arrive la veille.',
+    preheaderOnSite: (a: string, where: string | null) =>
+      `${where ? `Rendez-vous au ${where}.` : 'Le point de rendez-vous exact vous arrive la veille.'} ${a} à régler sur place.`,
+    preheaderPaid: (where: string | null) =>
+      `Payé, c’est réglé. ${where ? `Rendez-vous au ${where}.` : 'Le point de rendez-vous exact vous arrive la veille.'}`,
     preheaderRequest: 'Je vérifie le créneau et je vous réponds sous 24 h, souvent bien avant.',
     titleBooked: (n: string) => (n ? `C’est réservé, ${n}.` : 'C’est réservé.'),
     titleRequest: (n: string) => (n ? `Bien reçu, ${n}.` : 'Bien reçu.'),
-    leadOnSite:
-      'Votre place est retenue. Je vous envoie le point de rendez-vous exact la veille au soir, avec une photo du lieu pour que vous ne puissiez pas le manquer.',
-    leadPaid:
-      'Payé et confirmé — vous n’avez plus rien à faire. Je vous envoie le point de rendez-vous exact la veille au soir, avec une photo du lieu.',
+    leadOnSite: (where: string | null) =>
+      where
+        ? `Votre place est retenue. Rendez-vous au ${where} — la veille au soir, je vous envoie un rappel avec la carte et la météo.`
+        : 'Votre place est retenue. Je vous envoie le point de rendez-vous exact la veille au soir, avec une photo du lieu pour que vous ne puissiez pas le manquer.',
+    leadPaid: (where: string | null) =>
+      where
+        ? `Payé et confirmé — vous n’avez plus rien à faire. Rendez-vous au ${where} ; la veille au soir, je vous envoie un rappel avec la carte et la météo.`
+        : 'Payé et confirmé — vous n’avez plus rien à faire. Je vous envoie le point de rendez-vous exact la veille au soir, avec une photo du lieu.',
     leadRequest:
       'Votre demande m’est bien parvenue. Je guide chaque visite moi-même, je vérifie donc le créneau dans mon propre agenda avant de vous répondre — sous 24 h, souvent le soir même.',
     rowTour: 'Visite',
     rowGroup: 'Groupe',
     rowOnFoot: 'À pied',
+    rowMeeting: 'Rendez-vous',
     rowLanguage: 'Langue',
     rowEstimate: 'Estimation',
     rowReference: 'Référence',
@@ -156,13 +169,15 @@ const COPY = {
     calendar: 'Ajouter à mon agenda',
     calendarNote: 'Le fichier .ics est joint à ce mail',
     nextTitle: 'Ce qui se passe ensuite',
-    stepBefore: (day: string) => ({
+    stepBefore: (day: string, known: boolean) => ({
       lead: `${day}, 18 h.`,
-      rest: 'je vous envoie le point de rendez-vous exact, avec une photo et un lien vers la carte.',
+      rest: known
+        ? 'un rappel arrive dans votre boîte — la carte, une photo du lieu, et la météo du lendemain.'
+        : 'je vous envoie le point de rendez-vous exact, avec une photo et un lien vers la carte.',
     }),
     stepArrive: (day: string, time: string) => ({
       lead: `${day}, ${time}.`,
-      rest: 'je suis sur place avant vous. Cherchez l’homme avec la petite pancarte bordeaux.',
+      rest: 'je suis là, à vous attendre.',
     }),
     stepEndPay: (place: string, amount: string) => ({
       lead: 'À la fin,',
@@ -176,13 +191,10 @@ const COPY = {
       rest: 'vous recevez le point de rendez-vous avec une photo et un lien vers la carte.',
     },
     beforeTitle: 'Avant de venir',
-    before: (day: string, time: string, refundable: boolean) => [
-      'Des chaussures dans lesquelles vous pouvez marcher, sur des pavés.',
-      'On marche par tous les temps — seul l’orage annule une visite.',
-      refundable
-        ? `Annulation gratuite et remboursement intégral jusqu’au ${day} ${time}.`
-        : `Annulation gratuite jusqu’au ${day} ${time}. Il suffit de répondre à ce mail.`,
-      'Les enfants sont les bienvenus ; la visite convient à partir de 10 ans.',
+    before: (day: string, refundable: boolean) => [
+      'Des chaussures confortables, c’est tout ce qu’il vous faut.',
+      'Les enfants sont les bienvenus.',
+      ...(refundable ? [`Annulation gratuite jusqu’au ${day}. Annulée le jour même, la moitié du montant est remboursée.`] : []),
     ],
     privateNote:
       'Une visite privée s’adapte à vous : on peut s’attarder sur un arrêt, en ajouter un autre, ou partir une heure plus tard. Dites-moi ce qui compte pour votre groupe et je la façonne.',
@@ -192,8 +204,8 @@ const COPY = {
       'La moindre question avant la visite — un imprévu, un retard, un changement — écrivez-moi. C’est moi qui réponds.',
     guideBodyRequest: 'Pressé, ou vous voyagez demain ? WhatsApp va plus vite que le mail.',
     whatsapp: 'M’écrire sur WhatsApp',
-    footerCancel: (ref: string, day: string, time: string) =>
-      `Réservation ${ref} · annulation gratuite jusqu’au ${day}, ${time}`,
+    footerBooking: (ref: string, day: string | null) =>
+      day ? `Réservation ${ref} · annulation gratuite jusqu’au ${day}` : `Réservation ${ref}`,
     footerRequest: (ref: string) => `Demande ${ref} · aucun paiement à ce stade`,
   },
 } as const;
@@ -211,6 +223,9 @@ export function buildConfirmationEmail(
   const dateLong = longDate(b.dateKey, lang);
   const dayBeforeName = weekdayBefore(b.dateKey, lang);
   const amount = b.price != null ? money(b.price, lang) : null;
+  // The address goes into the confirmation itself as soon as it is known —
+  // promising it "the evening before" when it is already decided reads oddly.
+  const where = facts.meetingPoint?.address ?? null;
 
   // ── ticket rows ─────────────────────────────────────────────────────────
   const rows: TicketRow[] = [
@@ -221,6 +236,7 @@ export function buildConfirmationEmail(
     },
   ];
   if (state !== 'request') rows.push({ label: t.rowOnFoot, value: esc(facts.onFoot[lang]) });
+  if (state !== 'request' && where) rows.push({ label: t.rowMeeting, value: `<strong>${esc(where)}</strong>` });
   // Printed only once a session carries a language of its own; until then the
   // row would be a guess, and a wrong guess here strands someone on a pavement.
   if (b.tourLanguage) rows.push({ label: t.rowLanguage, value: `<strong>${esc(t.guidedIn(b.tourLanguage))}</strong>` });
@@ -235,25 +251,27 @@ export function buildConfirmationEmail(
   const preheader = isRequest
     ? t.preheaderRequest
     : state === 'on_site'
-      ? t.preheaderOnSite(amount ?? '')
-      : t.preheaderPaid;
+      ? t.preheaderOnSite(amount ?? '', where)
+      : t.preheaderPaid(where);
 
   const stepList = isRequest
     ? [t.stepReply, t.stepConfirm, t.stepMeeting]
     : [
-        t.stepBefore(dayBeforeName),
+        t.stepBefore(dayBeforeName, where !== null),
         t.stepArrive(weekday(b.dateKey, lang), b.time),
         state === 'on_site' && amount
           ? t.stepEndPay(facts.endsAt[lang], amount.replace(/&nbsp;/g, ' '))
           : t.stepEnd(facts.endsAt[lang]),
       ];
 
-  const cancelDay = weekdayBefore(b.dateKey, lang);
+  // Only money already taken can be refunded, so only a paid booking gets a
+  // cancellation line; on-site bookers simply do not come.
+  const cancelDay = state === 'paid' ? weekdayBefore(b.dateKey, lang) : null;
 
   const rowsHtml = [
     masthead(isRequest ? t.eyebrowRequest(tour) : t.eyebrowTour(tour)),
     heading(isRequest ? t.titleRequest(name) : t.titleBooked(name)),
-    paragraph(esc(isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite : t.leadPaid)),
+    paragraph(esc(isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite(where) : t.leadPaid(where))),
     ticket({
       dateLine: isRequest ? t.requested(dateLong) : dateLong,
       time: b.time,
@@ -274,7 +292,7 @@ export function buildConfirmationEmail(
     sectionTitle(t.nextTitle),
     steps(stepList),
     isRequest ? paragraph(esc(t.privateNote), 24) : sectionTitle(t.beforeTitle, 24),
-    isRequest ? '' : bullets(t.before(cancelDay, b.time, state === 'paid')),
+    isRequest ? '' : bullets(t.before(cancelDay ?? '', state === 'paid')),
     guideCard({
       title: isRequest ? t.guideTitleRequest : t.guideTitle,
       body: isRequest ? t.guideBodyRequest : t.guideBody,
@@ -284,7 +302,7 @@ export function buildConfirmationEmail(
     footer([
       `Paris History Tours · ${SITE.replace('https://', '')}`,
       `${SUPPORT_EMAIL} · ${PHONE_DISPLAY}`,
-      isRequest ? t.footerRequest(b.ref) : t.footerCancel(b.ref, cancelDay, b.time),
+      isRequest ? t.footerRequest(b.ref) : t.footerBooking(b.ref, cancelDay),
     ]),
   ].join('\n');
 
@@ -292,7 +310,7 @@ export function buildConfirmationEmail(
   const text = [
     isRequest ? t.titleRequest(name) : t.titleBooked(name),
     '',
-    isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite : t.leadPaid,
+    isRequest ? t.leadRequest : state === 'on_site' ? t.leadOnSite(where) : t.leadPaid(where),
     '',
     `${dateLong} — ${b.time} (${t.timeNote})`,
     ...rows.map((r) => `${r.label}: ${strip(r.value.replace(/<[^>]+>/g, ''))}`),
@@ -302,7 +320,7 @@ export function buildConfirmationEmail(
     t.nextTitle,
     ...stepList.map((s, i) => `${i + 1}. ${s.lead} ${s.rest}`),
     '',
-    ...(isRequest ? [t.privateNote] : [t.beforeTitle, ...t.before(cancelDay, b.time, state === 'paid').map((x) => `- ${x}`)]),
+    ...(isRequest ? [t.privateNote] : [t.beforeTitle, ...t.before(cancelDay ?? '', state === 'paid').map((x) => `- ${x}`)]),
     '',
     `${t.whatsapp}: ${opts.whatsappUrl}`,
     '',

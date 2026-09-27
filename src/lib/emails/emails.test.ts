@@ -126,6 +126,22 @@ test('confirmation says one thing per state', () => {
   assert.ok(!/Confirmed/i.test(request.subject), 'a request is not a confirmation');
 });
 
+test('a known meeting point is printed in the confirmation, not promised for later', () => {
+  const known = buildConfirmationEmail(booking, { whatsappUrl: 'x' });
+  assert.match(known.html, /60 boulevard Saint-Michel/);
+  assert.ok(!/exact meeting point the evening before/.test(known.html));
+  const unknown = buildConfirmationEmail({ ...booking, tour: 'right-bank' }, { whatsappUrl: 'x' });
+  assert.match(unknown.html, /exact meeting point the evening before/);
+});
+
+test('only a paid booking carries a cancellation line', () => {
+  const onSite = buildConfirmationEmail(booking, { whatsappUrl: 'x' });
+  assert.ok(!/cancellation/i.test(onSite.html));
+  const paid = buildConfirmationEmail({ ...booking, paymentMethod: 'stripe' }, { whatsappUrl: 'x' });
+  assert.match(paid.html, /Free cancellation until Saturday/);
+  assert.match(paid.html, /half the amount is refunded/);
+});
+
 test('the tour language line appears only once a session carries one', () => {
   const unknown = buildConfirmationEmail(booking, { whatsappUrl: 'x' });
   assert.ok(!/guided in/i.test(unknown.html));
