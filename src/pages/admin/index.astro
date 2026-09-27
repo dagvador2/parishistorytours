@@ -12,8 +12,10 @@ if (Astro.request.method === 'POST') {
   const formData = await Astro.request.formData();
   const password = formData.get('password')?.toString();
   if (password === adminPassword) {
+    // Scoped to the whole site, not just /admin: the same cookie is what lets
+    // an admin trigger /api/cron/* by hand (see src/lib/cron-auth.ts).
     Astro.cookies.set('admin_token', password, {
-      path: '/admin',
+      path: '/',
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
