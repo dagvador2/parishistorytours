@@ -6,11 +6,12 @@ import { supabase } from '../../../lib/supabase';
 // ⚠️ Migration Supabase requise :
 // ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_method TEXT DEFAULT 'stripe';
 // ALTER TABLE bookings ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'direct';
+// (email_locale : voir supabase/migrations/20260927120000_booking_language.sql)
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
-    const { sessionId, participants, name, email, phone, tour, date, time, price } = data;
+    const { sessionId, participants, name, email, phone, tour, date, time, price, locale } = data;
 
     if (!sessionId || !participants || !name || !email || !tour || !date || !time) {
       return new Response(
@@ -69,6 +70,8 @@ export const POST: APIRoute = async ({ request }) => {
         status: 'confirmed',
         payment_method: 'on_site',
         source: 'direct',
+        // The language the day-before reminder will be written in.
+        email_locale: locale === 'fr' ? 'fr' : 'en',
         created_at: new Date().toISOString(),
       })
       .select()

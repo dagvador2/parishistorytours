@@ -92,6 +92,7 @@ const RegularCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
             date: booking.date,
             time: booking.time,
             price: booking.price,
+            locale: lang,
           }),
         });
         if (!res.ok) {

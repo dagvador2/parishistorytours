@@ -52,3 +52,6 @@ design/audioguide-handoff/photos/
 # never work in progress — `pnpm clean:dups` deletes them.
 * 2
 * 2.*
+
+# email previews (pnpm emails:preview)
+.email-preview/

@@ -4,7 +4,7 @@ import { supabase } from '../../../lib/supabase';
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { email, name, participants, tour, date, time } = body;
+    const { email, name, participants, tour, date, time, locale } = body;
 
     if (!email || !name || !participants || !tour || !date || !time) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {
@@ -26,6 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
         booking_date: date,
         booking_time: time,
         status: 'pending',
+        email_locale: locale === 'fr' ? 'fr' : 'en',
         created_at: new Date().toISOString(),
       })
       .select()

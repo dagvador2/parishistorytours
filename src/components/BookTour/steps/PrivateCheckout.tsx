@@ -60,6 +60,7 @@ const PrivateCheckout: React.FC<Props> = ({ onBack, onRestart }) => {
           date: booking.date,
           time: booking.time,
           message: booking.message || null,
+          locale: lang,
         }),
       });
       if (!bookingRes.ok) {

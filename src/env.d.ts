@@ -12,6 +12,8 @@ interface ImportMetaEnv {
   readonly GOOGLE_PLACES_API_KEY: string;
   readonly GOOGLE_PLACE_ID: string;
   readonly ADMIN_PASSWORD: string;
+  // Bearer token Vercel sends to /api/cron/* — see vercel.json "crons".
+  readonly CRON_SECRET: string;
   readonly PUBLIC_SUPABASE_URL: string;
   readonly PUBLIC_SUPABASE_ANON_KEY: string;
   readonly SUPABASE_SERVICE_ROLE_KEY: string;

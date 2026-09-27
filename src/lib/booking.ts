@@ -61,6 +61,7 @@ export async function finalizeBooking(bookingData: BookingData) {
       booking_date: bookingData.date,
       booking_time: bookingData.time,
       status: 'confirmed',
+      email_locale: bookingData.locale === 'fr' ? 'fr' : 'en',
       created_at: new Date().toISOString()
     };
 

@@ -1,5 +1,9 @@
 {
   "framework": null,
+  "crons": [
+    { "path": "/api/cron/reminders", "schedule": "0 16,17 * * *" },
+    { "path": "/api/cron/thanks", "schedule": "0 7,8 * * *" }
+  ],
   "headers": [
     {
       "source": "/self-guided-tour/sw.js",

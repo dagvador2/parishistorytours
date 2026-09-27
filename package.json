@@ -17,7 +17,9 @@
     "self-guided:promo": "tsx scripts/self-guided/tools/create-promo-code.ts",
     "self-guided:test": "node --import tsx --test 'scripts/self-guided/**/*.test.ts'",
     "tracking:import": "tsx scripts/tracking/import-workbook.ts",
-    "tracking:test": "node --import tsx --test 'scripts/tracking/**/*.test.ts'"
+    "tracking:test": "node --import tsx --test 'scripts/tracking/**/*.test.ts'",
+    "emails:preview": "tsx scripts/emails/preview.ts",
+    "emails:test": "node --import tsx --test 'src/lib/emails/**/*.test.ts'"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
