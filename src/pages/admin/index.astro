@@ -46,7 +46,9 @@ const today = new Date().toLocaleDateString("fr-FR", {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Admin — Paris History Tours</title>
-    <style>
+    <!-- is:global : le tableau est construit en JS, et les styles scopés d'Astro
+         ne s'appliquent qu'aux éléments rendus par le template. -->
+    <style is:global>
       /* Ink on paper, comme le site. Les seules couleurs sémantiques sont
          l'or (attend quelque chose, argent à encaisser) et la sarcelle (réglé). */
       html { background: var(--paper); }
