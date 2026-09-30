@@ -55,3 +55,6 @@ design/audioguide-handoff/photos/
 
 # email previews (pnpm emails:preview)
 .email-preview/
+
+# classeur de suivi (données clients) — jamais dans le dépôt
+data/
